@@ -1,17 +1,29 @@
 ### Installation:
 
 ```
-$ cd
-$ git clone git://github.com/keith-rollin/dotfiles.git
--- or --
-$ git clone git@github.com:keith-rollin/dotfiles.git
+$ git clone --recursive git://github.com/keith-rollin/dotfiles.git
 ```
 
-### Create symlink(s):
+or:
+
+```
+$ git clone --recursive git@github.com:keith-rollin/dotfiles.git
+```
+
+If you already cloned the repository without `--recursive`, use the following
+to get the submodules checked-out:
+
+```
+$ git submodule update --init --recursive
+```
+
+### Create symlinks:
 
 ```
 $ ~/dotfiles/install_links.sh
 ```
+
+Then edit .gitconfig to have the right email address.
 
 ### To add a new submodule:
 
