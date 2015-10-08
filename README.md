@@ -10,14 +10,13 @@ or:
 $ git clone --recursive git@github.com:keith-rollin/dotfiles.git
 ```
 
-If you already cloned the repository without `--recursive`, use the following
-to get the submodules checked-out:
+If you already cloned the repository without `--recursive`, use the following to get the submodules checked-out:
 
 ```
 $ git submodule update --init --recursive
 ```
 
-### Create symlinks:
+Once the repository is checked out, you need to "hook up" the configuration files in to to the well-known top-level dot-files (.bashrc, etc.). Do that by running the following.
 
 ```
 $ ~/dotfiles/install_links.sh
@@ -25,21 +24,23 @@ $ ~/dotfiles/install_links.sh
 
 Then edit .gitconfig to have the right email address.
 
-### To add a new submodule:
+### Adding a submodule:
 
 ```
 $ git submodule add <github-path> ~/dotfiles/vim/bundle/<local-name>
 $ <Commit changes>
 ```
 
-### To update the submodules:
+### Updating submodules:
+
+To update the submodules to the latest versions in the upstream sources.
 
 ```
 $ git submodule foreach git pull origin master
 $ <Commit changes>
 ```
 
-### To remove a submodule:
+### Removing a submodule:
 
 ```
 $ git submodule deinit <submodule>      # Updates .git/config and deletes working directory
