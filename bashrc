@@ -9,8 +9,9 @@ source ~/.bash.console.sh
 export PS1="$FgiRed$UserName@$ShortHost:$WorkingDirPath$Reset\n$StdPromptPrefix "
 
 export EDITOR=vim
-export PATH="/usr/local/bin:$PATH"
-export PATH="/Users/keith/bin:$PATH"
+export PATH="/usr/local/bin:${PATH}"
+export PATH="${HOME}/bin:${PATH}"
+export PATH="${HOME}/dev/WebKit/OpenSource/Tools/Scripts:${PATH}"
 
 alias ls="ls -AFG"
 alias ll="ls -l"
