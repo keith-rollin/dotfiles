@@ -1,7 +1,23 @@
-" Invoke pathogen
+set nocompatible
+filetype off
 
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'fatih/vim-go'
+" Plugin 'tpope/vim-pathogen'
+Plugin 'tpope/vim-sensible'
+Plugin 'kballard/vim-swift'
+call vundle#end()
+filetype plugin indent on
+
+
+
+"" Invoke pathogen
+"
+"runtime bundle/vim-pathogen/autoload/pathogen.vim
+"execute pathogen#infect()
 
 " Manually load sensible.vim in case we want to override anything it does
 " here.
@@ -15,6 +31,7 @@ set ignorecase		" Case-insensitive searching...
 set smartcase		" ... unless we type at least one capital letter
 set hlsearch		" Turn on hightlighting of search text
 set autowriteall	" Write the file when we switch buffers.
+set expandtab		" Convert tabs to spaces
 
 let g:swift_no_conceal = 1			" Don't show the fancy -> in Swift source files.
 au BufNewFile,BufRead *.txt set textwidth=78	" Set text width to 78 when a .txt file is created or opened.
