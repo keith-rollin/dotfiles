@@ -23,6 +23,15 @@ alias tree='tree -F'
 alias gitp="git --no-pager"
 alias svn='xcrun svn'
 
+alias build-debug="time make debug | filter-build-webkit"
+alias build-release="time make release | filter-build-webkit"
+alias test-all="time run-webkit-tests"
+alias test-fast="time run-webkit-tests fast"
+alias test-imported="time run-webkit-tests imported"
+alias test-debug-all="time run-webkit-tests --debug"
+alias test-debug-fast="time run-webkit-tests --debug fast"
+alias test-debug-imported="time run-webkit-tests --debug imported"
+
 alias kill_go='kill -9 $( ps ux | grep "[0-9] \.\./go" | awk "{ print \$2 }" )'
 
 shopt -s checkwinsize
@@ -59,6 +68,7 @@ function up()
 
 # gt: Go Top
 alias gt='cd $(git rev-parse --show-toplevel 2>/dev/null || (echo "."; echo "Not within a git repository" >&2))'
+source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
 
 # From https://gist.github.com/ttscoff/893afa7acdcd6c696dc7
 # Bash completion for `up` <http://brettterpstra.com/2014/05/14/up-fuzzy-navigation-up-a-directory-tree/>
@@ -128,3 +138,5 @@ alias gt='cd $(git rev-parse --show-toplevel 2>/dev/null || (echo "."; echo "Not
 #}
 # 
 #complete -F _tm_complete tm
+
+[ -r "${HOME}/.bashrc.local" ] && source "${HOME}/.bashrc.local"
