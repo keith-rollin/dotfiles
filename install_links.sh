@@ -27,5 +27,4 @@ create_link vimrc .vimrc
 create_link bash.console.sh .bash.console.sh
 create_link bashrc .bashrc
 create_link bash_profile .bash_profile
-
-clone_file gitconfig .gitconfig
+create_link gitconfig .gitconfig

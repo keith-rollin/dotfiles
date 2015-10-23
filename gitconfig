@@ -1,6 +1,6 @@
 [user]
 	name = Keith Rollin
-	email = SET_EMAIL_ADDRESS
+	email = keith.rollin@gmail.com
 [push]
 	default = simple
 [alias]
@@ -11,6 +11,8 @@
 	co = checkout
 	lg = log -p
 	h = help
+	unstage = reset HEAD --
+	last = log -1 HEAD
 	spull = !git svn rebase
 	spush = !git svn dcommit
 [color]
