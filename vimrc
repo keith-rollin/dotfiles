@@ -5,12 +5,17 @@ filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'fatih/vim-go'
-" Plugin 'tpope/vim-pathogen'
 Plugin 'tpope/vim-sensible'
-Plugin 'kballard/vim-swift'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tacahiroy/ctrlp-funky'
+
+" Plugin 'fatih/vim-go'
+" Plugin 'tpope/vim-pathogen'
+" Plugin 'kballard/vim-swift'
+"
 call vundle#end()
 filetype plugin indent on
 
