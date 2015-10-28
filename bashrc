@@ -25,9 +25,9 @@ alias svn='xcrun svn'
 
 alias build-debug="time make debug | filter-build-webkit"
 alias build-release="time make release | filter-build-webkit"
-alias test-all="time run-webkit-tests"
-alias test-fast="time run-webkit-tests fast"
-alias test-imported="time run-webkit-tests imported"
+alias test-release-all="time run-webkit-tests"
+alias test-release-fast="time run-webkit-tests fast"
+alias test-release-imported="time run-webkit-tests imported"
 alias test-debug-all="time run-webkit-tests --debug"
 alias test-debug-fast="time run-webkit-tests --debug fast"
 alias test-debug-imported="time run-webkit-tests --debug imported"
@@ -37,7 +37,7 @@ alias kill_go='kill -9 $( ps ux | grep "[0-9] \.\./go" | awk "{ print \$2 }" )'
 shopt -s checkwinsize
 #set -o vi	# I like vim, but I don't know how to drive bash with this set.
 
-export GREP_OPTIONS="--color=auto --exclude-dir=.svn"
+export GREP_OPTIONS="--color=auto --exclude-dir=.git --exclude-dir=WebKitBuild"
 export LESS="-M -I -R"
 export LS_OPTIONS="-Fhv $LS_OPTIONS"
 
