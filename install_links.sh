@@ -11,20 +11,13 @@ create_link()
 	ln -s ${source} ${target}
 }
 
-clone_file()
-{
-	local source="${HOME}/dotfiles/$1"
-	local target="${HOME}/$2"
-
-	[ -e ${target} ] && { echo "### File ${target} exists. Please move it aside."; return; }
-
-	cp ${source} ${target}
-	echo "### File ${target} created. Please edit it."
-}
-
-create_link vim .vim
-create_link vimrc .vimrc
 create_link bash.console.sh .bash.console.sh
-create_link bashrc .bashrc
-create_link bash_profile .bash_profile
-create_link gitconfig .gitconfig
+create_link bash_profile    .bash_profile
+create_link bashrc          .bashrc
+create_link gitconfig       .gitconfig
+create_link vim             .vim
+create_link vimrc           .vimrc
+
+# Make sure Vundle.vim is not in a "detached HEAD" state.
+cd "${HOME}/dotfiles/vim/bundle/Vundle.vim"
+git checkout master
