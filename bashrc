@@ -26,9 +26,9 @@ alias svn='xcrun svn'
 
 alias build-debug="time make debug | filter-build-webkit"
 alias build-release="time make release | filter-build-webkit"
-alias test-release-all="time run-webkit-tests"
-alias test-release-fast="time run-webkit-tests fast"
-alias test-release-imported="time run-webkit-tests imported"
+alias test-release-all="time run-webkit-tests --release"
+alias test-release-fast="time run-webkit-tests --release fast"
+alias test-release-imported="time run-webkit-tests --release imported"
 alias test-debug-all="time run-webkit-tests --debug"
 alias test-debug-fast="time run-webkit-tests --debug fast"
 alias test-debug-imported="time run-webkit-tests --debug imported"
