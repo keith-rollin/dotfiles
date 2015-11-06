@@ -12,6 +12,7 @@ export EDITOR=vim
 export PATH="/usr/local/bin:${PATH}"
 export PATH="${HOME}/bin:${PATH}"
 export PATH="${HOME}/dev/WebKit/OpenSource/Tools/Scripts:${PATH}"
+export PATH="${HOME}/dev/depot_tools:${PATH}"
 
 alias ls="ls -AFG"
 alias ll="ls -l"

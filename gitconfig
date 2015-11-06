@@ -10,6 +10,7 @@
 	st = status
 	co = checkout
 	lg = log -p
+	lol = log --oneline
 	h = help
 	unstage = reset HEAD --
 	last = log -1 HEAD

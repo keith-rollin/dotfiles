@@ -11,6 +11,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'derekwyatt/vim-fswitch'
 
 " Plugin 'fatih/vim-go'
 " Plugin 'tpope/vim-pathogen'
@@ -32,9 +33,9 @@ set tabstop=4           " number of visual spaces per TAB
 set softtabstop=4       " number of spaces in tab when editing
 set expandtab           " Convert tabs to spaces
 
-set number              " show line numbers
 set showcmd             " show command in bottom bar
-set cursorline          " highlight current line
+" set number              " show line numbers
+" set cursorline          " highlight current line
 
 " Folding {{{1
 " ------------
@@ -83,8 +84,11 @@ let mapleader = ","
 nmap <leader>ev :edit $MYVIMRC<CR>
 nmap <leader>eb :edit $HOME/.bashrc<CR>
 
-" User '\l; to toggle "list" (i.e., show invisibles) mode.
+" Use '\l; to toggle "list" (i.e., show invisibles) mode.
 nmap <leader>l :set list!<CR>
+
+" Use '\,' to switch between companion source files
+nmap <leader>, :FSHere<CR>
 
 " Open a file in the same directory as the current file.
 "nmap <leader>ew :e <C-R>=expand("%:p:h") ."/"<CR>
