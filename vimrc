@@ -90,6 +90,10 @@ nmap <leader>l :set list!<CR>
 " Use '\,' to switch between companion source files
 nmap <leader>, :FSHere<CR>
 
+" CtrlP-Funky
+nnoremap <Leader>f :CtrlPFunky<CR>
+nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<CR>
+
 " Open a file in the same directory as the current file.
 "nmap <leader>ew :e <C-R>=expand("%:p:h") ."/"<CR>
 "nmap <leader>es :sp <C-R>=expand("%:p:h") ."/"<CR>
