@@ -2,19 +2,20 @@ source ~/.bash.console.sh
 
 export PS1="$FgiRed$UserName@$ShortHost:$WorkingDirPath$Reset\n$StdPromptPrefix "
 export EDITOR=vim
+export HOMEBREW_DIR="${HOME}/dev/brew"
+export HOMEBREW_CACHE="${HOMEBREW_DIR}/cache"
 export PATH="${HOME}/bin:${PATH}"
 export PATH="${HOME}/dev/WebKit/OpenSource/Tools/Scripts:${PATH}"
 export PATH="${HOME}/dev/depot_tools:${PATH}"
-export PATH="${HOME}/dev/brew/bin:${PATH}"
-export HOMEBREW_CACHE="${HOME}/dev/brew/cache"
+export PATH="${HOMEBREW_DIR}/bin:${PATH}"
 export WEBKIT_OUTPUTDIR="${HOME}/dev/build"
 
-alias ls="ls -AFG"
-alias ll="ls -l"
-alias la="ls -al"
+alias ls="ls -AFGh"
+alias ll="ls -o"
+alias la="ls -ao"
 alias ..="cd .."
-alias df='df --si'
-alias du='du --si -s'
+alias df='df -h'
+alias du='du -h -s'
 alias tree='tree -F'
 alias gitp="git --no-pager"
 alias svn='xcrun svn'
