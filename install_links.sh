@@ -11,9 +11,9 @@ create_link()
 	ln -s ${source} ${target}
 }
 
-create_link bash.console.sh .bash.console.sh
 create_link bash_profile    .bash_profile
 create_link bashrc          .bashrc
+create_link bin             bin
 create_link gitconfig       .gitconfig
 create_link vim             .vim
 create_link vimrc           .vimrc
