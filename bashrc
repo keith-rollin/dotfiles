@@ -1,4 +1,4 @@
-source ~/.bash.console.sh
+[ -r "${HOME}/dotfiles/bashrc.console" ] && source "${HOME}/dotfiles/bashrc.console"
 
 export PS1="$FgiRed$UserName@$ShortHost:$WorkingDirPath$Reset\n$StdPromptPrefix "
 export EDITOR=vim
@@ -59,4 +59,4 @@ function up()
 alias gt='cd $(git rev-parse --show-toplevel 2>/dev/null || (echo "."; echo "Not within a git repository" >&2))'
 source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
 
-[ -r "${HOME}/.bashrc.local" ] && source "${HOME}/.bashrc.local"
+[ -r "${HOME}/dotfiles/bashrc.private" ] && source "${HOME}/dotfiles/bashrc.private"

@@ -1,4 +1,5 @@
 bashrc.local        filter=git-crypt diff=git-crypt
+bashrc.private      filter=git-crypt diff=git-crypt
 git-update-all.sh   filter=git-crypt diff=git-crypt
 kill-safari.sh      filter=git-crypt diff=git-crypt
 *.key               filter=git-crypt diff=git-crypt
