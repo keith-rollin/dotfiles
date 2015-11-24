@@ -7,6 +7,7 @@
 	ci = commit
 	br = branch
 	wc = log --raw
+	s = status -s
 	st = status
 	co = checkout
 	lg = log -p
@@ -22,9 +23,9 @@
 	status = auto
 	interactive = auto
 [core]
-	whitespace = nowarn
+	#whitespace = nowarn
 [apply]
-	whitespace = nowarn
+	#whitespace = nowarn
 [merge]
 	conflictstyle = diff3
 [rerere]
