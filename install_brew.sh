@@ -48,6 +48,9 @@ fi
 
 if is_executable brew
 then
+    # Make sure this exists; homebrew doesn't seem to do that.
+    mkdir -p "$HOMEBREW_TEMP"
+
     echo "*** Updating Homebrew"
     brew update
 
@@ -74,8 +77,10 @@ then
         tree
     )
     casks=(
-        firefox
-        google-chrome
+        # 1Password doesn't work with Homebrew-cask-installed versions of these
+        # browsers.
+        #firefox
+        #google-chrome
 
         # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
         # TODO: Add suspicious-package when unar is fixed. See

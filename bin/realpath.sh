@@ -87,7 +87,7 @@ realpath() {
     TARGET_FILE="$1"
 
     # Switch to the target directory, and get the bare file name.
-    cd "$(dirname $TARGET_FILE)"
+    cd "$(dirname $TARGET_FILE)" &> /dev/null || { echo ""; return; }
     TARGET_FILE="$(basename $TARGET_FILE)"
 
     # Starting with the current directory and bare file name, iterate down a
@@ -98,11 +98,11 @@ realpath() {
     while [ -L "$TARGET_FILE" ]
     do
         TARGET_FILE="$(readlink "$TARGET_FILE")"
-        cd "$(dirname "$TARGET_FILE")"
+        cd "$(dirname "$TARGET_FILE")" &> /dev/null || { echo ""; return; }
         TARGET_FILE="$(basename "$TARGET_FILE")"
     done
 
-    # Compute the canonicalized name by finding the physical path 
+    # Compute the canonicalized name by finding the physical path
     # for the directory we're in and appending the target file.
     echo "$(pwd -P)/$TARGET_FILE"
 }

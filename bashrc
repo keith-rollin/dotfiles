@@ -21,10 +21,19 @@ function is_executable()
 function maybe_resolve()
 {
     # If `realpath.sh` is available, use it to resolve the given path into a
-    # full, real path (no relative directories, no symlinks). Otherwise, just
-    # return what we're given.
+    # full, real path (no relative directories, no symlinks). (In checking,
+    # hardcode a check for realpath being in ${HOME}/bin, since ${HOME}/bin
+    # might not be in $PATH yet.) Otherwise, just return what we're given.
 
-    is_executable realpath.sh && realpath.sh "$1" || echo "$1"
+    if is_executable realpath.sh
+    then
+        realpath.sh "$1"
+    elif is_executable "$HOME/bin/realpath.sh"
+    then
+        "$HOME/bin/realpath.sh" "$1"
+    else
+        echo ""
+    fi
 }
 
 function maybe_source
@@ -38,7 +47,11 @@ function prepend_path()
 {
     # Prepend the given path to PATH, resolving any links if necessary.
 
-    export PATH="$(maybe_resolve "$1"):${PATH}"
+    local p="$(maybe_resolve "$1")"
+    if [[ -n "$p" ]]
+    then
+        export PATH="$p:${PATH}"
+    fi
 }
 
 # Bring in color definitions for PS1.
@@ -56,13 +69,19 @@ export GREP_OPTIONS="--color=auto --devices=skip --exclude='ChangeLog*' --exclud
 export LESS="-IMR $LESS"
 export LS_OPTIONS="-AFGhv $LS_OPTIONS"
 
-# Homebrew (define these before PATH)
-export HOMEBREW_PREFIX="$(maybe_resolve "${HOME}/dev/brew")"
-export HOMEBREW_BIN="${HOMEBREW_PREFIX}/bin"
-export HOMEBREW_CACHE="${HOMEBREW_PREFIX}/cache"
-export HOMEBREW_TEMP="${HOMEBREW_PREFIX}/tmp"
+# Homebrew. Define these before PATH, since we'll be putting one of them into
+# it.
+p="$(maybe_resolve "${HOME}/dev/brew")"
+if [[ -n "$p" ]]
+then
+    export HOMEBREW_PREFIX="$p"
+    export HOMEBREW_BIN="${HOMEBREW_PREFIX}/bin"
+    export HOMEBREW_CACHE="${HOMEBREW_PREFIX}/cache"
+    export HOMEBREW_TEMP="${HOMEBREW_PREFIX}/tmp"
+fi
+unset p
 
-# $PATH
+# $PATH.
 prepend_path "${HOME}/bin"
 prepend_path "${HOME}/dev/WebKit/OpenSource/Tools/Scripts"
 prepend_path "${HOME}/dev/depot_tools"
