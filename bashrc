@@ -67,7 +67,6 @@ export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPr
 # Applications
 export GREP_OPTIONS="--color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn $GREP_OPTIONS"
 export LESS="-IMR $LESS"
-export LS_OPTIONS="-AFGhv $LS_OPTIONS"
 
 # Homebrew. Define these before PATH, since we'll be putting one of them into
 # it.
@@ -78,6 +77,7 @@ then
     export HOMEBREW_BIN="${HOMEBREW_PREFIX}/bin"
     export HOMEBREW_CACHE="${HOMEBREW_PREFIX}/cache"
     export HOMEBREW_TEMP="${HOMEBREW_PREFIX}/tmp"
+    export HOMEBREW_CASK_OPTS="--caskroom=\"${HOMEBREW_PREFIX}/Caskroom\""
 fi
 unset p
 
@@ -88,6 +88,7 @@ prepend_path "${HOME}/dev/depot_tools"
 prepend_path "${HOMEBREW_BIN}"
 
 # Aliases
+alias ls="ls -AFGhv"
 alias ll="ls -o"
 alias la="ls -ao"
 alias ..="cd .."
@@ -117,11 +118,11 @@ shopt -s nocaseglob
 
 # Functions
 
-f()   { find .         -iname "$1";   }     # find
-ff()  { find . -type f -iname "$1";   }     # find file
-fff() { find . -type f -iname "*$1*"; }     # fuzzy find file
-fd()  { find . -type d -iname "$1";   }     # find directory
-ffd() { find . -type d -iname "*$1*"; }     # fuzzy find directory
+f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
+ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
+fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
+fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
+ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
 
 function sudo_keep_alive()
 {
@@ -217,8 +218,21 @@ function gt()
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
 }
 
+function check_format()
+{
+    diff "$1" <("$(xcrun --find clang-format)" -style=WebKit < "$1")
+}
+
 # Bring in git completion.
 maybe_source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
+
+# Bring in ssh keys
+
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+    eval `ssh-agent -s`
+    ssh-add
+    ssh-add ~/.ssh/id_github
+fi
 
 # Bring in additional (private) definitions.
 maybe_source "${HOME}/dotfiles/bashrc.private"

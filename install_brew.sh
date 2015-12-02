@@ -72,7 +72,7 @@ then
         brew-cask
         git-crypt
         hub
-        shellcheck
+        #shellcheck     # Expensive. Requires ghc, which takes over an hour to install.
         ssh-copy-id
         tree
     )
