@@ -37,6 +37,12 @@ then
             "$INSTALLER"
     fi
 
+    # Make sure this exists; homebrew gets tripped up if there is a custom
+    # installation directory and it doesn't exist. It ends up thinking that
+    # /usr/local doesn't have the correct access privileges.
+
+    mkdir -p "$HOMEBREW_PREFIX"
+
     # Run and remove the installer.
 
     ruby "$INSTALLER"
