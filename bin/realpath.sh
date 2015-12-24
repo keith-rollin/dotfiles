@@ -102,9 +102,17 @@ realpath() {
         TARGET_FILE="$(basename "$TARGET_FILE")"
     done
 
-    # Compute the canonicalized name by finding the physical path
-    # for the directory we're in and appending the target file.
-    echo "$(pwd -P)/$TARGET_FILE"
+    # Compute the canonicalized name by finding the physical path for the
+    # directory we're in and appending the target file. If we're passed ".",
+    # then just return the (resolved) current working directory. Without this
+    # special casing, we'll end up with something like "/x/y/z/." (that is,
+    # with the "/." on the end, which is ugly, undesirable, and unneeded).
+    if [[ "$TARGET_FILE" == "." ]]
+    then
+        echo "$(pwd -P)"
+    else
+        echo "$(pwd -P)/$TARGET_FILE"
+    fi
 }
 
 realpath "$1"

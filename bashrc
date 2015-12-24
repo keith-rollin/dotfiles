@@ -107,6 +107,8 @@ alias hide_desktop="defaults write com.apple.finder CreateDesktop -bool false &&
 alias badge="tput bel"
 alias lmk="say 'Process complete.'"
 alias reload='source ~/.bash_profile'
+alias ackc='ack --type cc'
+alias ackcpp='ack --type cpp'
 
 # Shell
 shopt -s cdspell
@@ -226,13 +228,11 @@ function check_format()
 # Bring in git completion.
 maybe_source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
 
-# Bring in ssh keys
+# Bring in ssh keys.
 
-if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval `ssh-agent -s`
-    ssh-add
-    ssh-add ~/.ssh/id_github
-fi
+[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
+ssh-add &> /dev/null
+ssh-add ~/.ssh/id_github &> /dev/null
 
 # Bring in additional (private) definitions.
 maybe_source "${HOME}/dotfiles/bashrc.private"
