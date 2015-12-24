@@ -86,6 +86,7 @@ defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -stri
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
 defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" -string "@\\U21a9"
 defaults write com.apple.menuextra.battery -bool true
+defaults write com.apple.menuextra.clock DateFormat -string "EEE HH:mm:ss"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 5
