@@ -3,7 +3,6 @@
 # Install everything, including dotfiles, Vundle, brew, and prefs.
 
 HERE="$(dirname "$0")"
-
 REALPATH="$HERE/bin/realpath.sh"
 LNS="$HERE/bin/lns"
 HERE="$("$REALPATH" "$HERE")"
