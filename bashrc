@@ -45,13 +45,13 @@ function maybe_source
 
 function prepend_path()
 {
-    # Prepend the given path to PATH, resolving any links if necessary.
+    # Prepend the given path to PATH if it's not already there, resolving any
+    # links if necessary.
 
     local p="$(maybe_resolve "$1")"
-    if [[ -n "$p" ]]
-    then
-        export PATH="$p:${PATH}"
-    fi
+    [[ -z "$p" ]] && return 0
+    [[ "${PATH}" =~ .*$p:.* ]] && return 0
+    export PATH="$p:${PATH}"
 }
 
 # Bring in color definitions for PS1.
@@ -63,10 +63,6 @@ export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
-
-# Applications
-export GREP_OPTIONS="--color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn $GREP_OPTIONS"
-export LESS="-IMR $LESS"
 
 # Homebrew. Define these before PATH, since we'll be putting one of them into
 # it.
@@ -87,29 +83,6 @@ prepend_path "${HOME}/dev/WebKit/OpenSource/Tools/Scripts"
 prepend_path "${HOME}/dev/depot_tools"
 prepend_path "${HOMEBREW_BIN}"
 
-# Aliases
-alias ls="ls -AFGhv"
-alias ll="ls -o"
-alias la="ls -ao"
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias df="df -h"
-alias du="du -hs"
-alias tree="tree -aCF -I '.git'"
-alias gitp="git --no-pager"
-alias cleanupds="find -x . -type f -name '*.DS_Store' -print -delete"
-alias localip="ipconfig getifaddr en0"
-alias show_hidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide_hidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-alias show_desktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-alias hide_desktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias badge="tput bel"
-alias lmk="say 'Process complete.'"
-alias reload='source ~/.bash_profile'
-alias ackc='ack --type cc'
-alias ackcpp='ack --type cpp'
-
 # Shell
 shopt -s cdspell
 shopt -s checkwinsize
@@ -119,6 +92,30 @@ shopt -s nocaseglob
 #shopt -s globstar
 
 # Functions
+
+function ls() { command ls -FGhv "$@" ; }
+function ll() { ls -o "$@" ; }
+function la() { ls -oA "$@" ; }
+function ..() { cd .. ; }
+function ...() { cd ... ; }
+function ....() { cd .... ; }
+function df() { command df -h "$@" ; }
+function du() { command du -hs "$@" ; }
+function tree() { command tree -aCF -I '.git' "$@" ; }
+function gitp() { git --no-pager "$@" ; }
+function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
+function localip() { ipconfig getifaddr en0 ; }
+function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
+function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
+function show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
+function hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
+function badge() { tput bel ; }
+function lmk() { say 'Process complete.' ; }
+function reload() { source ~/.bash_profile ; }
+function ackc() { ack --type cc "$@" ; }
+function ackcpp() { ack --type cpp "$@" ; }
+function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
+function less() { command less -IMR "$@" ; }
 
 f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
 ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
@@ -223,6 +220,16 @@ function gt()
 function check_format()
 {
     diff "$1" <("$(xcrun --find clang-format)" -style=WebKit < "$1")
+}
+
+function goog()
+{
+    open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
+}
+
+function wiki()
+{
+    open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
 }
 
 # Bring in git completion.

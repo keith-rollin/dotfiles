@@ -40,8 +40,13 @@ create_link vimrc           .vimrc
     git checkout master
 )
 
+maybe_source "${HERE}/install_private.sh"
+
 if [[ "$1" == "--all" ]]
 then
+    # Optional because it may take a while.
     maybe_source "${HERE}/install_brew.sh"
+
+    # Optional because it may quit my apps.
     maybe_source "${HERE}/install_prefs.sh"
 fi
