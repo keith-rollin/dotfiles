@@ -20,23 +20,23 @@ function is_executable()
 
 function maybe_resolve()
 {
-    # If `realpath.sh` is available, use it to resolve the given path into a
-    # full, real path (no relative directories, no symlinks). (In checking,
-    # hardcode a check for realpath being in ${HOME}/bin, since ${HOME}/bin
-    # might not be in $PATH yet.) Otherwise, just return what we're given.
+    # If `realpath` is available, use it to resolve the given path into a full,
+    # real path (no relative directories, no symlinks). (In checking, hardcode
+    # a check for realpath being in ${HOME}/bin, since ${HOME}/bin might not be
+    # in $PATH yet.) Otherwise, just return what we're given.
 
-    if is_executable realpath.sh
+    if is_executable realpath
     then
-        realpath.sh "$1"
-    elif is_executable "$HOME/bin/realpath.sh"
+        realpath "$1"
+    elif is_executable "$HOME/bin/realpath"
     then
-        "$HOME/bin/realpath.sh" "$1"
+        "$HOME/bin/realpath" "$1"
     else
         echo ""
     fi
 }
 
-function maybe_source
+function maybe_source()
 {
     # `source` a file if it exists, is readable, and doesn't look like binary.
 
@@ -55,9 +55,11 @@ function prepend_path()
 }
 
 # Bring in color definitions for PS1.
+
 maybe_source "${HOME}/dotfiles/bashrc.console"
 
-# Environment
+# Environment.
+
 export EDITOR=vim
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
@@ -66,6 +68,7 @@ export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPr
 
 # Homebrew. Define these before PATH, since we'll be putting one of them into
 # it.
+
 p="$(maybe_resolve "${HOME}/dev/brew")"
 if [[ -n "$p" ]]
 then
@@ -78,12 +81,14 @@ fi
 unset p
 
 # $PATH.
+
 prepend_path "${HOME}/bin"
 prepend_path "${HOME}/dev/WebKit/OpenSource/Tools/Scripts"
 prepend_path "${HOME}/dev/depot_tools"
 prepend_path "${HOMEBREW_BIN}"
 
-# Shell
+# Shell.
+
 shopt -s cdspell
 shopt -s checkwinsize
 shopt -s nocaseglob
@@ -91,37 +96,41 @@ shopt -s nocaseglob
 #shopt -s dirspell
 #shopt -s globstar
 
-# Functions
+# Functions. The first of these are dangerous, since they replace/alias/hide
+# underlying commands with the same name.
 
+function df() { command df -h "$@" ; }
+function du() { command du -hs "$@" ; }
+function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
+function less() { command less -IMR "$@" ; }
 function ls() { command ls -FGhv "$@" ; }
-function ll() { ls -o "$@" ; }
-function la() { ls -oA "$@" ; }
+function tree() { command tree -aCF -I '.git' "$@" ; }
+
 function ..() { cd .. ; }
 function ...() { cd ... ; }
 function ....() { cd .... ; }
-function df() { command df -h "$@" ; }
-function du() { command du -hs "$@" ; }
-function tree() { command tree -aCF -I '.git' "$@" ; }
-function gitp() { git --no-pager "$@" ; }
-function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
-function localip() { ipconfig getifaddr en0 ; }
+
 function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
 function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
 function show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
 function hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
-function badge() { tput bel ; }
-function lmk() { say 'Process complete.' ; }
-function reload() { source ~/.bash_profile ; }
+
+function f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
+function ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
+function fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
+function fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
+function ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
+
 function ackc() { ack --type cc "$@" ; }
 function ackcpp() { ack --type cpp "$@" ; }
-function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
-function less() { command less -IMR "$@" ; }
-
-f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
-ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
-fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
-fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
-ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
+function badge() { tput bel ; }
+function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
+function gitp() { git --no-pager "$@" ; }
+function la() { ll -A "$@" ; }
+function ll() { ls -o "$@" ; }
+function lmk() { say 'Process complete.' ; }
+function localip() { ipconfig getifaddr en0 ; }
+function reload() { source ~/.bash_profile ; }
 
 function sudo_keep_alive()
 {
@@ -132,27 +141,28 @@ function sudo_keep_alive()
     # Ask for the administrator password upfront
     sudo -v
 
-    # Keep-alive: update existing `sudo` time stamp until this script has finished
+    # Keep-alive: update existing `sudo` time stamp until this script has
+    # finished.
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
 function mkcd()
 {
-    # Create a new directory and enter it
+    # Create a new directory and enter it.
 
     mkdir -p "$@" && cd "$@" || exit
 }
 
 function cdf()
 {
-    # Change working directory to the top-most Finder window location
+    # Change working directory to the top-most Finder window location.
 
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
 }
 
 function fs()
 {
-    # Determine size of a file or total size of a directory
+    # Determine size of a file or total size of a directory.
 
     if du -b /dev/null > /dev/null 2>&1
     then
@@ -170,14 +180,14 @@ function fs()
 
 function gdiff()
 {
-    # Use Git’s colored diff
+    # Use Git’s colored diff.
 
     git diff --no-index --color-words "$@";
 }
 
 function bak()
 {
-    # Make backups of the given files (copy them to *.bak)
+    # Make backups of the given files (copy them to *.bak).
 
     local f
     for f in "$@"
@@ -212,14 +222,9 @@ function up()
 
 function gt()
 {
-    # Go To Git Top
+    # Go To Git Top.
 
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
-}
-
-function check_format()
-{
-    diff "$1" <("$(xcrun --find clang-format)" -style=WebKit < "$1")
 }
 
 function goog()
@@ -233,7 +238,8 @@ function wiki()
 }
 
 # Bring in git completion.
-maybe_source "/Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash"
+
+maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
 
 # Bring in ssh keys.
 
@@ -242,4 +248,5 @@ ssh-add &> /dev/null
 ssh-add ~/.ssh/id_github &> /dev/null
 
 # Bring in additional (private) definitions.
+
 maybe_source "${HOME}/dotfiles/bashrc.private"

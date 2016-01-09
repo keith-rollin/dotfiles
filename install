@@ -3,7 +3,7 @@
 # Install everything, including dotfiles, Vundle, brew, and prefs.
 
 HERE="$(dirname "$0")"
-REALPATH="$HERE/bin/realpath.sh"
+REALPATH="$HERE/bin/realpath"
 LNS="$HERE/bin/lns"
 HERE="$("$REALPATH" "$HERE")"
 
@@ -40,13 +40,13 @@ create_link vimrc           .vimrc
     git checkout master
 )
 
-maybe_source "${HERE}/install_private.sh"
+maybe_source "${HERE}/install.private"
 
 if [[ "$1" == "--all" ]]
 then
     # Optional because it may take a while.
-    maybe_source "${HERE}/install_brew.sh"
+    maybe_source "${HERE}/install.brew"
 
     # Optional because it may quit my apps.
-    maybe_source "${HERE}/install_prefs.sh"
+    maybe_source "${HERE}/install.prefs"
 fi
