@@ -42,11 +42,14 @@ create_link vimrc           .vimrc
 
 maybe_source "${HERE}/install.private"
 
-if [[ "$1" == "--all" ]]
+if [[ "$1" == "--all" || "$1" == "--brew" ]]
 then
     # Optional because it may take a while.
     maybe_source "${HERE}/install.brew"
+fi
 
+if [[ "$1" == "--all" || "$1" == "--prefs" ]]
+then
     # Optional because it may quit my apps.
     maybe_source "${HERE}/install.prefs"
 fi
