@@ -3,12 +3,25 @@
 # Install everything, including dotfiles, Vundle, brew, and prefs.
 
 HERE="$(dirname "$0")"
-REALPATH="$HERE/bin/realpath"
-LNS="$HERE/bin/lns"
-HERE="$("$REALPATH" "$HERE")"
+REALPATH="${HERE}/bin/realpath"
+LNS="${HERE}/bin/lns"
+HERE="$("${REALPATH}" "${HERE}")"
+
+INIT_BREW=0
+INIT_PREFS=0
+
+for p in $@
+do
+    case $p in
+        --all)      INIT_BREW=1; INIT_PREFS=1; shift;;
+        --brew)     INIT_BREW=1;               shift;;
+        --prefs)                 INIT_PREFS=1; shift;;
+        *)          echo "### Unknown parameter: $p"; exit 1;;
+    esac
+done
 
 # Get some handy functions defined.
-source "$HERE/bashrc"
+source "${HERE}/bashrc"
 
 create_link()
 {
@@ -42,14 +55,8 @@ create_link vimrc           .vimrc
 
 maybe_source "${HERE}/install.private"
 
-if [[ "$1" == "--all" || "$1" == "--brew" ]]
-then
-    # Optional because it may take a while.
-    maybe_source "${HERE}/install.brew"
-fi
+# Optional because it may take a while.
+[[ "${INIT_BREW}" -ne 0 ]] && maybe_source "${HERE}/install.brew"
 
-if [[ "$1" == "--all" || "$1" == "--prefs" ]]
-then
-    # Optional because it may quit my apps.
-    maybe_source "${HERE}/install.prefs"
-fi
+# Optional because it may quit my apps, and that's disruptive.
+[[ "${INIT_PREFS}" -ne 0 ]] && maybe_source "${HERE}/install.prefs"

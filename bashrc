@@ -63,8 +63,8 @@ maybe_source "${HOME}/dotfiles/bashrc.console"
 export EDITOR=vim
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
-export LESS=-IMR
 export LC_ALL='en_US.UTF-8';
+export LESS=-IMR
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 
 # Homebrew. Define these before PATH, since we'll be putting one of them into

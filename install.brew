@@ -75,10 +75,9 @@ then
 
     apps=(
         ack
-        brew-cask
         git-crypt
         hub
-        #shellcheck     # Expensive. Requires ghc, which takes over an hour to install.
+        #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
         ssh-copy-id
         tree
     )
@@ -89,8 +88,6 @@ then
         #google-chrome
 
         # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
-        # TODO: Add suspicious-package when unar is fixed. See
-        # https://github.com/caskroom/homebrew-cask/issues/15025
 
         betterzipql
         qlcolorcode
@@ -99,6 +96,7 @@ then
         qlstephen
         quicklook-csv
         quicklook-json
+        suspicious-package
     )
 
     brew tap caskroom/cask
