@@ -63,6 +63,7 @@ maybe_source "${HOME}/dotfiles/bashrc.console"
 export EDITOR=vim
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
+export LESS=-IMR
 export LC_ALL='en_US.UTF-8';
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 
@@ -98,11 +99,19 @@ shopt -s nocaseglob
 
 # Functions. The first of these are dangerous, since they replace/alias/hide
 # underlying commands with the same name.
+#
+# UPDATE: I've had to disable the "less" function and revert to specifying
+# options in the LESS environment variable. I had moved to using a "less"
+# function for consistency with the way I modified other standard commands, but
+# this had problems with "git". In particular, "git" felt free to pass "-FRX"
+# to less, which messed up with my preferred way of handling the altscreen.
+# Moving (back) to defining my options in LESS inhibited git from setting its
+# own options, thereby restoring my preferred handling of the altscreen.
 
 function df() { command df -h "$@" ; }
 function du() { command du -hs "$@" ; }
 function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
-function less() { command less -IMR "$@" ; }
+#function less() { command less -IMR "$@" ; }
 function ls() { command ls -FGhv "$@" ; }
 function tree() { command tree -aCF -I '.git' "$@" ; }
 
