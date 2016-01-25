@@ -6,9 +6,21 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
+" To try out:
+"  Shougo/neobundle.vim
+"  bling/vim-airline
+"  kballard/vim-swift (supports syntastic)
+"  powerline/powerline
+"  scrooloose/nerdtree
+"  scrooloose/syntastic
+"  toyamarinyon/vim-swift
+"  tpope/vim-rsi
+"  tpope/vim-surround
+
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'derekwyatt/vim-fswitch'
-Plugin 'kien/ctrlp.vim'
+Plugin 'keith/swift.vim'
 Plugin 'tacahiroy/ctrlp-funky'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
@@ -85,14 +97,14 @@ augroup END
 " ----------------
 let mapleader = ","
 
-" Use '\ev' to edit this file, '\eb' to edit the .bashrc file.
+" Use ',ev' to edit this file, ',eb' to edit the .bashrc file.
 nmap <leader>ev :edit $MYVIMRC<CR>
 nmap <leader>eb :edit $HOME/.bashrc<CR>
 
-" Use '\l; to toggle "list" (i.e., show invisibles) mode.
+" Use ',l; to toggle "list" (i.e., show invisibles) mode.
 nmap <leader>l :set list!<CR>
 
-" Use '\,' to switch between companion source files
+" Use ',,' to switch between companion source files
 nmap <leader>, :FSHere<CR>
 
 " CtrlP-Funky
