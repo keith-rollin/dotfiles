@@ -248,7 +248,7 @@ function wiki()
 
 # Bring in git completion.
 
-maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
+is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
 
 # Bring in ssh keys.
 
