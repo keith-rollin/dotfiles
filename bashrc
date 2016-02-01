@@ -116,8 +116,8 @@ function ls() { command ls -FGhv "$@" ; }
 function tree() { command tree -aCF -I '.git' "$@" ; }
 
 function ..() { cd .. ; }
-function ...() { cd ... ; }
-function ....() { cd .... ; }
+function ...() { cd ../.. ; }
+function ....() { cd ../../.. ; }
 
 function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
 function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }

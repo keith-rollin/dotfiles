@@ -17,6 +17,9 @@
 	last = log -1 HEAD
 	spull = !git svn rebase
 	spush = !git svn dcommit
+	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
+	lgg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	svn-rev = !sh -c 'git svn find-rev r$1 | xargs git show' -
 [color]
 	branch = auto
 	diff = auto
