@@ -4,22 +4,22 @@
 [push]
 	default = simple
 [alias]
-	ci = commit
 	br = branch
-	wc = log --raw
-	s = status -s
-	st = status
 	co = checkout
-	lg = log -p
-	lol = log --oneline
+	ci = commit
 	h = help
 	unstage = reset HEAD --
-	last = log -1 HEAD
+	ls-alias = config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
+	s = status -s
+	st = status
+	log1 = log -1 HEAD
+	logf = log --raw
+	logg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	logl = log --oneline
+	logp = log -p
 	spull = !git svn rebase
 	spush = !git svn dcommit
-	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
-	lgg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	svn-rev = !sh -c 'git svn find-rev r$1 | xargs git show' -
+	srev = !sh -c 'git svn find-rev r$1 | xargs git show' -
 [color]
 	branch = auto
 	diff = auto
