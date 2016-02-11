@@ -59,6 +59,10 @@ function prepend_path()
 maybe_source "${HOME}/dotfiles/bashrc.console"
 
 # Environment.
+#
+# We need to force SHELL_SESSION_HISTORY to 1 in order to override the default
+# behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
+# defined.
 
 export EDITOR=vim
 export HISTTIMEFORMAT="%F %T: "
@@ -66,6 +70,7 @@ export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
+export SHELL_SESSION_HISTORY=1
 
 # Homebrew. Define these before PATH, since we'll be putting one of them into
 # it.
