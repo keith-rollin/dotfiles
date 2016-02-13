@@ -9,7 +9,7 @@
 	ci = commit
 	h = help
 	unstage = reset HEAD --
-	ls-alias = config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
+	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
 	s = status -s
 	st = status
 	log1 = log -1 HEAD
