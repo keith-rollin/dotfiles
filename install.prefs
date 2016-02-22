@@ -30,6 +30,8 @@ defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool false
+defaults write NSGlobalDomain NSUserKeyEquivalents -dict "Enter Full Screen" "@^f" "Exit Full Screen" "@^f"
+defaults write com.apple.universalaccess com.apple.custommenu.apps -array NSGlobalDomain    # Needed to activate the previous line
 defaults write com.apple.ActivityMonitor IconType -int 5
 defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
 defaults write com.apple.ActivityMonitor ShowCategory -int 0
