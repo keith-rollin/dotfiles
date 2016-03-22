@@ -35,3 +35,5 @@
 	enabled = true
 [credential]
 	helper = osxkeychain
+[sendemail]
+	transferEncoding = base64
