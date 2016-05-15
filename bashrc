@@ -251,6 +251,24 @@ function wiki()
     open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
 }
 
+function vi()
+{
+    # Open a file in vim, converting any line like this:
+    #
+    #   path/to/file.cpp:62
+    #
+    # Into:
+    #
+    #   path/to/file.cpp +62
+
+    if [[ $1 =~ .*:.* ]]
+    then
+        command vim $(echo $1 | sed -e 's/\(.*\):\(.*\)/\1 +\2/')
+    else
+        command vim $1
+    fi
+}
+
 # Bring in git completion.
 
 is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
