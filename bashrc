@@ -269,6 +269,27 @@ function vi()
     fi
 }
 
+function utcdate()
+{
+    TZ=utc date
+}
+
+function ascii()
+{
+    #man ascii | col -b | grep -A 55 --color=never "octal set"
+    cat /usr/share/misc/ascii
+}
+
+function urlencode()
+{
+    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
+}
+
+function wip()
+{
+    git commit -a -m wip
+}
+
 # Bring in git completion.
 
 is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
