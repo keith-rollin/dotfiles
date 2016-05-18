@@ -253,7 +253,7 @@ function wiki()
 
 function vi()
 {
-    # Open a file in vim, converting any line like this:
+    # Open a file in vim, converting any parameter like this:
     #
     #   path/to/file.cpp:62
     #
@@ -261,12 +261,19 @@ function vi()
     #
     #   path/to/file.cpp +62
 
-    if [[ $1 =~ .*:.* ]]
-    then
-        command vim $(echo $1 | sed -e 's/\(.*\):\(.*\)/\1 +\2/')
-    else
-        command vim $1
-    fi
+    CMD="command vi"
+    for p in "$@"
+    do
+        if [[ "$p" =~ .*:.* ]]
+        then
+            CMD="$CMD $(echo $p | sed -e 's/\(.*\):\(.*\)/"\1" +\2/')"
+        else
+            CMD="$CMD \"$p\""
+        fi
+    done
+
+    #echo $CMD
+    eval $CMD
 }
 
 function utcdate()
