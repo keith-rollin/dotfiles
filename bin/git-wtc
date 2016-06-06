@@ -1,0 +1,17 @@
+#!/bin/bash
+
+BRANCH_NAME=$1
+
+[[ -z "${BRANCH_NAME}" ]] && { echo "### New branch name needed"; exit 1; }
+
+cd ~/dev/WebKit/Internal
+git worktree add -b $1 ~/dev/WebKit/branches/$1/Internal
+cd -
+
+cd ~/dev/WebKit/Internal/iOS
+git worktree add -b $1 ~/dev/WebKit/branches/$1/Internal/iOS
+cd -
+
+cd ~/dev/WebKit/OpenSource
+git worktree add -b $1 ~/dev/WebKit/branches/$1/OpenSource
+cd -
