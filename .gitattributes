@@ -1,6 +1,7 @@
 bashrc.private      filter=git-crypt diff=git-crypt
 bwk                 filter=git-crypt diff=git-crypt
 git-update-all      filter=git-crypt diff=git-crypt
+git-wtc             filter=git-crypt diff=git-crypt
 install.private     filter=git-crypt diff=git-crypt
 kill-safari         filter=git-crypt diff=git-crypt
 *.key               filter=git-crypt diff=git-crypt

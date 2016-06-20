@@ -26,15 +26,11 @@
 	diff = auto
 	status = auto
 	interactive = auto
-[core]
-	#whitespace = nowarn
-[apply]
-	#whitespace = nowarn
 [merge]
 	conflictstyle = diff3
 [rerere]
 	enabled = true
-[credential]
-	helper = osxkeychain
 [sendemail]
 	transferEncoding = base64
+[log]
+	date = local
