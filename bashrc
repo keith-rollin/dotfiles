@@ -28,9 +28,9 @@ function maybe_resolve()
     if is_executable realpath
     then
         realpath "$1"
-    elif is_executable "$HOME/bin/realpath"
+    elif is_executable "${HOME}/bin/realpath"
     then
-        "$HOME/bin/realpath" "$1"
+        "${HOME}/bin/realpath" "$1"
     else
         echo ""
     fi
@@ -306,6 +306,14 @@ is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-cor
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
 ssh-add &> /dev/null
 ssh-add ~/.ssh/id_github &> /dev/null
+
+# Bring in swift.
+
+if is_executable swiftenv
+then
+    export SWIFTENV_ROOT="${HOME}/.swiftenv"
+    eval "$(swiftenv init -)"
+fi
 
 # Bring in additional (private) definitions.
 

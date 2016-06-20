@@ -79,7 +79,9 @@ then
         hub
         #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
         ssh-copy-id
+        swift-env
         tree
+        xz
     )
     casks=(
         # 1Password doesn't work with Homebrew-cask-installed versions of these

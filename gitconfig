@@ -20,6 +20,7 @@
 	spull = !git svn rebase
 	spush = !git svn dcommit
 	srev = !sh -c 'git svn find-rev r$1 | xargs git show' -
+    unstash = stash pop
 [color]
 	branch = auto
 	diff = auto
