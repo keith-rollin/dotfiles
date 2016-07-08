@@ -51,6 +51,7 @@ create_link vimrc           .vimrc
     echo "*** Updating Vundle"
     cd "${HERE}/vim/bundle/Vundle.vim" || exit
     git checkout master
+    git pull
 )
 
 maybe_source "${HERE}/install.private"
