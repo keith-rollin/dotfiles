@@ -112,6 +112,11 @@ nmap <leader>, :FSHere<CR>
 nnoremap <Leader>f :CtrlPFunky<CR>
 nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 
+" vim-easy-align
+
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
 
 " Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc {{{1
 " ----------------------------------------------------------------------------
