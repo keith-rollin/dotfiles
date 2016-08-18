@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Scan all files in the current directory hierarchy and change all instances of
+# one word/symbol to another. The conversion mapping is provided by an external
+# file. This file can be specified on the command line as a parameter, or can
+# be piped in via stdin. The contents of the file are a series of lines, with
+# each lines containing two whitespace-separated words. Empty lines and lines
+# starting with # are ignored.
+#
+# Example:
+#
+# mapping.txt
+# -----------
+# foo bar
+# Baz Bip
+# -----------
+#
+# $ canon mapping.txt
+#
+# or
+#
+# $ canon < mapping.txt
+
+MAP_FILE=$1
+shift
+
+while read OLD NEW
+do
+    [[ -z "$OLD" ]] && continue
+    [[ "$OLD" =~ \#.* ]] && continue
+
+    echo "$OLD -> $NEW"
+    for f in $(git grep --name-only -w $OLD)
+    do
+        echo "...$f"
+        sed -i '' -Ee "s/[[:<:]]$OLD[[:>:]]/$NEW/" $f
+    done
+done < "${MAP_FILE:-/dev/stdin}"

@@ -76,23 +76,11 @@ endif
 
 " Cursor restoration {{{1
 " -----------------------
-" Restore the last cursor position. From:
-"
-" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
-"
-" See also: 'help last-position-jump'
+" Restore the last cursor position. From: 'help last-position-jump'
 
-function! ResCur()
-    if line("'\"") <= line("$")
-        normal! g`"
-        return 1
-    endif
-endfunction
-
-augroup resCur
-    autocmd!
-    autocmd BufWinEnter * call ResCur()
-augroup END
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
 
 " Custom keys {{{1
 " ----------------
@@ -113,10 +101,8 @@ nnoremap <Leader>f :CtrlPFunky<CR>
 nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 
 " vim-easy-align
-
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-
 
 " Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc {{{1
 " ----------------------------------------------------------------------------
