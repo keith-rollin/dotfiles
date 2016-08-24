@@ -7,13 +7,17 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " To try out:
-"  Shougo/neobundle.vim
 "  bling/vim-airline
+"  fatih/vim-go
 "  kballard/vim-swift (supports syntastic)
+"  landaire/deoplete-swift
+"  mitsuse/autocomplete-swift
 "  powerline/powerline
 "  scrooloose/nerdtree
 "  scrooloose/syntastic
+"  Shougo/neobundle.vim
 "  toyamarinyon/vim-swift
+"  tpope/vim-pathogen
 "  tpope/vim-rsi
 "  tpope/vim-surround
 
@@ -26,10 +30,6 @@ Plugin 'tacahiroy/ctrlp-funky'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-vinegar'
-
-" Plugin 'fatih/vim-go'
-" Plugin 'tpope/vim-pathogen'
-" Plugin 'kballard/vim-swift'
 
 call vundle#end()
 filetype plugin indent on
@@ -77,7 +77,6 @@ endif
 " Cursor restoration {{{1
 " -----------------------
 " Restore the last cursor position. From: 'help last-position-jump'
-
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
@@ -106,7 +105,6 @@ nmap ga <Plug>(EasyAlign)
 
 " Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc {{{1
 " ----------------------------------------------------------------------------
-
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
     let save_cursor = getpos(".")
@@ -125,4 +123,4 @@ if has("autocmd")
     autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
 endif
 
-" vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:foldlevel=1
