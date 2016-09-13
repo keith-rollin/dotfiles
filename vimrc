@@ -20,6 +20,7 @@ call vundle#begin()
 "  tpope/vim-pathogen
 "  tpope/vim-rsi
 "  tpope/vim-surround
+"  vim-scripts/DrawIt
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
