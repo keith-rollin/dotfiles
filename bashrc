@@ -146,25 +146,21 @@ function lmk() { say 'Process complete.' ; }
 function localip() { ipconfig getifaddr en0 ; }
 function reload() { source ~/.bash_profile ; }
 
-function sudo_keep_alive()
+function ascii()
 {
-    # Go into sudo mode and stay in sudo mode until the current script quits.
-    # (I copied this function from somewhere else. The "sudo -n true" comes
-    # from that source. I don't know why it's not "sudo -v".)
-
-    # Ask for the administrator password upfront
-    sudo -v
-
-    # Keep-alive: update existing `sudo` time stamp until this script has
-    # finished.
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+    #man ascii | col -b | grep -A 55 --color=never "octal set"
+    cat /usr/share/misc/ascii
 }
 
-function mkcd()
+function bak()
 {
-    # Create a new directory and enter it.
+    # Make backups of the given files (copy them to *.bak).
 
-    mkdir -p "$@" && cd "$@" || exit
+    local f
+    for f in "$@"
+    do
+        cp -p "$f" "$f.bak"
+    done
 }
 
 function cdf()
@@ -192,22 +188,33 @@ function fs()
     fi
 }
 
-function gdiff()
+function git-diff()
 {
     # Use Git’s colored diff.
 
     git diff --no-index --color-words "$@";
 }
 
-function bak()
+function git-edit-changed()
 {
-    # Make backups of the given files (copy them to *.bak).
+    OLD_CWD="$(pwd)"
+    git-top
+    vi $(git diff --name-only)
+    cd "${OLD_CWD}"
+}
 
-    local f
-    for f in "$@"
-    do
-        cp -p "$f" "$f.bak"
-    done
+function git-top()
+{
+    # Go To Git Top.
+
+    cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
+}
+
+function mkcd()
+{
+    # Create a new directory and enter it.
+
+    mkdir -p "$@" && cd "$@" || exit
 }
 
 function path()
@@ -215,6 +222,30 @@ function path()
     # Show the PATH, one entry per line.
 
     echo "$PATH" | tr : '\n'
+}
+
+function search_goog()
+{
+    open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
+}
+
+function search_wiki()
+{
+    open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
+}
+
+function sudo_keep_alive()
+{
+    # Go into sudo mode and stay in sudo mode until the current script quits.
+    # (I copied this function from somewhere else. The "sudo -n true" comes
+    # from that source. I don't know why it's not "sudo -v".)
+
+    # Ask for the administrator password upfront
+    sudo -v
+
+    # Keep-alive: update existing `sudo` time stamp until this script has
+    # finished.
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
 function up()
@@ -234,21 +265,14 @@ function up()
     fi
 }
 
-function gt()
+function urlencode()
 {
-    # Go To Git Top.
-
-    cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
+    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
 }
 
-function goog()
+function utcdate()
 {
-    open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
-}
-
-function wiki()
-{
-    open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
+    TZ=utc date
 }
 
 function vi()
@@ -274,22 +298,6 @@ function vi()
 
     #echo $CMD
     eval $CMD
-}
-
-function utcdate()
-{
-    TZ=utc date
-}
-
-function ascii()
-{
-    #man ascii | col -b | grep -A 55 --color=never "octal set"
-    cat /usr/share/misc/ascii
-}
-
-function urlencode()
-{
-    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
 }
 
 function wip()
