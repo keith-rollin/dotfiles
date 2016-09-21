@@ -203,6 +203,11 @@ function git-edit-changed()
     cd "${OLD_CWD}"
 }
 
+function git-edit-files-with-symbol()
+{
+    vi $(git grep --name-only "$1")
+}
+
 function git-top()
 {
     # Go To Git Top.
