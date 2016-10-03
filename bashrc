@@ -170,6 +170,16 @@ function cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
 }
 
+function edit-ff()
+{
+    vi $(ff "$1")
+}
+
+function edit-fff()
+{
+    vi $(fff "$1")
+}
+
 function fs()
 {
     # Determine size of a file or total size of a directory.
