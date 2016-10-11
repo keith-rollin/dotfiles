@@ -20,7 +20,10 @@
 	spull = !git svn rebase
 	spush = !git svn dcommit
 	srev = !sh -c 'git svn find-rev r$1 | xargs git show' -
-    unstash = stash pop
+	unstash = stash pop
+	commend = commit --amend --no-edit
+	shorty = status --short --branch
+	grog = log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
 [color]
 	branch = auto
 	diff = auto

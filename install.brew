@@ -74,13 +74,15 @@ then
     # zopfli
 
     apps=(
-        ack
         git-crypt
-        hub
+        #hub
+        ripgrep
         #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
         ssh-copy-id
         swift-env
         tree
+        vim
+        watch           # Kinda expensive, but OK...
         xz
     )
     casks=(
