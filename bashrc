@@ -239,6 +239,11 @@ function path()
     echo "$PATH" | tr : '\n'
 }
 
+function rg()
+{
+    command rg -g '!ChangeLog*' "$@"
+}
+
 function search_goog()
 {
     open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
