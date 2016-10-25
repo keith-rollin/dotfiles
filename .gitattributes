@@ -1,5 +1,6 @@
 bashrc.private      filter=git-crypt diff=git-crypt
 bwk                 filter=git-crypt diff=git-crypt
+create-repos        filter=git-crypt diff=git-crypt
 gather-wk-logs      filter=git-crypt diff=git-crypt
 git-update-all      filter=git-crypt diff=git-crypt
 git-wtc             filter=git-crypt diff=git-crypt

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# (This script is not intended to be stand-alone. It's intended to be source'd
+# from `install`.)
+
 # Install homebrew (if missing) or update it (if not). Install or update
 # desired packages. Also install/update cask along with desired packages.
 #
@@ -11,6 +14,19 @@
 # First check to see if it's already installed. If not, prepare a place for it
 # and install it.
 
+function update_variable()
+{
+    local NAME="$1"
+    local FILE="$2"
+
+    eval VALUE="\$$1"
+    [[ -z "${VALUE}" ]] && { echo "### VALUE is empty"; return; }
+
+    sed -E -i '' \
+        -e "s#(${NAME}[[:space:]]*=[[:space:]]*).*#\1'${VALUE}'.freeze#" \
+        "$FILE"
+}
+
 if ! is_executable brew
 then
     echo "*** Installing Homebrew"
@@ -19,34 +35,29 @@ then
 
     INSTALLER="/tmp/install"
     curl -fsSL "https://raw.githubusercontent.com/Homebrew/install/master/install" \
-        -o "$INSTALLER" # (Should check for errors.)
+        -o "${INSTALLER}" # (Should check for errors.)
 
-    # If HOMEBREW_PREFIX and/or HOMEBREW_CACHE are defined, substitute them
-    # into the installer script.
+    # If HOMEBREW_PREFIX, HOMEBREW_REPOSITORY, and/or HOMEBREW_CACHE are
+    # defined, substitute them into the installer script.
 
-    if [[ -n "$HOMEBREW_PREFIX" ]]
-    then
-        sed -E -i '' \
-            -e "s#(HOMEBREW_PREFIX[[:space:]]*=[[:space:]]*).*#\1'$HOMEBREW_PREFIX'#" \
-            "$INSTALLER"
-    fi
-    if [[ -n "$HOMEBREW_CACHE" ]]
-    then
-        sed -E -i '' \
-            -e "s#(HOMEBREW_CACHE[[:space:]]*=[[:space:]]*).*#\1'$HOMEBREW_CACHE'#" \
-            "$INSTALLER"
-    fi
+    update_variable HOMEBREW_PREFIX "${INSTALLER}"
+    update_variable HOMEBREW_REPOSITORY "${INSTALLER}"
+    update_variable HOMEBREW_CACHE "${INSTALLER}"
+
+    # If there are any more /usr/local's in the installer, bail.
+
+    grep -q '^[^#]*\/usr\/local' "${INSTALLER}" && exit 1
 
     # Make sure this exists; homebrew gets tripped up if there is a custom
     # installation directory and it doesn't exist. It ends up thinking that
     # /usr/local doesn't have the correct access privileges.
 
-    mkdir -p "$HOMEBREW_PREFIX"
+    mkdir -p "${HOMEBREW_PREFIX}"
 
     # Run and remove the installer.
 
-    ruby "$INSTALLER"
-    rm "$INSTALLER"
+    ruby "${INSTALLER}"
+    rm "${INSTALLER}"
 fi
 
 
@@ -74,12 +85,12 @@ then
     # zopfli
 
     apps=(
-        git-crypt
-        #hub
-        ripgrep
+        #hub            # Maybe some other time. Never got into it. Also, check out gitless.
         #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
+        git-crypt
+        kylef/formulae/swiftenv
+        ripgrep
         ssh-copy-id
-        swift-env
         tree
         vim
         watch           # Kinda expensive, but OK...
@@ -103,7 +114,7 @@ then
         suspicious-package
     )
 
-    brew tap caskroom/cask
+    #brew tap caskroom/cask # Automatic now
     brew install "${apps[@]}"
     brew cask install "${casks[@]}"
     qlmanage -r &> /dev/null

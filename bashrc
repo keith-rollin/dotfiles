@@ -79,6 +79,7 @@ p="$(maybe_resolve "${HOME}/dev/brew")"
 if [[ -n "$p" ]]
 then
     export HOMEBREW_PREFIX="$p"
+    export HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}/Homebrew"
     export HOMEBREW_BIN="${HOMEBREW_PREFIX}/bin"
     export HOMEBREW_CACHE="${HOMEBREW_PREFIX}/cache"
     export HOMEBREW_TEMP="${HOMEBREW_PREFIX}/tmp"
@@ -168,6 +169,11 @@ function cdf()
     # Change working directory to the top-most Finder window location.
 
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
+}
+
+function delete-brew()
+{
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 }
 
 function edit-ff()

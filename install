@@ -7,24 +7,77 @@ REALPATH="${HERE}/bin/realpath"
 LNS="${HERE}/bin/lns"
 HERE="$("${REALPATH}" "${HERE}")"
 
-INIT_BREW=0
+INIT_BREW=1 # Force this one in order to install git-crypt for private stuff.
 INIT_PREFS=0
+KEY=""
 
-for p in $@
+while [[ "${1:+x}" ]]
 do
-    case $p in
+    case "$1" in
         --all)      INIT_BREW=1; INIT_PREFS=1; shift;;
         --brew)     INIT_BREW=1;               shift;;
         --prefs)                 INIT_PREFS=1; shift;;
+        --key)      KEY="$2";                  shift 2;;
         *)          echo "### Unknown parameter: $p"; exit 1;;
     esac
 done
 
+# Make sure we are in a dev/dotfiles directory.
+
+DEV_PATH="$(dirname "${HERE}")"
+DEV_NAME="$(basename "${DEV_PATH}")"
+if [[ "${DEV_NAME}" != "dev" ]]
+then
+    echo "### dotfiles must be in dev parent directory"
+    exit 1
+fi
+
+# Make sure Vundle.vim is not in a "detached HEAD" state. I don't know why it
+# would be, but it seems to do that every once and a while.
+
+(
+    echo "*** Updating Vundle"
+    cd "${HERE}/vim/bundle/Vundle.vim" || exit
+    git checkout master
+    git pull
+)
+
+# If I forgot to recursively checkout dotfiles, do that now. Otherwise, update
+# the submodules.
+
+if [[ ! -d "${HERE}/vim/bundle/vim-sensible" ]]
+then
+    echo "*** Installing submodules"
+    git submodule update --init --recursive
+else
+    echo "*** Updating submodules"
+    git submodule foreach git pull origin master
+fi
+
+# If we're going to install `brew`, make sure that its home has been created.
+# If not, bashrc (called next) will not define some needed environment
+# variables.
+
+BREW_PATH="${DEV_PATH}/brew"
+if [[ "${INIT_BREW}" -ne 0 && ! -d "${BREW_PATH}" ]]
+then
+    echo "*** Creating brew directory"
+    mkdir "${BREW_PATH}"
+fi
+
 # Get some handy functions defined.
+
 source "${HERE}/bashrc"
 
-create_link()
+# Create or update links in my home directory to handy things elsewhere.
+
+create_link_in_home_to_dotfile()
 {
+    # Create a link in my home directory to a file or directory in my dotfiles
+    # directory, possibly changing the name (e.g. "bashrc" in my dotfiles
+    # directory but ".bashrc" in my home directory). If a link already exists,
+    # update it.
+
     [[ "$1" == "." ]] && local source="${HERE}" || local source="${HERE}/$1"
     [[ "$2" == "." ]] && local target="${HOME}" || local target="${HOME}/$2"
 
@@ -34,30 +87,70 @@ create_link()
     }
 
     rm -f "${target}"
-    "$LNS" "${source}" "${target}" > /dev/null
+    "$LNS" "${source}" "${target}"
 }
 
-create_link bash_profile    .bash_profile
-create_link bashrc          .bashrc
-create_link bin             bin
-create_link .               dotfiles
-create_link gitconfig       .gitconfig
-create_link inputrc         .inputrc
-create_link vim             .vim
-create_link vimrc           .vimrc
+function create_link_in_home_to_directory()
+{
+    # Create a link in my home directory to a directory elsewhere, keeping the
+    # target's name, updating any pre-existing link in the home directory.
 
-# Make sure Vundle.vim is not in a "detached HEAD" state.
-(
-    echo "*** Updating Vundle"
-    cd "${HERE}/vim/bundle/Vundle.vim" || exit
-    git checkout master
-    git pull
-)
+    local source="$1"
+    local target="${HOME}/$(basename "${source}")"
 
-maybe_source "${HERE}/install.private"
+    [[ ! -d "${source}" ]] && return
 
-# Optional because it may take a while.
+    [[ -e "${target}" && ! -L "${target}" ]] && {
+        echo "### File ${link} exists and is not a link. Please move it aside.";
+        return;
+    }
+
+    rm -f "${target}"
+    "$LNS" "${source}" "${target}"
+}
+
+echo "*** Creating/updating home directory links"
+
+create_link_in_home_to_dotfile bash_profile    .bash_profile
+create_link_in_home_to_dotfile bashrc          .bashrc
+create_link_in_home_to_dotfile bin             bin
+create_link_in_home_to_dotfile .               dotfiles
+create_link_in_home_to_dotfile gitconfig       .gitconfig
+create_link_in_home_to_dotfile inputrc         .inputrc
+create_link_in_home_to_dotfile vim             .vim
+create_link_in_home_to_dotfile vimrc           .vimrc
+
+create_link_in_home_to_directory "${DEV_PATH}"
+create_link_in_home_to_directory "${DEV_PATH}/dotfiles"
+
+# Install Brew now, if we've called for it. We need to do this before invoking
+# install.private since that file might be encrypted and we need git-crypt from
+# brew in order to decrypt it.
+
 [[ "${INIT_BREW}" -ne 0 ]] && maybe_source "${HERE}/install.brew"
 
-# Optional because it may quit my apps, and that's disruptive.
-[[ "${INIT_PREFS}" -ne 0 ]] && maybe_source "${HERE}/install.prefs"
+# Pulling this out because it's kinda skanky and fragile. The options could
+# break at any time, and I'd have no way to know that until down the line.
+# Maybe bring this back if we can verify that the changes took effect.
+
+# [[ "${INIT_PREFS}" -ne 0 ]] && maybe_source "${HERE}/install.prefs"
+
+function is_decrypted()
+{
+    [[ "$(git -C "${HERE}" config --get filter.git-crypt.required)" == "true" ]]
+}
+
+if ! is_decrypted
+then
+    if [[ -n "${KEY}" ]]
+    then
+        git -C "${HERE}" crypt unlock "${KEY}"
+    else
+        echo "### WARNING: git repository is encrypted. Specify a key with --key to decrypt it."
+    fi
+fi
+
+if is_decrypted
+then
+    maybe_source "${HERE}/install.private"
+fi

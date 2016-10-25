@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# (This script is not intended to be stand-alone. It's intended to be source'd
+# from `install`.)
+
 # Install system/application preferences via defaults, nvram, pmset, tmutil,
 # systemsetup, scutil, mdutil, plistbuddy, etc.
 
