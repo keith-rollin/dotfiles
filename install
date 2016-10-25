@@ -4,8 +4,8 @@
 
 HERE="$(dirname "$0")"
 REALPATH="${HERE}/bin/realpath"
-LNS="${HERE}/bin/lns"
 HERE="$("${REALPATH}" "${HERE}")"
+LNS="${HERE}/bin/lns"
 
 INIT_BREW=1 # Force this one in order to install git-crypt for private stuff.
 INIT_PREFS=0
