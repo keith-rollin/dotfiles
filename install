@@ -123,6 +123,11 @@ create_link_in_home_to_dotfile vimrc           .vimrc
 create_link_in_home_to_directory "${DEV_PATH}"
 create_link_in_home_to_directory "${DEV_PATH}/dotfiles"
 
+# Run through bashrc again. It might now define some variables that it couldn't
+# before the above links were created.
+
+source "${HERE}/bashrc"
+
 # Install Brew now, if we've called for it. We need to do this before invoking
 # install.private since that file might be encrypted and we need git-crypt from
 # brew in order to decrypt it.
