@@ -53,6 +53,7 @@ then
     # /usr/local doesn't have the correct access privileges.
 
     mkdir -p "${HOMEBREW_PREFIX}"
+    mkdir -p "${HOMEBREW_TEMP}" # Need to make this one, too.
 
     # Run and remove the installer.
 
