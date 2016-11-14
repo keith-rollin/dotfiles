@@ -207,33 +207,34 @@ nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
     nmap <silent> <leader>sl      :set list!<CR>
     nmap <silent> <leader>ss      :set spell!<CR>
 "   nmap <silent> <leader>v       :set paste!<CR> " Handled with 'pastetoggle'
-    nmap <silent> <leader>wc      :wincmd c<CR>
-    nmap <silent> <leader>wh      :call WinMove('h')<CR>
-    nmap <silent> <leader>wj      :call WinMove('j')<CR>
-    nmap <silent> <leader>wk      :call WinMove('k')<CR>
-    nmap <silent> <leader>wl      :call WinMove('l')<CR>
-    nmap <silent> <leader>wq      :wincmd q<CR>
-    nmap <silent> <leader>ww      :w<CR>
+    nmap <silent> <leader>w       :w<CR>
 
-nnoremap <silent> <silent> j      gj
-nnoremap <silent> <silent> k      gk
-nnoremap <silent> <silent> ^      g^
-nnoremap <silent> <silent> $      g$
+nnoremap <silent> j               gj
+nnoremap <silent> k               gk
+nnoremap <silent> ^               g^
+nnoremap <silent> $               g$
 
-" Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc
-" -----------------------------------------------------------------------
-" Strip trailing whitespace (,ss)
+    nmap <silent> ç               :wincmd c<CR>
+    nmap <silent> ˙               :call WinMove('h')<CR>
+    nmap <silent> ∆               :call WinMove('j')<CR>
+    nmap <silent> ˚               :call WinMove('k')<CR>
+    nmap <silent> ¬               :call WinMove('l')<CR>
+    nmap <silent> œ               :wincmd q<CR>
+
+" Functions
+" ---------
+" Strip trailing whitespace
 function! StripWhitespace()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
+    let l:oldpos = getpos(".")
+    let l:oldquery = getreg('/')
     :%s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
+    call setpos('.', l:oldpos)
+    call setreg('/', l:oldquery)
 endfunction
 
 " Bottleneck function for appending a new component to a path. This is not
 " done in a file-system-independent manner, but at least the hackishness is
-" captured in this one location.
+" localized to this one location.
 function! AppendPathComponent(path, filename)
     if strpart(a:path, -1) != "/"
         return a:path . "/" . a:filename
@@ -257,14 +258,20 @@ function! FindInAncestorDirectory(filename)
     endwhile
 endfunction
 
-" Execute `make` on a parent makefile.
+" Execute :make on a parent makefile.
 function! ParentMake()
     let l:makefile = FindInAncestorDirectory("Makefile")
     if l:makefile == ""
         echoerr "### Can't find makefile for: " . getcwd()
         return
     endif
-    execute 'make -C ' . fnamemodify(l:makefile, ":h")
+    let l:prefmakeprg = &makeprg
+    set makeprg=make-filtered
+    try
+        execute 'make -C ' . fnamemodify(l:makefile, ":h")
+    finally
+        execute 'set makeprg=' . l:prefmakeprg
+    endtry
 endfunction
 
 " Perform the command to move between windows if possible. If not, take that

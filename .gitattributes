@@ -6,4 +6,5 @@ git-update-all      filter=git-crypt diff=git-crypt
 git-wtc             filter=git-crypt diff=git-crypt
 install.private     filter=git-crypt diff=git-crypt
 kill-safari         filter=git-crypt diff=git-crypt
+make-filtered       filter=git-crypt diff=git-crypt
 *.key               filter=git-crypt diff=git-crypt
