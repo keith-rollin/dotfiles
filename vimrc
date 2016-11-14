@@ -77,7 +77,7 @@ set scrolloff=3                 " Keep cursor this many lines from top or bottom
 set showcmd                     " Show the command being entered.
 set shortmess=atI               " Don't show the intro message when starting Vim
 set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}%15(%l,%c%V%)%9P%25{strftime('%F\ %T')}
-set wildmode=list:longest       " complete files like a shell
+"set wildmode=list:longest       " complete files like a shell
 
 " Search related
 set hlsearch                    " Highlight searches
@@ -139,7 +139,7 @@ if !g:HasInsertedAutocmds && has("autocmd")
     " Open NERDTree on startup. Do this after setting the highlight options or
     " the NERDTree window won't inherit them. After opening the pane, move the
     " cursor back over the main pain to the right.
-    autocmd VimEnter * NERDTree | wincmd l
+    "autocmd VimEnter * NERDTree | wincmd l
 endif
 
 " Reload the .vimrc file, in case for some reason the autocmd above doesn't do
@@ -245,7 +245,7 @@ endfunction
 function! FindInAncestorDirectory(filename)
     let l:curpath = fnamemodify(getcwd(), ":p:h")
     while 1
-        l:filepath = AppendPathComponent(l:curpath, a:filename)
+        let l:filepath = AppendPathComponent(l:curpath, a:filename)
         if glob(l:filepath) != ""
             return l:filepath
         endif
