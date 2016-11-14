@@ -1,5 +1,5 @@
-" Vundle Support {{{1
-" -------------------
+" Vundle Support
+" --------------
 set nocompatible
 filetype off
 
@@ -7,50 +7,86 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " To try out:
+"  AndrewRadev/writable_search.vim
 "  bling/vim-airline
+"  embear/vim-localvimrc
 "  fatih/vim-go
 "  kballard/vim-swift (supports syntastic)
 "  landaire/deoplete-swift
+"  Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 "  mitsuse/autocomplete-swift
 "  powerline/powerline
-"  scrooloose/nerdtree
 "  scrooloose/syntastic
 "  Shougo/neobundle.vim
+"  suan/vim-instant-markdown
+"  tmux-plugins/vim-tmux
 "  toyamarinyon/vim-swift
-"  tpope/vim-pathogen
+"  tpope/vim-commentary
+"  tpope/vim-flagship
+"  tpope/vim-git
+"  tpope/vim-jdaddy
+"  tpope/vim-repeat
 "  tpope/vim-rsi
+"  tpope/vim-sleuth
+"  tpope/vim-speeddating
 "  tpope/vim-surround
+"  tpope/vim-tbone
+"  tpope/vim-unimpaired
 "  vim-scripts/DrawIt
+" Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'derekwyatt/vim-fswitch'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'keith/swift.vim'
-Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-vinegar'
+" Configure CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_root_markers = ['Makefile.shared']
+
+" Configure swift.vim: don't show the fancy -> in Swift source files.
+let g:swift_no_conceal=1
+
+" Configure NERDTree
+let g:NERDTreeShowHidden=1
+
+Plugin 'VundleVim/Vundle.vim'       " Vim package manager (TBD: investigate Vim 8.0's built-in mechanism).
+Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
+Plugin 'derekwyatt/vim-fswitch'     " Switching between companion files.
+Plugin 'junegunn/vim-easy-align'    " Aligning source code.
+Plugin 'keith/swift.vim'            " Swift syntax highlighting and indenting.
+Plugin 'scrooloose/nerdtree'        " Directory hierarchy browser.
+Plugin 'tacahiroy/ctrlp-funky'      " CtrlP extension that performs function navigation.
+Plugin 'tpope/vim-fugitive'         " Git integration.
+Plugin 'tpope/vim-sensible'         " Sensible vim defaults.
 
 call vundle#end()
 filetype plugin indent on
 
-" Variables {{{1
-" --------------
+" Variables
+" ---------
+set autoread                    " Automatically reread externally changed files.
 set autowriteall                " Write the file when we switch buffers.
-set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters
+set clipboard=unnamed           " Interoperate with the system clipboard.
+set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
 set list                        " Show invisible characters
 set modeline                    " Enable modeline support
 set modelines=4                 " Scan last four lines of file for modeline
 set noerrorbells                " Disable error bells
 set nojoinspaces                " Only one space after a period when joining lines.
-set nostartofline               " Don’t reset cursor to start of line when moving around.
-set shortmess=atI               " Don’t show the intro message when starting Vim
+set nostartofline               " Don't reset cursor to start of line when moving around.
+set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
+set path+=**                    " Recursively search subdirectories for files on tab-complete.
+set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
+set showcmd                     " Show the command being entered.
+set shortmess=atI               " Don't show the intro message when starting Vim
+set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}%15(%l,%c%V%)%9P%25{strftime('%F\ %T')}
+set wildmode=list:longest       " complete files like a shell
 
 " Search related
 set hlsearch                    " Highlight searches
 set ignorecase                  " Ignore case of searches
 set smartcase                   " Case-insensitive searching unless we type at least one capital letter
+
+" Line number related
+set number                      " Show absolute line numbers
+set relativenumber              " Show relative line numbers; w/ above, accommodates both.
 
 " TAB related
 set expandtab                   " Convert tabs to spaces
@@ -58,54 +94,134 @@ set shiftwidth=4                " Number of spaces to use for each step of (auto
 set softtabstop=4               " Number of spaces in tab when editing
 set tabstop=4                   " Number of visual spaces per TAB
 
-" Folding related
-set foldlevelstart=10           " Start with fold level of 1
-set foldmethod=indent           " Fold based on indent level
-set foldnestmax=10              " Max 10 depth
-nnoremap <space> za
+" Speling corections
+" ------------------
+abbr const_case const_cast
+abbr dynamic_case dynamic_cast
+abbr fitler filter
+abbr funciton function
+abbr reinterpret_case reinterpret_cast
+abbr static_case static_cast
+abbr teh the
+abbr tempalte template
 
-" Misc. {{{1
+" Misc.
+" -----
+let g:HasInsertedAutocmds = get(g:, 'HasInsertedAutocmds', 0)
+if !g:HasInsertedAutocmds && has("autocmd")
+    let g:HasInsertedAutocmds = 1
+
+    " Set text width to 78 when a .txt file is created or opened.
+    autocmd BufNewFile,BufRead *.txt set textwidth=78
+
+    " `:source` .vimrc after we edit and save it.
+    autocmd BufWritePost .vimrc,vimrc source $MYVIMRC
+
+    " Restore the last cursor position. From: 'help last-position-jump'
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+    " Close vim is only/last window is NERDTree.
+    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+    " Set 'cursorline' for the active buffer.
+    augroup CursorLine
+        au!
+        autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+        autocmd WinLeave * setlocal nocursorline
+    augroup END
+
+    " Treat .json files as .js
+    autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+
+    " Treat .md files as Markdown
+    autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+
+    " Open NERDTree on startup. Do this after setting the highlight options or
+    " the NERDTree window won't inherit them. After opening the pane, move the
+    " cursor back over the main pain to the right.
+    autocmd VimEnter * NERDTree | wincmd l
+endif
+
+" Reload the .vimrc file, in case for some reason the autocmd above doesn't do
+" the trick. This mirrors my bash command that does the same thing with the
+" .bashrc file.
+command! Reload :source $MYVIMRC
+
+" Highlight colors
+highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+
+" netrw: Configuration -- compare to vinegar
+"let g:netrw_banner=0        " disable banner
+"let g:netrw_browse_split=4  " open in prior window
+"let g:netrw_altv=1          " open splits to the right
+"let g:netrw_liststyle=3     " tree view
+"let g:netrw_list_hide=netrw_gitignore#Hide() " hide gitignore'd files
+"let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default (this is the string toggled by netrw-gh)
+
+" Custom keys
 " -----------
-let g:swift_no_conceal=1                        " Don't show the fancy -> in Swift source files.
-au BufNewFile,BufRead *.txt set textwidth=78    " Set text width to 78 when a .txt file is created or opened.
-
-" "source" .vimrc after we edit and save it. {{{1
-" -----------------------------------------------
-if has("autocmd")
-    autocmd bufwritepost .vimrc source $MYVIMRC
-endif
-
-" Cursor restoration {{{1
-" -----------------------
-" Restore the last cursor position. From: 'help last-position-jump'
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
-
-" Custom keys {{{1
-" ----------------
 let mapleader = ","
 
-" Use ',ev' to edit this file, ',eb' to edit the .bashrc file.
-nmap <leader>ev :edit $MYVIMRC<CR>
-nmap <leader>eb :edit $HOME/.bashrc<CR>
+" Cheat Sheet (from `:help :map-modes`):
+"
+" There are six sets of mappings
+"
+" - For Normal mode: When typing commands.
+" - For Visual mode: When typing commands while the Visual area is highlighted.
+" - For Select mode: like Visual mode but typing text replaces the selection.
+" - For Operator-pending mode: When an operator is pending (after "d", "y", "c",
+"   etc.).
+" - For Insert mode: These are also used in Replace mode.
+" - For Command-line mode: When entering a ":" or "/" command. (KR: And, I
+"   suspect, "!" commands.)
+"
+"      COMMANDS                    MODES
+" :map   :noremap  :unmap     Normal, Visual, Select, Operator-pending
+" :nmap  :nnoremap :nunmap    Normal
+" :vmap  :vnoremap :vunmap    Visual and Select
+" :smap  :snoremap :sunmap    Select
+" :xmap  :xnoremap :xunmap    Visual
+" :omap  :onoremap :ounmap    Operator-pending
+" :map!  :noremap! :unmap!    Insert and Command-line
+" :imap  :inoremap :iunmap    Insert
+" :lmap  :lnoremap :lunmap    Insert, Command-line, Lang-Arglistlist
+" :cmap  :cnoremap :cunmap    Command-line
+"
+" Use *noremap when recursive mapping is not wanted. Use *unmap to remove a
+" specified binding. Use *mapclear to remove all bindings for that mode.
 
-" Use ',l; to toggle "list" (i.e., show invisibles) mode.
-nmap <leader>l :set list!<CR>
+" sort /<leader>/
+    nmap <silent> <leader>.       <c-^>
+    nmap <silent> <leader>,       :FSHere<CR>
+    nmap <silent> <leader><space> :call StripWhitespace()<CR>
+nnoremap <silent> <leader>ff      :CtrlPFunky<CR>
+nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
+    nmap <silent> <leader>ga      <Plug>(EasyAlign)
+    xmap <silent> <leader>ga      <Plug>(EasyAlign)
+    nmap <silent> <leader>m       :call ParentMake()<CR>
+     map <silent> <leader>ntf     :NERDTreeFind<CR>
+     map <silent> <leader>ntf     :execute 'NERDTree ' . fnamemodify(@%, ":p:h")<CR>
+     map <silent> <leader>ntt     :NERDTreeToggle<CR>
+    nmap <silent> <leader>si      :set cursorline!<CR>
+    nmap <silent> <leader>sl      :set list!<CR>
+    nmap <silent> <leader>ss      :set spell!<CR>
+"   nmap <silent> <leader>v       :set paste!<CR> " Handled with 'pastetoggle'
+    nmap <silent> <leader>wc      :wincmd c<CR>
+    nmap <silent> <leader>wh      :call WinMove('h')<CR>
+    nmap <silent> <leader>wj      :call WinMove('j')<CR>
+    nmap <silent> <leader>wk      :call WinMove('k')<CR>
+    nmap <silent> <leader>wl      :call WinMove('l')<CR>
+    nmap <silent> <leader>wq      :wincmd q<CR>
+    nmap <silent> <leader>ww      :w<CR>
 
-" Use ',,' to switch between companion source files
-nmap <leader>, :FSHere<CR>
+nnoremap <silent> <silent> j      gj
+nnoremap <silent> <silent> k      gk
+nnoremap <silent> <silent> ^      g^
+nnoremap <silent> <silent> $      g$
 
-" CtrlP-Funky
-nnoremap <Leader>f :CtrlPFunky<CR>
-nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<CR>
-
-" vim-easy-align
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-
-" Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc {{{1
-" ----------------------------------------------------------------------------
+" Misc. from https://github.com/mathiasbynens/dotfiles/blob/master/.vimrc
+" -----------------------------------------------------------------------
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
     let save_cursor = getpos(".")
@@ -114,14 +230,55 @@ function! StripWhitespace()
     call setpos('.', save_cursor)
     call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call StripWhitespace()<CR>
 
-" Automatic commands
-if has("autocmd")
-    " Treat .json files as .js
-    autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
-    " Treat .md files as Markdown
-    autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
-endif
+" Bottleneck function for appending a new component to a path. This is not
+" done in a file-system-independent manner, but at least the hackishness is
+" captured in this one location.
+function! AppendPathComponent(path, filename)
+    if strpart(a:path, -1) != "/"
+        return a:path . "/" . a:filename
+    endif
+    return a:path . a:filename
+endfunction
 
-" vim:foldmethod=marker:foldlevel=1
+" Find a file in an ancestor directory, starting with cwd.
+function! FindInAncestorDirectory(filename)
+    let l:curpath = fnamemodify(getcwd(), ":p:h")
+    while 1
+        l:filepath = AppendPathComponent(l:curpath, a:filename)
+        if glob(l:filepath) != ""
+            return l:filepath
+        endif
+        let l:newpath = fnamemodify(l:curpath, ":h")
+        if l:newpath == l:curpath
+            return ""
+        endif
+        let l:curpath = l:newpath
+    endwhile
+endfunction
+
+" Execute `make` on a parent makefile.
+function! ParentMake()
+    let l:makefile = FindInAncestorDirectory("Makefile")
+    if l:makefile == ""
+        echoerr "### Can't find makefile for: " . getcwd()
+        return
+    endif
+    execute 'make -C ' . fnamemodify(l:makefile, ":h")
+endfunction
+
+" Perform the command to move between windows if possible. If not, take that
+" as an indication to create a new window in the given direction and then move
+" into it.
+function! WinMove(key)
+    let t:curwin = winnr()
+    exec "wincmd " . a:key
+    if (t:curwin == winnr())
+        if (match(a:key,'[jk]'))
+            wincmd v
+        else
+            wincmd s
+        endif
+        exec "wincmd " . a:key
+    endif
+endfunction

@@ -7,22 +7,18 @@ REALPATH="${HERE}/bin/realpath"
 HERE="$("${REALPATH}" "${HERE}")"
 LNS="${HERE}/bin/lns"
 
-INIT_BREW=1 # Force this one in order to install git-crypt for private stuff.
-INIT_PREFS=0
-KEY=""
+KEY="" # git-crypt key
 
 while [[ "${1:+x}" ]]
 do
     case "$1" in
-        --all)      INIT_BREW=1; INIT_PREFS=1; shift;;
-        --brew)     INIT_BREW=1;               shift;;
-        --prefs)                 INIT_PREFS=1; shift;;
-        --key)      KEY="$2";                  shift 2;;
+        --key)      KEY="$2"; shift 2;;
         *)          echo "### Unknown parameter: $p"; exit 1;;
     esac
 done
 
-# Make sure we are in a dev/dotfiles directory.
+# Make sure we are in a dev/dotfiles directory. We want this arrangement so
+# that we can check out `brew` into dev/brew.
 
 DEV_PATH="$(dirname "${HERE}")"
 DEV_NAME="$(basename "${DEV_PATH}")"
@@ -32,34 +28,23 @@ then
     exit 1
 fi
 
-# Make sure Vundle.vim is not in a "detached HEAD" state. I don't know why it
-# would be, but it seems to do that every once and a while.
-
-(
-    echo "*** Updating Vundle"
-    cd "${HERE}/vim/bundle/Vundle.vim" || exit
-    git checkout master
-    git pull
-)
-
 # If I forgot to recursively checkout dotfiles, do that now. Otherwise, update
 # the submodules.
 
-if [[ ! -d "${HERE}/vim/bundle/vim-sensible" ]]
+if [[ ! -d "${HERE}/vim/bundle/Vundle.vim" ]]
 then
     echo "*** Installing submodules"
-    git submodule update --init --recursive
+    git -C "${HERE}" submodule update --init --recursive
 else
     echo "*** Updating submodules"
-    git submodule foreach git pull origin master
+    git -C "${HERE}" submodule foreach git pull origin master
 fi
 
-# If we're going to install `brew`, make sure that its home has been created.
-# If not, bashrc (called next) will not define some needed environment
-# variables.
+# Make sure that brew's home has been created. If not, bashrc (called next)
+# will not define some needed environment variables.
 
 BREW_PATH="${DEV_PATH}/brew"
-if [[ "${INIT_BREW}" -ne 0 && ! -d "${BREW_PATH}" ]]
+if [[ ! -d "${BREW_PATH}" ]]
 then
     echo "*** Creating brew directory"
     mkdir "${BREW_PATH}"
@@ -128,17 +113,11 @@ create_link_in_home_to_directory "${DEV_PATH}/dotfiles"
 
 source "${HERE}/bashrc"
 
-# Install Brew now, if we've called for it. We need to do this before invoking
-# install.private since that file might be encrypted and we need git-crypt from
-# brew in order to decrypt it.
+# Install Brew now. We need to do this before invoking install.private since
+# that file might be encrypted and we need git-crypt from brew in order to
+# decrypt it.
 
-[[ "${INIT_BREW}" -ne 0 ]] && maybe_source "${HERE}/install.brew"
-
-# Pulling this out because it's kinda skanky and fragile. The options could
-# break at any time, and I'd have no way to know that until down the line.
-# Maybe bring this back if we can verify that the changes took effect.
-
-# [[ "${INIT_PREFS}" -ne 0 ]] && maybe_source "${HERE}/install.prefs"
+maybe_source "${HERE}/install.brew"
 
 function is_decrypted()
 {
@@ -159,3 +138,9 @@ if is_decrypted
 then
     maybe_source "${HERE}/install.private"
 fi
+
+# Install/update vim bundles. Let's do this last so that the operation can be
+# done in the full context of environment variables and tools.
+
+echo "*** Installing/updating vim bundles"
+vim +PluginInstall +qall &> /dev/null
