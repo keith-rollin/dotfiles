@@ -53,6 +53,7 @@ Plugin 'junegunn/vim-easy-align'    " Aligning source code.
 Plugin 'keith/swift.vim'            " Swift syntax highlighting and indenting.
 Plugin 'scrooloose/nerdtree'        " Directory hierarchy browser.
 Plugin 'tacahiroy/ctrlp-funky'      " CtrlP extension that performs function navigation.
+Plugin 'tpope/vim-commentary'       " Comment/uncomment
 Plugin 'tpope/vim-fugitive'         " Git integration.
 Plugin 'tpope/vim-sensible'         " Sensible vim defaults.
 
@@ -76,7 +77,7 @@ set path+=**                    " Recursively search subdirectories for files on
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
 set showcmd                     " Show the command being entered.
 set shortmess=atI               " Don't show the intro message when starting Vim
-set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}%15(%l,%c%V%)%9P%25{strftime('%F\ %T')}
+set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}%15(Col=%c%V%)%9P%25{strftime('%F\ %T')}
 "set wildmode=list:longest       " complete files like a shell
 
 " Search related
@@ -195,6 +196,9 @@ let mapleader = ","
     nmap <silent> <leader>.       <c-^>
     nmap <silent> <leader>,       :FSHere<CR>
     nmap <silent> <leader><space> :call StripWhitespace()<CR>
+    nmap <silent> <leader>eb      :edit ~/.bashrc<CR>
+    nmap <silent> <leader>eg      :edit ~/.gitconfig<CR>
+    nmap <silent> <leader>ev      :edit $MYVIMRC<CR>
 nnoremap <silent> <leader>ff      :CtrlPFunky<CR>
 nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
     nmap <silent> <leader>ga      <Plug>(EasyAlign)
