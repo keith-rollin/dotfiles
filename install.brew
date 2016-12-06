@@ -89,6 +89,7 @@ then
         #hub            # Maybe some other time. Never got into it. Also, check out gitless.
         #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
         git-crypt
+        github-keygen
         kylef/formulae/swiftenv
         ripgrep
         ssh-copy-id
@@ -115,7 +116,6 @@ then
         suspicious-package
     )
 
-    #brew tap caskroom/cask # Automatic now
     brew install "${apps[@]}"
     brew cask install "${casks[@]}"
     qlmanage -r &> /dev/null
