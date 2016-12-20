@@ -338,7 +338,8 @@ is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-cor
 # Bring in ssh keys.
 
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
-ssh-add ~/.ssh/id_github &> /dev/null
+ssh-add id_keith-rollin@github &> /dev/null
+#ssh-add ~/.ssh/id_github &> /dev/null
 #ssh-add -A &> /dev/null    # Slow...don't use unless you have to.
 
 # Bring in swift.
