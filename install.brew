@@ -94,6 +94,7 @@ then
     apps=(
         git-crypt
         github-keygen
+        pyenv
         ripgrep
         ssh-copy-id
         tree

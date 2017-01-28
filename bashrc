@@ -329,9 +329,30 @@ function wip()
     git commit -a -m wip
 }
 
-# Bring in git completion.
+# Bring in bash completion.
 
 is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
+
+if is_executable brew
+then
+    HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
+    if [ -d "${HOMEBREW_COMPLETION_DIR}" ]
+    then
+        for f in "${HOMEBREW_COMPLETION_DIR}"/*
+        do
+            . "$f"
+        done
+    fi
+fi
+
+# Bring up pyenv.
+
+
+if is_executable brew && is_executable pyenv
+then
+    export PYENV_ROOT="$(brew --prefix)/var/pyenv"
+    eval "$(pyenv init -)"
+fi
 
 # Bring in ssh keys.
 
