@@ -84,13 +84,16 @@ then
     # coreutils, moreutils, findutils, gnu-sed, bash, bash-completion2, wget,
     # vim, grep, openssh, screen, git, git-lfs, lynx, pigz, pv, speedtest-cli,
     # zopfli
+    #
+    # Also:
+    #   bash-git-prompt
+    #   kylef/formulae/swiftenv
+    #   hub            # Maybe some other time. Never got into it. Also, check out gitless.
+    #   shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
 
     apps=(
-        #hub            # Maybe some other time. Never got into it. Also, check out gitless.
-        #shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
         git-crypt
         github-keygen
-        kylef/formulae/swiftenv
         ripgrep
         ssh-copy-id
         tree

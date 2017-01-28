@@ -136,8 +136,6 @@ function fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy fin
 function fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
 function ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
 
-function ackc() { ack --type cc "$@" ; }
-function ackcpp() { ack --type cpp "$@" ; }
 function badge() { tput bel ; }
 function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
 function gitp() { git --no-pager "$@" ; }

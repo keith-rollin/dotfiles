@@ -7,6 +7,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " To try out:
+"  airblade/vim-gitgutter
 "  AndrewRadev/writable_search.vim
 "  bling/vim-airline
 "  embear/vim-localvimrc
