@@ -151,6 +151,16 @@ function ascii()
     cat /usr/share/misc/ascii
 }
 
+function at_home()
+{
+    ! at_work
+}
+
+function at_work()
+{
+    [[ $(curl -s v4.ifconfig.co) =~ 17\..*\..*\..* ]]
+}
+
 function bak()
 {
     # Make backups of the given files (copy them to *.bak).
@@ -345,15 +355,6 @@ then
     fi
 fi
 
-# Bring up pyenv.
-
-
-if is_executable brew && is_executable pyenv
-then
-    export PYENV_ROOT="$(brew --prefix)/var/pyenv"
-    eval "$(pyenv init -)"
-fi
-
 # Bring in ssh keys.
 
 [[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
@@ -361,12 +362,23 @@ ssh-add ~/.ssh/id_keith-rollin@github &> /dev/null
 #ssh-add ~/.ssh/id_github &> /dev/null
 #ssh-add -A &> /dev/null    # Slow...don't use unless you have to.
 
-# Bring in swift.
-
-if is_executable swiftenv
+if is_executable brew
 then
-    export SWIFTENV_ROOT="${HOME}/.swiftenv"
-    eval "$(swiftenv init -)"
+    # Bring in pyenv.
+
+    if is_executable pyenv
+    then
+        export PYENV_ROOT="$(brew --prefix)/var/pyenv"
+        eval "$(pyenv init -)"
+    fi
+
+    # Bring in swift.
+
+    if is_executable swiftenv
+    then
+        export SWIFTENV_ROOT="$(brew --prefix)/.swiftenv"
+        eval "$(swiftenv init -)"
+    fi
 fi
 
 # Bring in additional (private) definitions.

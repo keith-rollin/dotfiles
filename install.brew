@@ -77,6 +77,10 @@ then
 
     echo "*** Installing new Homebrew apps"
 
+    # Tap into here for swiftenv
+
+    brew tap kylef/formulae
+
     # Some tools to consider from:
     #
     #   https://github.com/mathiasbynens/dotfiles/blob/master/brew.sh
@@ -97,11 +101,28 @@ then
         pyenv
         ripgrep
         ssh-copy-id
+        swiftenv
         tree
         vim
         watch           # Kinda expensive, but OK...
         xz
     )
+
+    if at_home
+    then
+        # Transcoding tools from:
+        #   http://robservatory.com/detailed-instructions-for-installing-the-transcode-video-tools/
+        #   http://robservatory.com/a-deep-dive-into-handbrake-and-video-transcoding/
+
+        apps2=(
+            #handbrake
+            #ffmpeg
+            #mkvtoolnix
+            #mp4v2
+            #mplayer
+        )
+    fi
+
     casks=(
         # 1Password doesn't work with Homebrew-cask-installed versions of these
         # browsers.
@@ -121,6 +142,16 @@ then
     )
 
     brew install "${apps[@]}"
+    [[ ${apps2[@]} -ne 0 ]] && brew install "${apps2[@]}"
     brew cask install "${casks[@]}"
     qlmanage -r &> /dev/null
+fi
+
+# Also needed for transcoding
+
+if is_executable at_home && at_home
+then
+    #sudo gem install video_transcoding
+    #sudo gem update video_transcoding
+    true
 fi
