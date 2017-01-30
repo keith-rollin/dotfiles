@@ -376,7 +376,7 @@ then
 
     if is_executable swiftenv
     then
-        export SWIFTENV_ROOT="$(brew --prefix)/.swiftenv"
+        export SWIFTENV_ROOT="$(brew --prefix)/var/swiftenv"
         eval "$(swiftenv init -)"
     fi
 fi
