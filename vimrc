@@ -78,7 +78,7 @@ set path+=**                    " Recursively search subdirectories for files on
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
 set showcmd                     " Show the command being entered.
 set shortmess=atI               " Don't show the intro message when starting Vim
-set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}%15(Col=%c%V%)%9P%25{strftime('%F\ %T')}
+set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%L\ \ \ %{strftime('%F\ %T')}
 "set wildmode=list:longest       " complete files like a shell
 
 " Search related
@@ -87,8 +87,8 @@ set ignorecase                  " Ignore case of searches
 set smartcase                   " Case-insensitive searching unless we type at least one capital letter
 
 " Line number related
-set number                      " Show absolute line numbers
-set relativenumber              " Show relative line numbers; w/ above, accommodates both.
+" set number                      " Show absolute line numbers
+" set relativenumber              " Show relative line numbers; w/ above, accommodates both.
 
 " TAB related
 set expandtab                   " Convert tabs to spaces
@@ -294,3 +294,4 @@ function! WinMove(key)
         exec "wincmd " . a:key
     endif
 endfunction
+
