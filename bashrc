@@ -221,7 +221,7 @@ function git-diff()
 
 function git-edit-changed()
 {
-    OLD_CWD="$(pwd)"
+    local OLD_CWD="$(pwd)"
     git-top
     vi $(git diff --name-only)
     cd "${OLD_CWD}"
@@ -275,11 +275,18 @@ function sudo_keep_alive()
     # from that source. I don't know why it's not "sudo -v".)
 
     # Ask for the administrator password upfront
+
     sudo -v
 
     # Keep-alive: update existing `sudo` time stamp until this script has
     # finished.
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+    while true
+    do
+        sudo -n true
+        sleep 60
+        kill -0 "$$" || exit
+    done 2>/dev/null &
 }
 
 function up()
@@ -319,7 +326,8 @@ function vi()
     #
     #   path/to/file.cpp +62
 
-    CMD="command vi"
+    local CMD="command vi"
+    local p
     for p in "$@"
     do
         if [[ "$p" =~ .*:.* ]]
@@ -330,7 +338,6 @@ function vi()
         fi
     done
 
-    #echo $CMD
     eval $CMD
 }
 
