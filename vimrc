@@ -138,6 +138,9 @@ if !g:HasInsertedAutocmds && has("autocmd")
     " Treat .md files as Markdown
     autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
 
+    " Treat .mm files as Objective-C
+    autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
+
     " Open NERDTree on startup. Do this after setting the highlight options or
     " the NERDTree window won't inherit them. After opening the pane, move the
     " cursor back over the main pain to the right.
