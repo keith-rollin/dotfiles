@@ -390,4 +390,4 @@ fi
 
 # Bring in additional (private) definitions.
 
-maybe_source "${HOME}/dotfiles/bashrc.private"
+at_work && maybe_source "${HOME}/dotfiles/bashrc.private"
