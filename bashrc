@@ -158,7 +158,12 @@ function at_home()
 
 function at_work()
 {
-    [[ $(curl -s v4.ifconfig.co) =~ 17\..*\..*\..* ]]
+    # This is not a good test. It tells me where I am, not whether I'm using a
+    # home or work computer.
+    #[[ $(curl -s v4.ifconfig.co) =~ 17\..*\..*\..* ]]
+
+    # Test for a volume I only have on work systems.
+    [[ -d /Volumes/Data ]]
 }
 
 function bak()
