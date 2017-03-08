@@ -34,7 +34,6 @@
 [rerere]
 	enabled = true
 [sendemail]
-	confirm = never
 	transferEncoding = base64
 [log]
 	date = local
