@@ -384,7 +384,7 @@ then
         eval "$(pyenv init -)"
     fi
 
-    # Bring in swift.
+    # Bring in swiftenv.
 
     if is_executable swiftenv
     then
