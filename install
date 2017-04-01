@@ -1,6 +1,28 @@
 #!/bin/bash
 
 # Install everything, including dotfiles, Vundle, brew, and prefs.
+#
+# Check out this repository into a directory called "dev". Running it will:
+#
+#   * Complete the check-out if it forgot to perform a recursive check-out.
+#   * Add the following links to my home directory, or update them if they
+#     already exist:
+#       * .bash_profile
+#       * .bashrc
+#       * .gitconfig
+#       * .inputrc
+#       * .vim
+#       * .vimrc
+#       * bin
+#       * dev
+#       * dotfiles
+#   * Create a "brew" directory next to it and put homebrew into it, or
+#     update it if it already exists.
+#   * Invoke my private installation script
+#   * Update vim with bundles defined in .vimrc
+#
+# Before running, I may need to get the key used for git-crypt. Point to it
+# with the --key option.
 
 HERE="$(dirname "$0")"
 REALPATH="${HERE}/bin/realpath"
