@@ -90,8 +90,6 @@ unset p
 # $PATH.
 
 prepend_path "${HOME}/bin"
-prepend_path "${HOME}/dev/WebKit/OpenSource/Tools/Scripts"
-prepend_path "${HOME}/dev/depot_tools"
 prepend_path "${HOMEBREW_BIN}"
 
 # Shell.
@@ -143,6 +141,7 @@ function la() { ll -A "$@" ; }
 function ll() { ls -o "$@" ; }
 function lmk() { say 'Process complete.' ; }
 function localip() { ipconfig getifaddr en0 ; }
+function notify() { osascript -e "display notification \"$1\" with title \"$2\"" ; }
 function reload() { source ~/.bash_profile ; }
 
 function ascii()
