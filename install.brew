@@ -98,10 +98,10 @@ then
     apps=(
         git-crypt
         github-keygen
-        pyenv
+        python
+        python3
         ripgrep
         ssh-copy-id
-        swiftenv
         tree
         vim
         watch           # Kinda expensive, but OK...
