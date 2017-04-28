@@ -78,57 +78,38 @@ source "${HERE}/bashrc"
 
 # Create or update links in my home directory to handy things elsewhere.
 
-create_link_in_home_to_dotfile()
+function create_link_in_home()
 {
-    # Create a link in my home directory to a file or directory in my dotfiles
-    # directory, possibly changing the name (e.g. "bashrc" in my dotfiles
-    # directory but ".bashrc" in my home directory). If a link already exists,
-    # update it.
+    local file="$1"
+    local link="$2"
 
-    [[ "$1" == "." ]] && local source="${HERE}" || local source="${HERE}/$1"
-    [[ "$2" == "." ]] && local target="${HOME}" || local target="${HOME}/$2"
+    [[ -z "${link}" ]] && link="$(basename "${file}")"
 
-    [[ -e "${target}" && ! -L "${target}" ]] && {
-        echo "### File ${target} exists and is not a link. Please move it aside.";
-        return;
-    }
+    file="$("${REALPATH}" "${file}")"
+    link="${HOME}/${link}"
 
-    rm -f "${target}"
-    "$LNS" "${source}" "${target}"
-}
+    if [[ -e "${link}" && ! -L "${link}" ]]
+    then
+        echo "### File ${link} exists and is not a link. Please move it aside."
+        return
+    fi
 
-function create_link_in_home_to_directory()
-{
-    # Create a link in my home directory to a directory elsewhere, keeping the
-    # target's name, updating any pre-existing link in the home directory.
-
-    local source="$1"
-    local target="${HOME}/$(basename "${source}")"
-
-    [[ ! -d "${source}" ]] && return
-
-    [[ -e "${target}" && ! -L "${target}" ]] && {
-        echo "### File ${link} exists and is not a link. Please move it aside.";
-        return;
-    }
-
-    rm -f "${target}"
-    "$LNS" "${source}" "${target}"
+    rm -f "${link}"
+    "$LNS" "${file}" "${link}"
 }
 
 echo "*** Creating/updating home directory links"
 
-create_link_in_home_to_dotfile bash_profile    .bash_profile
-create_link_in_home_to_dotfile bashrc          .bashrc
-create_link_in_home_to_dotfile bin             bin
-create_link_in_home_to_dotfile .               dotfiles
-create_link_in_home_to_dotfile gitconfig       .gitconfig
-create_link_in_home_to_dotfile inputrc         .inputrc
-create_link_in_home_to_dotfile vim             .vim
-create_link_in_home_to_dotfile vimrc           .vimrc
+create_link_in_home "${HERE}/bash_profile"  .bash_profile
+create_link_in_home "${HERE}/bashrc"        .bashrc
+create_link_in_home "${HERE}/gitconfig"     .gitconfig
+create_link_in_home "${HERE}/inputrc"       .inputrc
+create_link_in_home "${HERE}/vim"           .vim
+create_link_in_home "${HERE}/vimrc"         .vimrc
 
-create_link_in_home_to_directory "${DEV_PATH}"
-create_link_in_home_to_directory "${DEV_PATH}/dotfiles"
+create_link_in_home "${HERE}"
+create_link_in_home "${HERE}/bin"
+create_link_in_home "${DEV_PATH}"
 
 # Run through bashrc again. It might now define some variables that it couldn't
 # before the above links were created.
