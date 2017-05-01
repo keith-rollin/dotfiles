@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git -C ~/Internal worktree prune
+git -C ~/Internal/iOS worktree prune
+git -C ~/OpenSource worktree prune
