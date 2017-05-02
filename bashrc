@@ -72,10 +72,12 @@ export LESS=-IMR
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 export SHELL_SESSION_HISTORY=1
 
+export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
+
 # Homebrew. Define these before PATH, since we'll be putting one of them into
 # it.
 
-p="$(maybe_resolve "${HOME}/dev/brew")"
+p="$(maybe_resolve "${DEV_PATH}/brew")"
 if [[ -n "$p" ]]
 then
     export HOMEBREW_PREFIX="$p"
