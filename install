@@ -62,20 +62,6 @@ else
     git -C "${HERE}" submodule foreach git pull origin master
 fi
 
-# Make sure that brew's home has been created. If not, bashrc (called next)
-# will not define some needed environment variables.
-
-BREW_PATH="${DEV_PATH}/brew"
-if [[ ! -d "${BREW_PATH}" ]]
-then
-    echo "*** Creating brew directory"
-    mkdir "${BREW_PATH}"
-fi
-
-# Get some handy functions defined.
-
-source "${HERE}/bashrc"
-
 # Create or update links in my home directory to handy things elsewhere.
 
 function create_link_in_home()
@@ -95,7 +81,7 @@ function create_link_in_home()
     fi
 
     rm -f "${link}"
-    "$LNS" "${file}" "${link}"
+    "${LNS}" "${file}" "${link}"
 }
 
 echo "*** Creating/updating home directory links"
@@ -111,8 +97,18 @@ create_link_in_home "${HERE}"
 create_link_in_home "${HERE}/bin"
 create_link_in_home "${DEV_PATH}"
 
-# Run through bashrc again. It might now define some variables that it couldn't
-# before the above links were created.
+# Make sure that brew's home has been created. This will ensure that bashrc
+# (called next) will add brew/bin to the $PATH.
+
+BREW_PATH="${DEV_PATH}/brew"
+if [[ ! -d "${BREW_PATH}" ]]
+then
+    echo "*** Creating brew directory"
+    mkdir "${BREW_PATH}"
+fi
+unset BREW_PATH
+
+# Get some handy functions defined.
 
 source "${HERE}/bashrc"
 

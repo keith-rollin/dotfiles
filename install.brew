@@ -5,70 +5,21 @@
 
 # Install homebrew (if missing) or update it (if not). Install or update
 # desired packages. Also install/update cask along with desired packages.
-#
-# See https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/El_Capitan_and_Homebrew.md
-# regarding being able to install into /usr/local. Because of the SIP issue on
-# El Capitan and because I've got other things installing themselves into
-# /usr/local, I'm installing homebrew into its own dedicated directory.
 
-# First check to see if it's already installed. If not, prepare a place for it
-# and install it.
-
-function update_variable()
-{
-    local NAME="$1"
-    local FILE="$2"
-
-    eval VALUE="\$$1"
-    [[ -z "${VALUE}" ]] && { echo "### VALUE is empty"; return; }
-
-    sed -E -i '' \
-        -e "s#(${NAME}[[:space:]]*=[[:space:]]*).*#\1'${VALUE}'.freeze#" \
-        "$FILE"
-}
+# First, get homebrew if we don't already have it.
 
 if ! is_executable brew
 then
-    echo "*** Installing Homebrew"
-
-    # Download the brew installer script.
-
-    INSTALLER="/tmp/install"
-    curl -fsSL "https://raw.githubusercontent.com/Homebrew/install/master/install" \
-        -o "${INSTALLER}" # (Should check for errors.)
-
-    # If HOMEBREW_PREFIX, HOMEBREW_REPOSITORY, and/or HOMEBREW_CACHE are
-    # defined, substitute them into the installer script.
-
-    update_variable HOMEBREW_PREFIX "${INSTALLER}"
-    update_variable HOMEBREW_REPOSITORY "${INSTALLER}"
-    update_variable HOMEBREW_CACHE "${INSTALLER}"
-
-    # If there are any more /usr/local's in the installer, bail.
-
-    grep -q '^[^#]*\/usr\/local' "${INSTALLER}" && exit 1
-
-    # Make sure this exists; homebrew gets tripped up if there is a custom
-    # installation directory and it doesn't exist. It ends up thinking that
-    # /usr/local doesn't have the correct access privileges.
-
-    mkdir -p "${HOMEBREW_PREFIX}"
-    mkdir -p "${HOMEBREW_TEMP}" # Need to make this one, too.
-
-    # Run and remove the installer.
-
-    ruby "${INSTALLER}"
-    rm "${INSTALLER}"
+    BREW_PATH="${DEV_PATH}/brew"
+    [[ -d "${BREW_PATH}" ]] || mkdir "${BREW_PATH}"
+    git clone https://github.com/Homebrew/brew.git "${BREW_PATH}"
+    unset BREW_PATH
 fi
-
 
 # Second, install the apps we want.
 
 if is_executable brew
 then
-    # Make sure this exists; homebrew doesn't seem to do that.
-    mkdir -p "$HOMEBREW_TEMP"
-
     echo "*** Updating Homebrew"
     brew update
 
@@ -76,10 +27,6 @@ then
     brew upgrade
 
     echo "*** Installing new Homebrew apps"
-
-    # Tap into here for swiftenv
-
-    brew tap kylef/formulae
 
     # Some tools to consider from:
     #
@@ -94,6 +41,10 @@ then
     #   kylef/formulae/swiftenv
     #   hub            # Maybe some other time. Never got into it. Also, check out gitless.
     #   shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
+
+    # Tap into here for swiftenv.
+
+    # brew tap kylef/formulae
 
     apps=(
         git-crypt

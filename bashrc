@@ -74,25 +74,17 @@ export SHELL_SESSION_HISTORY=1
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
-# Homebrew. Define these before PATH, since we'll be putting one of them into
-# it.
-
-p="$(maybe_resolve "${DEV_PATH}/brew")"
-if [[ -n "$p" ]]
-then
-    export HOMEBREW_PREFIX="$p"
-    export HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}/Homebrew"
-    export HOMEBREW_BIN="${HOMEBREW_PREFIX}/bin"
-    export HOMEBREW_CACHE="${HOMEBREW_PREFIX}/cache"
-    export HOMEBREW_TEMP="${HOMEBREW_PREFIX}/tmp"
-    export HOMEBREW_CASK_OPTS="--caskroom=\"${HOMEBREW_PREFIX}/Caskroom\""
-fi
-unset p
-
 # $PATH.
 
 prepend_path "${HOME}/bin"
-prepend_path "${HOMEBREW_BIN}"
+
+BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
+if [[ -n "${BREW_PATH}" ]]
+then
+    prepend_path "${BREW_PATH}/sbin"
+    prepend_path "${BREW_PATH}/bin"
+fi
+unset BREW_PATH
 
 # Shell.
 
