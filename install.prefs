@@ -3,6 +3,12 @@
 # (This script is not intended to be stand-alone. It's intended to be source'd
 # from `install`.)
 
+# UPDATE: A lot of this stuff is fragile and breaks across system releases. For
+# now, I'm just tweaking things by hand instead. But I'm keeping this around in
+# case I change my mind.
+
+return
+
 # Install system/application preferences via defaults, nvram, pmset, tmutil,
 # systemsetup, scutil, mdutil, plistbuddy, etc.
 
@@ -163,3 +169,156 @@ killall \
     "iCal" \
     "iTunes" \
     &> /dev/null
+
+
+# From: http://tech.masterofsql.com/os-x/unload-disable-unwanted-agents-daemons-os-x.html
+# Here are some more things to mess with. To investigate:
+
+su root
+cd /
+mkdir RemovedFiles
+cd RemovedFiles
+mkdir System-Library-LaunchAgents
+FLA=/RemovedFiles/System-Library-LaunchAgents/
+cd /System/Library/LaunchAgents/
+
+
+
+# Disable AddressBook and Calendar
+mv com.apple.AddressBook*                      $FLA
+mv com.apple.CalendarAgent.plist               $FLA
+
+
+# iCloud-related
+mv com.apple.iCloudUserNotifications.plist     $FLA
+mv com.apple.icbaccountsd.plist                $FLA
+mv com.apple.icloud.fmfd.plist                 $FLA
+mv com.apple.cloud*                            $FLA
+
+
+# Disable imclient (Facetime) and smth else
+mv com.apple.imagent.plist                     $FLA
+mv com.apple.IMLoggingAgent.plist              $FLA
+
+
+# Disable Notification Centre
+mv com.apple.notificationcenterui.plist        $FLA
+killall NotificationCenter
+
+
+# spindump (see also code below)
+mv com.apple.spindump_agent.plist              $FLA
+
+
+# Safari is not the only browser in the world
+mv com.apple.safaridavclient.plist             $FLA
+mv com.apple.SafariNotificationAgent.plist     $FLA
+# in future versions of OS X
+mv com.apple.SafariCloudHistoryPushAgent.plist $FLA
+
+
+# Explain these
+mv com.apple.AirPlayUIAgent.plist              $FLA
+mv com.apple.AirPortBaseStationAgent.plist     $FLA
+mv com.apple.bird.plist                        $FLA
+mv com.apple.findmymacmessenger.plist          $FLA
+mv com.apple.gamed.plist                       $FLA
+mv com.apple.parentalcontrols.check.plist      $FLA
+mv com.apple.soagent.plist                     $FLA
+mv com.apple.SocialPushAgent.plist             $FLA
+mv com.apple.DictationIM.plist                 $FLA
+mv com.apple.Maps.pushdaemon.plist             $FLA
+mv com.apple.locationmenu.plist                $FLA
+mv com.apple.java.updateSharing.plist          $FLA
+mv com.apple.appstoreupdateagent.plist         $FLA
+mv com.apple.softwareupdate_notify_agent.plist $FLA
+mv com.apple.ScreenReaderUIServer.plist        $FLA
+mv com.apple.speech.*                          $FLA
+
+
+su root
+cd /System/Library/LaunchDaemons/
+
+
+
+# I don't have Apple TV so disable AirPlay
+launchctl unload -wF com.apple.AirPlayXPCHelper.plist
+
+
+# Disable Apple push notification
+launchctl unload -wF com.apple.apsd.plist
+
+
+# Disable location services (should have done it from System Preferences first)
+launchctl unload -wF com.apple.locationd.plist
+
+
+# No point trying to find your mac
+launchctl unload -wF com.apple.findmymac.plist
+launchctl unload -wF com.apple.findmymacmessenger.plist
+
+
+# iCloud. Enough said
+launchctl unload -wF com.apple.icloud.findmydeviced.plist
+launchctl unload -wF com.apple.cloudfamilyrestrictionsd-mac.plist 
+launchctl unload -wF com.apple.mbicloudsetupd.plist
+
+
+# Disable apple software updates - know why you'd do that
+launchctl unload -wF com.apple.softwareupdate*
+
+
+# don't even have DVD these days
+launchctl unload -wF com.apple.dvdplayback.setregion.plist 
+
+
+# no, thank you
+launchctl unload -wF com.apple.SubmitDiagInfo.plist 
+launchctl unload -wF com.apple.CrashReporterSupportHelper.plist 
+launchctl unload -wF com.apple.ReportCrash.Root.plist 
+launchctl unload -wF com.apple.GameController.gamecontrollerd.plist
+
+
+# Not using FTP these days
+launchctl unload -wF com.apple.ftp-proxy.plist
+
+
+# Disable spindump (spindump is a tool used by various system components
+# to create hang reports and notify the user of application hangs)
+# if it's crashed - it's crashed, get on with your life and don't slow my system down
+# I wonder what OzzyMan would have to say about it
+launchctl unload -wF com.apple.spindump.plist
+launchctl unload -wF com.apple.metadata.mds.spindump.plist
+
+
+
+# Disable IPv6 - if not using it yet
+# Run this for each network interface (assuming they are called Wi-Fi and Ethernet)
+networksetup -setv6off Wi-Fi
+networksetup -setv6off Ethernet
+
+
+# WARNING - this command disables swap file
+# Only use it if you know why you're doing it
+#launchctl unload -wF com.apple.dynamic_pager.plist
+
+
+# Disable cups (common unix printing service)
+# Don't disable if you have a printer(s) (and wanna use it)
+#launchctl unload -wF org.cups.cupsd.plist
+#launchctl unload -wF org.cups.cups-lpd.plist
+
+
+# mDNSresponder/discoveryd - Required for DNS (converting domain name into IP address)
+#launchctl unload -wF com.apple.mDNSResponder.plist
+#launchctl unload -wF com.apple.mDNSResponderHelper.plist
+#launchctl unload -wF com.apple.discoveryd.plist
+#launchctl unload -wF com.apple.discoveryd_helper.plist
+# Disable NetBIOS - need to check if macbook actually needs this
+#launchctl unload -wF com.apple.netbiosd.plist
+
+
+# Required for Wi-Fi icon
+#launchctl unload -wF com.apple.airport.wps.plist
+#launchctl unload -wF com.apple.airportd.plist
+
