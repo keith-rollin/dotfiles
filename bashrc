@@ -293,7 +293,7 @@ function up()
     # Inspired by `up`: http://brettterpstra.com/2014/05/14/up-fuzzy-navigation-up-a-directory-tree/
     # inspired by `bd`: https://github.com/vigneshwaranr/bd
 
-    if [ $# -eq 0 ]
+    if [[ $# -eq 0 ]]
     then
         echo "up: traverses up the current working directory to first match and cds to it"
         echo "You need an argument"
@@ -346,19 +346,13 @@ function wip()
 
 # Bring in bash completion.
 
-# is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
+is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
 
-# if is_executable brew
-# then
-#     HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-#     if [ -d "${HOMEBREW_COMPLETION_DIR}" ]
-#     then
-#         for f in "${HOMEBREW_COMPLETION_DIR}"/*
-#         do
-#             . "$f"
-#         done
-#     fi
-# fi
+if is_executable brew
+then
+    HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
+    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && source "${HOMEBREW_COMPLETION_DIR}/"*
+fi
 
 # Bring in ssh keys.
 
