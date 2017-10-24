@@ -8,6 +8,15 @@
 
 # First, get homebrew if we don't already have it.
 
+# Alternative steps to check out some day:
+#
+#   xcode-select --install
+#   cd /usr/local
+#   sudo mkdir homebrew
+#   sudo chown $USER homebrew
+#   curl -L https://github.com/Homebrew/brew/tarball/master |   # Why -L?
+#       tar xz --strip 1 -C homebrew                            # --strip-component 1?
+
 if ! is_executable brew
 then
     BREW_PATH="${DEV_PATH}/brew"
