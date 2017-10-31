@@ -245,27 +245,40 @@ function mkcd()
 }
 
 # l(ist)ips Get local and WAN IP adddresses
-# $ lips
-#    Local IP: 10.0.1.4
-# External IP: 41.32.11.102
 # From: http://brettterpstra.com/2017/10/30/a-few-new-shell-tricks/
+
 lips()
 {
-    local ip
-    for num in $(seq 9)
+    # Process the output from `networksetup -listallhardwareports`
+    #
+    #   Hardware Port: Ethernet 1
+    #   Device: en0
+    #   Ethernet Address: 00:3e:e1:c7:72:39
+    #
+    #  ...
+
+    local KEY VALUE PORT DEVICE IP EXTIP
+    while IFS=':' read KEY VALUE
     do
-        ip=$(ifconfig en${num} 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}')
-        [[ -n "$ip" ]] && break
-    done
+        # Remove the leading space from the 'VALUE' left over from splitting
+        # the string on the ':'.
+        VALUE="${VALUE:1}"
 
-    local locip extip
+        [[ "$KEY" == "Hardware Port" ]] && PORT="$VALUE"
+        [[ "$KEY" == "Device" ]]        && DEVICE="$VALUE"
+        if [[ -n "$PORT" && -n "$DEVICE" ]]
+        then
+            IP=$(ipconfig getifaddr $DEVICE)
+            [[ "$IP" != "" ]] && printf "%18s: %s\n" "$PORT" "$IP"
+            PORT=""
+            DEVICE=""
+        fi
+    done < <(networksetup -listallhardwareports)
 
-    [[ "$ip" != "" ]] && locip=$ip || locip="inactive"
+    IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    [[ "$IP" != "" ]] && EXTIP=$IP || EXTIP="inactive"
 
-    ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
-    [[ "$ip" != "" ]] && extip=$ip || extip="inactive"
-
-    printf '%11s: %s\n%11s: %s\n' "Local IP" $locip "External IP" $extip
+    printf '%18s: %s\n' "External IP" $EXTIP
 }
 
 
