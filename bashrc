@@ -269,7 +269,7 @@ lips()
         if [[ -n "$PORT" && -n "$DEVICE" ]]
         then
             IP=$(ipconfig getifaddr $DEVICE)
-            [[ "$IP" != "" ]] && printf "%18s: %s\n" "$PORT" "$IP"
+            [[ "$IP" != "" ]] && printf "%20s: %s (%s)\n" "$PORT" "$IP" "$DEVICE" # len("Thunderbolt Ethernet") == 20
             PORT=""
             DEVICE=""
         fi
@@ -278,7 +278,7 @@ lips()
     IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
     [[ "$IP" != "" ]] && EXTIP=$IP || EXTIP="inactive"
 
-    printf '%18s: %s\n' "External IP" $EXTIP
+    printf '%20s: %s\n' "External IP" $EXTIP
 }
 
 
