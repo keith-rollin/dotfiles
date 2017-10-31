@@ -244,6 +244,31 @@ function mkcd()
     mkdir -p "$@" && cd "$@" || exit
 }
 
+# l(ist)ips Get local and WAN IP adddresses
+# $ lips
+#    Local IP: 10.0.1.4
+# External IP: 41.32.11.102
+# From: http://brettterpstra.com/2017/10/30/a-few-new-shell-tricks/
+lips()
+{
+    local ip
+    for num in $(seq 9)
+    do
+        ip=$(ifconfig en${num} 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}')
+        [[ -n "$ip" ]] && break
+    done
+
+    local locip extip
+
+    [[ "$ip" != "" ]] && locip=$ip || locip="inactive"
+
+    ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    [[ "$ip" != "" ]] && extip=$ip || extip="inactive"
+
+    printf '%11s: %s\n%11s: %s\n' "Local IP" $locip "External IP" $extip
+}
+
+
 function path()
 {
     # Show the PATH, one entry per line.
