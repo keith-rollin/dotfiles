@@ -63,7 +63,6 @@ then
         ripgrep
         ssh-copy-id
         tree
-        vim
         watch           # Kinda expensive, but OK...
         xz
     )
@@ -87,6 +86,7 @@ then
     )
 
     brew install "${apps[@]}"
+    brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
     brew cask install "${casks[@]}"
     qlmanage -r &> /dev/null
 fi
