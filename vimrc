@@ -7,26 +7,44 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " To try out:
-"  airblade/vim-gitgutter
 "  AndrewRadev/writable_search.vim
+"  Lokaltog/powerline
+"  Shougo/neobundle.vim
+"  airblade/vim-gitgutter
+"  alampros/vim-styled-jsx
+"  altercation/vim-colors-solarized
+"  ap/vim-css-color
 "  bling/vim-airline
+"  docunext/closetag.vim
 "  embear/vim-localvimrc
+"  ervandew/supertab
 "  fatih/vim-go
+"  haya14busa/incsearch.vim
+"  itchyny/lightline.vim
+"  junegunn/fzf.vim
+"  junegunn/goyo.vim
 "  kballard/vim-swift (supports syntastic)
 "  landaire/deoplete-swift
-"  Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+"  mileszs/ack.vim
 "  mitsuse/autocomplete-swift
+"  nathanaelkane/vim-indent-guides
 "  powerline/powerline
+"  qpkorr/vim-bufkill
 "  scrooloose/syntastic
-"  Shougo/neobundle.vim
+"  sheerun/vim-polyglot
+"  statico/vim-inform7
 "  suan/vim-instant-markdown
 "  tmux-plugins/vim-tmux
+"  tomasr/molokai
 "  toyamarinyon/vim-swift
-"  tpope/vim-commentary
+"  tpope/vim-endwise
+"  tpope/vim-eunuch
 "  tpope/vim-flagship
 "  tpope/vim-git
 "  tpope/vim-jdaddy
+"  tpope/vim-pathogen
 "  tpope/vim-repeat
+"  tpope/vim-rhubarb
 "  tpope/vim-rsi
 "  tpope/vim-sleuth
 "  tpope/vim-speeddating
@@ -34,6 +52,8 @@ call vundle#begin()
 "  tpope/vim-tbone
 "  tpope/vim-unimpaired
 "  vim-scripts/DrawIt
+"  w0rp/ale
+"  wellle/targets.vim
 " Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
 
 " Configure CtrlP
@@ -86,7 +106,8 @@ set hlsearch                    " Highlight searches
 set ignorecase                  " Ignore case of searches
 set smartcase                   " Case-insensitive searching unless we type at least one capital letter
 
-" Line number related
+" Line number related. (Disabled, in part because I don't like selecting the
+" line number when I select text for copy/pasting.)
 " set number                      " Show absolute line numbers
 " set relativenumber              " Show relative line numbers; w/ above, accommodates both.
 
@@ -122,7 +143,7 @@ if !g:HasInsertedAutocmds && has("autocmd")
     " Restore the last cursor position. From: 'help last-position-jump'
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-    " Close vim is only/last window is NERDTree.
+    " Close vim if only/last window is NERDTree.
     autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
     " Set 'cursorline' for the active buffer.
@@ -217,10 +238,11 @@ nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 "   nmap <silent> <leader>v       :set paste!<CR> " Handled with 'pastetoggle'
     nmap <silent> <leader>w       :w<CR>
 
-nnoremap <silent> j               gj
-nnoremap <silent> k               gk
-nnoremap <silent> ^               g^
-nnoremap <silent> $               g$
+" These are kind of neat, but I think I'm tired of them.
+" nnoremap <silent> j               gj
+" nnoremap <silent> k               gk
+" nnoremap <silent> ^               g^
+" nnoremap <silent> $               g$
 
     nmap <silent> ç               :wincmd c<CR>
     nmap <silent> ˙               :call WinMove('h')<CR>
