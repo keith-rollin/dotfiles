@@ -1,35 +1,32 @@
 " Vundle Support
 " --------------
-set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " To try out:
-"  AndrewRadev/writable_search.vim
-"  Lokaltog/powerline
-"  Shougo/neobundle.vim
-"  airblade/vim-gitgutter
-"  alampros/vim-styled-jsx
+"  Lokaltog/powerline                   Or powerline/powerline, Airline, lightline
+"  Valloric/YouCompleteMe
+"  airblade/vim-gitgutter               Show status of each line in the vim gutter
 "  altercation/vim-colors-solarized
 "  ap/vim-css-color
 "  bling/vim-airline
+"  davidhalter/jedi-vim                 Python auto-completion
 "  docunext/closetag.vim
 "  embear/vim-localvimrc
 "  ervandew/supertab
 "  fatih/vim-go
 "  haya14busa/incsearch.vim
 "  itchyny/lightline.vim
-"  junegunn/fzf.vim
+"  junegunn/fzf.vim                     Reported to be a better version of CtrlP
 "  junegunn/goyo.vim
-"  kballard/vim-swift (supports syntastic)
+"  kballard/vim-swift                   Supports syntastic
 "  landaire/deoplete-swift
-"  mileszs/ack.vim
 "  mitsuse/autocomplete-swift
 "  nathanaelkane/vim-indent-guides
 "  powerline/powerline
-"  qpkorr/vim-bufkill
+"  python-rope/ropevim                  Python refactoring
 "  scrooloose/syntastic
 "  sheerun/vim-polyglot
 "  statico/vim-inform7
@@ -52,14 +49,23 @@ call vundle#begin()
 "  tpope/vim-tbone
 "  tpope/vim-unimpaired
 "  vim-scripts/DrawIt
-"  w0rp/ale
+"  w0rp/ale                             Better syntastic
 "  wellle/targets.vim
 " Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
+" Review https://vimawesome.com/
 
 " Configure CtrlP
+" TBD: Try out other variable mucking indicated below.
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_root_markers = ['Makefile.shared']
+" let g:ctrlp_match_window_bottom = 0       # Now ctrlp_match_window = "top, ..."
+" let g:ctrlp_match_window_reversed = 0     # Now ctrlp_match_window = "ttb, ..."
+" let g:ctrlp_custom_ignore = '\v\~$|\.(o|swp|pyc|wav|mp3|ogg|blend)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|__init__\.py'
+" let g:ctrlp_working_path_mode = 0
+" let g:ctrlp_dotfiles = 0                  # Now probably ctrlp_show-hidden
+" let g:ctrlp_switch_buffer = 0
+
 
 " Configure swift.vim: don't show the fancy -> in Swift source files.
 let g:swift_no_conceal=1
@@ -68,6 +74,7 @@ let g:swift_no_conceal=1
 let g:NERDTreeShowHidden=1
 
 Plugin 'VundleVim/Vundle.vim'       " Vim package manager (TBD: investigate Vim 8.0's built-in mechanism).
+
 Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
 Plugin 'derekwyatt/vim-fswitch'     " Switching between companion files.
 Plugin 'junegunn/vim-easy-align'    " Aligning source code.
@@ -86,6 +93,7 @@ filetype plugin indent on
 set autoread                    " Automatically reread externally changed files.
 set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
+set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
 set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
 set list                        " Show invisible characters
 set modeline                    " Enable modeline support
@@ -103,6 +111,7 @@ set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%
 
 " Search related
 set hlsearch                    " Highlight searches
+"set incsearch                  " (Set in vim.sensible)
 set ignorecase                  " Ignore case of searches
 set smartcase                   " Case-insensitive searching unless we type at least one capital letter
 
@@ -217,13 +226,13 @@ let mapleader = ","
 " Use *noremap when recursive mapping is not wanted. Use *unmap to remove a
 " specified binding. Use *mapclear to remove all bindings for that mode.
 
-" sort /<leader>/
     nmap <silent> <leader>.       <c-^>
     nmap <silent> <leader>,       :FSHere<CR>
     nmap <silent> <leader><space> :call StripWhitespace()<CR>
     nmap <silent> <leader>eb      :edit ~/.bashrc<CR>
     nmap <silent> <leader>eg      :edit ~/.gitconfig<CR>
     nmap <silent> <leader>ev      :edit $MYVIMRC<CR>
+nnoremap <silent> <leader>fb      :CtrlPBuffer<CR>
 nnoremap <silent> <leader>ff      :CtrlPFunky<CR>
 nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
     nmap <silent> <leader>ga      <Plug>(EasyAlign)
@@ -250,6 +259,21 @@ nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
     nmap <silent> ˚               :call WinMove('k')<CR>
     nmap <silent> ¬               :call WinMove('l')<CR>
     nmap <silent> œ               :wincmd q<CR>
+
+" Add some mappings to better unify vim's mini-buffer with other editing
+" environments. Experimental at this point -- we'll see how I like them (or if
+" I even remember to use them.
+cnoremap <C-a>  <Home>
+cnoremap <C-b>  <Left>
+cnoremap <C-f>  <Right>
+cnoremap <C-d>  <Delete>
+cnoremap <M-b>  <S-Left>
+cnoremap <M-f>  <S-Right>
+cnoremap <M-d>  <S-right><Delete>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+cnoremap <Esc>d <S-right><Delete>
+cnoremap <C-g>  <C-c>
 
 " Functions
 " ---------
