@@ -1,5 +1,8 @@
 " Vundle Support
 " --------------
+set nocompatible    " Should not be needed if a vimrc file (this file) exists.
+                    " But I found that pastetoggle does not work unless I
+                    " explicitly include this statement.
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
