@@ -281,6 +281,15 @@ lips()
     printf '%20s: %s\n' "External IP" $EXTIP
 }
 
+function on_ac_power()
+{
+    pmset -g ps | grep -q "AC Power"
+}
+
+function on_battery_power()
+{
+    pmset -g ps | grep -q "Battery Power"
+}
 
 function path()
 {
