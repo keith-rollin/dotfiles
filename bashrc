@@ -132,6 +132,7 @@ function badge() { tput bel ; }
 function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
 function gitp() { git --no-pager "$@" ; }
 function la() { ll -A "$@" ; }
+function lart() { ls -lArt "$@" ; }
 function ll() { ls -o "$@" ; }
 function lmk() { say 'Process complete.' ; }
 function localip() { ipconfig getifaddr en0 ; }
