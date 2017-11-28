@@ -93,7 +93,7 @@ $ <Commit changes>
 
 ```bash
 $ git submodule deinit <submodule>      # Updates .git/config and deletes working directory
-$ git rm bundle/<submodule>             # Removes submodule from parent project
+$ git rm <submodule>                    # Removes submodule from parent project
 $ rm -rf .git/modules/<submodule>       # Remove sub-.git directory from parent .git directory
 $ <Edit .gitmodules>                    # Remove submodule references in here
 $ <Commit changes>

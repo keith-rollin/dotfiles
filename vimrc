@@ -1,61 +1,61 @@
-" Vundle Support
-" --------------
 set nocompatible    " Should not be needed if a vimrc file (this file) exists.
                     " But I found that pastetoggle does not work unless I
                     " explicitly include this statement.
-filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Plugins to try out:
+"
+"   Lokaltog/powerline                  Or powerline/powerline, Airline, lightline
+"   Valloric/YouCompleteMe
+"   airblade/vim-gitgutter              Show status of each line in the vim gutter
+"   altercation/vim-colors-solarized
+"   ap/vim-css-color
+"   bling/vim-airline
+"   davidhalter/jedi-vim                Python auto-completion
+"   docunext/closetag.vim
+"   embear/vim-localvimrc
+"   ervandew/supertab
+"   fatih/vim-go
+"   haya14busa/incsearch.vim
+"   itchyny/lightline.vim
+"   junegunn/fzf.vim                    Reported to be a better version of CtrlP
+"   junegunn/goyo.vim
+"   kballard/vim-swift                  Supports syntastic
+"   landaire/deoplete-swift
+"   mitsuse/autocomplete-swift
+"   nathanaelkane/vim-indent-guides
+"   powerline/powerline
+"   python-rope/ropevim                 Python refactoring
+"   scrooloose/syntastic
+"   sheerun/vim-polyglot
+"   statico/vim-inform7
+"   suan/vim-instant-markdown
+"   tmux-plugins/vim-tmux
+"   tomasr/molokai
+"   toyamarinyon/vim-swift
+"   tpope/vim-endwise
+"   tpope/vim-eunuch
+"   tpope/vim-flagship
+"   tpope/vim-git
+"   tpope/vim-jdaddy
+"   tpope/vim-pathogen
+"   tpope/vim-repeat
+"   tpope/vim-rhubarb
+"   tpope/vim-rsi
+"   tpope/vim-sleuth
+"   tpope/vim-speeddating
+"   tpope/vim-surround
+"   tpope/vim-tbone
+"   tpope/vim-unimpaired
+"   vim-scripts/DrawIt
+"   w0rp/ale                            Better syntastic
+"   wellle/targets.vim
+"
+"   Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
+"
+"   Review https://vimawesome.com/
 
-" To try out:
-"  Lokaltog/powerline                   Or powerline/powerline, Airline, lightline
-"  Valloric/YouCompleteMe
-"  airblade/vim-gitgutter               Show status of each line in the vim gutter
-"  altercation/vim-colors-solarized
-"  ap/vim-css-color
-"  bling/vim-airline
-"  davidhalter/jedi-vim                 Python auto-completion
-"  docunext/closetag.vim
-"  embear/vim-localvimrc
-"  ervandew/supertab
-"  fatih/vim-go
-"  haya14busa/incsearch.vim
-"  itchyny/lightline.vim
-"  junegunn/fzf.vim                     Reported to be a better version of CtrlP
-"  junegunn/goyo.vim
-"  kballard/vim-swift                   Supports syntastic
-"  landaire/deoplete-swift
-"  mitsuse/autocomplete-swift
-"  nathanaelkane/vim-indent-guides
-"  powerline/powerline
-"  python-rope/ropevim                  Python refactoring
-"  scrooloose/syntastic
-"  sheerun/vim-polyglot
-"  statico/vim-inform7
-"  suan/vim-instant-markdown
-"  tmux-plugins/vim-tmux
-"  tomasr/molokai
-"  toyamarinyon/vim-swift
-"  tpope/vim-endwise
-"  tpope/vim-eunuch
-"  tpope/vim-flagship
-"  tpope/vim-git
-"  tpope/vim-jdaddy
-"  tpope/vim-pathogen
-"  tpope/vim-repeat
-"  tpope/vim-rhubarb
-"  tpope/vim-rsi
-"  tpope/vim-sleuth
-"  tpope/vim-speeddating
-"  tpope/vim-surround
-"  tpope/vim-tbone
-"  tpope/vim-unimpaired
-"  vim-scripts/DrawIt
-"  w0rp/ale                             Better syntastic
-"  wellle/targets.vim
-" Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
-" Review https://vimawesome.com/
+" Configure plugins
+" -----------------
 
 " Configure CtrlP
 " TBD: Try out other variable mucking indicated below.
@@ -69,27 +69,32 @@ let g:ctrlp_root_markers = ['Makefile.shared']
 " let g:ctrlp_dotfiles = 0                  # Now probably ctrlp_show-hidden
 " let g:ctrlp_switch_buffer = 0
 
-
 " Configure swift.vim: don't show the fancy -> in Swift source files.
 let g:swift_no_conceal=1
 
 " Configure NERDTree
 let g:NERDTreeShowHidden=1
 
-Plugin 'VundleVim/Vundle.vim'       " Vim package manager (TBD: investigate Vim 8.0's built-in mechanism).
+" Pull in vim-plug
+" ----------------
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-Plugin 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
-Plugin 'derekwyatt/vim-fswitch'     " Switching between companion files.
-Plugin 'junegunn/vim-easy-align'    " Aligning source code.
-Plugin 'keith/swift.vim'            " Swift syntax highlighting and indenting.
-Plugin 'scrooloose/nerdtree'        " Directory hierarchy browser.
-Plugin 'tacahiroy/ctrlp-funky'      " CtrlP extension that performs function navigation.
-Plugin 'tpope/vim-commentary'       " Comment/uncomment
-Plugin 'tpope/vim-fugitive'         " Git integration.
-Plugin 'tpope/vim-sensible'         " Sensible vim defaults.
-
-call vundle#end()
-filetype plugin indent on
+" Install plugins
+" ---------------
+call plug#begin('~/.vim/plugged')
+Plug 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
+Plug 'derekwyatt/vim-fswitch'     " Switching between companion files.
+Plug 'junegunn/vim-easy-align'    " Aligning source code.
+Plug 'keith/swift.vim'            " Swift syntax highlighting and indenting.
+Plug 'scrooloose/nerdtree'        " Directory hierarchy browser.
+Plug 'tacahiroy/ctrlp-funky'      " CtrlP extension that performs function navigation.
+Plug 'tpope/vim-commentary'       " Comment/uncomment
+Plug 'tpope/vim-fugitive'         " Git integration.
+Plug 'tpope/vim-sensible'         " Sensible vim defaults.
+call plug#end()
 
 " Variables
 " ---------
@@ -159,14 +164,15 @@ if !g:HasInsertedAutocmds && has("autocmd")
     autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
     " Set 'cursorline' for the active buffer.
-    augroup CursorLine
-        au!
-        autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-        autocmd WinLeave * setlocal nocursorline
-    augroup END
+    " Turn this off -- it can be kinda slow. We can turn it on with <leader>si.
+    " augroup CursorLine
+    "     au!
+    "     autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    "     autocmd WinLeave * setlocal nocursorline
+    " augroup END
 
     " Treat .json files as .js
-    autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+    autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
 
     " Treat .md files as Markdown
     autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
@@ -187,7 +193,7 @@ command! Reload :source $MYVIMRC
 
 " Highlight colors
 highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge error markers
 
 " netrw: Configuration -- compare to vinegar
 "let g:netrw_banner=0        " disable banner
@@ -265,7 +271,7 @@ nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 
 " Add some mappings to better unify vim's mini-buffer with other editing
 " environments. Experimental at this point -- we'll see how I like them (or if
-" I even remember to use them.
+" I even remember to use them).
 cnoremap <C-a>  <Home>
 cnoremap <C-b>  <Left>
 cnoremap <C-f>  <Right>
