@@ -35,12 +35,12 @@ then
     echo
     echo "*** Updating Homebrew"
     echo
-    brew update
+    caffeinate -dim brew update
 
     echo
     echo "*** Upgrading installed Homebrew apps"
     echo
-    brew upgrade
+    caffeinate -dim brew upgrade
 
     echo
     echo "*** Installing new Homebrew apps"
