@@ -94,8 +94,8 @@ then
         suspicious-package
     )
 
-    brew install "${apps[@]}"
-    brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
-    brew cask install "${casks[@]}"
-    qlmanage -r &> /dev/null
+    caffeinate -dim brew install "${apps[@]}"
+    caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
+    caffeinate -dim brew cask install "${casks[@]}"
+    caffeinate -dim qlmanage -r &> /dev/null
 fi
