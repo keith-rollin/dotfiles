@@ -19,6 +19,9 @@
 
 if ! is_executable brew
 then
+    echo
+    echo "*** Cloning Homebrew repository"
+    echo
     BREW_PATH="${DEV_PATH}/brew"
     [[ -d "${BREW_PATH}" ]] || mkdir "${BREW_PATH}"
     git clone https://github.com/Homebrew/brew.git "${BREW_PATH}"
@@ -29,13 +32,19 @@ fi
 
 if is_executable brew
 then
+    echo
     echo "*** Updating Homebrew"
+    echo
     brew update
 
+    echo
     echo "*** Upgrading installed Homebrew apps"
+    echo
     brew upgrade
 
+    echo
     echo "*** Installing new Homebrew apps"
+    echo
 
     # Some tools to consider from:
     #

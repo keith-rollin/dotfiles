@@ -49,18 +49,6 @@ then
     exit 1
 fi
 
-# If I forgot to recursively checkout dotfiles, do that now. Otherwise, update
-# the submodules.
-
-if [[ ! -d "${HERE}/vim/bundle/Vundle.vim" ]]
-then
-    echo "*** Installing submodules"
-    git -C "${HERE}" submodule update --init --recursive
-else
-    echo "*** Updating submodules"
-    git -C "${HERE}" submodule foreach git pull origin master
-fi
-
 # Create or update links in my home directory to handy things elsewhere.
 
 function create_link_in_home()
@@ -83,7 +71,9 @@ function create_link_in_home()
     "${LNS}" "${file}" "${link}"
 }
 
+echo
 echo "*** Creating/updating home directory links"
+echo
 
 create_link_in_home "${HERE}/bash_profile"  .bash_profile
 create_link_in_home "${HERE}/bashrc"        .bashrc
@@ -101,12 +91,11 @@ create_link_in_home "${DEV_PATH}"
 BREW_PATH="${DEV_PATH}/brew"
 if [[ ! -d "${BREW_PATH}" ]]
 then
-    echo "*** Creating brew directory"
     mkdir "${BREW_PATH}"
 fi
 unset BREW_PATH
 
-# Get some handy functions defined.
+# Get some handy functions defined (well, `maybe_source`, anyway).
 
 source "${HERE}/bashrc"
 
@@ -115,6 +104,11 @@ source "${HERE}/bashrc"
 # decrypt it.
 
 maybe_source "${HERE}/install.brew"
+
+# Decrypt our dotfiles repository files if (a) they look encrypted and (b) we
+# have access to the key. Do this after installing HomeBrew since we use
+# git-crypt from it. If that succeeds, move on to installing our private
+# gibblies.
 
 function is_decrypted()
 {
@@ -127,7 +121,9 @@ then
     then
         git -C "${HERE}" crypt unlock "${KEY}"
     else
+        echo "###"
         echo "### WARNING: git repository is encrypted. Specify a key with --key to decrypt it."
+        echo "###"
     fi
 fi
 
