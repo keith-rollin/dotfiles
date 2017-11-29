@@ -12,14 +12,13 @@
 #       * .gitconfig
 #       * .inputrc
 #       * .vim
-#       * .vimrc
 #       * bin
 #       * dev
 #       * dotfiles
 #   * Create a "brew" directory next to it and put homebrew into it, or
 #     update it if it already exists.
 #   * Invoke my private installation script
-#   * Update vim with bundles defined in .vimrc
+#   * Update vim with bundles defined in .vimrc (disabled for now)
 #
 # Before running, I may need to get the key used for git-crypt. Point to it
 # with the --key option.
@@ -91,7 +90,6 @@ create_link_in_home "${HERE}/bashrc"        .bashrc
 create_link_in_home "${HERE}/gitconfig"     .gitconfig
 create_link_in_home "${HERE}/inputrc"       .inputrc
 create_link_in_home "${HERE}/vim"           .vim
-create_link_in_home "${HERE}/vimrc"         .vimrc
 
 create_link_in_home "${HERE}"
 create_link_in_home "${HERE}/bin"
@@ -140,6 +138,8 @@ fi
 
 # Install/update vim bundles. Let's do this last so that the operation can be
 # done in the full context of environment variables and tools.
+# This is commented out because I no longer use Vundle. I now use vim_plug.
+# Bring this back after figuring out how to auto-install plugins with vim-plug.
 
-echo "*** Installing/updating vim bundles"
-vim +PluginInstall +qall &> /dev/null
+# echo "*** Installing/updating vim bundles"
+# vim +PluginInstall +qall &> /dev/null
