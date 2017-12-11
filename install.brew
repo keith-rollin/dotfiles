@@ -98,4 +98,6 @@ then
     caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
     caffeinate -dim brew cask install "${casks[@]}"
     caffeinate -dim qlmanage -r &> /dev/null
+
+    brew analytics off
 fi
