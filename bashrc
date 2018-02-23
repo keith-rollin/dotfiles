@@ -175,7 +175,7 @@ function cdf()
 {
     # Change working directory to the top-most Finder window location.
 
-    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
+    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
 function delete-brew()
@@ -242,7 +242,7 @@ function mkcd()
 {
     # Create a new directory and enter it.
 
-    mkdir -p "$@" && cd "$@" || exit
+    mkdir -p "$@" && cd "$@"
 }
 
 # l(ist)ips Get local and WAN IP adddresses
@@ -331,7 +331,7 @@ function sudo_keep_alive()
     do
         sudo -n true
         sleep 60
-        kill -0 "$$" || exit
+        kill -0 "$$" || return
     done 2>/dev/null &
 }
 
@@ -348,7 +348,7 @@ function up()
     else
         local rx=$(echo "$1" | sed -e "s/\s\+//g" -e "s/\(.\)/\1[^\/]*/g")
         local p="$(echo -n "$(pwd | sed -e "s/\(.*\/[^\/]*${rx}\)\/.*/\1/")")"
-        cd "$p" || exit
+        cd "$p"
     fi
 }
 
