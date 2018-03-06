@@ -83,6 +83,7 @@ if [[ -n "${BREW_PATH}" ]]
 then
     prepend_path "${BREW_PATH}/sbin"
     prepend_path "${BREW_PATH}/bin"
+    prepend_path "${BREW_PATH}/opt/python@2/libexec/bin"
 fi
 unset BREW_PATH
 
@@ -297,6 +298,11 @@ function path()
     # Show the PATH, one entry per line.
 
     echo "$PATH" | tr : '\n'
+}
+
+function python()
+{
+    /usr/bin/python "$@"
 }
 
 function rg()

@@ -67,7 +67,7 @@ then
     apps=(
         git-crypt
         github-keygen
-        python
+        python@2
         python3
         ripgrep
         ssh-copy-id
