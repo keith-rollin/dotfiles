@@ -300,11 +300,6 @@ function path()
     echo "$PATH" | tr : '\n'
 }
 
-function python()
-{
-    /usr/bin/python "$@"
-}
-
 function rg()
 {
     command rg -g '!ChangeLog*' "$@"
