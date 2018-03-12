@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# TBD: Maybe make use of something like the following:
+
+# text_reset="$(tput sgr0)" # turn off all attributes
+# text_bold="$(tput bold)"
+# text_underline="$(tput smul)"
+# text_blink="$(tput blink)"
+
+# text_color_reset="$(tput setaf 0)"
+# text_color_burgundy="$(tput setaf 1)"
+# text_color_green="$(tput setaf 2)"
+# text_color_yellow="$(tput setaf 3)"
+# text_color_blue="$(tput setaf 4)"
+# text_color_magenta="$(tput setaf 5)"
+# text_color_cyan="$(tput setaf 6)"
+# text_color_light="$(tput setaf 7)"
+# text_color_gray="$(tput setaf 8)"
+# text_color_red="$(tput setaf 9)"
+# text_color_orange="$(tput setaf 166)"
+
+# func_underline() {
+#   printf "${text_underline}%s${text_reset}\n" ${1+"$@"}
+# }
+
 # PS1 escape characters
 
 Date="\d"
