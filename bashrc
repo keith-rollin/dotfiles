@@ -83,7 +83,7 @@ if [[ -n "${BREW_PATH}" ]]
 then
     prepend_path "${BREW_PATH}/sbin"
     prepend_path "${BREW_PATH}/bin"
-    prepend_path "${BREW_PATH}/opt/python@2/libexec/bin"
+    prepend_path "${BREW_PATH}/opt/python@2/bin"
 fi
 unset BREW_PATH
 
