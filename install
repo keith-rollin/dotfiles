@@ -26,6 +26,7 @@
 HERE="$(dirname "$0")"
 REALPATH="${HERE}/bin/realpath"
 HERE="$("${REALPATH}" "${HERE}")"
+REALPATH="${HERE}/bin/realpath"
 LNS="${HERE}/bin/lns"
 
 KEY="" # git-crypt key
@@ -126,6 +127,10 @@ then
         echo "###"
     fi
 fi
+
+# Re-run bashrc in case something interesting got decrypted.
+
+source "${HERE}/bashrc"
 
 if is_decrypted
 then
