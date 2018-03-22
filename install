@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Install everything, including dotfiles, Vundle, brew, and prefs.
+# Install everything, including dotfiles, vim_plug, brew, and prefs.
 #
 # Check out this repository into a directory called "dev". Running it will:
 #
-#   * Complete the check-out if it forgot to perform a recursive check-out.
+#   * Complete the check-out if I forgot to perform a recursive check-out.
 #   * Add the following links to my home directory, or update them if they
 #     already exist:
 #       * .bash_profile
@@ -17,27 +17,15 @@
 #       * dotfiles
 #   * Create a "brew" directory next to it and put homebrew into it, or
 #     update it if it already exists.
-#   * Invoke my private installation script
 #   * Update vim with bundles defined in .vimrc (disabled for now)
-#
-# Before running, I may need to get the key used for git-crypt. Point to it
-# with the --key option.
 
-HERE="$(dirname "$0")"
+ME="$(readlink "${BASH_SOURCE[0]}")"
+[[ -n "${ME}" ]] || ME="${BASH_SOURCE[0]}"
+HERE="$(dirname "${ME}")"
 REALPATH="${HERE}/bin/realpath"
 HERE="$("${REALPATH}" "${HERE}")"
 REALPATH="${HERE}/bin/realpath"
 LNS="${HERE}/bin/lns"
-
-KEY="" # git-crypt key
-
-while [[ "${1:+x}" ]]
-do
-    case "$1" in
-        --key)      KEY="$2"; shift 2;;
-        *)          echo "### Unknown parameter: $p"; exit 1;;
-    esac
-done
 
 # Make sure we are in a dev/dotfiles directory. We want this arrangement so
 # that we can check out `brew` into dev/brew.
@@ -83,7 +71,6 @@ create_link_in_home "${HERE}/inputrc"       .inputrc
 create_link_in_home "${HERE}/vim"           .vim
 
 create_link_in_home "${HERE}"
-create_link_in_home "${HERE}/bin"
 create_link_in_home "${DEV_PATH}"
 
 # Make sure that brew's home has been created. This will ensure that bashrc
@@ -98,44 +85,16 @@ unset BREW_PATH
 
 # Get some handy functions defined (well, `maybe_source`, anyway).
 
-source "${HERE}/bashrc"
+source "${HOME}/.bashrc"
 
-# Install Brew now. We need to do this before invoking install.private since
-# that file might be encrypted and we need git-crypt from brew in order to
-# decrypt it.
+# Install Brew now.
 
 maybe_source "${HERE}/install.brew"
 
-# Decrypt our dotfiles repository files if (a) they look encrypted and (b) we
-# have access to the key. Do this after installing HomeBrew since we use
-# git-crypt from it. If that succeeds, move on to installing our private
-# gibblies.
+# Re-run bashrc in case something something is sensitive to brew being
+# installed.
 
-function is_decrypted()
-{
-    [[ "$(git -C "${HERE}" config --get filter.git-crypt.required)" == "true" ]]
-}
-
-if ! is_decrypted
-then
-    if [[ -n "${KEY}" ]]
-    then
-        git -C "${HERE}" crypt unlock "${KEY}"
-    else
-        echo "###"
-        echo "### WARNING: git repository is encrypted. Specify a key with --key to decrypt it."
-        echo "###"
-    fi
-fi
-
-# Re-run bashrc in case something interesting got decrypted.
-
-source "${HERE}/bashrc"
-
-if is_decrypted
-then
-    maybe_source "${HERE}/install.private"
-fi
+source "${HOME}/.bashrc"
 
 # Install/update vim bundles. Let's do this last so that the operation can be
 # done in the full context of environment variables and tools.

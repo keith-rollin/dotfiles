@@ -10,6 +10,10 @@
 # later in this file, but we'll need to call these functions before they're
 # defined, so they're moved to the top of the file.
 
+ME="$(readlink "${BASH_SOURCE[0]}")"
+[[ -n "${ME}" ]] || ME="${BASH_SOURCE[0]}"
+HERE="$(dirname "${ME}")"
+
 function is_executable()
 {
     # Determine if the given command is an actual command, alias, or shell
@@ -28,9 +32,9 @@ function maybe_resolve()
     if is_executable realpath
     then
         realpath "$1"
-    elif is_executable "${HOME}/bin/realpath"
+    elif is_executable "${HERE}/bin/realpath"
     then
-        "${HOME}/bin/realpath" "$1"
+        "${HERE}/bin/realpath" "$1"
     else
         echo ""
     fi
@@ -56,7 +60,7 @@ function prepend_path()
 
 # Bring in color definitions for PS1.
 
-maybe_source "${HOME}/dotfiles/bashrc.console"
+maybe_source "${HERE}/bashrc.console"
 
 # Environment.
 #
@@ -76,8 +80,6 @@ export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
 # $PATH.
 
-prepend_path "${HOME}/bin"
-
 BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
 if [[ -n "${BREW_PATH}" ]]
 then
@@ -86,6 +88,8 @@ then
     prepend_path "${BREW_PATH}/opt/python@2/bin"
 fi
 unset BREW_PATH
+
+prepend_path "${HERE}/bin"
 
 # Shell.
 
@@ -117,6 +121,8 @@ function tree() { command tree -aCF -I '.git' "$@" ; }
 function ..() { cd .. ; }
 function ...() { cd ../.. ; }
 function ....() { cd ../../.. ; }
+function .....() { cd ../../../.. ; }
+function ......() { cd ../../../../.. ; }
 
 function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
 function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
@@ -136,7 +142,6 @@ function la() { ll -A "$@" ; }
 function lart() { ls -lArt "$@" ; }
 function ll() { ls -o "$@" ; }
 function lmk() { say 'Process complete.' ; }
-function localip() { ipconfig getifaddr en0 ; }
 function notify() { osascript -e "display notification \"$1\" with title \"$2\"" ; }
 function reload() { source ~/.bash_profile ; }
 
@@ -246,7 +251,7 @@ function mkcd()
     mkdir -p "$@" && cd "$@"
 }
 
-# l(ist)ips Get local and WAN IP adddresses
+# l(ist)ips: Get local and WAN IP addresses
 # From: http://brettterpstra.com/2017/10/30/a-few-new-shell-tricks/
 
 lips()
@@ -429,7 +434,3 @@ then
         eval "$(swiftenv init -)"
     fi
 fi
-
-# Bring in additional (private) definitions.
-
-at_work && maybe_source "${HOME}/dotfiles/bashrc.private"
