@@ -65,9 +65,7 @@ then
     # brew tap kylef/formulae
 
     apps=(
-        git-crypt
         github-keygen
-        python@2
         python3
         ripgrep
         ssh-copy-id
