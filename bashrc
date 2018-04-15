@@ -404,7 +404,7 @@ is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-cor
 if is_executable brew
 then
     HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && source "${HOMEBREW_COMPLETION_DIR}/"*
+    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
 fi
 
 # Bring in ssh keys.

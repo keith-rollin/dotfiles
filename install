@@ -4,7 +4,6 @@
 #
 # Check out this repository into a directory called "dev". Running it will:
 #
-#   * Complete the check-out if I forgot to perform a recursive check-out.
 #   * Add the following links to my home directory, or update them if they
 #     already exist:
 #       * .bash_profile
@@ -12,9 +11,7 @@
 #       * .gitconfig
 #       * .inputrc
 #       * .vim
-#       * bin
 #       * dev
-#       * dotfiles
 #   * Create a "brew" directory next to it and put homebrew into it, or
 #     update it if it already exists.
 #   * Update vim with bundles defined in .vimrc (disabled for now)
@@ -52,7 +49,7 @@ function create_link_in_home()
 
     if [[ -e "${link}" && ! -L "${link}" ]]
     then
-        echo "### File ${link} exists and is not a link. Please move it aside."
+        echo "### File ${link} exists but is not a link. Please move it aside."
         return
     fi
 
@@ -70,18 +67,7 @@ create_link_in_home "${HERE}/gitconfig"     .gitconfig
 create_link_in_home "${HERE}/inputrc"       .inputrc
 create_link_in_home "${HERE}/vim"           .vim
 
-create_link_in_home "${HERE}"
 create_link_in_home "${DEV_PATH}"
-
-# Make sure that brew's home has been created. This will ensure that bashrc
-# (called next) will add brew/bin to the $PATH.
-
-BREW_PATH="${DEV_PATH}/brew"
-if [[ ! -d "${BREW_PATH}" ]]
-then
-    mkdir "${BREW_PATH}"
-fi
-unset BREW_PATH
 
 # Get some handy functions defined (well, `maybe_source`, anyway).
 
@@ -90,11 +76,6 @@ source "${HOME}/.bashrc"
 # Install Brew now.
 
 maybe_source "${HERE}/install.brew"
-
-# Re-run bashrc in case something something is sensitive to brew being
-# installed.
-
-source "${HOME}/.bashrc"
 
 # Install/update vim bundles. Let's do this last so that the operation can be
 # done in the full context of environment variables and tools.

@@ -1,46 +1,100 @@
 #!/bin/bash
 
-# (This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`.)
-
 # Install homebrew (if missing) or update it (if not). Install or update
 # desired packages. Also install/update cask along with desired packages.
-
-# First, get homebrew if we don't already have it.
-
-# Alternative steps to check out some day:
 #
-#   xcode-select --install
-#   cd /usr/local
-#   sudo mkdir homebrew
-#   sudo chown $USER homebrew
-#   curl -L https://github.com/Homebrew/brew/tarball/master |   # Why -L?
-#       tar xz --strip 1 -C homebrew                            # --strip-component 1?
+# This script is not intended to be stand-alone. It's intended to be source'd
+# from `install`. In particular, we need $DEV_PATH and $LNS from `install`, and
+# prepend_path from when `install` invokes `bashrc`. Further, in case of error,
+# this script aborts by using "return 1", which is how you exit a source'd
+# script.
+
+
+# Make sure that brew's home has been created.
+#
+# I operate in two modes here. At work, I keep "dev" (which contains "dotfiles"
+# and "brew") on a non-boot volume so that it can be shared among boot volumes.
+# At home, I don't have a non-boot volume. This means I have to keep "dev"
+# somewhere on my boot volume. I choose to keep it in my Documents directory so
+# that it can be backed up to iCloud and shared with all my Macs. But I don't
+# want to keep "brew" in it since I don't want or need that copied to iCloud.
+# So, instead, I keep my "brew" directory in my $HOME directory and create a
+# soft link to it in "dev" next to my "dotfiles" directory.
+
+BREW_DEV_PATH="${DEV_PATH}/brew"
+BREW_HOME_PATH="${HOME}/brew"
+if [[ "${DEV_PATH}" =~ .*/Documents/.* ]]
+then
+    # On my home system. Create "${BREW_HOME_PATH}", and create
+    # "${BREW_DEV_PATH}" as a soft link in "dev" next to my "dotfiles"
+    # directory, pointing it to "${BREW_HOME_PATH}".
+
+    [[ ! -d "${BREW_HOME_PATH}" ]] && {
+        mkdir "${BREW_HOME_PATH}" || {
+            echo "### Unable to create ${BREW_HOME_PATH} directory"
+            return 1
+        }
+    }
+
+    [[   -L "${BREW_DEV_PATH}" ]] && {
+        rm -f "${BREW_DEV_PATH}" || {
+            echo "### Unable to remove existing ${BREW_DEV_PATH} symbolic link"
+            return 1
+        }
+    }
+
+    [[ ! -e "${BREW_DEV_PATH}" ]] && {
+        "${LNS}" "${BREW_DEV_PATH}" "${BREW_HOME_PATH}" || {
+            echo "### Unable to create ${BREW_DEV_PATH} symbolic link"
+            return 1
+        }
+    }
+
+    [[ ! -L "${BREW_DEV_PATH}" ]] && {
+        echo "### File ${BREW_DEV_PATH} exists but is not a link. Please move it aside."
+        return 1
+    }
+else
+    # On a work system. Create the "${BREW_DEV_PATH}" directory next to my
+    # "dotfiles" directory if it doesn't already exist.
+
+    [[ ! -d "${BREW_DEV_PATH}" ]] && {
+        mkdir "${BREW_DEV_PATH}" || {
+            echo "### Unable to create ${BREW_HOME_PATH} directory"
+            return 1
+        }
+    }
+fi
+
+prepend_path "${BREW_DEV_PATH}/sbin"
+prepend_path "${BREW_DEV_PATH}/bin"
+
+# Get homebrew if I don't already have it.
 
 if ! is_executable brew
 then
     echo
     echo "*** Cloning Homebrew repository"
     echo
-    BREW_PATH="${DEV_PATH}/brew"
-    [[ -d "${BREW_PATH}" ]] || mkdir "${BREW_PATH}"
-    git clone https://github.com/Homebrew/brew.git "${BREW_PATH}"
-    unset BREW_PATH
+    git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
+        echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
+        return 1
+    }
 fi
 
-# Second, install the apps we want.
+# Second, install the apps I want.
 
 if is_executable brew
 then
-    echo
-    echo "*** Updating Homebrew"
-    echo
-    caffeinate -dim brew update
+    brew analytics off
 
     echo
-    echo "*** Upgrading installed Homebrew apps"
+    echo "*** Upgrading Homebrew and installed Homebrew apps"
     echo
-    caffeinate -dim brew upgrade
+    caffeinate -dim brew upgrade || {
+        echo "### Unable to update/upgrade brew"
+        return 1
+    }
 
     echo
     echo "*** Installing new Homebrew apps"
@@ -82,7 +136,6 @@ then
 
         # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
 
-        betterzipql
         qlcolorcode
         qlmarkdown
         qlprettypatch
@@ -96,6 +149,7 @@ then
     caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
     caffeinate -dim brew cask install "${casks[@]}"
     caffeinate -dim qlmanage -r &> /dev/null
-
-    brew analytics off
 fi
+
+unset BREW_DEV_PATH
+unset BREW_HOME_PATH
