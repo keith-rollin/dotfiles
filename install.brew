@@ -120,6 +120,7 @@ then
 
     apps=(
         github-keygen
+        multimarkdown
         python3
         ripgrep
         ssh-copy-id
