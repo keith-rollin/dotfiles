@@ -243,6 +243,14 @@ function git-top()
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
 }
 
+function hide-brew()
+{
+    local old_path="$PATH"
+    export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
+    "$@"
+    export PATH="$old_path"
+}
+
 function mkcd()
 {
     # Create a new directory and enter it.
