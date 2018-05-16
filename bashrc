@@ -87,6 +87,8 @@ then
     prepend_path "${BREW_PATH}/bin"
 fi
 unset BREW_PATH
+export HOMEBREW_TEMP="${DEV_PATH}/tmp"
+mkdir -p "${HOMEBREW_TEMP}"
 
 prepend_path "${HERE}/bin"
 
@@ -413,18 +415,7 @@ if is_executable brew
 then
     HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
     [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
-fi
 
-# Bring in ssh keys.
-
-[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
-ssh-add ~/.ssh/id_rsa &> /dev/null
-ssh-add ~/.ssh/id_keith-rollin@github &> /dev/null
-#ssh-add ~/.ssh/id_github &> /dev/null
-#ssh-add -A &> /dev/null    # Slow...don't use unless you have to.
-
-if is_executable brew
-then
     # Bring in pyenv.
 
     if is_executable pyenv
@@ -441,3 +432,11 @@ then
         eval "$(swiftenv init -)"
     fi
 fi
+
+# Bring in ssh keys.
+
+[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
+ssh-add ~/.ssh/id_rsa &> /dev/null
+ssh-add ~/.ssh/id_keith-rollin@github &> /dev/null
+#ssh-add ~/.ssh/id_github &> /dev/null
+#ssh-add -A &> /dev/null    # Slow...don't use unless you have to.
