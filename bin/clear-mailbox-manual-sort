@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+import xml.etree.ElementTree as ET
+
+def print_element_tree(tree):
+    print('<?xml version="1.0" encoding="UTF-8"?>')
+    print('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">')
+    tree.write(sys.stdout)
+
+
+def clone_element(elt):
+    new_elt = ET.Element(elt.tag, elt.attrib)
+    new_elt.text = elt.text
+    new_elt.tail = elt.tail
+    return new_elt
+
+
+def reset_manually_sorted(elt):
+    new_elt = clone_element(elt)
+    last_was_manually_sorted = False
+    for child in elt:
+        if child.tag == 'key' and child.text == 'MailboxIsManuallySorted':
+            new_elt.append(child)
+            last_was_manually_sorted = True
+        elif last_was_manually_sorted:
+            assert child.tag == 'true' or child.tag == 'false'
+            child.tag = 'false'
+            new_elt.append(child)
+            last_was_manually_sorted = False
+        else:
+            new_elt.append(reset_manually_sorted(child))
+    return new_elt
+
+
+def remove_display_index(elt):
+    new_elt = clone_element(elt)
+    last_was_display_index = False
+    for child in elt:
+        if child.tag == 'key' and child.text == 'MailboxDisplayIndex':
+            last_was_display_index = True
+        elif last_was_display_index:
+            assert child.tag == 'integer'
+            last_was_display_index = False
+        else:
+            new_elt.append(remove_display_index(child))
+    return new_elt
+
+
+def main():
+    file_name = sys.argv[1]
+    if not file_name: return
+
+    tree = ET.parse(file_name)
+    if not tree: return
+
+    root = tree.getroot()
+    if not root: return
+
+    root = reset_manually_sorted(root)
+    if not root: return
+
+    root = remove_display_index(root)
+    if not root: return
+
+    new_tree = ET.ElementTree(root)
+    if not new_tree: return
+
+    print_element_tree(new_tree)
+
+
+if __name__ == '__main__':
+    main()
