@@ -385,19 +385,19 @@ function vi()
     #
     #   path/to/file.cpp +62
 
-    local CMD="command vi"
+    local -a ARGS
     local p
     for p in "$@"
     do
         if [[ "$p" =~ .*:.* ]]
         then
-            CMD="$CMD $(echo $p | sed -e 's/\(.*\):\(.*\)/"\1" +\2/')"
+            ARGS+=("$(echo "$p" | sed -e 's/\(.*\):\(.*\)/"\1" +\2/')")
         else
-            CMD="$CMD \"$p\""
+            ARGS+=("$p")
         fi
     done
 
-    eval $CMD
+    command vi "${ARGS[@]}"
 }
 
 function wip()
