@@ -393,9 +393,9 @@ function vi()
     do
         if [[ "$p" =~ .*:.* ]]
         then
-            ARGS+=("$(echo "$p" | sed -e 's/\(.*\):\(.*\)/"\1" +\2/')")
+            ARGS+=($(echo $p | sed -e 's/\(.*\):\(.*\)/\1 +\2/'))
         else
-            ARGS+=("$p")
+            ARGS+=($p)
         fi
     done
 
