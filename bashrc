@@ -440,3 +440,9 @@ ssh-add ~/.ssh/id_rsa &> /dev/null
 ssh-add ~/.ssh/id_keith-rollin@github &> /dev/null
 #ssh-add ~/.ssh/id_github &> /dev/null
 #ssh-add -A &> /dev/null    # Slow...don't use unless you have to.
+
+# The following was given as a tip for speeding up `git status`. I tried it out
+# on an APFS volume (which seems to have slowed down `git status` a lot) and it
+# seems to more than double the speed. Nice.
+
+sudo sysctl kern.maxvnodes=$((512*1024)) &> /dev/null
