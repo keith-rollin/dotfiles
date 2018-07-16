@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
+from contextlib import contextmanager
+import glob
+import os
 import sys
 import xml.etree.ElementTree as ET
 
@@ -48,26 +53,48 @@ def remove_display_index(elt):
     return new_elt
 
 
+@contextmanager
+def redirect_stdin(file_name, mode = None):
+    saved = sys.stdin
+    sys.stdin = open(file_name, mode if mode else "r")
+    try:
+        yield
+    finally:
+        sys.stdin = saved
+
+
+@contextmanager
+def redirect_stdout(file_name, mode = None):
+    saved = sys.stdout
+    sys.stdout = open(file_name, mode if mode else "w")
+    try:
+        yield
+    finally:
+        sys.stdout = saved
+
+
 def main():
-    file_name = sys.argv[1]
-    if not file_name: return
+    mboxcache_file_names = glob.glob(os.path.expanduser(os.path.join("~", "Library", "Mail", "V5", "*", ".mboxCache.plist")))
 
-    tree = ET.parse(file_name)
-    if not tree: return
+    for mboxcache_file_name in mboxcache_file_names:
+        with redirect_stdin(mboxcache_file_name):
+            tree = ET.parse(sys.stdin)
+        if not tree: return
 
-    root = tree.getroot()
-    if not root: return
+        root = tree.getroot()
+        if not len(root): return
 
-    root = reset_manually_sorted(root)
-    if not root: return
+        root = reset_manually_sorted(root)
+        if not len(root): return
 
-    root = remove_display_index(root)
-    if not root: return
+        root = remove_display_index(root)
+        if not len(root): return
 
-    new_tree = ET.ElementTree(root)
-    if not new_tree: return
+        new_tree = ET.ElementTree(root)
+        if not new_tree: return
 
-    print_element_tree(new_tree)
+        with redirect_stdout(mboxcache_file_name):
+            print_element_tree(new_tree)
 
 
 if __name__ == '__main__':
