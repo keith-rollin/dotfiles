@@ -190,6 +190,13 @@ function delete-brew()
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 }
 
+function did()
+{
+    # From https://theptrk.com/2018/07/11/did-txt-file/
+
+    vim +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
+}
+
 function edit-ff()
 {
     vi $(ff "$1")
