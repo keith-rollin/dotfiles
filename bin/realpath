@@ -1,6 +1,6 @@
 #!/bin/bash
 
-remove_dots_and_slashes() {
+remove-dots-and-slashes() {
     local x=$1
 
     # If the x is relative, make it absolute.
@@ -61,7 +61,7 @@ realpath1() {
 realpath() {
     # This implementation (along with supporting functions above) is the one I
     # came up with.
-    realpath1 "$(remove_dots_and_slashes "$1")"
+    realpath1 "$(remove-dots-and-slashes "$1")"
 }
 
 realpath() {

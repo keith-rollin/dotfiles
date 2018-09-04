@@ -66,12 +66,12 @@ else
     }
 fi
 
-prepend_path "${BREW_DEV_PATH}/sbin"
-prepend_path "${BREW_DEV_PATH}/bin"
+prepend-path "${BREW_DEV_PATH}/sbin"
+prepend-path "${BREW_DEV_PATH}/bin"
 
 # Get homebrew if I don't already have it.
 
-if ! is_executable brew
+if ! is-executable brew
 then
     echo
     echo "*** Cloning Homebrew repository"
@@ -84,7 +84,7 @@ fi
 
 # Second, install the apps I want.
 
-if is_executable brew
+if is-executable brew
 then
     brew analytics off
 

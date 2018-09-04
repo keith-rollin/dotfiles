@@ -37,7 +37,7 @@ fi
 
 # Create or update links in my home directory to handy things elsewhere.
 
-function create_link_in_home()
+function create-link-in-home()
 {
     local file="$1"
     local link="$2"
@@ -61,21 +61,21 @@ echo
 echo "*** Creating/updating home directory links"
 echo
 
-create_link_in_home "${HERE}/bash_profile"  .bash_profile
-create_link_in_home "${HERE}/bashrc"        .bashrc
-create_link_in_home "${HERE}/gitconfig"     .gitconfig
-create_link_in_home "${HERE}/inputrc"       .inputrc
-create_link_in_home "${HERE}/vim"           .vim
+create-link-in-home "${HERE}/bash_profile"  .bash_profile
+create-link-in-home "${HERE}/bashrc"        .bashrc
+create-link-in-home "${HERE}/gitconfig"     .gitconfig
+create-link-in-home "${HERE}/inputrc"       .inputrc
+create-link-in-home "${HERE}/vim"           .vim
 
-create_link_in_home "${DEV_PATH}"
+create-link-in-home "${DEV_PATH}"
 
-# Get some handy functions defined (well, `maybe_source`, anyway).
+# Get some handy functions defined (well, `maybe-source`, anyway).
 
 source "${HOME}/.bashrc"
 
 # Install Brew now.
 
-maybe_source "${HERE}/install.brew"
+maybe-source "${HERE}/install.brew"
 
 # Install/update vim bundles. Let's do this last so that the operation can be
 # done in the full context of environment variables and tools.
