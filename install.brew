@@ -127,6 +127,14 @@ then
         tree
         watch           # Kinda expensive, but OK...
         xz
+
+        # New to explore from https://remysharp.com/2018/08/23/cli-improved
+        htop
+        bat
+        fd
+        ncdu
+        nnn
+        tldr
     )
 
     casks=(
