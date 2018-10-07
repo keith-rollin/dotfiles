@@ -129,6 +129,7 @@ function show-hidden() { defaults write com.apple.finder AppleShowAllFiles -bool
 function hide-hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
 function show-desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
 function hide-desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
+function toggle-dark-mode() { osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'; }
 
 function f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
 function ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
