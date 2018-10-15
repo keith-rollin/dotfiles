@@ -1,0 +1,5 @@
+#!/bin/bash
+
+BRANCH="$1"
+DATETIME="$2"
+git checkout $(git rev-list -n 1 --before="${DATETIME}" "${BRANCH}")
