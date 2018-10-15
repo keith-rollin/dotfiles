@@ -12,7 +12,8 @@
 	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
 	s = status -s
 	st = status
-	log1 = log -1 HEAD
+	list-remote-branches = ls-remote --heads
+	log1 = log -1
 	logf = log --raw
 	logg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	logl = log --oneline
