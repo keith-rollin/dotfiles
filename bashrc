@@ -253,6 +253,14 @@ function git-top()
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
 }
 
+function grm()
+{
+    # "git rebase master" is typed almost all with left-handed keys. Use this
+    # macro to ease the pain.
+
+    git rebase master
+}
+
 function hide-brew()
 {
     local old_path="$PATH"
