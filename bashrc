@@ -425,7 +425,7 @@ function wip()
 
 # Bring in bash completion.
 
-is-executable xcode-select && maybe-source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
+# is-executable xcode-select && maybe-source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
 
 if is-executable brew
 then
