@@ -175,7 +175,8 @@ function bak()
     local f
     for f in "$@"
     do
-        cp -p "$f" "$f.bak"
+        f=${f%%/}
+        ditto "$f" "$f.bak"
     done
 }
 
