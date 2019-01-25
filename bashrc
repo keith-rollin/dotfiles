@@ -14,7 +14,7 @@ ME="$(readlink "${BASH_SOURCE[0]}")"
 [[ -n "${ME}" ]] || ME="${BASH_SOURCE[0]}"
 HERE="$(dirname "${ME}")"
 
-function is-executable()
+function is_executable()
 {
     # Determine if the given command is an actual command, alias, or shell
     # function -- that is, if it's something we can invoke.
@@ -22,17 +22,17 @@ function is-executable()
     command -v "$1" &> /dev/null
 }
 
-function maybe-resolve()
+function maybe_resolve()
 {
     # If `realpath` is available, use it to resolve the given path into a full,
     # real path (no relative directories, no symlinks). (In checking, hardcode
     # a check for realpath being in ${HOME}/bin, since ${HOME}/bin might not be
     # in $PATH yet.) Otherwise, just return what we're given.
 
-    if is-executable realpath
+    if is_executable realpath
     then
         realpath "$1"
-    elif is-executable "${HERE}/bin/realpath"
+    elif is_executable "${HERE}/bin/realpath"
     then
         "${HERE}/bin/realpath" "$1"
     else
@@ -40,19 +40,19 @@ function maybe-resolve()
     fi
 }
 
-function maybe-source()
+function maybe_source()
 {
     # `source` a file if it exists, is readable, and doesn't look like binary.
 
     [[ -r "$1" && "$(file -b "$1")" != "data" ]] && source "$1"
 }
 
-function prepend-path()
+function prepend_path()
 {
     # Prepend the given path to PATH if it's not already there, resolving any
     # links if necessary.
 
-    local p="$(maybe-resolve "$1")"
+    local p="$(maybe_resolve "$1")"
     [[ -z "$p" ]] && return 0
     [[ "${PATH}" =~ .*$p:.* ]] && return 0
     export PATH="$p:${PATH}"
@@ -60,7 +60,7 @@ function prepend-path()
 
 # Bring in color definitions for PS1.
 
-maybe-source "${HERE}/bashrc.console"
+maybe_source "${HERE}/bashrc.console"
 
 # Environment.
 #
@@ -76,21 +76,21 @@ export LESS=-IMR
 export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 export SHELL_SESSION_HISTORY=1
 
-export DEV_PATH="$(maybe-resolve "${HOME}/dev")"
+export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
 # $PATH.
 
-BREW_PATH="$(maybe-resolve "${DEV_PATH}/brew")"
+BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
 if [[ -n "${BREW_PATH}" ]]
 then
-    prepend-path "${BREW_PATH}/sbin"
-    prepend-path "${BREW_PATH}/bin"
+    prepend_path "${BREW_PATH}/sbin"
+    prepend_path "${BREW_PATH}/bin"
 fi
 unset BREW_PATH
 export HOMEBREW_TEMP="${DEV_PATH}/tmp"
 mkdir -p "${HOMEBREW_TEMP}"
 
-prepend-path "${HERE}/bin"
+prepend_path "${HERE}/bin"
 
 # Shell.
 
@@ -125,11 +125,11 @@ function ....() { cd ../../.. ; }
 function .....() { cd ../../../.. ; }
 function ......() { cd ../../../../.. ; }
 
-function show-hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
-function hide-hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
-function show-desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
-function hide-desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
-function toggle-dark-mode() { osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'; }
+function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
+function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
+function show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
+function hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
+function toggle_dark_mode() { osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'; }
 
 function f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
 function ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
@@ -153,12 +153,12 @@ function ascii()
     cat /usr/share/misc/ascii
 }
 
-function at-home()
+function at_home()
 {
-    ! at-work
+    ! at_work
 }
 
-function at-work()
+function at_work()
 {
     # This is not a good test. It tells me where I am, not whether I'm using a
     # home or work computer.
@@ -187,7 +187,7 @@ function cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-function delete-brew()
+function delete_brew()
 {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 }
@@ -199,12 +199,12 @@ function did()
     vim +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
 }
 
-function edit-ff()
+function edit_ff()
 {
     vi $(ff "$1")
 }
 
-function edit-fff()
+function edit_fff()
 {
     vi $(fff "$1")
 }
@@ -227,27 +227,27 @@ function fs()
     fi
 }
 
-function git-diff()
+function git_diff()
 {
     # Use Git’s colored diff.
 
     git diff --no-index --color-words "$@";
 }
 
-function git-edit-changed()
+function git_edit_changed()
 {
     local OLD_CWD="$(pwd)"
-    git-top
+    git_top
     vi $(git diff --name-only)
     cd "${OLD_CWD}"
 }
 
-function git-edit-files-with-symbol()
+function git_edit_files_with_symbol()
 {
     vi $(git grep --name-only "$1")
 }
 
-function git-top()
+function git_top()
 {
     # Go To Git Top.
 
@@ -262,7 +262,7 @@ function grm()
     git rebase master
 }
 
-function hide-brew()
+function hide_brew()
 {
     local old_path="$PATH"
     export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
@@ -314,12 +314,12 @@ lips()
     printf '%20s: %s\n' "External IP" $EXTIP
 }
 
-function on-ac-power()
+function on_ac_power()
 {
     pmset -g ps | grep -q "AC Power"
 }
 
-function on-battery-power()
+function on_battery_power()
 {
     pmset -g ps | grep -q "Battery Power"
 }
@@ -336,17 +336,17 @@ function rg()
     command rg -g '!ChangeLog*' "$@"
 }
 
-function search-goog()
+function search_goog()
 {
     open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
 }
 
-function search-wiki()
+function search_wiki()
 {
     open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
 }
 
-function sudo-keep-alive()
+function sudo_keep_alive()
 {
     # Go into sudo mode and stay in sudo mode until the current script quits.
     # (I copied this function from somewhere else. The "sudo -n true" comes
@@ -426,16 +426,16 @@ function wip()
 
 # Bring in bash completion.
 
-# is-executable xcode-select && maybe-source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
+# is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
 
-if is-executable brew
+if is_executable brew
 then
     HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe-source "${HOMEBREW_COMPLETION_DIR}/"*
+    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
 
     # Bring in pyenv.
 
-    if is-executable pyenv
+    if is_executable pyenv
     then
         export PYENV_ROOT="$(brew --prefix)/var/pyenv"
         eval "$(pyenv init -)"
@@ -443,7 +443,7 @@ then
 
     # Bring in swiftenv.
 
-    if is-executable swiftenv
+    if is_executable swiftenv
     then
         export SWIFTENV_ROOT="$(brew --prefix)/var/swiftenv"
         eval "$(swiftenv init -)"
