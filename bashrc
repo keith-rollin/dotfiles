@@ -187,6 +187,13 @@ function cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
+function cheat()
+{
+    local TOPIC=$1
+    shift
+    curl "cheat.sh/$TOPIC/$*"
+}
+
 function delete_brew()
 {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
