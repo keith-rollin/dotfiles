@@ -191,7 +191,8 @@ function cheat()
 {
     local TOPIC=$1
     shift
-    curl "cheat.sh/$TOPIC/$*"
+    local QUESTION=$(echo "$*" | tr ' ' '+')
+    curl "cheat.sh/${TOPIC}/${QUESTION}"
 }
 
 function delete_brew()
