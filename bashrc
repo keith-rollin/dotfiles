@@ -262,6 +262,11 @@ function git_top()
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
 }
 
+function grc()
+{
+    git rebase --continue
+}
+
 function grm()
 {
     # "git rebase master" is typed almost all with left-handed keys. Use this
