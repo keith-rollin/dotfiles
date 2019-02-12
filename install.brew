@@ -135,6 +135,7 @@ then
         ncdu
         nnn
         tldr
+        checkbashisms
     )
 
     casks=(
