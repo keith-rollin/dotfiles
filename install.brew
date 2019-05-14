@@ -104,9 +104,17 @@ then
     #
     #   https://github.com/mathiasbynens/dotfiles/blob/master/brew.sh
     #
-    # coreutils, moreutils, findutils, gnu-sed, bash, bash-completion2, wget,
-    # vim, grep, openssh, screen, git, git-lfs, lynx, pigz, pv, speedtest-cli,
-    # zopfli
+    # coreutils, moreutils, multimarkdown, findutils, gnu-sed, bash,
+    # bash-completion2, wget, vim, grep, openssh, screen, git, git-lfs, lynx,
+    # pigz, pv, speedtest-cli, zopfli
+    #
+    # New to explore from https://remysharp.com/2018/08/23/cli-improved
+    # htop
+    # bat
+    # fd
+    # ncdu
+    # nnn
+    # tldr
     #
     # Also:
     #   bash-git-prompt
@@ -119,23 +127,14 @@ then
     # brew tap kylef/formulae
 
     apps=(
+        checkbashisms
         github-keygen
-        # multimarkdown
         python3
         ripgrep
         ssh-copy-id
         tree
         watch           # Kinda expensive, but OK...
         xz
-
-        # New to explore from https://remysharp.com/2018/08/23/cli-improved
-        htop
-        bat
-        fd
-        ncdu
-        nnn
-        tldr
-        checkbashisms
     )
 
     casks=(
