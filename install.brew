@@ -71,6 +71,11 @@ prepend_path "${BREW_DEV_PATH}/bin"
 
 # Get homebrew if I don't already have it.
 
+if is_executable brew
+then
+    return 0
+fi
+
 if ! is_executable brew
 then
     echo
