@@ -344,6 +344,13 @@ function path()
     echo "$PATH" | tr : '\n'
 }
 
+function manpath()
+{
+    # Show the "man path", one entry per line.
+
+    man -w | tr : '\n'
+}
+
 function rg()
 {
     command rg -g '!ChangeLog*' "$@"
