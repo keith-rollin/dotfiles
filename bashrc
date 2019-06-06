@@ -187,6 +187,13 @@ function cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
+function cdx()
+{
+    # Change working directory to Xcode.
+
+    cd "$(xcode-select -p)"
+}
+
 function cheat()
 {
     local TOPIC=$1
