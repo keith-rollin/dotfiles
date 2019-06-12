@@ -451,6 +451,11 @@ function wip()
     git commit -a -m wip
 }
 
+function xsp()
+{
+    xcode-select -p
+}
+
 # Bring in bash completion.
 
 # is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
