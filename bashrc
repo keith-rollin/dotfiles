@@ -113,7 +113,14 @@ shopt -s nocaseglob
 # own options, thereby restoring my preferred handling of the altscreen.
 
 function df() { command df -h "$@" ; }
-function du() { command du -hs "$@" ; }
+function duh() { sudo du -h -d 1 ; }
+function duk() { sudo du -k -d 1 ; }
+function dum() { sudo du -m -d 1 ; }
+function dug() { sudo du -g -d 1 ; }
+function duh2() { sudo du -h -d 2 ; }
+function duk2() { sudo du -k -d 2 ; }
+function dum2() { sudo du -m -d 2 ; }
+function dug2() { sudo du -g -d 2 ; }
 function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
 #function less() { command less -IMR "$@" ; }
 function ls() { command ls -FGhv "$@" ; }
