@@ -11,60 +11,9 @@
 
 
 # Make sure that brew's home has been created.
-#
-# I operate in two modes here. At work, I keep "dev" (which contains "dotfiles"
-# and "brew") on a non-boot volume so that it can be shared among boot volumes.
-# At home, I don't have a non-boot volume. This means I have to keep "dev"
-# somewhere on my boot volume. I choose to keep it in my Documents directory so
-# that it can be backed up to iCloud and shared with all my Macs. But I don't
-# want to keep "brew" in it since I don't want or need that copied to iCloud.
-# So, instead, I keep my "brew" directory in my $HOME directory and create a
-# soft link to it in "dev" next to my "dotfiles" directory.
 
 BREW_DEV_PATH="${DEV_PATH}/brew"
 BREW_HOME_PATH="${HOME}/brew"
-if [[ "${DEV_PATH}" =~ .*/Documents/.* ]]
-then
-    # On my home system. Create "${BREW_HOME_PATH}", and create
-    # "${BREW_DEV_PATH}" as a soft link in "dev" next to my "dotfiles"
-    # directory, pointing it to "${BREW_HOME_PATH}".
-
-    [[ ! -d "${BREW_HOME_PATH}" ]] && {
-        mkdir "${BREW_HOME_PATH}" || {
-            echo "### Unable to create ${BREW_HOME_PATH} directory"
-            return 1
-        }
-    }
-
-    [[   -L "${BREW_DEV_PATH}" ]] && {
-        rm -f "${BREW_DEV_PATH}" || {
-            echo "### Unable to remove existing ${BREW_DEV_PATH} symbolic link"
-            return 1
-        }
-    }
-
-    [[ ! -e "${BREW_DEV_PATH}" ]] && {
-        "${LNS}" "${BREW_DEV_PATH}" "${BREW_HOME_PATH}" || {
-            echo "### Unable to create ${BREW_DEV_PATH} symbolic link"
-            return 1
-        }
-    }
-
-    [[ ! -L "${BREW_DEV_PATH}" ]] && {
-        echo "### File ${BREW_DEV_PATH} exists but is not a link. Please move it aside."
-        return 1
-    }
-else
-    # On a work system. Create the "${BREW_DEV_PATH}" directory next to my
-    # "dotfiles" directory if it doesn't already exist.
-
-    [[ ! -d "${BREW_DEV_PATH}" ]] && {
-        mkdir "${BREW_DEV_PATH}" || {
-            echo "### Unable to create ${BREW_HOME_PATH} directory"
-            return 1
-        }
-    }
-fi
 
 prepend_path "${BREW_DEV_PATH}/sbin"
 prepend_path "${BREW_DEV_PATH}/bin"
@@ -76,94 +25,103 @@ then
     return 0
 fi
 
-if ! is_executable brew
-then
-    echo
-    echo "*** Cloning Homebrew repository"
-    echo
-    git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
-        echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
+echo
+echo "*** Cloning Homebrew repository"
+echo
+
+[[ ! -d "${BREW_DEV_PATH}" ]] && {
+    mkdir -p "${BREW_DEV_PATH}" || {
+        echo "### Unable to create ${BREW_HOME_PATH} directory"
         return 1
     }
+}
+
+git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
+    echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
+    return 1
+}
+
+if ! is_executable brew
+then
+    echo "### Could not find brew executable after installing"
+    return 1
 fi
 
 # Second, install the apps I want.
 
-if is_executable brew
-then
-    brew analytics off
+brew analytics off
 
-    echo
-    echo "*** Upgrading Homebrew and installed Homebrew apps"
-    echo
-    caffeinate -dim brew upgrade || {
-        echo "### Unable to update/upgrade brew"
-        return 1
-    }
+echo
+echo "*** Upgrading Homebrew and installed Homebrew apps"
+echo
 
-    echo
-    echo "*** Installing new Homebrew apps"
-    echo
+caffeinate -dim brew upgrade || {
+    echo "### Unable to update/upgrade brew"
+    return 1
+}
 
-    # Some tools to consider from:
-    #
-    #   https://github.com/mathiasbynens/dotfiles/blob/master/brew.sh
-    #
-    # coreutils, moreutils, multimarkdown, findutils, gnu-sed, bash,
-    # bash-completion2, wget, vim, grep, openssh, screen, git, git-lfs, lynx,
-    # pigz, pv, speedtest-cli, zopfli
-    #
-    # New to explore from https://remysharp.com/2018/08/23/cli-improved
-    # htop
-    # bat
-    # fd
-    # ncdu
-    # nnn
-    # tldr
-    #
-    # Also:
-    #   bash-git-prompt
-    #   kylef/formulae/swiftenv
-    #   hub            # Maybe some other time. Never got into it. Also, check out gitless.
-    #   shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
+echo
+echo "*** Installing new Homebrew apps"
+echo
 
-    # Tap into here for swiftenv.
+# Some tools to consider from:
+#
+#   https://github.com/mathiasbynens/dotfiles/blob/master/brew.sh
+#
+# coreutils, moreutils, multimarkdown, findutils, gnu-sed, bash,
+# bash-completion2, wget, vim, grep, openssh, screen, git, git-lfs, lynx,
+# pigz, pv, speedtest-cli, zopfli
+#
+# New to explore from https://remysharp.com/2018/08/23/cli-improved
+# htop
+# bat
+# fd
+# ncdu
+# nnn
+# tldr
+#
+# Also:
+#   bash-git-prompt
+#   kylef/formulae/swiftenv
+#   hub            # Maybe some other time. Never got into it. Also, check out gitless.
+#   shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
 
-    # brew tap kylef/formulae
+# Tap into here for swiftenv.
 
-    apps=(
-        checkbashisms
-        github-keygen
-        python3
-        ripgrep
-        ssh-copy-id
-        tree
-        watch           # Kinda expensive, but OK...
-        xz
-    )
+# brew tap kylef/formulae
 
-    casks=(
-        # 1Password doesn't work with Homebrew-cask-installed versions of these
-        # browsers.
-        #firefox
-        #google-chrome
+apps=(
+    checkbashisms
+    github-keygen
+    python3
+    ripgrep
+    ssh-copy-id
+    tree
+    watch           # Kinda expensive, but OK...
+    xz
+)
 
-        # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
+casks=(
+    # 1Password doesn't work with Homebrew-cask-installed versions of these
+    # browsers.
+    #firefox
+    #google-chrome
 
-        qlcolorcode
-        qlmarkdown
-        qlprettypatch
-        qlstephen
-        quicklook-csv
-        quicklook-json
-        suspicious-package
-    )
+    # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
 
-    caffeinate -dim brew install "${apps[@]}"
-    # caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
-    caffeinate -dim brew cask install "${casks[@]}"
-    caffeinate -dim qlmanage -r &> /dev/null
-fi
+    qlcolorcode
+    qlmarkdown
+    qlprettypatch
+    qlstephen
+    quicklook-csv
+    quicklook-json
+    suspicious-package
+)
+
+caffeinate -dim brew install "${apps[@]}"
+# caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
+caffeinate -dim brew cask install "${casks[@]}"
+caffeinate -dim qlmanage -r &> /dev/null
 
 unset BREW_DEV_PATH
 unset BREW_HOME_PATH
