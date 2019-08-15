@@ -365,6 +365,11 @@ function manpath()
     man -w | tr : '\n'
 }
 
+function ql()
+{
+    qlmanage -p "$@" &> /dev/null &
+}
+
 function rg()
 {
     command rg -g '!ChangeLog*' "$@"
