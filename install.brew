@@ -13,55 +13,64 @@
 # Make sure that brew's home has been created.
 
 BREW_DEV_PATH="${DEV_PATH}/brew"
-BREW_HOME_PATH="${HOME}/brew"
 
 prepend_path "${BREW_DEV_PATH}/sbin"
 prepend_path "${BREW_DEV_PATH}/bin"
 
+
 # Get homebrew if I don't already have it.
-
-if is_executable brew
-then
-    return 0
-fi
-
-echo
-echo "*** Cloning Homebrew repository"
-echo
-
-[[ ! -d "${BREW_DEV_PATH}" ]] && {
-    mkdir -p "${BREW_DEV_PATH}" || {
-        echo "### Unable to create ${BREW_HOME_PATH} directory"
-        return 1
-    }
-}
-
-git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
-    echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
-    return 1
-}
 
 if ! is_executable brew
 then
-    echo "### Could not find brew executable after installing"
-    return 1
+    echo
+    echo "*** Cloning Homebrew repository"
+    echo
+
+    [[ ! -d "${BREW_DEV_PATH}" ]] && {
+        mkdir -p "${BREW_DEV_PATH}" || {
+            echo "### Unable to create ${BREW_DEV_PATH} directory"
+            return 1
+        }
+    }
+
+    git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
+        echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
+        return 1
+    }
+
+    if ! is_executable brew
+    then
+        echo "### Could not find brew executable after installing"
+        return 1
+    fi
 fi
 
-# Second, install the apps I want.
+
+# Don't go leaking information about what OS I'm running.
 
 brew analytics off
 
-echo
-echo "*** Upgrading Homebrew and installed Homebrew apps"
-echo
 
-caffeinate -dim brew upgrade || {
-    echo "### Unable to update/upgrade brew"
-    return 1
-}
+# Update any apps I may already have installed.
+# NOTE: Take this out. I think I prefer doing it manually.
+
+if false
+then
+    echo
+    echo "*** Upgrading Homebrew and installed Homebrew apps"
+    echo
+
+    caffeinate -dim brew upgrade || {
+        echo "### Unable to update/upgrade brew"
+        return 1
+    }
+fi
+
+
+# Install the apps I want.
 
 echo
-echo "*** Installing new Homebrew apps"
+echo "*** Installing Homebrew apps"
 echo
 
 # Some tools to consider from:
@@ -101,27 +110,40 @@ apps=(
     xz
 )
 
+caffeinate -dim brew install "${apps[@]}"
+# No longer install the latest vim. I don't remember what, but it was causing
+# some problems recently interacting with the system or getting confused with
+# the system vim. TODO: Look into this again.
+# caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
+
+
+# Install some QuickLook plugins.
+
+echo
+echo "*** Installing QuickLook casks"
+echo
+
 casks=(
     # 1Password doesn't work with Homebrew-cask-installed versions of these
-    # browsers.
+    # browsers. TODO: Look into this again.
     #firefox
     #google-chrome
 
     # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
 
     qlcolorcode
-    qlmarkdown
-    qlprettypatch
     qlstephen
-    quicklook-csv
+    qlmarkdown
     quicklook-json
+    qlimagesize
     suspicious-package
+    quicklookase
+    qlvideo
 )
 
-caffeinate -dim brew install "${apps[@]}"
-# caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
 caffeinate -dim brew cask install "${casks[@]}"
 caffeinate -dim qlmanage -r &> /dev/null
 
 unset BREW_DEV_PATH
-unset BREW_HOME_PATH
+unset apps
+unset casks
