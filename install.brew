@@ -102,6 +102,7 @@ echo
 apps=(
     checkbashisms
     github-keygen
+    jsonpp
     python3
     ripgrep
     ssh-copy-id
