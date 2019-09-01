@@ -9,5 +9,8 @@ set mark-symlinked-directories on
 "\e[B": history-search-forward
 "\e[A": history-search-backward
 
+# Put $() around the current line.
+Control-j: "\C-a $(\C-e)\C-a"
+
 # Show extra file information when completing, like `ls -F` does
 set visible-stats on
