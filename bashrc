@@ -78,7 +78,7 @@ export SHELL_SESSION_HISTORY=1
 
 [[ -z "$ZSH_NAME" ]] \
     && PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} " \
-    || PS1=$'%F{red}%n@%m:%~%f\n%# '
+    || PS1=$'%F{160}%n@%m:%~%f\n%# '
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
