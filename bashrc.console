@@ -46,7 +46,7 @@ EndSeq="\]"
 #
 #	<ESC>[ attr1 ; attr2 ; attr3 code
 
-Csi="$Escape["	# Prefix (Control Sequence Introducer -- CSI)
+Csi="${Escape}["	# Prefix (Control Sequence Introducer -- CSI)
 
 ## Attributes for setting text colors
 
@@ -78,11 +78,11 @@ Wht="7"		# White
 # sequences needed to specify non-printing characters in PS1.
 
 function make_color {
-	if (( "$#" == 1 )); then
+	if (( $# == 1 )); then
 		echo "$BeginSeq$Csi$1$Sgr$EndSeq"
-	elif (( "$#" == 2 )); then
+	elif (( $# == 2 )); then
 		echo "$BeginSeq$Csi$1;$2$Sgr$EndSeq"
-	elif (( "$#" == 3 )); then
+	elif (( $# == 3 )); then
 		echo "$BeginSeq$Csi$1;$2;$3$Sgr$EndSeq"
 	fi
 }

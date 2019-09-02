@@ -10,8 +10,9 @@
 # later in this file, but we'll need to call these functions before they're
 # defined, so they're moved to the top of the file.
 
-ME="$(readlink "${BASH_SOURCE[0]}")"
-[[ -n "${ME}" ]] || ME="${BASH_SOURCE[0]}"
+[[ -n "${ZSH_NAME}" ]] && BASE_ME="${(%):-%N}" || BASE_ME="${BASH_SOURCE[0]}"
+ME="$(readlink "${BASE_ME}")"
+[[ -n "${ME}" ]] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
 
 function is_executable()
@@ -60,7 +61,7 @@ function prepend_path()
 
 # Bring in color definitions for PS1.
 
-maybe_source "${HERE}/bashrc.console"
+[[ -z "$ZSH_NAME" ]] && maybe_source "${HERE}/bashrc.console"
 
 # Environment.
 #
@@ -73,8 +74,11 @@ export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
-export PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 export SHELL_SESSION_HISTORY=1
+
+[[ -z "$ZSH_NAME" ]] \
+    && PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} " \
+    || PS1=$'%F{red}%n@%m:%~%f\n%# '
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
@@ -94,12 +98,36 @@ prepend_path "${HERE}/bin"
 
 # Shell.
 
-shopt -s cdspell
-shopt -s checkwinsize
-shopt -s nocaseglob
-#shopt -s autocd
-#shopt -s dirspell
-#shopt -s globstar
+if [[ -z "$ZSH_NAME" ]]
+then
+    shopt -s cdspell
+    shopt -s checkwinsize
+    shopt -s nocaseglob
+    #shopt -s autocd
+    #shopt -s dirspell
+    #shopt -s globstar
+else
+    # setopt extendedglob
+    # unsetopt CASE_GLOB
+    # setopt EXTENDED_GLOB
+    # setopt NO_CASE_GLOB
+    # zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+    # zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+    # zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+    # setopt MENU_COMPLETE
+    # zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|?=** r:|?=**'
+    # zstyle ':completion:*' matcher-list 'm:{a-z-}={A-Z_}' 'r:|[-_./]=* r:|=*'
+
+    # unsetopt menu_complete   # do not autoselect the first completion entry
+    # unsetopt flowcontrol
+    # setopt auto_menu         # show completion menu on successive tab press
+    # setopt complete_in_word
+    # setopt always_to_end
+
+    autoload -U compinit
+    compinit
+    zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+fi
 
 # Functions. The first of these are dangerous, since they replace/alias/hide
 # underlying commands with the same name.
@@ -474,8 +502,11 @@ function xsp()
 
 if is_executable brew
 then
-    HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-    [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
+    if [[ -z "$ZSH_NAME" ]]
+    then
+        HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
+        [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
+    fi
 
     # Bring in pyenv.
 

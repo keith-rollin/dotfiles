@@ -11,14 +11,17 @@
 #       * .gitconfig
 #       * .inputrc
 #       * .vim
+#       * .zshrc
 #       * dev
 #   * Create a "brew" directory next to it and put homebrew into it, or
 #     update it if it already exists.
 #   * Update vim with bundles defined in .vimrc (disabled for now)
 
-ME="$(readlink "${BASH_SOURCE[0]}")"
-[[ -n "${ME}" ]] || ME="${BASH_SOURCE[0]}"
+[[ -n "${ZSH_NAME}" ]] && BASE_ME="${(%):-%N}" || BASE_ME="${BASH_SOURCE[0]}"
+ME="$(readlink "${BASE_ME}")"
+[[ -n "${ME}" ]] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
+
 REALPATH="${HERE}/bin/realpath"
 HERE="$("${REALPATH}" "${HERE}")"
 REALPATH="${HERE}/bin/realpath"
@@ -66,6 +69,7 @@ create_link_in_home "${HERE}/bashrc"        .bashrc
 create_link_in_home "${HERE}/gitconfig"     .gitconfig
 create_link_in_home "${HERE}/inputrc"       .inputrc
 create_link_in_home "${HERE}/vim"           .vim
+create_link_in_home "${HERE}/zshrc"         .zshrc
 
 create_link_in_home "${DEV_PATH}"
 
