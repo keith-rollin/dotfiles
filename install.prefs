@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # (This script is not intended to be stand-alone. It's intended to be source'd
 # from `install`.)
 

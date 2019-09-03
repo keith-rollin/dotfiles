@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Install homebrew (if missing) or update it (if not). Install or update
 # desired packages. Also install/update cask along with desired packages.
 #
