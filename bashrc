@@ -80,6 +80,14 @@ export SHELL_SESSION_HISTORY=1
     && PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} " \
     || PS1=$'%F{160}%n@%m:%~%f\n%# '
 
+if [[ -n "$ZSH_NAME" ]]
+then
+    HISTFILE=~/.zhistory
+    HISTSIZE=SAVEHIST=10000
+    setopt sharehistory
+    setopt extendedhistory
+fi
+
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
 # $PATH.
