@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Some sources for what follows:
 #
 #   https://medium.com/@webprolific/getting-started-with-dotfiles-43c3602fd789

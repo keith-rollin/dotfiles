@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # TBD: Maybe make use of something like the following:
 
 # text_reset="$(tput sgr0)" # turn off all attributes
