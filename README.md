@@ -1,40 +1,35 @@
 ### Installation:
 
-Before checking out, be sure to add your GitHub SSH keys with `ssh-add`.
+Before checking out:
+
+* Add your GitHub SSH keys with `ssh-add`.
+* Create a separate APFS volume at /Volumes/Data.
+* Create a dev directory at /Volumes/Data/dev.
 
 ```bash
-$ mkdir dev && cd dev # In ~/Documents at home, in /Volumes/Data at work.
+$ cd /Volumes/Data/dev
 $ git clone git@github.com:keith-rollin/dotfiles.git
 $ dotfiles/install
 ```
 
 ### Result:
 
-#### Work:
-
 ```text
 ~
-|-- dev -> /Volumes/Data/dev
-`-- Documents/
-    `-- dev/
-        `-- Projects shared via iCloud
+|-- .bash_profile@ -> /Volumes/Data/dev/dotfiles/bash_profile
+|-- .bashrc@ -> /Volumes/Data/dev/dotfiles/bashrc
+|-- .gitconfig@ -> /Volumes/Data/dev/dotfiles/gitconfig
+|-- .inputrc@ -> /Volumes/Data/dev/dotfiles/inputrc
+|-- .vim@ -> /Volumes/Data/dev/dotfiles/vim
+|-- .zshrc@ -> /Volumes/Data/dev/dotfiles/zshrc
+`-- dev@ -> /Volumes/Data/dev
 
 /Volumes/Data/
 `-- dev/
     |-- brew/
     |-- dotfiles/
-    `-- Projects shared via shared partition
-```
-
-#### Home:
-
-```text
-~
-|-- brew/
-|-- dev -> ~/Documents/dev
-`-- Documents/
-    `-- dev/
-        |-- brew -> ~/brew
-        |-- dotfiles
-        `-- Projects shared via iCloud
+    |-- dotfiles-work/  (only on my work systems)
+    |-- tmp/
+    |-- webkit/         (only on my work systems)
+    `-- <various projects>
 ```
