@@ -195,6 +195,11 @@ command! Reload :source $MYVIMRC
 highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge error markers
 
+" Set the default highlighting style for shells. This particular setting
+" assumes that our scripts are POSIX compatible and so shows things like
+" $(...) without flagging it as invalid.
+let g:is_posix = 1
+
 " netrw: Configuration -- compare to vinegar
 "let g:netrw_banner=0        " disable banner
 "let g:netrw_browse_split=4  " open in prior window
