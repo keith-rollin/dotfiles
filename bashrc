@@ -8,7 +8,7 @@
 # later in this file, but we'll need to call these functions before they're
 # defined, so they're moved to the top of the file.
 
-[[ -n "${ZSH_NAME}" ]] && BASE_ME="${(%):-%N}" || BASE_ME="${BASH_SOURCE[0]}"
+[[ -n "${ZSH_NAME}" ]] && BASE_ME="$0" || BASE_ME="${BASH_SOURCE[0]}"
 ME="$(readlink "${BASE_ME}")"
 [[ -n "${ME}" ]] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"

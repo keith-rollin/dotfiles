@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Scan all files in the current directory hierarchy and change all instances of
 # one word/symbol to another. The conversion mapping is provided by an external
@@ -26,8 +26,8 @@ shift
 
 while read OLD NEW
 do
-    [[ -z "$OLD" ]] && continue
-    [[ "$OLD" =~ \#.* ]] && continue
+    [ -z "$OLD" ] && continue
+    [ "$OLD" =~ \#.* ] && continue
 
     echo "$OLD -> $NEW"
     for f in $(git grep --name-only -w $OLD)

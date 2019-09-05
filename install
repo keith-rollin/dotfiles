@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Install everything, including dotfiles, vim_plug, brew, and prefs.
 #
@@ -17,7 +17,7 @@
 #     update it if it already exists.
 #   * Update vim with bundles defined in .vimrc (disabled for now)
 
-[[ -n "${ZSH_NAME}" ]] && BASE_ME="${(%):-%N}" || BASE_ME="${BASH_SOURCE[0]}"
+[[ -n "${ZSH_NAME}" ]] && BASE_ME="$0" || BASE_ME="${BASH_SOURCE[0]}"
 ME="$(readlink "${BASE_ME}")"
 [[ -n "${ME}" ]] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
