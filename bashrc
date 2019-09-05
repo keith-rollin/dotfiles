@@ -88,6 +88,15 @@ fi
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
+if [[ -n "$ZSH_NAME" ]]
+then
+    bindkey "^[[A" history-beginning-search-backward
+    bindkey "^[[B" history-beginning-search-forward
+else
+    bind '"\e[A": history-search-backward'
+    bind '"\e[B": history-search-forward'
+fi
+
 # $PATH.
 
 BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
