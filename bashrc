@@ -8,12 +8,16 @@
 # later in this file, but we'll need to call these functions before they're
 # defined, so they're moved to the top of the file.
 
-[[ -n "${ZSH_NAME}" ]] && BASE_ME="$0" || BASE_ME="${BASH_SOURCE[0]}"
+[ -n "${MAIN_BASHRC}" ] && BASE_ME="$MAIN_BASHRC" || BASE_ME="${0}"
 ME="$(readlink "${BASE_ME}")"
-[[ -n "${ME}" ]] || ME="${BASE_ME}"
+[ -n "${ME}" ] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
 
-function is_executable()
+[ -n "$BASH"       ] && HOST_SHELL=bash
+[ -n "$ZSH_NAME"   ] && HOST_SHELL=zsh
+[ -z "$HOST_SHELL" ] && HOST_SHELL=dash
+
+is_executable()
 {
     # Determine if the given command is an actual command, alias, or shell
     # function -- that is, if it's something we can invoke.
@@ -21,7 +25,7 @@ function is_executable()
     command -v "$1" &> /dev/null
 }
 
-function maybe_resolve()
+maybe_resolve()
 {
     # If `realpath` is available, use it to resolve the given path into a full,
     # real path (no relative directories, no symlinks). (In checking, hardcode
@@ -39,27 +43,27 @@ function maybe_resolve()
     fi
 }
 
-function maybe_source()
+maybe_source()
 {
     # `source` a file if it exists, is readable, and doesn't look like binary.
 
-    [[ -r "$1" && "$(file -b "$1")" != "data" ]] && source "$1"
+    [ -r "$1" -a "$(file -b "$1")" != "data" ] && . "$1"
 }
 
-function prepend_path()
+prepend_path()
 {
     # Prepend the given path to PATH if it's not already there, resolving any
     # links if necessary.
 
     local p="$(maybe_resolve "$1")"
-    [[ -z "$p" ]] && return 0
-    [[ "${PATH}" =~ .*$p:.* ]] && return 0
+    [ -z "$p" ] && return 0
+    echo "${PATH}" | grep -q '.*$p:.*' && return 0
     export PATH="$p:${PATH}"
 }
 
 # Bring in color definitions for PS1.
 
-[[ -z "$ZSH_NAME" ]] && maybe_source "${HERE}/bashrc.console"
+[ "$HOST_SHELL" = bash ] && maybe_source "${HERE}/bashrc.console"
 
 # Environment.
 #
@@ -74,11 +78,10 @@ export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export SHELL_SESSION_HISTORY=1
 
-[[ -z "$ZSH_NAME" ]] \
-    && PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} " \
-    || PS1=$'%F{160}%n@%m:%~%f\n%# '
+[ "$HOST_SHELL" = bash ] && PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
+[ "$HOST_SHELL" = zsh  ] && PS1=$'%F{160}%n@%m:%~%f\n%# '
 
-if [[ -n "$ZSH_NAME" ]]
+if [ "$HOST_SHELL" = zsh ]
 then
     HISTFILE=~/.zhistory
     HISTSIZE=SAVEHIST=10000
@@ -88,19 +91,20 @@ fi
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
 
-if [[ -n "$ZSH_NAME" ]]
+if [ "$HOST_SHELL" = bash ]
+then
+    bind '"\e[A": history-search-backward'
+    bind '"\e[B": history-search-forward'
+elif [ "$HOST_SHELL" = zsh ]
 then
     bindkey "^[[A" history-beginning-search-backward
     bindkey "^[[B" history-beginning-search-forward
-else
-    bind '"\e[A": history-search-backward'
-    bind '"\e[B": history-search-forward'
 fi
 
 # $PATH.
 
 BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
-if [[ -n "${BREW_PATH}" ]]
+if [ -n "${BREW_PATH}" ]
 then
     prepend_path "${BREW_PATH}/sbin"
     prepend_path "${BREW_PATH}/bin"
@@ -113,7 +117,7 @@ prepend_path "${HERE}/bin"
 
 # Shell.
 
-if [[ -z "$ZSH_NAME" ]]
+if [ "$HOST_SHELL" = bash ]
 then
     shopt -s cdspell
     shopt -s checkwinsize
@@ -121,7 +125,8 @@ then
     #shopt -s autocd
     #shopt -s dirspell
     #shopt -s globstar
-else
+elif [ "$HOST_SHELL" = zsh ]
+then
     # setopt extendedglob
     # unsetopt CASE_GLOB
     # setopt EXTENDED_GLOB
@@ -155,70 +160,70 @@ fi
 # Moving (back) to defining my options in LESS inhibited git from setting its
 # own options, thereby restoring my preferred handling of the altscreen.
 
-function df() { command df -h "$@" ; }
-function duh() { sudo du -h -d 1 ; }
-function duk() { sudo du -k -d 1 ; }
-function dum() { sudo du -m -d 1 ; }
-function dug() { sudo du -g -d 1 ; }
-function duh2() { sudo du -h -d 2 ; }
-function duk2() { sudo du -k -d 2 ; }
-function dum2() { sudo du -m -d 2 ; }
-function dug2() { sudo du -g -d 2 ; }
-function grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
+df() { command df -h "$@" ; }
+duh() { sudo du -h -d 1 ; }
+duk() { sudo du -k -d 1 ; }
+dum() { sudo du -m -d 1 ; }
+dug() { sudo du -g -d 1 ; }
+duh2() { sudo du -h -d 2 ; }
+duk2() { sudo du -k -d 2 ; }
+dum2() { sudo du -m -d 2 ; }
+dug2() { sudo du -g -d 2 ; }
+grep() { command grep --color=auto --devices=skip --exclude='ChangeLog*' --exclude='*.pbxproj' --exclude-dir=.git --exclude-dir=.svn "$@" ; }
 #function less() { command less -IMR "$@" ; }
-function ls() { command ls -FGhv "$@" ; }
-function tree() { command tree -aCF -I '.git' "$@" ; }
+ls() { command ls -FGhv "$@" ; }
+tree() { command tree -aCF -I '.git' "$@" ; }
 
-function ..() { cd .. ; }
-function ...() { cd ../.. ; }
-function ....() { cd ../../.. ; }
-function .....() { cd ../../../.. ; }
-function ......() { cd ../../../../.. ; }
+..() { cd .. ; }
+...() { cd ... ; }
+....() { cd .... ; }
+.....() { cd ..... ; }
+......() { cd ...... ; }
 
-function show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
-function hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
-function show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
-function hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
-function toggle_dark_mode() { osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'; }
+show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
+hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
+show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
+hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
+toggle_dark_mode() { osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'; }
 
-function f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
-function ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
-function fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
-function fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
-function ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
+f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
+ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
+fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
+fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
+ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
 
-function badge() { tput bel ; }
-function cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
-function gitp() { git --no-pager "$@" ; }
-function la() { ll -A "$@" ; }
-function lart() { ls -lArt "$@" ; }
-function ll() { ls -o "$@" ; }
-function lmk() { say 'Process complete.' ; }
-function notify() { osascript -e "display notification \"$1\" with title \"$2\"" ; }
-function reload() { source ~/.bash_profile ; }
+badge() { tput bel ; }
+cleanupds() { find -x . -type f -name '*.DS_Store' -print -delete ; }
+gitp() { git --no-pager "$@" ; }
+la() { ll -A "$@" ; }
+lart() { ls -lArt "$@" ; }
+ll() { ls -o "$@" ; }
+lmk() { say 'Process complete.' ; }
+notify() { osascript -e "display notification \"$1\" with title \"$2\"" ; }
+reload() { . ~/.bash_profile ; }
 
-function ascii()
+ascii()
 {
     #man ascii | col -b | grep -A 55 --color=never "octal set"
     cat /usr/share/misc/ascii
 }
 
-function at_home()
+at_home()
 {
     ! at_work
 }
 
-function at_work()
+at_work()
 {
     # This is not a good test. It tells me where I am, not whether I'm using a
     # home or work computer.
-    #[[ $(curl -s v4.ifconfig.co) =~ 17\..*\..*\..* ]]
+    #[ $(curl -s v4.ifconfig.co) =~ 17\..*\..*\..* ]
 
     # Test for a volume I only have on work systems.
-    [[ -d /Volumes/Data ]]
+    [ -d /Volumes/Data ]
 }
 
-function bak()
+bak()
 {
     # Make backups of the given files (copy them to *.bak).
 
@@ -230,21 +235,21 @@ function bak()
     done
 }
 
-function cdf()
+cdf()
 {
     # Change working directory to the top-most Finder window location.
 
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-function cdx()
+cdx()
 {
     # Change working directory to Xcode.
 
     cd "$(xcode-select -p)"
 }
 
-function cheat()
+cheat()
 {
     local TOPIC=$1
     shift
@@ -252,29 +257,29 @@ function cheat()
     curl "cheat.sh/${TOPIC}/${QUESTION}"
 }
 
-function delete_brew()
+delete_brew()
 {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 }
 
-function did()
+did()
 {
     # From https://theptrk.com/2018/07/11/did-txt-file/
 
     vim +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
 }
 
-function edit_ff()
+edit_ff()
 {
     vi $(ff "$1")
 }
 
-function edit_fff()
+edit_fff()
 {
     vi $(fff "$1")
 }
 
-function fs()
+fs()
 {
     # Determine size of a file or total size of a directory.
 
@@ -284,7 +289,7 @@ function fs()
     else
         local arg=-sh
     fi
-    if [[ -n "$@" ]]
+    if [ -n "$@" ]
     then
         du $arg -- "$@"
     else
@@ -292,14 +297,14 @@ function fs()
     fi
 }
 
-function git_diff()
+git_diff()
 {
     # Use Git’s colored diff.
 
     git diff --no-index --color-words "$@";
 }
 
-function git_edit_changed()
+git_edit_changed()
 {
     local OLD_CWD="$(pwd)"
     git_top
@@ -307,24 +312,24 @@ function git_edit_changed()
     cd "${OLD_CWD}"
 }
 
-function git_edit_files_with_symbol()
+git_edit_files_with_symbol()
 {
     vi $(git grep --name-only "$1")
 }
 
-function git_top()
+git_top()
 {
     # Go To Git Top.
 
     cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
 }
 
-function grc()
+grc()
 {
     git rebase --continue
 }
 
-function grm()
+grm()
 {
     # "git rebase master" is typed almost all with left-handed keys. Use this
     # macro to ease the pain.
@@ -332,7 +337,7 @@ function grm()
     git rebase master
 }
 
-function hide_brew()
+hide_brew()
 {
     local old_path="$PATH"
     export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
@@ -340,7 +345,7 @@ function hide_brew()
     export PATH="$old_path"
 }
 
-function mkcd()
+mkcd()
 {
     # Create a new directory and enter it.
 
@@ -367,68 +372,68 @@ lips()
         # the string on the ':'.
         VALUE="${VALUE:1}"
 
-        [[ "$KEY" == "Hardware Port" ]] && PORT="$VALUE"
-        [[ "$KEY" == "Device" ]]        && DEVICE="$VALUE"
-        if [[ -n "$PORT" && -n "$DEVICE" ]]
+        [ "$KEY" = "Hardware Port" ] && PORT="$VALUE"
+        [ "$KEY" = "Device" ]        && DEVICE="$VALUE"
+        if [ -n "$PORT" -a -n "$DEVICE" ]
         then
             IP=$(ipconfig getifaddr $DEVICE)
-            [[ "$IP" != "" ]] && printf "%20s: %s (%s)\n" "$PORT" "$IP" "$DEVICE" # len("Thunderbolt Ethernet") == 20
+            [ "$IP" != "" ] && printf "%20s: %s (%s)\n" "$PORT" "$IP" "$DEVICE" # len("Thunderbolt Ethernet") == 20
             PORT=""
             DEVICE=""
         fi
     done < <(networksetup -listallhardwareports)
 
     IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
-    [[ "$IP" != "" ]] && EXTIP=$IP || EXTIP="inactive"
+    [ "$IP" != "" ] && EXTIP=$IP || EXTIP="inactive"
 
     printf '%20s: %s\n' "External IP" $EXTIP
 }
 
-function on_ac_power()
+on_ac_power()
 {
     pmset -g ps | grep -q "AC Power"
 }
 
-function on_battery_power()
+on_battery_power()
 {
     pmset -g ps | grep -q "Battery Power"
 }
 
-function path()
+path()
 {
     # Show the PATH, one entry per line.
 
     echo "$PATH" | tr : '\n'
 }
 
-function manpath()
+manpath()
 {
     # Show the "man path", one entry per line.
 
     man -w | tr : '\n'
 }
 
-function ql()
+ql()
 {
     qlmanage -p "$@" &> /dev/null &
 }
 
-function rg()
+rg()
 {
     command rg -g '!ChangeLog*' "$@"
 }
 
-function search_goog()
+search_goog()
 {
     open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
 }
 
-function search_wiki()
+search_wiki()
 {
     open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
 }
 
-function sudo_keep_alive()
+sudo_keep_alive()
 {
     # Go into sudo mode and stay in sudo mode until the current script quits.
     # (I copied this function from somewhere else. The "sudo -n true" comes
@@ -449,13 +454,13 @@ function sudo_keep_alive()
     done 2>/dev/null &
 }
 
-function up()
+up()
 {
     # Move up to named parent directory, using fuzzy matching.
     # Inspired by `up`: http://brettterpstra.com/2014/05/14/up-fuzzy-navigation-up-a-directory-tree/
     # inspired by `bd`: https://github.com/vigneshwaranr/bd
 
-    if [[ $# -eq 0 ]]
+    if [ $# -eq 0 ]
     then
         echo "up: traverses up the current working directory to first match and cds to it"
         echo "You need an argument"
@@ -466,17 +471,17 @@ function up()
     fi
 }
 
-function urlencode()
+urlencode()
 {
     python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
 }
 
-function utcdate()
+utcdate()
 {
     TZ=utc date
 }
 
-function vi()
+vi()
 {
     # Open a file in vim, converting any parameter like this:
     #
@@ -490,7 +495,7 @@ function vi()
     local p
     for p in "$@"
     do
-        if [[ "$p" =~ .*:.* ]]
+        if echo "$p" | grep -q '.*:.*'
         then
             ARGS+=($(echo $p | sed -e 's/\(.*\):\(.*\)/\1 +\2/'))
         else
@@ -501,12 +506,12 @@ function vi()
     command vi "${ARGS[@]}"
 }
 
-function wip()
+wip()
 {
     git commit -a -m wip
 }
 
-function xsp()
+xsp()
 {
     xcode-select -p
 }
@@ -517,10 +522,10 @@ function xsp()
 
 if is_executable brew
 then
-    if [[ -z "$ZSH_NAME" ]]
+    if [ "$HOST_SHELL" = bash ]
     then
         HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-        [[ -d "${HOMEBREW_COMPLETION_DIR}" ]] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
+        [ -d "${HOMEBREW_COMPLETION_DIR}" ] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
     fi
 
     # Bring in pyenv.
@@ -542,7 +547,7 @@ fi
 
 # Bring in ssh keys.
 
-[[ -z "$SSH_AUTH_SOCK" ]] && eval "$(ssh-agent -s)" &> /dev/null
+[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" &> /dev/null
 ssh-add ~/.ssh/id_rsa &> /dev/null
 ssh-add ~/.ssh/id_keith-rollin@github &> /dev/null
 #ssh-add ~/.ssh/id_github &> /dev/null
