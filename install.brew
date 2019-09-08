@@ -2,10 +2,9 @@
 # desired packages. Also install/update cask along with desired packages.
 #
 # This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`. In particular, we need $DEV_PATH and $LNS from `install`, and
-# prepend_path from when `install` invokes `bashrc`. Further, in case of error,
-# this script aborts by using "return 1", which is how you exit a source'd
-# script.
+# from `install`. In particular, we need $DEV_PATH to be defined. Further, in
+# case of error, this script aborts by using "return 1", which is how you exit
+# a source'd script.
 
 
 # Make sure that brew's home has been created.
@@ -24,7 +23,7 @@ then
     echo "*** Cloning Homebrew repository"
     echo
 
-    [[ ! -d "${BREW_DEV_PATH}" ]] && {
+    [ ! -d "${BREW_DEV_PATH}" ] && {
         mkdir -p "${BREW_DEV_PATH}" || {
             echo "### Unable to create ${BREW_DEV_PATH} directory"
             return 1

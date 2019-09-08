@@ -17,9 +17,9 @@
 #     update it if it already exists.
 #   * Update vim with bundles defined in .vimrc (disabled for now)
 
-[[ -n "${ZSH_NAME}" ]] && BASE_ME="$0" || BASE_ME="${BASH_SOURCE[0]}"
+[ -n "${MAIN_INSTALL}" ] && BASE_ME="$MAIN_INSTALL" || BASE_ME="${0}"
 ME="$(readlink "${BASE_ME}")"
-[[ -n "${ME}" ]] || ME="${BASE_ME}"
+[ -n "${ME}" ] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
 
 REALPATH="${HERE}/bin/realpath"
@@ -32,7 +32,7 @@ LNS="${HERE}/bin/lns"
 
 DEV_PATH="$(dirname "${HERE}")"
 DEV_NAME="$(basename "${DEV_PATH}")"
-if [[ "${DEV_NAME}" != "dev" ]]
+if [ "${DEV_NAME}" != "dev" ]
 then
     echo "### dotfiles must be in dev parent directory"
     exit 1
@@ -40,17 +40,17 @@ fi
 
 # Create or update links in my home directory to handy things elsewhere.
 
-function create_link_in_home()
+create_link_in_home()
 {
     local file="$1"
     local link="$2"
 
-    [[ -z "${link}" ]] && link="$(basename "${file}")"
+    [ -z "${link}" ] && link="$(basename "${file}")"
 
     file="$("${REALPATH}" "${file}")"
     link="${HOME}/${link}"
 
-    if [[ -e "${link}" && ! -L "${link}" ]]
+    if [ -e "${link}" -a ! -L "${link}" ]
     then
         echo "### File ${link} exists but is not a link. Please move it aside."
         return
@@ -69,11 +69,12 @@ create_link_in_home "${HERE}/bashrc"        .bashrc
 create_link_in_home "${HERE}/gitconfig"     .gitconfig
 create_link_in_home "${HERE}/inputrc"       .inputrc
 create_link_in_home "${HERE}/vim"           .vim
-create_link_in_home "${HERE}/zshrc"         .zshrc
+create_link_in_home "${HERE}/bashrc"        .zshrc
 
 create_link_in_home "${DEV_PATH}"
 
-# Get some handy functions defined (well, `maybe_source`, anyway).
+# Get some handy functions defined: is_executable, maybe_resolve, maybe_source,
+# prepend_path.
 
 source "${HOME}/.bashrc"
 
