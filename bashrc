@@ -92,7 +92,7 @@ export SHELL_SESSION_HISTORY=1
 
 if [ "$HOST_SHELL" = zsh ]
 then
-    HISTFILE=~/.zhistory
+    HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
     HISTSIZE=SAVEHIST=10000
     setopt sharehistory
     setopt extendedhistory
@@ -108,6 +108,7 @@ elif [ "$HOST_SHELL" = zsh ]
 then
     bindkey "^[[A" history-beginning-search-backward
     bindkey "^[[B" history-beginning-search-forward
+    bindkey -e
 fi
 
 # $PATH.
