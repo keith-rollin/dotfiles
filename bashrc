@@ -4,18 +4,27 @@
 #   https://github.com/webpro/dotfiles
 #   https://github.com/mathiasbynens/dotfiles
 
-# Define some functions up front. Normally, function definitions are placed
-# later in this file, but we'll need to call these functions before they're
-# defined, so they're moved to the top of the file.
+# Determine what shell we're using.
+
+HOST_SHELL=$(basename $(ps -o comm $$ | grep -v COMM | sed -Ee 's/-?(.*)/\1/'))
+[ "${HOST_SHELL}" = "bash" ] && ME_BASE="${BASH_SOURCE[0]}"
+[ "${HOST_SHELL}" = "zsh"  ] && ME_BASE="${(%):-%N}"
+[ -z "${ME_BASE}"  ] && return 0    # We don't support this shell.
+
+# Determine our location. If we see that MAIN_BASHRC is defined, this means
+# that we're being source'd from another script and that we can find the path
+# to us in that variable. Without that, we'd have to fall back to looking at
+# $0, which might or might not be us, depending on the shell we're running
+# under.
 
 [ -n "${MAIN_BASHRC}" ] && BASE_ME="$MAIN_BASHRC" || BASE_ME="${0}"
 ME="$(readlink "${BASE_ME}")"
 [ -n "${ME}" ] || ME="${BASE_ME}"
 HERE="$(dirname "${ME}")"
 
-[ -n "$BASH"       ] && HOST_SHELL=bash
-[ -n "$ZSH_NAME"   ] && HOST_SHELL=zsh
-[ -z "$HOST_SHELL" ] && HOST_SHELL=dash
+# Define some functions up front. Normally, function definitions are placed
+# later in this file, but we'll need to call these functions before they're
+# defined, so they're moved to the top of the file.
 
 is_executable()
 {
