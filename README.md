@@ -16,12 +16,12 @@ $ dotfiles/install
 
 ```text
 ~
-|-- .bash_profile@ -> /Volumes/Data/dev/dotfiles/bash_profile
+|-- .bash_profile@ -> /Volumes/Data/dev/dotfiles/bashrc
 |-- .bashrc@ -> /Volumes/Data/dev/dotfiles/bashrc
 |-- .gitconfig@ -> /Volumes/Data/dev/dotfiles/gitconfig
 |-- .inputrc@ -> /Volumes/Data/dev/dotfiles/inputrc
 |-- .vim@ -> /Volumes/Data/dev/dotfiles/vim
-|-- .zshrc@ -> /Volumes/Data/dev/dotfiles/zshrc
+|-- .zshrc@ -> /Volumes/Data/dev/dotfiles/bashrc
 `-- dev@ -> /Volumes/Data/dev
 
 /Volumes/Data/

@@ -64,7 +64,7 @@ echo
 echo "*** Creating/updating home directory links"
 echo
 
-create_link_in_home "${HERE}/bash_profile"  .bash_profile
+create_link_in_home "${HERE}/bashrc"        .bash_profile
 create_link_in_home "${HERE}/bashrc"        .bashrc
 create_link_in_home "${HERE}/gitconfig"     .gitconfig
 create_link_in_home "${HERE}/inputrc"       .inputrc
