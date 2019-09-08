@@ -66,7 +66,7 @@ prepend_path()
 
     local p="$(maybe_resolve "$1")"
     [ -z "$p" ] && return 0
-    echo "${PATH}" | grep -q '.*$p:.*' && return 0
+    [[ "${PATH}" =~ .*$p:.* ]] && return 0
     export PATH="$p:${PATH}"
 }
 
@@ -504,7 +504,7 @@ vi()
     local p
     for p in "$@"
     do
-        if echo "$p" | grep -q '.*:.*'
+        if [[ "$p" =~ .*:.* ]]
         then
             ARGS+=($(echo $p | sed -e 's/\(.*\):\(.*\)/\1 +\2/'))
         else
