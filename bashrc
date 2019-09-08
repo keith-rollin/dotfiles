@@ -17,9 +17,9 @@ HOST_SHELL=$(basename $(ps -o comm $$ | grep -v COMM | sed -Ee 's/-?(.*)/\1/'))
 # $0, which might or might not be us, depending on the shell we're running
 # under.
 
-[ -n "${MAIN_BASHRC}" ] && BASE_ME="$MAIN_BASHRC" || BASE_ME="${0}"
-ME="$(readlink "${BASE_ME}")"
-[ -n "${ME}" ] || ME="${BASE_ME}"
+[ -n "${MAIN_BASHRC}" ] && ME_BASE="$MAIN_BASHRC"
+ME="$(readlink "${ME_BASE}")"
+[ -n "${ME}" ] || ME="${ME_BASE}"
 HERE="$(dirname "${ME}")"
 
 # Define some functions up front. Normally, function definitions are placed
