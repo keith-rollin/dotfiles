@@ -104,16 +104,12 @@ apps=(
     ripgrep
     ssh-copy-id
     tree
+    vim
     watch           # Kinda expensive, but OK...
     xz
 )
 
 caffeinate -dim brew install "${apps[@]}"
-# No longer install the latest vim. I don't remember what, but it was causing
-# some problems recently interacting with the system or getting confused with
-# the system vim. TODO: Look into this again.
-# caffeinate -dim brew install --with-override-system-vi vim # TBD: How to encode this into 'apps'.
-
 
 # Install some QuickLook plugins.
 

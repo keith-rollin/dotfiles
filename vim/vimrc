@@ -85,6 +85,7 @@ endif
 " Install plugins
 " ---------------
 call plug#begin('~/.vim/plugged')
+Plug 'ambv/black'                 " Black Python formatter
 Plug 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
 Plug 'derekwyatt/vim-fswitch'     " Switching between companion files.
 Plug 'junegunn/vim-easy-align'    " Aligning source code.
