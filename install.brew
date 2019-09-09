@@ -100,7 +100,6 @@ apps=(
     checkbashisms
     github-keygen
     jsonpp
-    python3
     ripgrep
     ssh-copy-id
     tree
@@ -109,33 +108,6 @@ apps=(
 )
 
 caffeinate -dim brew install "${apps[@]}"
-
-# Install some QuickLook plugins.
-
-#echo
-#echo "*** Installing QuickLook casks"
-#echo
-
-#casks=(
-#    # 1Password doesn't work with Homebrew-cask-installed versions of these
-#    # browsers. TODO: Look into this again.
-#    #firefox
-#    #google-chrome
-
-#    # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
-
-#    qlcolorcode
-#    qlstephen
-#    qlmarkdown
-#    quicklook-json
-#    qlimagesize
-#    suspicious-package
-#    quicklookase
-#    qlvideo
-#)
-
-#caffeinate -dim brew cask install "${casks[@]}"
-#caffeinate -dim qlmanage -r &> /dev/null
 
 unset BREW_DEV_PATH
 unset apps
