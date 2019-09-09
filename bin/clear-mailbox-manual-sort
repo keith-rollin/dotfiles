@@ -9,9 +9,12 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 
+
 def print_element_tree(tree):
     print('<?xml version="1.0" encoding="UTF-8"?>')
-    print('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">')
+    print(
+        '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
+    )
     tree.write(sys.stdout)
 
 
@@ -26,12 +29,12 @@ def reset_manually_sorted(elt):
     new_elt = clone_element(elt)
     last_was_manually_sorted = False
     for child in elt:
-        if child.tag == 'key' and child.text == 'MailboxIsManuallySorted':
+        if child.tag == "key" and child.text == "MailboxIsManuallySorted":
             new_elt.append(child)
             last_was_manually_sorted = True
         elif last_was_manually_sorted:
-            assert child.tag == 'true' or child.tag == 'false'
-            child.tag = 'false'
+            assert child.tag == "true" or child.tag == "false"
+            child.tag = "false"
             new_elt.append(child)
             last_was_manually_sorted = False
         else:
@@ -43,10 +46,10 @@ def remove_display_index(elt):
     new_elt = clone_element(elt)
     last_was_display_index = False
     for child in elt:
-        if child.tag == 'key' and child.text == 'MailboxDisplayIndex':
+        if child.tag == "key" and child.text == "MailboxDisplayIndex":
             last_was_display_index = True
         elif last_was_display_index:
-            assert child.tag == 'integer'
+            assert child.tag == "integer"
             last_was_display_index = False
         else:
             new_elt.append(remove_display_index(child))
@@ -54,7 +57,7 @@ def remove_display_index(elt):
 
 
 @contextmanager
-def redirect_stdin(file_name, mode = None):
+def redirect_stdin(file_name, mode=None):
     saved = sys.stdin
     sys.stdin = open(file_name, mode if mode else "r")
     try:
@@ -64,7 +67,7 @@ def redirect_stdin(file_name, mode = None):
 
 
 @contextmanager
-def redirect_stdout(file_name, mode = None):
+def redirect_stdout(file_name, mode=None):
     saved = sys.stdout
     sys.stdout = open(file_name, mode if mode else "w")
     try:
@@ -74,28 +77,37 @@ def redirect_stdout(file_name, mode = None):
 
 
 def main():
-    mboxcache_file_names = glob.glob(os.path.expanduser(os.path.join("~", "Library", "Mail", "V5", "*", ".mboxCache.plist")))
+    mboxcache_file_names = glob.glob(
+        os.path.expanduser(
+            os.path.join("~", "Library", "Mail", "V5", "*", ".mboxCache.plist")
+        )
+    )
 
     for mboxcache_file_name in mboxcache_file_names:
         with redirect_stdin(mboxcache_file_name):
             tree = ET.parse(sys.stdin)
-        if not tree: return
+        if not tree:
+            return
 
         root = tree.getroot()
-        if not len(root): return
+        if not len(root):
+            return
 
         root = reset_manually_sorted(root)
-        if not len(root): return
+        if not len(root):
+            return
 
         root = remove_display_index(root)
-        if not len(root): return
+        if not len(root):
+            return
 
         new_tree = ET.ElementTree(root)
-        if not new_tree: return
+        if not new_tree:
+            return
 
         with redirect_stdout(mboxcache_file_name):
             print_element_tree(new_tree)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
