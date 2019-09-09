@@ -30,7 +30,7 @@ then
         }
     }
 
-    git clone --depth=1 https://github.com/Homebrew/brew.git "${BREW_DEV_PATH}" || {
+    git clone --depth=1 ${HOMEBREW_REPO:-https://github.com/Homebrew/brew.git} "${BREW_DEV_PATH}" || {
         echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
         return 1
     }
@@ -104,7 +104,6 @@ apps=(
     ripgrep
     ssh-copy-id
     tree
-    vim
     watch           # Kinda expensive, but OK...
     xz
 )
@@ -113,30 +112,30 @@ caffeinate -dim brew install "${apps[@]}"
 
 # Install some QuickLook plugins.
 
-echo
-echo "*** Installing QuickLook casks"
-echo
+#echo
+#echo "*** Installing QuickLook casks"
+#echo
 
-casks=(
-    # 1Password doesn't work with Homebrew-cask-installed versions of these
-    # browsers. TODO: Look into this again.
-    #firefox
-    #google-chrome
+#casks=(
+#    # 1Password doesn't work with Homebrew-cask-installed versions of these
+#    # browsers. TODO: Look into this again.
+#    #firefox
+#    #google-chrome
 
-    # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
+#    # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
 
-    qlcolorcode
-    qlstephen
-    qlmarkdown
-    quicklook-json
-    qlimagesize
-    suspicious-package
-    quicklookase
-    qlvideo
-)
+#    qlcolorcode
+#    qlstephen
+#    qlmarkdown
+#    quicklook-json
+#    qlimagesize
+#    suspicious-package
+#    quicklookase
+#    qlvideo
+#)
 
-caffeinate -dim brew cask install "${casks[@]}"
-caffeinate -dim qlmanage -r &> /dev/null
+#caffeinate -dim brew cask install "${casks[@]}"
+#caffeinate -dim qlmanage -r &> /dev/null
 
 unset BREW_DEV_PATH
 unset apps
