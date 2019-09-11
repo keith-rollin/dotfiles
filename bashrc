@@ -52,7 +52,7 @@ hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && ki
 
 la() { ll -A "$@" ; }
 lart() { ls -lArt "$@" ; }
-ll() { ls "$@" ; }
+ll() { ls -l "$@" ; }
 ls() { command ls -FGhv "$@" ; }
 
 ascii()
