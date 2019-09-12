@@ -73,6 +73,49 @@ create_link_in_home "${HERE}/bashrc"        .zshrc
 
 create_link_in_home "${DEV_PATH}"
 
+# If there's an empty ~/Library/Sublime Text 3/Packages/User directory, replace
+# it with a link to our dotfiles version.
+
+LOCAL_USER_DIR="$HOME/Library/Application Support/Sublime Text 3/Packages/User"
+SHARED_USER_DIR="$HERE/SublimeText-Packages-User"
+CREATE_LINK=FALSE
+if [ -e "$LOCAL_USER_DIR" ]
+then
+    if [ -h "$LOCAL_USER_DIR" ]
+    then
+        # It's already a sym link; assume it's because we made it that way.
+        true
+    elif [ ! -d "$LOCAL_USER_DIR" ]
+    then
+        # It's a file or it's something else other than a directory.
+        echo "Cannot link $LOCAL_USER_DIR to $SHARED_USER_DIR because the former already exists and is not a directory."
+    elif [ "$(ls -A "$LOCAL_USER_DIR")" != "" ]
+    then
+        # It's a real directory, but it's not empty.
+        echo "Cannot link $LOCAL_USER_DIR to $SHARED_USER_DIR because the former is not empty."
+    else
+        # There's something at the target location. If we reach here, then it
+        # ought to be a real, empty directory.
+        CREATE_LINK=TRUE
+    fi
+else
+    # The target doesn't exist, so it might be OK to create it.
+    CREATE_LINK=TRUE
+fi
+
+if [ ! -d "$SHARED_USER_DIR" ]
+then
+    CREATE_LINK=FALSE
+    echo "Cannot link $LOCAL_USER_DIR to $SHARED_USER_DIR because the latter doesn't exist."
+fi
+
+if [ "$CREATE_LINK" = TRUE ]
+then
+    rm -rf "$LOCAL_USER_DIR" &> /dev/null
+    mkdir -p "$(dirname "$LOCAL_USER_DIR")"
+    "${LNS}" "$SHARED_USER_DIR" "$LOCAL_USER_DIR"
+fi
+
 # Get some handy functions defined: is_executable, maybe_resolve, maybe_source,
 # prepend_path.
 
