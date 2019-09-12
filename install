@@ -127,8 +127,6 @@ maybe_source "${HERE}/install.brew"
 
 # Install/update vim bundles. Let's do this last so that the operation can be
 # done in the full context of environment variables and tools.
-# This is commented out because I no longer use Vundle. I now use vim_plug.
-# Bring this back after figuring out how to auto-install plugins with vim-plug.
 
-# echo "*** Installing/updating vim bundles"
-# vim +PluginInstall +qall &> /dev/null
+echo "*** Installing/updating vim bundles"
+vim +PlugUpgrade +PlugUpdate +qall &>/dev/null
