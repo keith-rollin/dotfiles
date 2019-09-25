@@ -289,6 +289,14 @@ cnoremap <Esc>f <S-Right>
 cnoremap <Esc>d <S-right><Delete>
 cnoremap <C-g>  <C-c>
 
+" People who have and don't like the MBP touchbar use kj instead of <esc>
+" Maybe I'll try this out. The last line turns ESC into a NOP in order to
+" train me to use 'jk' (which, with that mapping in place, is now pretty
+" awkward to type).
+inoremap kj <esc>
+inoremap jk <esc>
+inoremap <esc> <nop>
+
 " Functions
 " ---------
 " Strip trailing whitespace
