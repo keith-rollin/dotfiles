@@ -85,15 +85,16 @@ endif
 " Install plugins
 " ---------------
 call plug#begin('~/.vim/plugged')
-Plug 'ctrlpvim/ctrlp.vim'         " Fuzzy file searching.
-Plug 'derekwyatt/vim-fswitch'     " Switching between companion files.
-Plug 'junegunn/vim-easy-align'    " Aligning source code.
-Plug 'keith/swift.vim'            " Swift syntax highlighting and indenting.
-Plug 'scrooloose/nerdtree'        " Directory hierarchy browser.
-Plug 'tacahiroy/ctrlp-funky'      " CtrlP extension that performs function navigation.
-Plug 'tpope/vim-commentary'       " Comment/uncomment
-Plug 'tpope/vim-fugitive'         " Git integration.
-Plug 'tpope/vim-sensible'         " Sensible vim defaults.
+Plug 'ConradIrwin/vim-bracketed-paste'  " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
+Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
+Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
+Plug 'junegunn/vim-easy-align'          " Aligning source code.
+Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
+Plug 'scrooloose/nerdtree'              " Directory hierarchy browser.
+Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
+Plug 'tpope/vim-commentary'             " Comment/uncomment
+Plug 'tpope/vim-fugitive'               " Git integration.
+Plug 'tpope/vim-sensible'               " Sensible vim defaults.
 call plug#end()
 
 " Variables
@@ -292,10 +293,12 @@ cnoremap <C-g>  <C-c>
 " People who have and don't like the MBP touchbar use kj instead of <esc>
 " Maybe I'll try this out. The last line turns ESC into a NOP in order to
 " train me to use 'jk' (which, with that mapping in place, is now pretty
-" awkward to type).
+" awkward to type). UPDATE: Actually, the inoremap <esc> inteferes with
+" bracketed paste mode (BPM), which uses <esc>. Disable this, or the remaining
+" BPM characters will get inserted.
 inoremap kj <esc>
 inoremap jk <esc>
-inoremap <esc> <nop>
+" inoremap <esc> <nop>
 
 " Functions
 " ---------
