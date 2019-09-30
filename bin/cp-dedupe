@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+
+def main():
+    source_base = pathlib.Path(sys.argv[1])
+    dest_base = pathlib.Path(sys.argv[2])
+
+    walker = os.walk(source_base)
+    for source_dir, dir_names, file_names in walker:
+        source_path = pathlib.Path(source_dir)
+        source_dir_relative_to_base = source_path.relative_to(source_base)
+        dest_path = dest_base / source_dir_relative_to_base
+        dest_path.mkdir(parents=True, exist_ok=True)
+        if file_names:
+            for file_name in file_names:
+                source_file_path = source_path / file_name
+                dest_file_path = dest_path / file_name
+                if source_file_path.is_symlink():
+                    copy_file(source_file_path, dest_file_path)
+                else:
+                    source_file_hash = get_file_hash(source_file_path)
+                    previous = seen_files.get(source_file_hash)
+                    if previous:
+                        link_between(previous, dest_file_path)
+                    else:
+                        seen_files[source_file_hash] = source_file_path
+                        copy_file(source_file_path, dest_file_path)
+
+
+
+# if __name__ == "__main__":
+#     main()
