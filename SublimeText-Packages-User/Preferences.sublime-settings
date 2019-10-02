@@ -7,6 +7,6 @@
 		"*.jpg", "*.jpeg", "*.png", "*.gif", "*.ttf", "*.tga", "*.dds", "*.ico",
 		"*.eot", "*.pdf", "*.swf", "*.jar", "*.zip",
 		"WebKitBuild*/**"],
-	"index_exclude_patterns": ["*.log",
+	"index_exclude_patterns": ["*.log", "*.js",
 		"WebKitBuild*/**"],
 }
