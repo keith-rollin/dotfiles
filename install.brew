@@ -35,6 +35,7 @@ then
         return 1
     }
 
+    hash -r
     if ! is_executable brew
     then
         echo "### Could not find brew executable after installing"
