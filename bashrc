@@ -95,7 +95,7 @@ cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-cdx()
+cdxc()
 {
     # Change working directory to Xcode.
 
@@ -236,6 +236,11 @@ hide_brew()
     export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
     "$@"
     export PATH="$old_path"
+}
+
+hmapdump()
+{
+    $(xcode-select -p)/../PlugIns/Xcode3Core.ideplugin/Contents/Frameworks/DevToolsCore.framework/Resources/hmapdump "$@"
 }
 
 is_executable()
@@ -381,6 +386,11 @@ prepend_path()
     fi
 }
 
+pxc()
+{
+    xcode-select -p
+}
+
 ql()
 {
     qlmanage -p "$@" &> /dev/null &
@@ -492,11 +502,6 @@ vi()
 wip()
 {
     git commit -a -m wip
-}
-
-xsp()
-{
-    xcode-select -p
 }
 
 # Environment variables.
