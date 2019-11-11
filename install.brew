@@ -36,6 +36,8 @@ then
     }
 
     hash -r
+    echo -n "brew path: "
+    command -v brew
     if ! is_executable brew
     then
         echo "### Could not find brew executable after installing"
