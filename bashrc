@@ -6,7 +6,7 @@
 
 # Determine what shell we're using.
 
-HOST_SHELL=$(basename $(ps -o comm $$ | grep -v COMM | sed -Ee 's/-?(.*)/\1/'))
+HOST_SHELL=$(basename $(lsof -p $$ | grep -w 'txt.*sh$' | awk '{ print $NF }'))
 [ "${HOST_SHELL}" = "bash" ] && ME_BASE="${BASH_SOURCE[0]}"
 [ "${HOST_SHELL}" = "zsh"  ] && ME_BASE="${(%):-%N}"
 [ -z "${ME_BASE}"  ] && return 0    # We don't support this shell.
