@@ -101,6 +101,7 @@ echo
 
 apps=(
     checkbashisms
+    cmake
     github-keygen
     jsonpp
     ripgrep
