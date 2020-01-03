@@ -567,6 +567,7 @@ then
 
     bind '"\e[A": history-search-backward'
     bind '"\e[B": history-search-forward'
+    bind '"`": "~"'
 
     # Bring in command-line completion.
     # is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
@@ -583,6 +584,7 @@ then
 
     bindkey "^[[A" history-beginning-search-backward
     bindkey "^[[B" history-beginning-search-forward
+    bindkey -s "\`" "~"
     bindkey -e
 
     # Bring in command-line completion.
