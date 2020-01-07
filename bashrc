@@ -504,6 +504,12 @@ wip()
     git commit -a -m wip
 }
 
+zippy_daemons()
+{
+    [[ "$1" == "on" ]] && sudo sysctl debug.lowpri_throttle_enabled=0
+    [[ "$1" == "off" ]] && sudo sysctl debug.lowpri_throttle_enabled=1
+}
+
 # Environment variables.
 #
 # We need to force SHELL_SESSION_HISTORY to 1 in order to override the default
