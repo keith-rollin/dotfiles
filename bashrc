@@ -437,6 +437,11 @@ sudo_keep_alive()
     done 2>/dev/null &
 }
 
+sxc()
+{
+    sudo xcode-select -s "$@"
+}
+
 toggle_dark_mode()
 {
     osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'
