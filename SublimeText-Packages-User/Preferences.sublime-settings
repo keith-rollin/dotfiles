@@ -9,4 +9,5 @@
 		"WebKitBuild*/**"],
 	"index_exclude_patterns": ["*.log", "*.js",
 		"WebKitBuild*/**","**/StitchMarker/**"],
+	"word_wrap": "true",
 }
