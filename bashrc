@@ -504,11 +504,6 @@ vi()
     command vi "${ARGS[@]}"
 }
 
-wip()
-{
-    git commit -a -m wip
-}
-
 zippy_daemons()
 {
     [[ "$1" == "on" ]] && sudo sysctl debug.lowpri_throttle_enabled=0
