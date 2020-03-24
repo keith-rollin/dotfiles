@@ -112,6 +112,7 @@ apps=(
 )
 
 caffeinate -dim brew install "${apps[@]}"
+caffeinate -dim brew cask install brooklyn
 
 unset BREW_DEV_PATH
 unset apps
