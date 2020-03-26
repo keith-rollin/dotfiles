@@ -598,6 +598,10 @@ then
     then
         fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
     fi
+
+    # Remove/disable git completion, since it's agonizingly slow on large
+    # projects like WebKit.
+    compdef -d git
 fi
 
 # The following was given as a tip for speeding up `git status`. I tried it out
