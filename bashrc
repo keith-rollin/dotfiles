@@ -536,8 +536,9 @@ if [ "$HOST_SHELL" = zsh ]
 then
     HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
     HISTSIZE=SAVEHIST=10000
-    setopt sharehistory
-    setopt extendedhistory
+    setopt share_history
+    setopt extended_history
+    setopt interactive_comments
 fi
 
 export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
