@@ -133,3 +133,25 @@ echo "*** Installing/updating vim bundles"
 echo
 
 vim +PlugUpgrade +PlugUpdate +qall &>/dev/null
+
+echo
+echo "*** Setting System Defaults"
+echo
+
+defaults write com.apple.TextEdit   HeightInChars   -int 80
+defaults write com.apple.TextEdit   RichText        -int 0
+defaults write com.apple.TextEdit   TabWidth        -int 4
+defaults write com.apple.TextEdit   WidthInChars    -int 120
+
+defaults write com.apple.Safari     AlwaysRestoreSessionAtLaunch    -int 1
+defaults write com.apple.Safari     AutoOpenSafeDownloads           -int 0
+defaults write com.apple.Safari     DownloadsClearingPolicy         -int 2
+defaults write com.apple.Safari     ExcludePrivateWindowWhenRestoringSessionAtLaunch -int 0
+defaults write com.apple.Safari     HistoryAgeInDaysLimit           -int 365000
+defaults write com.apple.Safari     IncludeDevelopMenu              -int 1
+defaults write com.apple.Safari     NewTabBehavior                  -int 1
+defaults write com.apple.Safari     NewWindowBehavior               -int 1
+
+# Secret options from https://github.com/kpdecker/dotfiles/blob/master/setup/osx-defaults/safari.sh
+defaults write com.apple.Safari     IncludeInternalDebugMenu        -int 1
+defaults write com.apple.Safari     ShowFullURLInSmartSearchField   -int 1
