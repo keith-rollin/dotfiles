@@ -439,7 +439,7 @@ sudo_keep_alive()
 
 sxc()
 {
-    sudo xcode-select -s "$@"
+    sudo xcode-select -s $(realpath "$@")
 }
 
 toggle_dark_mode()
