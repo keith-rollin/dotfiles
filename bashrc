@@ -613,7 +613,7 @@ sudo sysctl kern.maxvnodes=$((512*1024)) &> /dev/null
 
 
 
-
+# VS Code support.
 
 # Support for repeating keys in the vim extenstion to Visual Code.
 
@@ -626,3 +626,8 @@ code()
 {
     "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" "${@}"
 }
+
+
+# Rust support.
+
+prepend_path $HOME/.cargo/bin
