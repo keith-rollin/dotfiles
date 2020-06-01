@@ -105,14 +105,13 @@ apps=(
     github-keygen
     jsonpp
     ripgrep
-    ssh-copy-id
     tree
     watch           # Kinda expensive, but OK...
     xz
 )
 
 caffeinate -dim brew install "${apps[@]}"
-caffeinate -dim brew cask install brooklyn
+# caffeinate -dim brew cask install brooklyn    # Pretty, but I don't really use screensavers.
 
 unset BREW_DEV_PATH
 unset apps
