@@ -73,6 +73,44 @@ create_link_in_home "${HERE}/bashrc"        .zshrc
 
 create_link_in_home "${DEV_PATH}"
 
+# Move ~/Downloads to /Volumes/Data, and replace it with a link. This way,
+# Downloads can be shared across boot volumes, and not take up space on the
+# otherwise trashable boot volume. TODO: If the shared directory doesn't exist,
+# rather than create it, move any existing directory there.
+
+SHARED_DOWNLOADS_DIR="/Volumes/Data/Downloads"
+HOME_DOWNLOADS_DIR="${HOME}/Downloads"
+
+if [ ! -e "${SHARED_DOWNLOADS_DIR}" -o -d "${SHARED_DOWNLOADS_DIR}" ]
+then
+    if [ -d "${HOME_DOWNLOADS_DIR}" ]
+    then
+        rm -f "${HOME_DOWNLOADS_DIR}/.DS_Store"
+        rm -f "${HOME_DOWNLOADS_DIR}/.localized"
+        if [ -z "$(ls -A "${HOME_DOWNLOADS_DIR}")" ]
+        then
+            # At this point, we know that HOME_DOWNLOADS_DIR is an empty
+            # directory, and SHARED_DOWNLOADS_DIR is either a directory or
+            # doesn't exist.
+            mkdir -p "${SHARED_DOWNLOADS_DIR}"
+            touch "${SHARED_DOWNLOADS_DIR}/.localized"
+            sudo rm -d "${HOME_DOWNLOADS_DIR}"  # We get "permission denied" without sudo, even though we own it.
+            "${LNS}" "${HOME_DOWNLOADS_DIR}" "${SHARED_DOWNLOADS_DIR}"
+        else
+            # HOME_DOWNLOADS_DIR is a directory, but there's stuff in it that
+            # we should move first. Warn about it.
+            echo "### Cannot link ${HOME_DOWNLOADS_DIR} to ${SHARED_DOWNLOADS_DIR} because it's not empty"
+        fi
+    elif [ ! -L "${HOME_DOWNLOADS_DIR}" ]
+    then
+        # HOME_DOWNLOADS_DIR is neither a directory nor a link. Warn about it.
+        echo "### Cannot link ${HOME_DOWNLOADS_DIR} to ${SHARED_DOWNLOADS_DIR} because it's not a directory"
+    fi
+else
+    # SHARED_DOWNLOADS_DIR already exists, but it's not a directory.
+    echo "### Cannot create ${SHARED_DOWNLOADS_DIR} because a non-directory already exists at that location"
+fi
+
 # If there's an empty ~/Library/Sublime Text 3/Packages/User directory, replace
 # it with a link to our dotfiles version.
 
