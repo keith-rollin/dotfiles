@@ -4,19 +4,23 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 
 " Plugins to try out:
 "
-"   Lokaltog/powerline                  Or powerline/powerline, Airline, lightline
+"   Lokaltog/powerline                  Deprecated/obsolete, see powerline/powerline
+"   powerline/powerline
+"   bling/vim-airline                   Redirects to vim-airline/vim-airline
+"   vim-airline/vim-airline
+"   itchyny/lightline.vim
+"   rbong/vim-crystalline
+"
 "   Valloric/YouCompleteMe
 "   airblade/vim-gitgutter              Show status of each line in the vim gutter
 "   altercation/vim-colors-solarized
 "   ap/vim-css-color
-"   bling/vim-airline
 "   davidhalter/jedi-vim                Python auto-completion
 "   docunext/closetag.vim
 "   embear/vim-localvimrc
 "   ervandew/supertab
 "   fatih/vim-go
 "   haya14busa/incsearch.vim
-"   itchyny/lightline.vim
 "   junegunn/fzf.vim                    Reported to be a better version of CtrlP
 "   junegunn/goyo.vim
 "   kballard/vim-swift                  Supports syntastic
@@ -88,8 +92,10 @@ call plug#begin('~/.vim/plugged')
 Plug 'ConradIrwin/vim-bracketed-paste'  " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
 Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
 Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
+Plug 'itchyny/lightline.vim'            " Powerline-ish
 Plug 'junegunn/vim-easy-align'          " Aligning source code.
 Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
+Plug 'morhetz/gruvbox'                  " Color scheme
 Plug 'scrooloose/nerdtree'              " Directory hierarchy browser.
 Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
 Plug 'tpope/vim-commentary'             " Comment/uncomment
@@ -97,12 +103,34 @@ Plug 'tpope/vim-fugitive'               " Git integration.
 Plug 'tpope/vim-sensible'               " Sensible vim defaults.
 call plug#end()
 
+let g:lightline = {
+    \   'colorscheme': 'gruvbox',
+    \   'active': {
+    \       'left': [ [ 'mode', 'paste' ],
+    \                 [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+    \       'right': [ [ 'date_time' ],
+    \                  [ 'lineinfo' ],
+    \                  [ 'percent' ] ]
+    \   },
+    \   'component': {
+    \       'date_time': "%{strftime('%F\ %T')}"
+    \   },
+    \   'component_function': {
+    \       'gitbranch': 'FugitiveHead'
+    \   },
+    \ }
+let g:gruvbox_contrast_dark = 'hard'
+set background=dark
+colorscheme gruvbox
+set noshowmode                  " Don't show --INSERT--, since lightline does that.
+
 " Variables
 " ---------
 set autoread                    " Automatically reread externally changed files.
 set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
+set laststatus=2                " Always
 set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
 set list                        " Show invisible characters
 set modeline                    " Enable modeline support
@@ -115,8 +143,8 @@ set path+=**                    " Recursively search subdirectories for files on
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
 set showcmd                     " Show the command being entered.
 set shortmess=atI               " Don't show the intro message when starting Vim
-set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%L\ \ \ %{strftime('%F\ %T')}
-"set wildmode=list:longest       " complete files like a shell
+" set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%L\ \ \ %{strftime('%F\ %T')}
+" set wildmode=list:longest       " complete files like a shell
 
 " Search related
 set hlsearch                    " Highlight searches
