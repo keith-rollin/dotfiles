@@ -92,7 +92,7 @@ then
             # At this point, we know that HOME_DOWNLOADS_DIR is an empty
             # directory, and SHARED_DOWNLOADS_DIR is either a directory or
             # doesn't exist.
-            mkdir -p "${SHARED_DOWNLOADS_DIR}"
+            mkdir -p "${SHARED_DOWNLOADS_DIR}" # Handle failure here. It might not have permission to create the directory. If so, fail without deleting ~/Downloads.
             touch "${SHARED_DOWNLOADS_DIR}/.localized"
             sudo rm -d "${HOME_DOWNLOADS_DIR}"  # We get "permission denied" without sudo, even though we own it.
             "${LNS}" "${HOME_DOWNLOADS_DIR}" "${SHARED_DOWNLOADS_DIR}"
