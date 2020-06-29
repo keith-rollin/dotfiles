@@ -11,10 +11,6 @@
 
 BREW_DEV_PATH="${DEV_PATH}/brew"
 
-prepend_path "${BREW_DEV_PATH}/sbin"
-prepend_path "${BREW_DEV_PATH}/bin"
-
-
 # Get homebrew if I don't already have it.
 
 if ! is_executable brew
@@ -34,15 +30,15 @@ then
         echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
         return 1
     }
+fi
 
-    hash -r
-    echo -n "brew path: "
-    command -v brew
-    if ! is_executable brew
-    then
-        echo "### Could not find brew executable after installing"
-        return 1
-    fi
+prepend_path "${BREW_DEV_PATH}/sbin"
+prepend_path "${BREW_DEV_PATH}/bin"
+
+if ! is_executable brew
+then
+    echo "### Could not find brew executable after installing"
+    return 1
 fi
 
 
