@@ -170,7 +170,9 @@ echo
 echo "*** Installing/updating vim bundles"
 echo
 
-vim +PlugUpgrade +PlugUpdate +qall &>/dev/null
+# This doesn't work well on first install. It seems to hang, especially when
+# vimrc tries to invoke gruvbox before it's isntalled.
+# vim +PlugUpgrade +PlugUpdate +qall &>/dev/null
 
 echo
 echo "*** Setting System Defaults"
