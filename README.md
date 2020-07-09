@@ -4,10 +4,11 @@ Before checking out:
 
 * Add your GitHub SSH keys with `ssh-add`.
 * Create a separate APFS volume at /Volumes/Data.
-* Create a dev directory at /Volumes/Data/dev.
+* Create a dev directory at /Volumes/Data/totally-not-dev/dev. (Time Machine will not back up a directory named "dev" at the root of a volume.)
 
 ```bash
-$ cd /Volumes/Data/dev
+$ mkdir -p /Volumes/Data/totally-not-dev/dev
+$ cd /Volumes/Data/totally-not-dev/dev
 $ git clone git@github.com:keith-rollin/dotfiles.git
 $ dotfiles/install
 ```
@@ -16,15 +17,15 @@ $ dotfiles/install
 
 ```text
 ~
-|-- .bash_profile@ -> /Volumes/Data/dev/dotfiles/bashrc
-|-- .bashrc@ -> /Volumes/Data/dev/dotfiles/bashrc
-|-- .gitconfig@ -> /Volumes/Data/dev/dotfiles/gitconfig
-|-- .inputrc@ -> /Volumes/Data/dev/dotfiles/inputrc
-|-- .vim@ -> /Volumes/Data/dev/dotfiles/vim
-|-- .zshrc@ -> /Volumes/Data/dev/dotfiles/bashrc
-`-- dev@ -> /Volumes/Data/dev
+|-- .bash_profile@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
+|-- .bashrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
+|-- .gitconfig@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/gitconfig
+|-- .inputrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/inputrc
+|-- .vim@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/vim
+|-- .zshrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
+`-- dev@ -> /Volumes/Data/totally-not-dev/dev
 
-/Volumes/Data/
+/Volumes/Data/totally-not-dev/
 `-- dev/
     |-- brew/
     |-- dotfiles/
