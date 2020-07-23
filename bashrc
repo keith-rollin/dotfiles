@@ -561,8 +561,8 @@ prepend_path "${HERE}/bin"
 # Bring in ssh keys.
 
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" &> /dev/null
-[ -x ~/.ssh/id_krollin@home ] && ssh-add ~/.ssh/id_krollin@home &> /dev/null
-[ -x ~/.ssh/id_krollin@work ] && ssh-add ~/.ssh/id_krollin@work &> /dev/null
+[ -f ~/.ssh/id_krollin@home ] && ssh-add ~/.ssh/id_krollin@home &> /dev/null
+[ -f ~/.ssh/id_krollin@work ] && ssh-add ~/.ssh/id_krollin@work &> /dev/null
 
 # Shell.
 
