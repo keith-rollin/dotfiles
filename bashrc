@@ -529,7 +529,7 @@ then
     PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
 elif [ "$HOST_SHELL" = zsh ]
 then
-    PS1=$'%F{160}%n@%m:%~%f\n%# '
+    PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 fi
 
 if [ "$HOST_SHELL" = zsh ]
