@@ -57,6 +57,14 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 "   Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
 "
 "   Review https://vimawesome.com/
+"
+"   From ThePrimeagen:
+"
+"   jremmen/vim/ripgrep
+"   vim-utils/vim-man
+"   lyuts/vim-rtags
+"   git@github.com:kien/ctrlp.vim.git   Why such a verbose path?
+"   mbbill/undotree
 
 " Configure plugins
 " -----------------
@@ -72,6 +80,8 @@ let g:ctrlp_root_markers = ['Makefile.shared']
 " let g:ctrlp_working_path_mode = 0
 " let g:ctrlp_dotfiles = 0                  # Now probably ctrlp_show-hidden
 " let g:ctrlp_switch_buffer = 0
+" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+" let g:ctrlp_use_caching = 0
 
 " Configure swift.vim: don't show the fancy -> in Swift source files.
 let g:swift_no_conceal=1
@@ -123,6 +133,10 @@ let g:gruvbox_contrast_dark = 'hard'
 set background=dark
 colorscheme gruvbox
 set noshowmode                  " Don't show --INSERT--, since lightline does that.
+
+if executable('rg')
+    let g:rg_derive_root='true'
+endif
 
 " Variables
 " ---------
@@ -237,9 +251,13 @@ let g:is_posix = 1
 "let g:netrw_list_hide=netrw_gitignore#Hide() " hide gitignore'd files
 "let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default (this is the string toggled by netrw-gh)
 
+" let g:netrw_browse_split = 2
+" let g:netrw_banner = 0
+" let g:netrw_winsize = 25
+
 " Custom keys
 " -----------
-let mapleader = ","
+let mapleader = " "
 
 " Cheat Sheet (from `:help :map-modes`):
 "
@@ -290,11 +308,27 @@ nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
 "   nmap <silent> <leader>v       :set paste!<CR> " Handled with 'pastetoggle'
     nmap <silent> <leader>w       :w<CR>
 
+" Take the selection and move it up or down, after which, reselect the text,
+" reformat/indent it, and select it again.
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " These are kind of neat, but I think I'm tired of them.
 " nnoremap <silent> j               gj
 " nnoremap <silent> k               gk
 " nnoremap <silent> ^               g^
 " nnoremap <silent> $               g$
+
+    " I don't see this documented under 'key-notation', but <M-...> doesn't
+    " seem to work for on the Mac.
+
+    " nmap <silent> <M-c>           :wincmd c<CR>
+    " nmap <silent> <M-h>           :call WinMove('h')<CR>
+    " nmap <silent> <M-j>           :call WinMove('j')<CR>
+    " nmap <silent> <M-k>           :call WinMove('k')<CR>
+    " nmap <silent> <M-l>           :call WinMove('l')<CR>
+    " nmap <silent> <M-q>           :wincmd q<CR>
 
     nmap <silent> ç               :wincmd c<CR>
     nmap <silent> ˙               :call WinMove('h')<CR>
