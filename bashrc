@@ -95,13 +95,6 @@ cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-cdxc()
-{
-    # Change working directory to Xcode.
-
-    cd "$(xcode-select -p)"
-}
-
 cheat()
 {
     local TOPIC=$1
@@ -386,11 +379,6 @@ prepend_path()
     fi
 }
 
-pxc()
-{
-    xcode-select -p
-}
-
 ql()
 {
     qlmanage -p "$@" &> /dev/null &
@@ -435,11 +423,6 @@ sudo_keep_alive()
         sleep 60
         kill -0 "$$" || return
     done 2>/dev/null &
-}
-
-sxc()
-{
-    sudo xcode-select -s $(realpath "$@")
 }
 
 toggle_dark_mode()
@@ -502,6 +485,43 @@ vi()
     done
 
     command vi "${ARGS[@]}"
+}
+
+xc()
+{
+    local CMD="$1"
+    shift
+
+    case "$CMD" in
+        p|print)
+            xcode-select -p
+            ;;
+        s|select)
+            sudo xcode-select -s $(realpath "$1")
+            ;;
+        c|cd)
+            cd "$(xcode-select -p)"
+            ;;
+        v|vers|version)
+            if [[ "$1" == "all" ]]
+            then
+                sw_vers
+                echo "==============================================================================="
+                xcodebuild -showsdks
+                echo "==============================================================================="
+                xcodebuild -sdk -version
+                echo "==============================================================================="
+                clang -v
+            else
+                sw_vers
+                echo
+                xcodebuild -version
+                echo
+                clang -v
+            fi
+            ;;
+        *)  echo "### Unknown command: $CMD" ;;
+    esac
 }
 
 zippy_daemons()
