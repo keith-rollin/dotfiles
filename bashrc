@@ -108,6 +108,11 @@ cleanupds()
     find -x . -type f -name '*.DS_Store' -print -delete
 }
 
+clr()
+{
+    clear && printf '\e[3J'
+}
+
 delete_brew()
 {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
