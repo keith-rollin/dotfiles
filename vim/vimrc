@@ -234,6 +234,9 @@ endif
 " .bashrc file.
 command! Reload :source $MYVIMRC
 
+" Remind me what file I'm in.
+command WhatAmI :echo expand("%")
+
 " Highlight colors
 highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge error markers
@@ -430,4 +433,3 @@ function! WinMove(key)
         exec "wincmd " . a:key
     endif
 endfunction
-
