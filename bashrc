@@ -394,9 +394,19 @@ reload()
     source ~/.bash_profile
 }
 
+restart_touchbar()
+{
+    sudo pkill ControlStrip TouchBarServer
+}
+
 rg()
 {
     command rg -g '!ChangeLog*' "$@"
+}
+
+rgcmake()
+{
+    command rg -g '*.cmake' -g 'CMakeLists.txt' "$@"
 }
 
 search_goog()
