@@ -96,15 +96,15 @@ echo
 # brew tap kylef/formulae
 
 apps=(
-    checkbashisms
-    cmake
-    github-keygen
-    jsonpp
-    ninja
+    # checkbashisms
+    # cmake
+    # github-keygen
+    # jsonpp
+    # ninja
     ripgrep
     tree
     watch           # Kinda expensive, but OK...
-    xz
+    # xz
 )
 
 caffeinate -dim brew install "${apps[@]}"
