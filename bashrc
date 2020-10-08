@@ -55,6 +55,16 @@ lart() { ls -lArt "$@" ; }
 ll() { ls -l "$@" ; }
 ls() { command ls -FGhv "$@" ; }
 
+ga()   { git add "$@" ; }
+gc()   { git commit "$@" ; }
+gcam() { git commit -am "$@" ; }
+gd()   { git diff "$@" ; }
+gl()   { git log "$@" ; }
+glp()  { git log -p "$@" ; }
+grc()  { git rebase --continue ; }
+grm()  { git rebase master ; }
+gs()   { git status "$@" ; }
+
 ascii()
 {
     #man ascii | col -b | grep -A 55 --color=never "octal set"
@@ -175,16 +185,23 @@ git_diff()
 {
     # Use Git’s colored diff.
 
-    git diff --no-index --color-words "$@";
+    git diff --no-index --color-words "$@"
 }
 
 git_edit_changed()
 {
     local OLD_CWD="$(pwd)"
     git_top
-    vi $(git diff --name-only)
+    "${EDITOR}" $(git diff --name-only)
     cd "${OLD_CWD}"
 }
+
+# Maybe this one? It seems to have a problem, though, where diff-index
+# sometimes includes a spurious (unchanged) file.
+# git_edit_changed()
+# {
+#     "${EDITOR}" $(git diff-index --name-only HEAD)
+# }
 
 git_edit_files_with_symbol()
 {
@@ -203,11 +220,6 @@ gitp()
     git --no-pager "$@"
 }
 
-grc()
-{
-    git rebase --continue
-}
-
 grep()
 {
     command grep \
@@ -218,14 +230,6 @@ grep()
         --exclude-dir=.git \
         --exclude-dir=.svn \
         "$@"
-}
-
-grm()
-{
-    # "git rebase master" is typed almost all with left-handed keys. Use this
-    # macro to ease the pain.
-
-    git rebase master
 }
 
 hide_brew()
@@ -404,7 +408,7 @@ rg()
     command rg -g '!ChangeLog*' "$@"
 }
 
-rgcmake()
+rgc()
 {
     command rg -g '*.cmake' -g 'CMakeLists.txt' "$@"
 }
