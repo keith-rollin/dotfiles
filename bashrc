@@ -234,10 +234,9 @@ grep()
 
 hide_brew()
 {
-    local old_path="$PATH"
+    trap "PATH=$PATH" INT EXIT
     export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
     "$@"
-    export PATH="$old_path"
 }
 
 hmapdump()
