@@ -234,7 +234,7 @@ grep()
 
 hide_brew()
 {
-    trap "PATH=$PATH" INT EXIT
+    trap "PATH=$PATH; trap - INT EXIT" INT EXIT
     export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
     "$@"
 }
