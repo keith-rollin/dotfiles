@@ -296,7 +296,13 @@ lips()
         fi
     done < <(networksetup -listallhardwareports)
 
-    IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+    # The following doesn't seem to be working any more.
+    # IP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+
+    # So try these out.
+    # IP=$(curl -s ipecho.net/plain)
+    # IP=$(curl -s icanhazip.com)   # Returned IPv6 address
+    IP=$(curl -s ifconfig.me)
     [ "$IP" != "" ] && EXTIP=$IP || EXTIP="inactive"
 
     printf '%20s: %s\n' "External IP" $EXTIP
