@@ -671,6 +671,15 @@ then
     # Remove/disable git completion, since it's agonizingly slow on large
     # projects like WebKit.
     compdef -d git
+
+    # autoload -Uz run-help
+    # unalias run-help
+    # alias help=run-help
+
+    unalias run-help
+    autoload run-help
+    HELPDIR=$(echo /usr/share/zsh/*/help) # TODO: Deal with multiple matches
+    alias help=run-help
 fi
 
 # The following was given as a tip for speeding up `git status`. I tried it out
@@ -678,7 +687,6 @@ fi
 # seems to more than double the speed. Nice.
 
 sudo sysctl kern.maxvnodes=$((512*1024)) &> /dev/null
-
 
 
 # VS Code support.
