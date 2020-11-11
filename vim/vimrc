@@ -166,9 +166,9 @@ set smartcase                   " Case-insensitive searching unless we type at l
 
 " Line number related. (Disabled, in part because I don't like selecting the
 " line number when I select text for copy/pasting.)
-set number                      " Show absolute line numbers
-set relativenumber              " Show relative line numbers; w/ above, accommodates both.
-set numberwidth=5               " Use common width for everything up to 9999.
+" set number                      " Show absolute line numbers
+" set relativenumber              " Show relative line numbers; w/ above, accommodates both.
+" set numberwidth=5               " Use common width for everything up to 9999.
 
 " TAB related
 set expandtab                   " Convert tabs to spaces
