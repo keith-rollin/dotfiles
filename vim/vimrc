@@ -337,6 +337,39 @@ nnoremap <silent> ˚               :call WinMove('k')<CR>
 nnoremap <silent> ¬               :call WinMove('l')<CR>
 nnoremap <silent> œ               :wincmd q<CR>
 
+if executable('clang-format')
+    let g:clang_format_path = exepath("clang-format")
+    let g:clang_format_root = fnamemodify(fnamemodify(g:clang_format_path, ":h"), ":h")
+    let g:clang_format_py = g:clang_format_root . "/share/clang/clang-format.py"
+    if ! empty(glob(g:clang_format_py))
+        if has('python')
+            let g:py_command = ":pyf"
+        elseif has('python3')
+            let g:py_command = ":py3f"
+        endif
+
+        if exists("g:py_command")
+            function! FormatAll()
+                let l:lines = "all"
+                execute g:py_command g:clang_format_py
+            endfunction
+
+            function! FormatSelection()
+                execute g:py_command g:clang_format_py
+            endfunction
+
+            function! FormatChanged()
+                let l:formatdiff = 1
+                execute g:py_command g:clang_format_py
+            endfunction
+
+            nnoremap <leader>cf :call FormatAll()<cr>
+            xnoremap <leader>cf :call FormatSelection()<cr>
+            autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatChanged()
+        endif
+    endif
+endif
+
 " Add some mappings to better unify vim's mini-buffer with other editing
 " environments. Experimental at this point -- we'll see how I like them (or if
 " I even remember to use them).
