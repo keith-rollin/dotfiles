@@ -1,0 +1,19 @@
+---
+BasedOnStyle: WebKit
+AccessModifierOffset: 4
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AlignConsecutiveBitFields: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+AlignTrailingComments: true
+AlignEscapedNewlines: Left
+AllowShortCaseLabelsOnASingleLine: true
+BreakBeforeBraces: Allman
+BreakBeforeBinaryOperators: None
+IncludeBlocks: Regroup
+IndentCaseBlocks: true
+IndentCaseLabels: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+SpaceAfterCStyleCast: true
+SpaceAfterTemplateKeyword: false

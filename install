@@ -64,12 +64,13 @@ echo
 echo "*** Creating/updating home directory links"
 echo
 
-create_link_in_home "${HERE}/bashrc"        .bash_profile
-create_link_in_home "${HERE}/bashrc"        .bashrc
-create_link_in_home "${HERE}/gitconfig"     .gitconfig
-create_link_in_home "${HERE}/inputrc"       .inputrc
-create_link_in_home "${HERE}/vim"           .vim
-create_link_in_home "${HERE}/bashrc"        .zshrc
+create_link_in_home "${HERE}/bashrc"            .bash_profile
+create_link_in_home "${HERE}/bashrc"            .bashrc
+create_link_in_home "${HERE}/gitconfig"         .gitconfig
+create_link_in_home "${HERE}/inputrc"           .inputrc
+create_link_in_home "${HERE}/vim"               .vim
+create_link_in_home "${HERE}/bashrc"            .zshrc
+create_link_in_home "${HERE}/clang-format.in"   .clang-format
 
 create_link_in_home "${DEV_PATH}"
 
