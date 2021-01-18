@@ -12,10 +12,14 @@
 #       * .inputrc
 #       * .vim
 #       * .zshrc
+#       * .clang-format (also move to /Volumes/Data
 #       * dev
+#   * Move ~/Documents to /Volumes/Data.
+#   * Point Sublime Text preferences to the ones in this repo.
 #   * Create a "brew" directory next to it and put homebrew into it, or
 #     update it if it already exists.
 #   * Update vim with bundles defined in .vimrc (disabled for now)
+#   * Set some application preferences with `defaults`.
 
 [ -n "${MAIN_INSTALL}" ] && BASE_ME="$MAIN_INSTALL" || BASE_ME="${0}"
 ME="$(readlink "${BASE_ME}")"
@@ -74,10 +78,30 @@ create_link_in_home "${HERE}/clang-format.in"   .clang-format
 
 create_link_in_home "${DEV_PATH}"
 
+# clang-format will not search for .clang-format in the home directory.
+# Instead, it traverses parents until it finds the file. So storing
+# .clang-format in ~ only works if you store all your projects in your home
+# directory.
+#
+# I don't really do that at the moment. While my home directory is
+# /Users/keith, my work is kept on a separate logical volume at
+# /Volumes/Data/dev. This arrangement helps when I want to install multiple
+# versions of the OS for experimental or testing purposes -- I can install each
+# OS onto it's own volume, and each volume can access my work data on the Data
+# volume.
+#
+# Therefore, I need to store a .clang-format in /Volumes/Data so that projects
+# rooted there can find it.
+
+DOT_CLANG_FORMAT="/Volumes/Data/.clang-format"
+[[ -d $(dirname "${DOT_CLANG_FORMAT}") && ! -e "${DOT_CLANG_FORMAT}" ]] && \
+    cp -R "$HOME/.clang-format" "${DOT_CLANG_FORMAT}"
+
 # Move ~/Downloads to /Volumes/Data, and replace it with a link. This way,
 # Downloads can be shared across boot volumes, and not take up space on the
 # otherwise trashable boot volume. TODO: If the shared directory doesn't exist,
-# rather than create it, move any existing directory there.
+# rather than create it, move any existing directory there. (NOTE: this
+# operation is a bit finicky and could use some hardening.)
 
 SHARED_DOWNLOADS_DIR="/Volumes/Data/Downloads"
 HOME_DOWNLOADS_DIR="${HOME}/Downloads"
@@ -190,8 +214,8 @@ defaults write com.apple.Safari     DownloadsClearingPolicy         -int 2
 defaults write com.apple.Safari     ExcludePrivateWindowWhenRestoringSessionAtLaunch -int 0
 defaults write com.apple.Safari     HistoryAgeInDaysLimit           -int 365000
 defaults write com.apple.Safari     IncludeDevelopMenu              -int 1
-defaults write com.apple.Safari     NewTabBehavior                  -int 1
-defaults write com.apple.Safari     NewWindowBehavior               -int 1
+defaults write com.apple.Safari     NewTabBehavior                  -int 1  # Open to empty page
+defaults write com.apple.Safari     NewWindowBehavior               -int 1  # Open to empty page
 
 # Secret options from https://github.com/kpdecker/dotfiles/blob/master/setup/osx-defaults/safari.sh
 defaults write com.apple.Safari     IncludeInternalDebugMenu        -int 1
