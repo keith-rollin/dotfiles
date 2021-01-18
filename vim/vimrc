@@ -365,7 +365,7 @@ if executable('clang-format')
 
             nnoremap <leader>cf :call FormatAll()<cr>
             xnoremap <leader>cf :call FormatSelection()<cr>
-            autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatChanged()
+            autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatAll()
         endif
     endif
 endif
