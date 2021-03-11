@@ -137,6 +137,7 @@ set autoindent                  " Copy indent from previous line.
 set autoread                    " Automatically reread externally changed files.
 set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
+set cursorline                  " Highlight the row that contains the cursor (color set below with `highlight CursorLine`)
 set cmdheight=2                 " Higher command area so that switching buffers doesn't result in "Press Enter or type command to continue"
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
 set laststatus=2                " Always show a status line, even on the last window.
@@ -229,7 +230,13 @@ command WhatAmI :echo expand("%")
 
 " Highlight colors
 " highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
-highlight LineNr ctermfg=grey
+" highlight CursorLine cterm=NONE ctermbg=DarkBlue
+" highlight CursorLine cterm=NONE ctermbg=DarkGreen
+" highlight CursorLine cterm=NONE ctermbg=DarkCyan
+highlight CursorLine cterm=NONE ctermbg=DarkRed
+" highlight CursorLine cterm=NONE ctermbg=DarkMagenta
+" highlight CursorLine cterm=NONE ctermbg=DarkGrey
+" highlight LineNr ctermfg=grey
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge error markers
 
 " Set the default highlighting style for shell scripts. This particular
@@ -260,7 +267,7 @@ let g:netrw_liststyle=3     " tree view
 
 " Custom keys
 " -----------
-let mapleader = " "
+let mapleader = ","
 
 " Cheat Sheet (from `:help :map-modes`):
 "
