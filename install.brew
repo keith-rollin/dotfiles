@@ -1,3 +1,4 @@
+#!/bin/sh
 # Install homebrew (if missing) or update it (if not). Install or update
 # desired packages. Also install/update cask along with desired packages.
 #
@@ -7,10 +8,6 @@
 # a source'd script.
 
 
-# Make sure that brew's home has been created.
-
-BREW_DEV_PATH="${DEV_PATH}/brew"
-
 # Get homebrew if I don't already have it.
 
 if ! is_executable brew
@@ -19,21 +16,17 @@ then
     echo "*** Cloning Homebrew repository"
     echo
 
-    [ ! -d "${BREW_DEV_PATH}" ] && {
-        mkdir -p "${BREW_DEV_PATH}" || {
-            echo "### Unable to create ${BREW_DEV_PATH} directory"
-            return 1
-        }
-    }
-
-    git clone --depth=1 ${HOMEBREW_REPO:-https://github.com/Homebrew/brew.git} "${BREW_DEV_PATH}" || {
-        echo "### Unable to clone brew repository to ${BREW_DEV_PATH}"
-        return 1
-    }
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-prepend_path "${BREW_DEV_PATH}/sbin"
-prepend_path "${BREW_DEV_PATH}/bin"
+if [[ "$(uname -m)" == "arm64" ]]
+then
+    HOMEBREW_PREFIX="/opt/homebrew"   # For ASi systems.
+else
+    HOMEBREW_PREFIX="/usr/local"
+fi
+prepend_path "${HOMEBREW_PREFIX}/sbin"
+prepend_path "${HOMEBREW_PREFIX}/bin"
 
 if ! is_executable brew
 then
@@ -41,11 +34,21 @@ then
     return 1
 fi
 
+BREW_DEV_PATH="${DEV_PATH}/brew"
+if [[ -h "${BREW_DEV_PATH}" ]]
+then
+    true
+elif [[ -e "${BREW_DEV_PATH}" ]]
+then
+    echo "### Unable to install Homebrew: ${BREW_DEV_PATH} already exists and is not a symlink"
+    return 1
+else
+    ln -s "${HOMEBREW_PREFIX}" "${BREW_DEV_PATH}"
+fi
 
 # Don't go leaking information about what OS I'm running.
 
 brew analytics off
-
 
 # Update any apps I may already have installed.
 # NOTE: Take this out. I think I prefer doing it manually.
@@ -96,20 +99,35 @@ echo
 # brew tap kylef/formulae
 
 apps=(
-    # checkbashisms
-    # cmake
-    # github-keygen
-    # jsonpp
-    # ninja
+    clang-format
+    cmake
+    git
+    github-keygen
+    jsonpp
+    ninja
+    python
     ripgrep
+    telnet
     tree
-    watch           # Kinda expensive, but OK...
-    # xz
+    vim
+    watch
 )
 
 caffeinate -dim brew install "${apps[@]}"
-# caffeinate -dim brew cask install brooklyn    # Pretty, but I don't really use screensavers.
 
+
+# Prevent the following errors/messages when starting zsh:
+#
+# zsh compinit: insecure directories, run compaudit for list.
+# Ignore insecure directories and continue [y] or abort compinit [n]?
+
+if [ "$HOST_SHELL" = zsh ]
+then
+    compaudit | xargs chmod g-w
+    compaudit | xargs chown root
+fi
+
+unset HOMEBREW_PREFIX
 unset BREW_DEV_PATH
 unset apps
 unset casks
