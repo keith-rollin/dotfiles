@@ -119,9 +119,8 @@ defaults write com.apple.universalaccess reduceTransparency -bool true
 
 chflags nohidden ~/Library
 
-sudo nvram SystemAudioVolume=" " # This doesn't seem to be working all the time. Perhaps the following is now the correct approach?
-sudo nvram BootAudio=%01
-sudo nvram StartupMute=%00 # I think the previous one is now old and this is correct.
+#sudo nvram SystemAudioVolume=" " # For older Macs (not sure how old). Reset by deleting.
+sudo nvram StartupMute=%01 # Restore by setting to %00.
 
 sudo systemsetup -setrestartfreeze on
 sudo systemsetup -settimezone "America/Los_Angeles" > /dev/null
