@@ -203,10 +203,10 @@ echo
 echo "*** Setting System Defaults"
 echo
 
-defaults write com.apple.TextEdit   HeightInChars   -int 80
-defaults write com.apple.TextEdit   RichText        -int 0
-defaults write com.apple.TextEdit   TabWidth        -int 4
-defaults write com.apple.TextEdit   WidthInChars    -int 120
+defaults write com.apple.TextEdit   HeightInChars                   -int 80
+defaults write com.apple.TextEdit   RichText                        -int 0
+defaults write com.apple.TextEdit   TabWidth                        -int 4
+defaults write com.apple.TextEdit   WidthInChars                    -int 120
 
 defaults write com.apple.Safari     AlwaysRestoreSessionAtLaunch    -int 1
 defaults write com.apple.Safari     AutoOpenSafeDownloads           -int 0
@@ -220,3 +220,9 @@ defaults write com.apple.Safari     NewWindowBehavior               -int 1  # Op
 # Secret options from https://github.com/kpdecker/dotfiles/blob/master/setup/osx-defaults/safari.sh
 defaults write com.apple.Safari     IncludeInternalDebugMenu        -int 1
 defaults write com.apple.Safari     ShowFullURLInSmartSearchField   -int 1
+
+# Set the delay before the proxy icon appears. The first controls only the
+# Finder; the second is global. See:
+#   <https://brettterpstra.com/2021/04/14/fixing-the-big-sur-proxy-icon-delay-globally/>
+# defaults write com.apple.Finder NSToolbarTitleViewRolloverDelay     -float 0
+defaults write -g NSToolbarTitleViewRolloverDelay                   -float 0
