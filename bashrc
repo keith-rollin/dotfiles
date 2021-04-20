@@ -45,6 +45,10 @@ fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
 fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
 ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
 
+grep() { grep_core "$@" ; }
+egrep() { grep_core "$@" ; }
+fgrep() { grep_core "$@" ; }
+
 show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
 hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
@@ -220,9 +224,20 @@ gitp()
     git --no-pager "$@"
 }
 
-grep()
+grep_core()
 {
-    command grep \
+    if [ "$HOST_SHELL" = bash ]
+    then
+        local caller="${FUNCNAME[1]}"
+    elif [ "$HOST_SHELL" = zsh ]
+    then
+        local caller="${funcstack[@]:1:1}"
+    else
+        print "*** Unknown shell" >&2
+        return 1
+    fi
+
+    command ${caller} \
         --color=auto \
         --devices=skip \
         --exclude='ChangeLog*' \
