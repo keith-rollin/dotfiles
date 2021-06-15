@@ -120,6 +120,8 @@ apps=(
 
 caffeinate -dim brew install "${apps[@]}"
 
+# Universal-ctags is its own project.
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 # Prevent the following errors/messages when starting zsh:
 #
