@@ -708,15 +708,15 @@ fi
 
 # Support for repeating keys in the vim extenstion to Visual Code.
 
-defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false &> /dev/null         # For VS Code
-defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false &> /dev/null # For VS Code Insider
-defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false &> /dev/null    # For VS Codium
-defaults delete -g ApplePressAndHoldEnabled &> /dev/null                                      # If necessary, reset global default
+# defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false &> /dev/null         # For VS Code
+# defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false &> /dev/null # For VS Code Insider
+# defaults write com.visualstudio.code.oss ApplePressAndHoldEnabled -bool false &> /dev/null    # For VS Codium
+# defaults delete -g ApplePressAndHoldEnabled &> /dev/null                                      # If necessary, reset global default
 
-code()
-{
-    "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" "${@}"
-}
+# code()
+# {
+#     "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" "${@}"
+# }
 
 
 # Rust support.
