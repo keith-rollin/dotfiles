@@ -701,7 +701,7 @@ fi
 # on an APFS volume (which seems to have slowed down `git status` a lot) and it
 # seems to more than double the speed. Nice.
 
-sudo sysctl kern.maxvnodes=$((512*1024)) &> /dev/null
+# sudo sysctl kern.maxvnodes=$((512*1024)) &> /dev/null
 
 
 # VS Code support.
