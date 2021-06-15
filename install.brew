@@ -113,22 +113,13 @@ apps=(
     vim
     watch
 
-
     # For SerenityOS
-    # core
-    brew install coreutils qemu bash gcc@10 ninja cmake
-
-    # Fuse + ex2
-    brew install osxfuse e2fsprogs m4 autoconf automake libtool
-    # brew install --cask osxfuse
-    # Toolchain/BuildFuseExt2.sh
+    coreutils qemu bash gcc@10 ninja cmake
+    osxfuse e2fsprogs m4 autoconf automake libtool
 )
 
 caffeinate -dim brew install "${apps[@]}"
 
-# For SerenityOS
-brew install --cask osxfuse
-#Toolchain/BuildFuseExt2.sh
 
 # Prevent the following errors/messages when starting zsh:
 #
