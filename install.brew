@@ -101,6 +101,7 @@ echo
 apps=(
     clang-format
     cmake
+    dust
     git
     github-keygen
     jsonpp
