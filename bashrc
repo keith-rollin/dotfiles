@@ -389,6 +389,8 @@ path()
 
 prepend_path()
 {
+    [ -e "$1" ] || return 0
+
     # Prepend the given path to PATH if it's not already there, resolving any
     # links if necessary.
 
