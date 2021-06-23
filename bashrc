@@ -139,6 +139,11 @@ did()
     vim +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
 }
 
+dont_sleep()
+{
+    caffeinate -dim "$@"
+}
+
 edit_ff()
 {
     vi $(ff "$1")
@@ -602,17 +607,19 @@ GIT_PS1_SHOWUPSTREAM= # Or auto, verbose, name, legacy, git, svn
 
 if [ "$HOST_SHELL" = bash ]
 then
-    maybe_source "${HERE}/bashrc.console"
-    PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
+    # maybe_source "${HERE}/bashrc.console"
+    # PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
+    eval "$(starship init bash)"
 elif [ "$HOST_SHELL" = zsh ]
 then
-    if [[ -n "${GIT_PROMPT_SH}" ]]
-    then
-        setopt PROMPT_SUBST
-        PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
-    else
-        PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
-    fi
+    # if [[ -n "${GIT_PROMPT_SH}" ]]
+    # then
+    #     setopt PROMPT_SUBST
+    #     PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
+    # else
+    #     PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
+    # fi
+    eval "$(starship init zsh)"
 fi
 
 if [ "$HOST_SHELL" = zsh ]

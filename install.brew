@@ -59,7 +59,7 @@ then
     echo "*** Upgrading Homebrew and installed Homebrew apps"
     echo
 
-    caffeinate -dim brew upgrade || {
+    dont_sleep brew upgrade || {
         echo "### Unable to update/upgrade brew"
         return 1
     }
@@ -99,16 +99,25 @@ echo
 # brew tap kylef/formulae
 
 apps=(
+    bat             # Clone of cat(1) with syntax highlighting and Git integration
     clang-format
     cmake
-    dust
+    dust            # More intuitive version of du in rust
+    exa             # Modern replacement for 'ls'
+    fd              # Simple, fast and user-friendly alternative to find
     git
     github-keygen
-    jsonpp
+    htop            # Improved top (interactive process viewer)
+    jsonpp          # Command-line JSON pretty-printer
     ninja
+    nvim            # Ambitious Vim-fork focused on extensibility and agility
+    procs           # Modern replacement for ps written by Rust
     python
     ripgrep
+    starship        # Cross-shell prompt for astronauts
     telnet
+    tldr            # Simplified and community-driven man pages
+    tokei           # Program that allows you to count code, quickly
     tree
     vim
     watch
@@ -118,10 +127,14 @@ apps=(
     osxfuse e2fsprogs m4 autoconf automake libtool
 )
 
-caffeinate -dim brew install "${apps[@]}"
+dont_sleep brew install "${apps[@]}"
 
 # Universal-ctags is its own project.
-brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+
+dont_sleep brew tap homebrew/cask-fonts
+dont_sleep brew install --cask font-inconsolata-nerd-font
+dont_sleep brew install --cask font-ubuntu-mono-nerd-font
 
 # Prevent the following errors/messages when starting zsh:
 #
