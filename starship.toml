@@ -1,7 +1,10 @@
+# https://starship.rs/config/
+
 command_timeout = 10000
+
 format = """
 [┌───────────────────>](bold green)
-[│](bold green) \
+[│](bold green) $time: \
 $username\
 $hostname\
 $shlvl\
@@ -56,17 +59,30 @@ $cmd_duration\
 $lua\
 $jobs\
 $battery\
-$time\
 $status\
 $shell\
 $line_break\
-[└─>](bold green) """
+[└─>](bold green) $character"""
 
-[time]
-disabled = false
+[character]
+success_symbol = "[\\$](bold green)"
+error_symbol = "[\\$](bold red)"
 
-[status]
-disabled = false
+[cmake]
+disabled = true
+
+[directory]
+truncation_length = 100
+truncate_to_repo = false
 
 [python]
 python_binary = "python3"
+disabled = true
+
+[status]
+disabled = false
+format = "[$symbol$status: $common_meaning]($style)"
+
+[time]
+disabled = false
+format = "[$time]($style)"
