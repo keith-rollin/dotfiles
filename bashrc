@@ -54,10 +54,19 @@ hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false &&
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
 hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
 
-la() { ll -A "$@" ; }
-lart() { ls -lArt "$@" ; }
-ll() { ls -l "$@" ; }
-ls() { command ls -FGhv "$@" ; }
+# la() { ll -A "$@" ; }                 # A changed to a
+# lart() { ls -lArt "$@" ; }            # A changed to a, t takes "modified" parameter
+# ll() { ls -l "$@" ; }
+# ls() { command ls -FGhv "$@" ; }      # G, h, and v are not supported
+
+la()        { ls_common -la "$@" ; }
+lart()      { ls_common -lart modified "$@" ; }
+lax()       { ls_common -la@ "$@" ; }
+ll()        { ls_common -l "$@" ; }
+llx()       { ls_common -l@ "$@" ; }
+ls()        { ls_common "$@" ; }
+ls_common() { ls_base -F --git "$@" ; } # Establish options common to all commands.
+ls_base()   { exa "$@" ; }              # Bottleneck to select `ls` or `exa`.
 
 ga()   { git add "$@" ; }
 gc()   { git commit "$@" ; }
