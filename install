@@ -79,6 +79,9 @@ create_link_in_home "${HERE}/clang-format.in"   .clang-format
 mkdir -p "${HOME}/.config"
 create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
 
+mkdir -p "${HOME}/.config/nvim"
+create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
+
 create_link_in_home "${DEV_PATH}"
 
 # clang-format will not search for .clang-format in the home directory.
