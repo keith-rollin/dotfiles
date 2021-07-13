@@ -232,3 +232,6 @@ defaults write com.apple.Safari     ShowFullURLInSmartSearchField   -int 1
 #   <https://brettterpstra.com/2021/04/14/fixing-the-big-sur-proxy-icon-delay-globally/>
 # defaults write com.apple.Finder NSToolbarTitleViewRolloverDelay     -float 0
 defaults write -g NSToolbarTitleViewRolloverDelay                   -float 0
+
+# Use the system print dialog instead of Chrome's custom dialog.
+defaults write com.google.Chrome    DisablePrintPreview             -bool true
