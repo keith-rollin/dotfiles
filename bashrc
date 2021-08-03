@@ -738,3 +738,8 @@ fi
 # Rust support.
 
 prepend_path $HOME/.cargo/bin
+
+# broot support.
+
+BR_SCRIPT_PATH=$HOME/.config/broot/launcher/bash/br
+[[ -e "${BR_SCRIPT_PATH}" ]] && source "${BR_SCRIPT_PATH}"
