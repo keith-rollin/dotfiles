@@ -209,6 +209,8 @@ echo
 echo "*** Setting System Defaults"
 echo
 
+defaults write com.apple.dock       static-only                     -bool true; killall Dock
+
 defaults write com.apple.TextEdit   HeightInChars                   -int 80
 defaults write com.apple.TextEdit   RichText                        -int 0
 defaults write com.apple.TextEdit   TabWidth                        -int 4
