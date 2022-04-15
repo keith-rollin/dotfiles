@@ -553,7 +553,7 @@ utcdate()
 
 vi()
 {
-    # Open a file in vim, converting any parameter like this:
+    # Open a file in [n]vim, converting any parameter like this:
     #
     #   path/to/file.cpp:62
     #
@@ -573,7 +573,12 @@ vi()
         fi
     done
 
-    command vi "${ARGS[@]}"
+    if is_executable nvim
+    then
+        command nvim "${ARGS[@]}"
+    else
+        command vim "${ARGS[@]}"
+    fi
 }
 
 xc()
