@@ -1,5 +1,10 @@
 # https://starship.rs/config/
 
+# $git_branch\
+# $git_commit\
+# $git_state\
+# $git_status\
+
 command_timeout = 10000
 
 format = """
@@ -11,10 +16,7 @@ $shlvl\
 $kubernetes\
 $directory\
 $vcsh\
-$git_branch\
-$git_commit\
-$git_state\
-$git_status\
+\
 $hg_branch\
 $docker_context\
 $package\
