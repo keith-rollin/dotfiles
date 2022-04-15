@@ -4,11 +4,11 @@ Before checking out:
 
 * Add your GitHub SSH keys with `ssh-add`.
 * Create a separate APFS volume at /Volumes/Data.
-* Create a dev directory at /Volumes/Data/totally-not-dev/dev. (Time Machine will not back up a directory named “dev” at the root of a volume.)
+* Create a src directory at /Volumes/Data/src.
 
 ```bash
-$ mkdir -p /Volumes/Data/totally-not-dev/dev
-$ cd /Volumes/Data/totally-not-dev/dev
+$ mkdir -p /Volumes/Data/src
+$ cd /Volumes/Data/src
 $ git clone git@github.com:keith-rollin/dotfiles.git
 $ dotfiles/install
 ```
@@ -17,20 +17,23 @@ $ dotfiles/install
 
 ```text
 $HOME/
-|-- .bash_profile@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
-|-- .bashrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
-|-- .clang-format@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/clang-format.in
-|-- .config/nvim/init.vim@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/vim/init.vim
-|-- .config/starship.toml@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/starship.toml
-|-- .gitconfig@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/gitconfig
-|-- .inputrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/inputrc
-|-- .vim@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/vim
-|-- .zshrc@ -> /Volumes/Data/totally-not-dev/dev/dotfiles/bashrc
-`-- dev@ -> /Volumes/Data/totally-not-dev/dev
+|-- .bash_profile@ -> /Volumes/Data/src/dotfiles/bashrc
+|-- .bashrc@ -> /Volumes/Data/src/dotfiles/bashrc
+|-- .clang-format@ -> /Volumes/Data/src/dotfiles/clang-format.in
+|-- .config/nvim/init.vim@ -> /Volumes/Data/src/dotfiles/vim/init.vim
+|-- .config/starship.toml@ -> /Volumes/Data/src/dotfiles/starship.toml
+|-- .gitconfig@ -> /Volumes/Data/src/dotfiles/gitconfig
+|-- .inputrc@ -> /Volumes/Data/src/dotfiles/inputrc
+|-- .vim@ -> /Volumes/Data/src/dotfiles/vim
+|-- .zshrc@ -> /Volumes/Data/src/dotfiles/bashrc
+`-- src@ -> /Volumes/Data/src
 
-/Volumes/Data/totally-not-dev/dev/
-|-- brew/
+/Volumes/Data/src/
+|-- brew/ -> /usr/local
 |-- dotfiles/
 |-- tmp/
 `-- <various projects>
+
+/usr/local
+`-- <homebrew files>
 ```
