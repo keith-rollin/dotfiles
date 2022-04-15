@@ -637,39 +637,29 @@ export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export SHELL_SESSION_HISTORY=1
 
-look_for_git_prompt()
-{
-    [[ -n "${GIT_PROMPT_SH}" ]] && return
-    local f="$(dirname "$(dirname "$1")")/share/git-core/git-prompt.sh"
-    test -f "$f" && GIT_PROMPT_SH="$f"
-}
-
-GIT_PROMPT_SH=
-look_for_git_prompt "$(which git)"
-look_for_git_prompt "$(xcrun -f git)"
-
-source "${GIT_PROMPT_SH}"
-GIT_PS1_SHOWDIRTYSTATE=
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUNTRACKEDFILES=
-GIT_PS1_SHOWCOLORHINTS=
-GIT_PS1_SHOWUPSTREAM= # Or auto, verbose, name, legacy, git, svn
-
 if [ "$HOST_SHELL" = bash ]
 then
-    # maybe_source "${HERE}/bashrc.console"
-    # PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
-    eval "$(starship init bash)"
+    if is_executable starship
+    then
+        eval "$(starship init bash)"
+    else
+        maybe_source "${HERE}/bashrc.console"
+        PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
+    fi
 elif [ "$HOST_SHELL" = zsh ]
 then
-    # if [[ -n "${GIT_PROMPT_SH}" ]]
-    # then
-    #     setopt PROMPT_SUBST
-    #     PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
-    # else
-    #     PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
-    # fi
-    eval "$(starship init zsh)"
+    if is_executable starship
+    then
+        eval "$(starship init zsh)"
+    else
+        if [[ -n "${GIT_PROMPT_SH}" ]]
+        then
+            setopt PROMPT_SUBST
+            PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
+        else
+            PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
+        fi
+    fi
 fi
 
 if [ "$HOST_SHELL" = zsh ]
