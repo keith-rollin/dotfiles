@@ -47,8 +47,9 @@ else
 fi
 
 # Don't go leaking information about what OS I'm running.
+# (Don't turn this off any more, since I no longer work at Apple.)
 
-brew analytics off
+# brew analytics off
 
 # Update any apps I may already have installed.
 # NOTE: Take this out. I think I prefer doing it manually.
