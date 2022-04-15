@@ -106,6 +106,7 @@ apps=(
     dust            # More intuitive version of du in rust
     exa             # Modern replacement for 'ls'
     fd              # Simple, fast and user-friendly alternative to find
+    fzf
     git
     github-keygen
     htop            # Improved top (interactive process viewer)

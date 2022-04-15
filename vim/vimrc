@@ -306,6 +306,7 @@ nnoremap <silent> <leader>ev      :edit $MYVIMRC<CR>
 nnoremap <silent> <leader>fb      :CtrlPBuffer<CR>
 nnoremap <silent> <leader>ff      :CtrlPFunky<CR>
 nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
+nnoremap <silent> <leader>fz      :FZF<CR>
 nnoremap <silent> <leader>ga      <Plug>(EasyAlign)
 xnoremap <silent> <leader>ga      <Plug>(EasyAlign)
 nnoremap <silent> <leader>m       :call ParentMake()<CR>

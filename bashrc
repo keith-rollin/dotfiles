@@ -774,3 +774,16 @@ prepend_path $HOME/.cargo/bin
 
 BR_SCRIPT_PATH=$HOME/.config/broot/launcher/bash/br
 [[ -e "${BR_SCRIPT_PATH}" ]] && source "${BR_SCRIPT_PATH}"
+
+
+# FZF support (tab completion and key bindings)
+
+BREW_PATH="$(maybe_resolve "${SRC_PATH}/brew")"
+FZF_BASE="${BREW_PATH}/opt/fzf"
+if [[ -d "${FZF_BASE}" ]]
+then
+    [[ $- == *i* ]] && source "${FZF_BASE}/shell/completion.${HOST_SHELL}" 2> /dev/null
+    source "${FZF_BASE}/shell/key-bindings.${HOST_SHELL}"
+fi
+unset BREW_PATH
+unset FZF_BASE
