@@ -103,6 +103,7 @@ ls_common() {
     }
 
 ga()   { git add "$@" ; }
+gap()  { git add -p "$@" ; }
 gc()   { git commit "$@" ; }
 gcam() { git commit -am "$@" ; }
 gd()   { git diff "$@" ; }
