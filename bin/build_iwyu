@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Get or update the include-what-you-use sources.
+
+REPO_URL=git@github.com:include-what-you-use/include-what-you-use.git
+DEV_DIR="${HOME}/dev/iwyu"
+REPO_DIR=include-what-you-use
+SOURCE_DIR="${REPO_DIR}"
+BUILD_DIR=build
+INSTALL_DIR=/opt/include-what-you-use/head
+LLVM_DIR=/opt/clang/head
+
+cd "${DEV_DIR}"
+
+if [[ -e "${REPO_DIR}" && ! -d "${REPO_DIR}" ]]
+then
+    echo "*** ${REPO_DIR} exists but is not a directory." >&2
+    exit 1
+elif [[ ! -e "${REPO_DIR}" ]]
+then
+    echo "### Getting repository"
+    git clone "${REPO_URL}"
+else
+    echo "### Updating repository"
+    git -C "${REPO_DIR}" pull
+fi
+
+# Build.
+
+cmake \
+    -S "${SOURCE_DIR}" \
+    -B "${BUILD_DIR}" \
+    -G Ninja \
+    -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_PREFIX_PATH="${LLVM_DIR}" \
+    #
+
+cmake --build "${BUILD_DIR}" || exit 1
+sudo chmod -R 777 /opt/
+cmake --install "${BUILD_DIR}"
+sudo chmod -R 755 /opt/
