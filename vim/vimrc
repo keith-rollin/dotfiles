@@ -47,7 +47,6 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 "   tpope/vim-rsi
 "   tpope/vim-sleuth
 "   tpope/vim-speeddating
-"   tpope/vim-surround
 "   tpope/vim-tbone
 "   tpope/vim-unimpaired
 "   vim-scripts/DrawIt
@@ -65,6 +64,18 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 "   lyuts/vim-rtags
 "   git@github.com:kien/ctrlp.vim.git   Why such a verbose path?
 "   mbbill/undotree
+"
+"   nvim-specific:
+"       From https://www.youtube.com/watch?v=P9jB7mz2Ax4
+"   https://github.com/nvim-telescope/telescope.nvim
+"   https://github.com/nvim-treesitter/nvim-treesitter
+"   https://github.com/ray-x/lsp_signature.nvim
+"   https://github.com/hrsh7th/nvim-compe
+"   https://github.com/tamago324/compe-zsh
+"   https://github.com/lewis6991/gitsigns.nvim
+"   https://github.com/kyazdani42/nvim-tree.lua
+"   https://github.com/akinsho/nvim-toggleterm.lua
+"   https://github.com/voldikss/vim-floaterm
 
 " Configure plugins
 " -----------------
@@ -106,6 +117,13 @@ Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function
 Plug 'tpope/vim-commentary'             " Comment/uncomment
 Plug 'tpope/vim-fugitive'               " Git integration.
 Plug 'tpope/vim-sensible'               " Sensible vim defaults.
+Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
+Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
+
+if has("nvim")
+    Plug 'neovim/nvim-lspconfig'
+endif
+
 call plug#end()
 
 let g:lightline = {
