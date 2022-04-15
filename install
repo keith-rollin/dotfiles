@@ -235,5 +235,8 @@ defaults write com.apple.Safari     ShowFullURLInSmartSearchField   -int 1
 # defaults write com.apple.Finder NSToolbarTitleViewRolloverDelay     -float 0
 defaults write -g NSToolbarTitleViewRolloverDelay                   -float 0
 
+# Show the classic-style dialogs rather than the vertically-arranged dialogs.
+defaults write -g NSAlertMetricsGatheringEnabled -bool false
+
 # Use the system print dialog instead of Chrome's custom dialog.
 defaults write com.google.Chrome    DisablePrintPreview             -bool true
