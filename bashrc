@@ -54,19 +54,53 @@ hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false &&
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
 hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
 
-# la() { ll -A "$@" ; }                 # A changed to a
-# lart() { ls -lArt "$@" ; }            # A changed to a, t takes "modified" parameter
-# ll() { ls -l "$@" ; }
-# ls() { command ls -FGhv "$@" ; }      # G, h, and v are not supported
+# Duplicated from its rightful place below so that we can use it here.
+is_executable() { command -v "$1" &> /dev/null }
 
-la()        { ls_common -la "$@" ; }
-lart()      { ls_common -lart modified "$@" ; }
-lax()       { ls_common -la@ "$@" ; }
-ll()        { ls_common -l "$@" ; }
-llx()       { ls_common -l@ "$@" ; }
-ls()        { ls_common "$@" ; }
-ls_common() { ls_base -F --git "$@" ; } # Establish options common to all commands.
-ls_base()   { exa "$@" ; }              # Bottleneck to select `ls` or `exa`.
+set_ls_options()
+{
+    if is_executable exa
+    then
+        LS_EXECUTABLE="exa"
+        LS_GIT_PROPS="--git"
+        LS_HIDE_GROUP=""
+        LS_NATURAL_SORT=""
+        LS_SHOW_COLOR=""
+        LS_SHOW_EXTENDED_ATTRIBUTE_KEYS="-@"
+        LS_SHOW_FILE_KIND_INDICATORS="-F"
+        LS_SHOW_HIDDEN="-a"
+        LS_SHOW_HUMAN_READABLE=""
+        LS_SORT_BY_TIME=(-s modified)
+    else
+        LS_EXECUTABLE="/bin/ls"
+        LS_GIT_PROPS=""
+        LS_HIDE_GROUP="-o"
+        LS_NATURAL_SORT="-v"
+        LS_SHOW_COLOR="-G"
+        LS_SHOW_EXTENDED_ATTRIBUTE_KEYS="-@"
+        LS_SHOW_FILE_KIND_INDICATORS="-F"
+        LS_SHOW_HIDDEN="-A"
+        LS_SHOW_HUMAN_READABLE="-h"
+        LS_SORT_BY_TIME=(-r -t)
+    fi
+}
+
+la()        { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} "$@" ; }
+lart()      { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" ; }
+lax()       { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
+ll()        { set_ls_options; ls_common -l "$@" ; }
+llx()       { set_ls_options; ls_common -l ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
+ls()        { set_ls_options; ls_common "$@" ; }
+ls_common() {
+    "${LS_EXECUTABLE}" \
+        ${LS_SHOW_FILE_KIND_INDICATORS} \
+        ${LS_GIT_PROPS} \
+        ${LS_HIDE_GROUP} \
+        ${LS_NATURAL_SORT} \
+        ${LS_SHOW_COLOR} \
+        ${LS_SHOW_HUMAN_READABLE} \
+        "$@"
+    }
 
 ga()   { git add "$@" ; }
 gc()   { git commit "$@" ; }
