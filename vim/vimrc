@@ -232,7 +232,7 @@ if !g:HasInsertedAutocmds && has("autocmd")
     autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
 
     " Treat .md files as Markdown
-    autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+    autocmd BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md,*.MD setlocal filetype=markdown
 
     " Treat .mm files as Objective-C
     autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
