@@ -99,7 +99,8 @@ echo
 
 # brew tap kylef/formulae
 
-apps=(
+# Install as source (formulae) or pre-built (bottles).
+APPS=(
     bat             # Clone of cat(1) with syntax highlighting and Git integration
     broot           # New way to see and navigate directory trees
     clang-format
@@ -116,6 +117,7 @@ apps=(
     nvim            # Ambitious Vim-fork focused on extensibility and agility
     procs           # Modern replacement for ps written by Rust
     python
+    # qlmarkdown    # Remove this; trying to install twice causes an error, which aborts overall install
     ripgrep
     starship        # Cross-shell prompt for astronauts
     telnet
@@ -125,19 +127,29 @@ apps=(
     vim
     watch
 
+    # For NeoVIM
+    tree-sitter
+    luajit
+
     # For SerenityOS
-    coreutils qemu bash gcc@10 ninja cmake
-    osxfuse e2fsprogs m4 autoconf automake libtool
+    coreutils e2fsprogs qemu bash gcc@11 imagemagick ninja cmake ccache rsync
+    genext2fs
 )
 
-dont_sleep brew install "${apps[@]}"
+# Install pre-built Mac binaries.
+CASKS=(
+    emacs           # Recommended to install as cask in order to get GUI support
+    font-inconsolata-nerd-font
+    font-ubuntu-mono-nerd-font
+)
 
-# Universal-ctags is its own project.
+dont_sleep brew tap homebrew/cask-fonts     # For the nerd-fonts
+
+dont_sleep brew install "${APPS[@]}"
+dont_sleep brew install --cask "${CASKS[@]}"
+
+# Universal-ctags is its own project and should be installed from HEAD.
 dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-
-dont_sleep brew tap homebrew/cask-fonts
-dont_sleep brew install --cask font-inconsolata-nerd-font
-dont_sleep brew install --cask font-ubuntu-mono-nerd-font
 
 # Prevent the following errors/messages when starting zsh:
 #
@@ -152,5 +164,5 @@ fi
 
 unset HOMEBREW_PREFIX
 unset BREW_DEV_PATH
-unset apps
-unset casks
+unset APPS
+unset CASKS
