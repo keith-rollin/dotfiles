@@ -671,11 +671,11 @@ then
     setopt interactive_comments
 fi
 
-export DEV_PATH="$(maybe_resolve "${HOME}/dev")"
+export SRC_PATH="$(maybe_resolve "${HOME}/src")"
 
 # $PATH.
 
-BREW_PATH="$(maybe_resolve "${DEV_PATH}/brew")"
+BREW_PATH="$(maybe_resolve "${SRC_PATH}/brew")"
 if [ -n "${BREW_PATH}" ]
 then
     prepend_path "${BREW_PATH}/sbin"
@@ -683,7 +683,7 @@ then
 fi
 unset BREW_PATH
 
-export HOMEBREW_TEMP="${DEV_PATH}/tmp"
+export HOMEBREW_TEMP="${SRC_PATH}/tmp"
 mkdir -p "${HOMEBREW_TEMP}"
 
 prepend_path "${HERE}/bin"

@@ -2,7 +2,7 @@
 
 # Install everything, including dotfiles, vim_plug, brew, and prefs.
 #
-# Check out this repository into a directory called "dev". Running it will:
+# Check out this repository into a directory called "src". Running it will:
 #
 #   * Add the following links to my home directory, or update them if they
 #     already exist:
@@ -13,7 +13,7 @@
 #       * .vim
 #       * .zshrc
 #       * .clang-format (also move to /Volumes/Data
-#       * dev
+#       * src
 #   * Move ~/Documents to /Volumes/Data.
 #   * Point Sublime Text preferences to the ones in this repo.
 #   * Create a "brew" directory next to it and put homebrew into it, or
@@ -31,14 +31,14 @@ HERE="$("${REALPATH}" "${HERE}")"
 REALPATH="${HERE}/bin/realpath"
 LNS="${HERE}/bin/lns"
 
-# Make sure we are in a dev/dotfiles directory. We want this arrangement so
+# Make sure we are in a src/dotfiles directory. We want this arrangement so
 # that we can check out `brew` into dev/brew.
 
-DEV_PATH="$(dirname "${HERE}")"
-DEV_NAME="$(basename "${DEV_PATH}")"
-if [ "${DEV_NAME}" != "dev" ]
+SRC_PATH="$(dirname "${HERE}")"
+SRC_NAME="$(basename "${SRC_PATH}")"
+if [ "${SRC_NAME}" != "src" ]
 then
-    echo "### dotfiles must be in dev parent directory"
+    echo "### dotfiles must be in src parent directory"
     exit 1
 fi
 
@@ -82,7 +82,7 @@ create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
 mkdir -p "${HOME}/.config/nvim"
 create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
 
-create_link_in_home "${DEV_PATH}"
+create_link_in_home "${SRC_PATH}"
 
 # clang-format will not search for .clang-format in the home directory.
 # Instead, it traverses parents until it finds the file. So storing
@@ -91,7 +91,7 @@ create_link_in_home "${DEV_PATH}"
 #
 # I don't really do that at the moment. While my home directory is
 # /Users/keith, my work is kept on a separate logical volume at
-# /Volumes/Data/dev. This arrangement helps when I want to install multiple
+# /Volumes/Data/src. This arrangement helps when I want to install multiple
 # versions of the OS for experimental or testing purposes -- I can install each
 # OS onto it's own volume, and each volume can access my work data on the Data
 # volume.
