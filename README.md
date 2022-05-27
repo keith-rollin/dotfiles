@@ -9,6 +9,9 @@ $ dotfiles/install
 
 ### Result:
 
+* "dotfiles" upstream repo URL will be changed from "https" scheme to "git"
+  scheme.
+
 ```text
 $HOME/
 |-- .bash_profile@ -> $HPD/dotfiles/bashrc
