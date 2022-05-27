@@ -3,9 +3,9 @@
 # desired packages. Also install/update cask along with desired packages.
 #
 # This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`. In particular, we need $DEV_PATH to be defined. Further, in
-# case of error, this script aborts by using "return 1", which is how you exit
-# a source'd script.
+# from `install`. In particular, we need is_executable, prepend_path, and
+# dont_sleep to be defined. Further, in case of error, this script aborts by
+# using "return 1", which is how you exit a source'd script.
 
 
 # Get homebrew if I don't already have it.
@@ -19,12 +19,17 @@ then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if [[ "$(uname -m)" == "arm64" ]]
+# (This conditional code is taken from homebrew's install.sh.)
+UNAME_MACHINE="$(/usr/bin/uname -m)"
+if [[ "${UNAME_MACHINE}" == "arm64" ]]
 then
-    HOMEBREW_PREFIX="/opt/homebrew"   # For ASi systems.
+    # On ARM macOS, this script installs to /opt/homebrew only
+    HOMEBREW_PREFIX="/opt/homebrew"
 else
+    # On Intel macOS, this script installs to /usr/local only
     HOMEBREW_PREFIX="/usr/local"
 fi
+
 prepend_path "${HOMEBREW_PREFIX}/sbin"
 prepend_path "${HOMEBREW_PREFIX}/bin"
 
@@ -33,39 +38,6 @@ then
     echo "### Could not find brew executable after installing"
     return 1
 fi
-
-BREW_DEV_PATH="${DEV_PATH}/brew"
-if [[ -h "${BREW_DEV_PATH}" ]]
-then
-    true
-elif [[ -e "${BREW_DEV_PATH}" ]]
-then
-    echo "### Unable to install Homebrew: ${BREW_DEV_PATH} already exists and is not a symlink"
-    return 1
-else
-    ln -s "${HOMEBREW_PREFIX}" "${BREW_DEV_PATH}"
-fi
-
-# Don't go leaking information about what OS I'm running.
-# (Don't turn this off any more, since I no longer work at Apple.)
-
-# brew analytics off
-
-# Update any apps I may already have installed.
-# NOTE: Take this out. I think I prefer doing it manually.
-
-if false
-then
-    echo
-    echo "*** Upgrading Homebrew and installed Homebrew apps"
-    echo
-
-    dont_sleep brew upgrade || {
-        echo "### Unable to update/upgrade brew"
-        return 1
-    }
-fi
-
 
 # Install the apps I want.
 
@@ -116,7 +88,6 @@ APPS=(
     ninja
     nvim            # Ambitious Vim-fork focused on extensibility and agility
     procs           # Modern replacement for ps written by Rust
-    python
     # qlmarkdown    # Remove this; trying to install twice causes an error, which aborts overall install
     ripgrep
     starship        # Cross-shell prompt for astronauts
@@ -126,6 +97,21 @@ APPS=(
     tree
     vim
     watch
+
+    # pyenv           # Python version management
+    # pipx            # Execute binaries from Python packages in isolated environments
+
+    # Currently, installing "python" (or python3 or python@3) installs 3.9.
+    # Let's also install 3.10 just in case we need it. Not that it's not on
+    # $PATH, so the two shouldn't interfew with each other. But it does make
+    # using 3.10 a little tricky with paths and whatnot.
+    #
+    # Also, bookmark this here: https://docs.brew.sh/Homebrew-and-Python
+
+    python          # aka python@3.9
+    python@3.10
+    python-tk       # aka python-tk@3.9
+    python-tk@3.10
 
     # For NeoVIM
     tree-sitter
@@ -141,6 +127,7 @@ CASKS=(
     emacs           # Recommended to install as cask in order to get GUI support
     font-inconsolata-nerd-font
     font-ubuntu-mono-nerd-font
+    password/tap/1password-cli
 )
 
 dont_sleep brew tap homebrew/cask-fonts     # For the nerd-fonts
@@ -163,6 +150,5 @@ then
 fi
 
 unset HOMEBREW_PREFIX
-unset BREW_DEV_PATH
 unset APPS
 unset CASKS

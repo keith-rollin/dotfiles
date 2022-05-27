@@ -11,13 +11,6 @@ HOST_SHELL=$(basename $(lsof -p $$ | grep -w 'txt.*sh$' | awk '{ print $NF }'))
 [ "${HOST_SHELL}" = "zsh"  ] && ME_BASE="${(%):-%N}"
 [ -z "${ME_BASE}"  ] && return 0    # We don't support this shell.
 
-# Determine our location. If we see that MAIN_BASHRC is defined, this means
-# that we're being source'd from another script and that we can find the path
-# to us in that variable. Without that, we'd have to fall back to looking at
-# $0, which might or might not be us, depending on the shell we're running
-# under.
-
-[ -n "${MAIN_BASHRC}" ] && ME_BASE="$MAIN_BASHRC"
 ME="$(readlink "${ME_BASE}")"
 [ -n "${ME}" ] || ME="${ME_BASE}"
 HERE="$(dirname "${ME}")"
@@ -62,7 +55,7 @@ set_ls_options()
     if is_executable exa
     then
         LS_EXECUTABLE="exa"
-        LS_GIT_PROPS="--git"
+        LS_GIT_PROPS=""         # "--git" This is way too slow on large projects like WebKit or CyberArts
         LS_HIDE_GROUP=""
         LS_NATURAL_SORT=""
         LS_SHOW_COLOR=""
@@ -119,16 +112,6 @@ ascii()
     cat /usr/share/misc/ascii
 }
 
-at_home()
-{
-    return 0
-}
-
-at_work()
-{
-    return 1
-}
-
 badge()
 {
     tput bel
@@ -144,6 +127,15 @@ bak()
         f=${f%%/}
         ditto "$f" "$f.bak"
     done
+}
+
+brew_path()
+{
+    if is_executable brew
+    then
+        # echo $(dirname $(dirname $(which brew)))
+        brew --prefix
+    fi
 }
 
 cdf()
@@ -163,7 +155,27 @@ cheat()
 
 cleanupds()
 {
-    find -x . -type f -name '*.DS_Store' -print -delete
+    local locations=(
+        /Applications
+        /bin
+        /cores
+        /Library
+        /opt
+        /private
+        /sbin
+        /Users
+        /usr
+        /Volumes/Data
+        /Volumes/Spare
+        /Volumes/Video
+    )
+
+    if [[ "${1}" == "-n" ]]
+    then
+        find -x "${locations[@]}" -type f -name '.DS_Store' -print         2> /dev/null
+    else
+        find -x "${locations[@]}" -type f -name '.DS_Store' -print -delete 2> /dev/null
+    fi
 }
 
 clr()
@@ -299,8 +311,10 @@ grep_core()
 hide_brew()
 {
     trap "PATH=$PATH; trap - INT EXIT" INT EXIT
-    export PATH="$(echo "$PATH" | sed -E -e 's|:[^:]*/brew/[^:]*||g')"
-    export PATH="$(echo "$PATH" | sed -E -e 's|:/usr/local/[^:]*||g')"
+    export PATH="$(echo "$PATH" | sed -E -e 's|^'$(brew_path)'/bin:||')"
+    export PATH="$(echo "$PATH" | sed -E -e 's|^'$(brew_path)'/sbin:||')"
+    export PATH="$(echo "$PATH" | sed -E -e 's|:'$(brew_path)'/bin||g')"
+    export PATH="$(echo "$PATH" | sed -E -e 's|:'$(brew_path)'/sbin||g')"
     "$@"
 }
 
@@ -408,6 +422,16 @@ maybe_source()
     [ -r "$1" -a "$(file -b "$1")" != "data" ] && . "$1"
 }
 
+maybe_run()
+{
+    if is_executable "$1"
+    then
+        "$@"
+    else
+        return 1
+    fi
+}
+
 mkcd()
 {
     # Create a new directory and enter it.
@@ -456,6 +480,14 @@ prepend_path()
         element_in_array "$p" "${path[@]}" && return 0
         path=("$p" "${path[@]}")
     fi
+}
+
+py()
+{
+    maybe_run "/usr/local/opt/python@3.10/bin/python3" "$@" || \
+    maybe_run "/usr/local/opt/python@3.9/bin/python3" "$@" || \
+    maybe_run "/usr/local/bin/python3" "$@" || \
+    maybe_run "/usr/local/bin/python" "$@"
 }
 
 ql()
@@ -671,11 +703,9 @@ then
     setopt interactive_comments
 fi
 
-export SRC_PATH="$(maybe_resolve "${HOME}/src")"
-
 # $PATH.
 
-BREW_PATH="$(maybe_resolve "${SRC_PATH}/brew")"
+BREW_PATH="$(brew_path)"
 if [ -n "${BREW_PATH}" ]
 then
     prepend_path "${BREW_PATH}/sbin"
@@ -683,16 +713,16 @@ then
 fi
 unset BREW_PATH
 
-export HOMEBREW_TEMP="${SRC_PATH}/tmp"
-mkdir -p "${HOMEBREW_TEMP}"
-
 prepend_path "${HERE}/bin"
 
-# Bring in ssh keys.
+# Support for 1Password as ssh-agent.
 
-[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" &> /dev/null
-[ -f ~/.ssh/id_krollin@home ] && ssh-add ~/.ssh/id_krollin@home &> /dev/null
-[ -f ~/.ssh/id_krollin@work ] && ssh-add ~/.ssh/id_krollin@work &> /dev/null
+REAL_AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+HOME_AGENT_SOCK="$HOME/.config/1password/agent.sock"
+mkdir -p $(dirname "$HOME_AGENT_SOCK") && ln -sf "$REAL_AGENT_SOCK" "$HOME_AGENT_SOCK"
+[[ -L "$HOME_AGENT_SOCK" ]] && export SSH_AUTH_SOCK="$HOME_AGENT_SOCK"
+unset HOME_AGENT_SOCK
+unset REAL_AGENT_SOCK
 
 # Shell.
 
@@ -738,7 +768,7 @@ then
     # unalias run-help
     # alias help=run-help
 
-    unalias run-help
+    unalias run-help 2> /dev/null
     autoload run-help
     HELPDIR=$(echo /usr/share/zsh/*/help) # TODO: Deal with multiple matches
     alias help=run-help
@@ -778,7 +808,7 @@ BR_SCRIPT_PATH=$HOME/.config/broot/launcher/bash/br
 
 # FZF support (tab completion and key bindings)
 
-BREW_PATH="$(maybe_resolve "${SRC_PATH}/brew")"
+BREW_PATH="$(brew_path)"
 FZF_BASE="${BREW_PATH}/opt/fzf"
 if [[ -d "${FZF_BASE}" ]]
 then

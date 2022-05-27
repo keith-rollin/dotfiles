@@ -55,11 +55,33 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 "
 "   Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
 "
+"   Stuff from: https://gist.github.com/noam-g4/142a33c34740a20b21f2faeeab6f2b80
+"
+"   Plug 'preservim/nerdtree'
+"   Plug 'ryanoasis/vim-devicons'
+"   Plug 'tpope/vim-fugitive'
+"   Plug 'Xuyuanp/nerdtree-git-plugin'
+"   Plug 'https://github.com/morhetz/gruvbox'
+"   Plug 'vim-airline/vim-airline'
+"   Plug 'tpope/vim-commentary'
+"   Plug 'http://github.com/tpope/vim-surround'
+"   Plug 'https://github.com/kien/ctrlp.vim'
+"   Plug 'airblade/vim-gitgutter'
+"   Plug 'https://github.com/neoclide/coc.nvim', {'branch': 'release'}
+"   Plug 'puremourning/vimspector'
+"   Plug 'vim-airline/vim-airline-themes'
+"   Plug 'https://github.com/fatih/vim-go'
+"   Plug 'https://github.com/f-person/git-blame.nvim'
+"   Plug 'nvim-lua/plenary.nvim'
+"   Plug 'sindrets/diffview.nvim'
+"   Plug 'christoomey/vim-tmux-navigator'
+"   Plug 'mtdl9/vim-log-highlighting'
+"
 "   Review https://vimawesome.com/
 "
 "   From ThePrimeagen:
 "
-"   jremmen/vim/ripgrep
+"   jremmen/vim-ripgrep
 "   vim-utils/vim-man
 "   lyuts/vim-rtags
 "   git@github.com:kien/ctrlp.vim.git   Why such a verbose path?
@@ -113,6 +135,11 @@ Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
 Plug 'itchyny/lightline.vim'            " Powerline-ish
 Plug 'junegunn/vim-easy-align'          " Aligning source code.
 Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
+Plug 'mattn/vim-lsp-settings'           " Auto configurations for Language Server for vim-lsp
+Plug 'prabirshrestha/async.vim'         " normalize async job control api for vim and neovim
+Plug 'prabirshrestha/asyncomplete.vim'  " async completion in pure vim script for vim8 and neovim
+Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp
+Plug 'prabirshrestha/vim-lsp'           " lsp-server client for vim and neovim.
 Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
 Plug 'tpope/vim-commentary'             " Comment/uncomment
 Plug 'tpope/vim-fugitive'               " Git integration.
@@ -120,11 +147,34 @@ Plug 'tpope/vim-sensible'               " Sensible vim defaults.
 Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
 Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
 
-if has("nvim")
-    Plug 'neovim/nvim-lspconfig'
-endif
+" if has("nvim")
+"     Plug 'neovim/nvim-lspconfig'
+" endif
 
 call plug#end()
+
+" Ugh! Tooks me two days to figure out how to configure pylsp when it's
+" installed via vim-lsp-settings! I had been trying to install my settings
+" following the instructions in the vim-lsp repo, but my attempts there were
+" getting overridden by vim-lsp-settings.
+"
+" NB: I don't know the difference between 'config' and 'workspace_config', but
+" the latter is definitely what we want here.
+
+let g:lsp_settings = {
+    \   'pylsp-all': {
+    \       'workspace_config': {
+    \           'pylsp': {
+    \               'plugins': {
+    \                   'pycodestyle': {
+    \                       'ignore': [ 'E221' ]
+    \                   }
+    \               }
+    \           }
+    \       }
+    \   }
+    \ }
+
 
 let g:lightline = {
     \   'active': {
@@ -144,6 +194,8 @@ let g:lightline = {
 
 set background=dark
 set noshowmode                  " Don't show --INSERT--, since lightline does that.
+
+" Something to do with vim-ripgrep ... which I don't have installed.
 
 if executable('rg')
     let g:rg_derive_root='true'
@@ -373,10 +425,47 @@ nnoremap Y y$
 
 " Keeping it centered. (Not sure if I like this.)
 
-nnoremap <silent> n     nzzzv
-nnoremap <silent> N     Nzzzv
-nnoremap <silent> J     mzJ`z
+" nnoremap <silent> n     nzzzv
+" nnoremap <silent> N     Nzzzv
+" nnoremap <silent> J     mzJ`z
 
+" Support for auto-completion in the asynccomplete plugin.
+
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    " nmap <buffer> gd <plug>(lsp-definition)
+    " nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    " nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    " nmap <buffer> gr <plug>(lsp-references)
+    " nmap <buffer> gi <plug>(lsp-implementation)
+    " nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    " nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    " nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    " nmap <buffer> K <plug>(lsp-hover)
+    " nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    " nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+
+" clang-format support.
+"
 if executable('clang-format')
     let g:clang_format_path = exepath("clang-format")
     let g:clang_format_root = fnamemodify(fnamemodify(g:clang_format_path, ":h"), ":h")
