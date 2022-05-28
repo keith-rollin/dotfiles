@@ -39,6 +39,7 @@ EndSeq="\]"
 
 # Sequences to set text colors.
 # See <https://en.wikipedia.org/wiki/ANSI_escape_code>
+# See also <https://ʞ.cc/irl/term.html>
 #
 # In short, we want to build:
 #
