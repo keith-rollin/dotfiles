@@ -51,9 +51,6 @@ hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false &&
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
 hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
 
-# Duplicated from its rightful place below so that we can use it here.
-is_executable() { command -v "$1" &> /dev/null }
-
 set_ls_options()
 {
     if is_executable exa
