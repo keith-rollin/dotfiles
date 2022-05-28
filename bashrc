@@ -584,9 +584,9 @@ utcdate()
     TZ=utc date
 }
 
-vi()
+v()
 {
-    # Open a file in [n]vim, converting any parameter like this:
+    # Open a file in vi|vim|nvim, converting any parameter like this:
     #
     #   path/to/file.cpp:62
     #
@@ -606,12 +606,7 @@ vi()
         fi
     done
 
-    if is_executable nvim
-    then
-        command nvim "${ARGS[@]}"
-    else
-        command vim "${ARGS[@]}"
-    fi
+    "${EDITOR}" "${ARGS[@]}"
 }
 
 xc()
@@ -663,12 +658,18 @@ zippy_daemons()
 # behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
 # defined.
 
-export EDITOR=vim
+_VI="/usr/bin/vi"
+[[ -x $(which vim) ]] && _VI=$(which vim)
+[[ -x $(which nvim) ]] && _VI=$(which nvim)
+
+export EDITOR="${VI}"
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export SHELL_SESSION_HISTORY=1
+
+unset _VI
 
 if [ "$HOST_SHELL" = bash ]
 then
