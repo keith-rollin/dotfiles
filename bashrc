@@ -6,10 +6,14 @@
 
 # Determine what shell we're using.
 
-HOST_SHELL=$(basename $(lsof -p $$ | grep -w 'txt.*sh$' | awk '{ print $NF }'))
+[ -n "${ZSH_VERSION}" ] && HOST_SHELL="zsh"
+[ -n "${BASH_VERSION}" ] && HOST_SHELL="bash"
+[ -z "${HOST_SHELL}"  ] && return 0    # We don't support this shell.
+
+# Get the path to this script so that we can find local resources.
+
 [ "${HOST_SHELL}" = "bash" ] && ME_BASE="${BASH_SOURCE[0]}"
 [ "${HOST_SHELL}" = "zsh"  ] && ME_BASE="${(%):-%N}"
-[ -z "${ME_BASE}"  ] && return 0    # We don't support this shell.
 
 ME="$(readlink "${ME_BASE}")"
 [ -n "${ME}" ] || ME="${ME_BASE}"
