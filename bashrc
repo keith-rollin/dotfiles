@@ -662,7 +662,7 @@ _VI="/usr/bin/vi"
 [[ -x $(which vim) ]] && _VI=$(which vim)
 [[ -x $(which nvim) ]] && _VI=$(which nvim)
 
-export EDITOR="${VI}"
+export EDITOR="${_VI}"
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
