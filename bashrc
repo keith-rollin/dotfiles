@@ -17,7 +17,7 @@
 
 ME="$(readlink "${ME_BASE}")"
 [ -n "${ME}" ] || ME="${ME_BASE}"
-HERE="$(dirname "${ME}")"
+DOTFILES="$(dirname "${ME}")"
 
 # Functions.
 
@@ -137,6 +137,11 @@ brew_path()
         # echo $(dirname $(dirname $(which brew)))
         brew --prefix
     fi
+}
+
+cdd()
+{
+    cd "${DOTFILES}"
 }
 
 cdf()
@@ -408,9 +413,9 @@ maybe_resolve()
     if is_executable realpath
     then
         realpath "$1"
-    elif is_executable "${HERE}/bin/realpath"
+    elif is_executable "${DOTFILES}/bin/realpath"
     then
-        "${HERE}/bin/realpath" "$1"
+        "${DOTFILES}/bin/realpath" "$1"
     else
         echo ""
     fi
@@ -677,7 +682,7 @@ then
     then
         eval "$(starship init bash)"
     else
-        maybe_source "${HERE}/bashrc.console"
+        maybe_source "${DOTFILES}/bashrc.console"
         PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
     fi
 elif [ "$HOST_SHELL" = zsh ]
@@ -715,7 +720,7 @@ then
 fi
 unset BREW_PATH
 
-prepend_path "${HERE}/bin"
+prepend_path "${DOTFILES}/bin"
 
 # Support for 1Password as ssh-agent.
 
