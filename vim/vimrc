@@ -147,10 +147,6 @@ Plug 'tpope/vim-sensible'               " Sensible vim defaults.
 Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
 Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
 
-" if has("nvim")
-"     Plug 'neovim/nvim-lspconfig'
-" endif
-
 call plug#end()
 
 " Ugh! Tooks me two days to figure out how to configure pylsp when it's
@@ -195,12 +191,6 @@ let g:lightline = {
 set background=dark
 set noshowmode                  " Don't show --INSERT--, since lightline does that.
 
-" Something to do with vim-ripgrep ... which I don't have installed.
-
-if executable('rg')
-    let g:rg_derive_root='true'
-endif
-
 " Variables
 " ---------
 set autoindent                  " Copy indent from previous line.
@@ -237,9 +227,9 @@ set smartcase                   " Case-insensitive searching unless we type at l
 
 " Line number related. (Disabled, in part because I don't like selecting the
 " line number when I select text for copy/pasting.)
-" set number                      " Show absolute line numbers
-" set relativenumber              " Show relative line numbers; w/ above, accommodates both.
-" set numberwidth=5               " Use common width for everything up to 9999.
+set number                      " Show absolute line numbers
+set relativenumber              " Show relative line numbers; w/ above, accommodates both.
+set numberwidth=5               " Use common width for everything up to 9999.
 
 " TAB related
 set expandtab                   " Convert tabs to spaces
@@ -264,12 +254,12 @@ abbr .78. ......................................................................
 abbr -78- ------------------------------------------------------------------------------
 abbr =78= ==============================================================================
 abbr *78* ******************************************************************************
+abbr x78x ******************************************************************************
 
 " Misc.
 " -----
-let g:HasInsertedAutocmds = get(g:, 'HasInsertedAutocmds', 0)
-if !g:HasInsertedAutocmds && has("autocmd")
-    let g:HasInsertedAutocmds = 1
+augroup custom_kr
+    autocmd!
 
     " Set text width to 78 when a .txt file is created or opened.
     autocmd BufNewFile,BufRead *.txt set textwidth=78
@@ -288,22 +278,26 @@ if !g:HasInsertedAutocmds && has("autocmd")
 
     " Treat .mm files as Objective-C
     autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
-endif
+augroup END
 
 " Reload the .vimrc file, in case for some reason the autocmd above doesn't do
 " the trick. This mirrors my bash command that does the same thing with the
 " .bashrc file.
+"
 command! Reload :source $MYVIMRC
 
 " Remind me what file I'm in.
+"
 command WhatAmI :echo expand("%")
 
 " Highlight colors
+"
 " highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
 " highlight CursorLine cterm=NONE ctermbg=DarkBlue
 " highlight CursorLine cterm=NONE ctermbg=DarkGreen
 " highlight CursorLine cterm=NONE ctermbg=DarkCyan
-highlight CursorLine cterm=NONE ctermbg=DarkRed
+" highlight CursorLine cterm=NONE ctermbg=DarkRed
+highlight CursorLine cterm=underline ctermbg=None
 " highlight CursorLine cterm=NONE ctermbg=DarkMagenta
 " highlight CursorLine cterm=NONE ctermbg=DarkGrey
 " highlight LineNr ctermfg=grey
@@ -312,6 +306,7 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge e
 " Set the default highlighting style for shell scripts. This particular
 " setting assumes that our scripts are POSIX compatible and so shows things
 " like $(...) without flagging it as invalid.
+"
 let g:is_posix = 1
 
 " netrw: Configuration -- compare to vinegar
@@ -331,6 +326,7 @@ let g:netrw_liststyle=3     " tree view
 " let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default (this is the string toggled by netrw-gh)
 
 " Some additional tweaks I must have picked up somewhere:
+"
 " let g:netrw_browse_split = 2
 " let g:netrw_banner = 0
 " let g:netrw_winsize = 25
@@ -366,71 +362,46 @@ let mapleader = ","
 "
 " Use *noremap when recursive mapping is not wanted. Use *unmap to remove a
 " specified binding. Use *mapclear to remove all bindings for that mode.
-
-nnoremap <silent> <leader>.       <c-^>
-nnoremap <silent> <leader>,       :FSHere<CR>
-nnoremap <silent> <leader><space> :call StripWhitespace()<CR>
-nnoremap <silent> <leader>eb      :edit ~/.bashrc<CR>
-nnoremap <silent> <leader>eg      :edit ~/.gitconfig<CR>
-nnoremap <silent> <leader>ev      :edit $MYVIMRC<CR>
-nnoremap <silent> <leader>fb      :CtrlPBuffer<CR>
-nnoremap <silent> <leader>ff      :CtrlPFunky<CR>
-nnoremap <silent> <leader>fu      :execute 'CtrlPFunky ' . expand('<cword>')<CR>
-nnoremap <silent> <leader>fz      :FZF<CR>
-nnoremap <silent> <leader>ga      <Plug>(EasyAlign)
-xnoremap <silent> <leader>ga      <Plug>(EasyAlign)
-nnoremap <silent> <leader>m       :call ParentMake()<CR>
-nnoremap <silent> <leader>si      :set cursorline!<CR>
-nnoremap <silent> <leader>sl      :set list!<CR>
-nnoremap <silent> <leader>ss      :set spell!<CR>
-" nnoremap <silent> <leader>v       :set paste!<CR> " Handled with 'pastetoggle'
-nnoremap <silent> <leader>w       :w<CR>
+"
+nnoremap <silent> <leader>.         <c-^>
+nnoremap <silent> <leader>,         :FSHere<CR>
+nnoremap <silent> <leader><space>   :call StripWhitespace()<CR>
+nnoremap <silent> <leader>eb        :edit ~/.bashrc<CR>
+nnoremap <silent> <leader>eg        :edit ~/.gitconfig<CR>
+nnoremap <silent> <leader>ev        :edit $MYVIMRC<CR>
+nnoremap <silent> <leader>fb        :CtrlPBuffer<CR>
+nnoremap <silent> <leader>ff        :CtrlPFunky<CR>
+nnoremap <silent> <leader>fu        :execute 'CtrlPFunky ' . expand('<cword>')<CR>
+nnoremap <silent> <leader>fz        :FZF<CR>
+nnoremap <silent> <leader>ga        <Plug>(EasyAlign)
+xnoremap <silent> <leader>ga        <Plug>(EasyAlign)
+nnoremap <silent> <leader>m         :call ParentMake()<CR>
+nnoremap <silent> <leader>si        :set cursorline!<CR>
+nnoremap <silent> <leader>sl        :set list!<CR>
+nnoremap <silent> <leader>ss        :set spell!<CR>
+" nnoremap <silent> <leader>v         :set paste!<CR> " Handled with 'pastetoggle'
+nnoremap <silent> <leader>w         :w<CR>
 
 " Take the selection and move it up or down, after which, reselect the text,
 " reformat/indent it, and select it again.
+"
+vnoremap <silent> J                 :m '>+1<CR>gv=gv
+vnoremap <silent> K                 :m '<-2<CR>gv=gv
 
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-
-" These are kind of neat, but I think I'm tired of them.
-" nnoremap <silent> j               gj
-" nnoremap <silent> k               gk
-" nnoremap <silent> ^               g^
-" nnoremap <silent> $               g$
-
-    " I don't see this documented under 'key-notation', but <M-...> doesn't
-    " seem to work for on the Mac.
-
-    " nnoremap <silent> <M-c>           :wincmd c<CR>
-    " nnoremap <silent> <M-h>           :call WinMove('h')<CR>
-    " nnoremap <silent> <M-j>           :call WinMove('j')<CR>
-    " nnoremap <silent> <M-k>           :call WinMove('k')<CR>
-    " nnoremap <silent> <M-l>           :call WinMove('l')<CR>
-    " nnoremap <silent> <M-q>           :wincmd q<CR>
-
-nnoremap <silent> ˙     :call WinMove('h')<CR>
-nnoremap <silent> ∆     :call WinMove('j')<CR>
-nnoremap <silent> ˚     :call WinMove('k')<CR>
-nnoremap <silent> ¬     :call WinMove('l')<CR>
-nnoremap <silent> ç     :wincmd c<CR>
-nnoremap <silent> œ     :wincmd q<CR>
-nnoremap <silent> ø     :wincmd o<CR>
+" Stay in visual mode when indenting.
+"
+vnoremap <silent> <                 <gv
+vnoremap <silent> >                 >gv
 
 " From ":help Y":
 "
 "   If you like "Y" to work from the cursor to the end of line (which is more
 "   logical, but not Vi-compatible) use ":map Y y$".
-
-nnoremap Y y$
-
-" Keeping it centered. (Not sure if I like this.)
-
-" nnoremap <silent> n     nzzzv
-" nnoremap <silent> N     Nzzzv
-" nnoremap <silent> J     mzJ`z
+"
+nnoremap <silent>Y                  y$
 
 " Support for auto-completion in the asynccomplete plugin.
-
+"
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
@@ -453,7 +424,7 @@ function! s:on_lsp_buffer_enabled() abort
     " nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
     " nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
-    let g:lsp_format_sync_timeout = 1000
+    let g:lsp_format_sync_timeout = 3000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
 endfunction
 
@@ -499,21 +470,6 @@ if executable('clang-format')
     endif
 endif
 
-" Add some mappings to better unify vim's mini-buffer with other editing
-" environments. Experimental at this point -- we'll see how I like them (or if
-" I even remember to use them).
-" cnoremap <C-a>  <Home>
-" cnoremap <C-b>  <Left>
-" cnoremap <C-f>  <Right>
-" cnoremap <C-d>  <Delete>
-" cnoremap <M-b>  <S-Left>
-" cnoremap <M-f>  <S-Right>
-" cnoremap <M-d>  <S-right><Delete>
-" cnoremap <Esc>b <S-Left>
-" cnoremap <Esc>f <S-Right>
-" cnoremap <Esc>d <S-right><Delete>
-" cnoremap <C-g>  <C-c>
-
 " Functions
 " ---------
 " Strip trailing whitespace
@@ -528,6 +484,7 @@ endfunction
 " Bottleneck function for appending a new component to a path. This is not
 " done in a file-system-independent manner, but at least the hackishness is
 " localized to this one location.
+"
 function! AppendPathComponent(path, filename)
     if strpart(a:path, -1) != "/"
         return a:path . "/" . a:filename
@@ -536,6 +493,7 @@ function! AppendPathComponent(path, filename)
 endfunction
 
 " Find a file in an ancestor directory, starting with cwd.
+"
 function! FindInAncestorDirectory(filename)
     let l:curpath = fnamemodify(getcwd(), ":p:h")
     while 1
@@ -552,33 +510,12 @@ function! FindInAncestorDirectory(filename)
 endfunction
 
 " Execute :make on a parent makefile.
+"
 function! ParentMake()
     let l:makefile = FindInAncestorDirectory("Makefile")
     if l:makefile == ""
         echoerr "### Can't find makefile for: " . getcwd()
         return
     endif
-    let l:prefmakeprg = &makeprg
-    set makeprg=make-filtered
-    try
-        execute 'make -C ' . fnamemodify(l:makefile, ":h")
-    finally
-        execute 'set makeprg=' . l:prefmakeprg
-    endtry
-endfunction
-
-" Perform the command to move between windows if possible. If not, take that
-" as an indication to create a new window in the given direction and then move
-" into it.
-function! WinMove(key)
-    let t:curwin = winnr()
-    exec "wincmd " . a:key
-    if (t:curwin == winnr())
-        if (match(a:key,'[jk]'))
-            wincmd v
-        else
-            wincmd s
-        endif
-        exec "wincmd " . a:key
-    endif
+    execute 'make -C ' . fnamemodify(l:makefile, ":h")
 endfunction
