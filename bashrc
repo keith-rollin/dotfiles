@@ -614,6 +614,11 @@ v()
     "${EDITOR}" "${ARGS[@]}"
 }
 
+wh()
+{
+    which "$@"
+}
+
 xc()
 {
     local CMD="$1"
