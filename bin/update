@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Install/update vim bundles. Let's do this last so that the operation can be
+# done in the full context of environment variables and tools.
+#
+# This doesn't work well on first install. It seems to hang, especially when
+# vimrc tries to invoke gruvbox before it's isntalled.
+
+echo
+echo "*** Updating vim bundles"
+echo
+
+nvim +PlugUpgrade +qall # &>/dev/null
+nvim +PlugUpdate +qall # &>/dev/null
+
+echo
+echo "*** Updating Homebrew"
+echo
+
+brew upgrade

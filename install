@@ -131,18 +131,6 @@ maybe_source "${HERE}/install.brew"
 
 # pip3 install "python-lsp-server[all]"
 
-# Install/update vim bundles. Let's do this last so that the operation can be
-# done in the full context of environment variables and tools.
-#
-# This doesn't work well on first install. It seems to hang, especially when
-# vimrc tries to invoke gruvbox before it's isntalled.
-
-# echo
-# echo "*** Installing/updating vim bundles"
-# echo
-#
-# vim +PlugUpgrade +PlugUpdate +qall &>/dev/null
-
 echo
 echo "*** Setting System Defaults"
 echo
