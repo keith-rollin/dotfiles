@@ -121,14 +121,16 @@ let g:swift_no_conceal=1
 
 " Pull in vim-plug
 " ----------------
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let s:plug_path = stdpath("data") . "/site/autoload/plug.vim"
+let s:plug_repo = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+if empty(glob(s:plug_path))
+    silent execute "!curl --create-dirs --fail --location --output \"" . s:plug_path . "\" \"" . s:plug_repo . "\""
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Install plugins
 " ---------------
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 Plug 'ConradIrwin/vim-bracketed-paste'  " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
 Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
 Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
