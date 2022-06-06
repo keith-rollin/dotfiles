@@ -6,15 +6,16 @@
 # This doesn't work well on first install. It seems to hang, especially when
 # vimrc tries to invoke gruvbox before it's isntalled.
 
-echo
+echo "*** Updating nvim bundles"
+
+nvim +PlugUpgrade +qall &>/dev/null
+nvim +PlugUpdate +qall &>/dev/null
+
 echo "*** Updating vim bundles"
-echo
 
-nvim +PlugUpgrade +qall # &>/dev/null
-nvim +PlugUpdate +qall # &>/dev/null
+vim +PlugUpgrade +qall &>/dev/null
+vim +PlugUpdate +qall &>/dev/null
 
-echo
 echo "*** Updating Homebrew"
-echo
 
 brew upgrade
