@@ -98,6 +98,16 @@ set nocompatible    " Should not be needed if a vimrc file (this file) exists.
 "   https://github.com/kyazdani42/nvim-tree.lua
 "   https://github.com/akinsho/nvim-toggleterm.lua
 "   https://github.com/voldikss/vim-floaterm
+"
+" Plugins I used to install; maybe I will again:
+"
+" Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
+" Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
+" Plug 'junegunn/vim-easy-align'          " Aligning source code.
+" Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
+" Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
+" Plug 'tpope/vim-fugitive'               " Git integration.
+" Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
 
 " Configure plugins
 " -----------------
@@ -133,22 +143,15 @@ endif
 " ---------------
 call plug#begin()
 Plug 'ConradIrwin/vim-bracketed-paste'  " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
-Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
 Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
 Plug 'itchyny/lightline.vim'            " Powerline-ish
-Plug 'junegunn/vim-easy-align'          " Aligning source code.
-Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
 Plug 'mattn/vim-lsp-settings'           " Auto configurations for Language Server for vim-lsp
 Plug 'prabirshrestha/async.vim'         " normalize async job control api for vim and neovim
-Plug 'prabirshrestha/asyncomplete.vim'  " async completion in pure vim script for vim8 and neovim
 Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp
+Plug 'prabirshrestha/asyncomplete.vim'  " async completion in pure vim script for vim8 and neovim
 Plug 'prabirshrestha/vim-lsp'           " lsp-server client for vim and neovim.
-Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
 Plug 'tpope/vim-commentary'             " Comment/uncomment
-Plug 'tpope/vim-fugitive'               " Git integration.
 Plug 'tpope/vim-sensible'               " Sensible vim defaults.
-Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
-Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
 
 call plug#end()
 
