@@ -1,49 +1,221 @@
-#!/bin/sh
-# Install homebrew (if missing) or update it (if not). Install or update
-# desired packages. Also install/update cask along with desired packages.
+#!/bin/zsh
+
+# Install, update, or remove homebrew along with my desired packages.
 #
 # This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`. In particular, we need is_executable, prepend_path, and
-# dont_sleep to be defined. Further, in case of error, this script aborts by
-# using "return 1", which is how you exit a source'd script.
+# from `install`. In particular, the effects of prepend_path need to be made
+# persistant by this script being source'd at the top-level shell. Also, in
+# case of error, this script aborts by using "return 1", which is how you exit
+# a source'd script.
+#
+# To perform a simple, first-time install:
+#
+#       source ./install.brew
+#
+# To remove homebrew:
+#
+#       UNINSTALL=1 source ./install.brew
+#
+# To remove homebrew and then re-install it:
+#
+#       CLEAN_INSTALL=1 source ./install.brew
 
 
-# Get homebrew if I don't already have it.
+# Packages to install as source (formulae) or pre-built (bottles).
 
-if ! is_executable brew
+APPS=(
+    clang-format    # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+    exa             # Modern replacement for 'ls'
+    git             # Distributed revision control system
+    nvim            # Ambitious Vim-fork focused on extensibility and agility
+    python-tk@3.10
+    python-tk@3.9
+    python@3.10
+    python@3.9      # (See the following regarding versions: https://docs.brew.sh/Homebrew-and-Python)
+    ripgrep         # Search tool like grep and The Silver Searcher
+    starship        # Cross-shell prompt for astronauts
+    tree            # Display directories as trees (with optional color/HTML output)
+    watch           # Executes a program periodically, showing output fullscreen
+)
+
+# Packages to install as pre-built Mac binaries.
+
+CASKS=(
+    1password/tap/1password-cli
+    emacs           # Recommended to install as cask in order to get GUI support
+    homebrew/cask-fonts/font-inconsolata-nerd-font
+    homebrew/cask-fonts/font-ubuntu-mono-nerd-font
+    qlmarkdown      # QuickLook generator for Markdown files (NB:
+                    # QLMarkdown.app needs to be manually launched at leat once
+                    # in order for the QL generator to be registered.)
+)
+
+
+remove_brew()
+{
+    if ! have_brew
+    then
+        echo "### Asked to uninstall brew, but it doesn't seem to be installed."
+        error 1
+    fi
+
+    echo
+    echo "*** Uninstalling Homebrew"
+    echo
+
+    brew rm --zap "${CASKS[@]}"
+    delete_brew
+}
+
+install_brew()
+{
+    # Get homebrew if I don't already have it.
+
+    if ! have_brew
+    then
+        echo
+        echo "*** Cloning Homebrew repository"
+        echo
+
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    # Determine where it's getting installed so that we can add it to our path.
+    # It would be nice to be able to run `brew --prefix` in order to get the
+    # path, but we have a chicken-and-egg problem because we don't know where
+    # `brew` is in order to call it to find out where it is. (/usr/local may be
+    # on the $PATH, but /opt/homebrew will never be.)
+
+    # (This conditional code is taken from homebrew's install.sh.)
+    local UNAME_MACHINE="$(/usr/bin/uname -m)"
+    if [[ "${UNAME_MACHINE}" == "arm64" ]]
+    then
+        # On ARM macOS, this script installs to /opt/homebrew only
+        local HOMEBREW_PREFIX="/opt/homebrew"
+    else
+        # On Intel macOS, this script installs to /usr/local only
+        local HOMEBREW_PREFIX="/usr/local"
+    fi
+
+    prepend_path "${HOMEBREW_PREFIX}/sbin"
+    prepend_path "${HOMEBREW_PREFIX}/bin"
+
+    if ! have_brew
+    then
+        echo "### Could not find brew executable after installing"
+        error 1
+    fi
+
+    # Install the apps I want.
+
+    echo
+    echo "*** Installing Homebrew apps"
+    echo
+
+    dont_sleep brew install -q "${APPS[@]}"
+    dont_sleep brew install -q --cask "${CASKS[@]}"
+
+    # Prevent the following errors/messages when starting zsh:
+    #
+    # zsh compinit: insecure directories, run compaudit for list.
+    # Ignore insecure directories and continue [y] or abort compinit [n]?
+
+    if [ "$HOST_SHELL" = zsh ]
+    then
+        compaudit | xargs chmod g-w
+        compaudit | xargs chown root
+    fi
+}
+
+have_brew()
+{
+    is_executable brew
+}
+
+error()
+{
+    return "$@"
+}
+
+
+# Make sure we're being source'd.
+
+if [[ "$ZSH_EVAL_CONTEXT" != "toplevel:file" ]]
 then
-    echo
-    echo "*** Cloning Homebrew repository"
-    echo
-
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "### This script needs to be source'd from the top-level of the shell in order to set \$PATH"
+    exit 1
 fi
 
-# (This conditional code is taken from homebrew's install.sh.)
-UNAME_MACHINE="$(/usr/bin/uname -m)"
-if [[ "${UNAME_MACHINE}" == "arm64" ]]
+# Get some commands: delete_brew, is_executable, prepend_path, and dont_sleep.
+
+source "${HOME}/.bashrc"
+
+# Do the work.
+
+if [[ "${CLEAN_INSTALL}" == "1" ]]
 then
-    # On ARM macOS, this script installs to /opt/homebrew only
-    HOMEBREW_PREFIX="/opt/homebrew"
+    remove_brew
+    install_brew
+elif [[ "${UNINSTALL}" == "1" ]]
+then
+    remove_brew
 else
-    # On Intel macOS, this script installs to /usr/local only
-    HOMEBREW_PREFIX="/usr/local"
+    install_brew
 fi
 
-prepend_path "${HOMEBREW_PREFIX}/sbin"
-prepend_path "${HOMEBREW_PREFIX}/bin"
+unset CASKS
+unset APPS
 
-if ! is_executable brew
-then
-    echo "### Could not find brew executable after installing"
-    return 1
-fi
+return 0
 
-# Install the apps I want.
 
-echo
-echo "*** Installing Homebrew apps"
-echo
+# ===== OLD JUNK BELOW THIS LINE =====
+
+    # To clean things up before we can perform a new install:
+    #
+    # $ PROMPT="$ " # Unhook starfish.
+    # $ RPROMPT="$ " # Unhook starfish.
+    # $ brew rm --zap $CASKS # Clean up things that uninstall.sh won't.
+    # $ delete_brew # Runs the official uninstall.sh script.
+    # $ # If we didn't run `brew rm --zap $CASKS`, then we also need to clean up
+    # $ # the following by hand:
+    # $ rm -rf \
+    # $     /Applications/Emacs.app \
+    # $     /usr/local/bin/ebrowse \
+    # $     /usr/local/bin/emacs \
+    # $     /usr/local/bin/emacsclient \
+    # $     /usr/local/bin/etags \
+    # $     /usr/local/share/man/man1/ebrowse.1.gz \
+    # $     /usr/local/share/man/man1/emacs.1.gz \
+    # $     /usr/local/share/man/man1/emacsclient.1.gz \
+    # $     /usr/local/share/man/man1/etags.1.gz \
+    # $     /Applications/QLMarkdown.app \
+    # $     ~/Library/Fonts/Ubuntu* \
+    # $     ~/Library/Fonts/Inconsolata*
+    # $ source install.brew
+    # $ reload # starfish is back, so fix the prompts.
+
+# TERMINOLOGY CHEAT SHEET:
+#
+# (See: https://docs.brew.sh/Formula-Cookbook)
+#
+# * Tap: A Git repository of Formulae. E.g., homebrew-core.
+# * Formula: The Ruby file describing the package.
+# * Cellar: Build/intallation location. Prefixed by project/version.
+# * Keg: The versioned installation path in the Cellar.
+# * Keg-only: Not made visible to $HOMEBREW_PREFIX/{bin,lib,etc}
+# * Bottle: Prebuilt Keg.
+# * Cask: Facility for installing macOS native applications.
+# * Bundle: Something about homebrew dependencies.
+#
+# Further, there's the notion of the "homebrew prefix". This prefix is
+# established below where we define HOMEBREW_PREFIX. It is the root of (almost)
+# all homebrew files. Not only are the installed bin, lib, etc., directories
+# created/stored there, but so are the meta-directories Cask, Cellar, Homebrew,
+# etc. After installation, this path is returned by $(brew --prefix) and in the
+# HOMEBREW_PREFIX field returned by $(brew --config) or $(brew --env). Some
+# additional files are stored at $(brew --cache) (e.g.,
+# ~/Library/Caches/Homebrew)
 
 # Some tools to consider from:
 #
@@ -66,89 +238,41 @@ echo
 #   kylef/formulae/swiftenv
 #   hub            # Maybe some other time. Never got into it. Also, check out gitless.
 #   shellcheck     # Nice, but expensive. Requires ghc, which takes over an hour to install.
+#
+# Apps I used to install thinking I'd use them, but never did.
+#
+# bat             # Clone of cat(1) with syntax highlighting and Git integration
+# broot           # New way to see and navigate directory trees
+# cmake
+# dust            # More intuitive version of du in rust
+# fd              # Simple, fast and user-friendly alternative to find
+# fzf
+# github-keygen   # (Using 1Password instead)
+# htop            # Improved top (interactive process viewer)
+# jsonpp          # Command-line JSON pretty-printer
+# ninja
+# procs           # Modern replacement for ps written by Rust
+# telnet
+# tldr            # Simplified and community-driven man pages
+# tokei           # Program that allows you to count code, quickly
 
+# Maybe additional for Python:
+#
+# pyenv           # Python version management
+# pipx            # Execute binaries from Python packages in isolated environments
+#
 # Tap into here for swiftenv.
-
+#
 # brew tap kylef/formulae
-
-# Install as source (formulae) or pre-built (bottles).
-APPS=(
-    bat             # Clone of cat(1) with syntax highlighting and Git integration
-    broot           # New way to see and navigate directory trees
-    clang-format
-    cmake
-    dust            # More intuitive version of du in rust
-    exa             # Modern replacement for 'ls'
-    fd              # Simple, fast and user-friendly alternative to find
-    fzf
-    git
-    github-keygen
-    htop            # Improved top (interactive process viewer)
-    jsonpp          # Command-line JSON pretty-printer
-    ninja
-    nvim            # Ambitious Vim-fork focused on extensibility and agility
-    procs           # Modern replacement for ps written by Rust
-    # qlmarkdown    # Remove this; trying to install twice causes an error, which aborts overall install
-    ripgrep
-    starship        # Cross-shell prompt for astronauts
-    telnet
-    tldr            # Simplified and community-driven man pages
-    tokei           # Program that allows you to count code, quickly
-    tree
-    vim
-    watch
-
-    # pyenv           # Python version management
-    # pipx            # Execute binaries from Python packages in isolated environments
-
-    # Currently, installing "python" (or python3 or python@3) installs 3.9.
-    # Let's also install 3.10 just in case we need it. Not that it's not on
-    # $PATH, so the two shouldn't interfew with each other. But it does make
-    # using 3.10 a little tricky with paths and whatnot.
-    #
-    # Also, bookmark this here: https://docs.brew.sh/Homebrew-and-Python
-
-    python          # aka python@3.9
-    python@3.10
-    python-tk       # aka python-tk@3.9
-    python-tk@3.10
-
-    # For NeoVIM
-    tree-sitter
-    luajit
-
-    # For SerenityOS
-    coreutils e2fsprogs qemu bash gcc@11 imagemagick ninja cmake ccache rsync
-    genext2fs
-)
-
-# Install pre-built Mac binaries.
-CASKS=(
-    emacs           # Recommended to install as cask in order to get GUI support
-    font-inconsolata-nerd-font
-    font-ubuntu-mono-nerd-font
-    password/tap/1password-cli
-)
-
-dont_sleep brew tap homebrew/cask-fonts     # For the nerd-fonts
-
-dont_sleep brew install "${APPS[@]}"
-dont_sleep brew install --cask "${CASKS[@]}"
+#
+# # For SerenityOS:
+#
+#   coreutils e2fsprogs qemu bash gcc@11 imagemagick ninja cmake ccache rsync
+#   genext2fs
 
 # Universal-ctags is its own project and should be installed from HEAD.
-dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+# Do I need this if I'm also considering tree-sitter?
+# dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
-# Prevent the following errors/messages when starting zsh:
-#
-# zsh compinit: insecure directories, run compaudit for list.
-# Ignore insecure directories and continue [y] or abort compinit [n]?
 
-if [ "$HOST_SHELL" = zsh ]
-then
-    compaudit | xargs chmod g-w
-    compaudit | xargs chown root
-fi
 
-unset HOMEBREW_PREFIX
-unset APPS
-unset CASKS
