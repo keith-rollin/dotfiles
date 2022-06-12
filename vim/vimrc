@@ -346,7 +346,7 @@ let g:netrw_liststyle=3     " tree view
 
 " Custom keys
 " -----------
-let mapleader = ","
+let mapleader = " "
 
 " Cheat Sheet (from `:help :map-modes`):
 "
