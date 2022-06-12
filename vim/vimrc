@@ -195,7 +195,11 @@ let g:lightline = {
     \   },
     \ }
 
-set background=dark
+" colorscheme default
+colorscheme morning
+" colorscheme pablo
+
+" set background=dark
 set noshowmode                  " Don't show --INSERT--, since lightline does that.
 
 " Variables
