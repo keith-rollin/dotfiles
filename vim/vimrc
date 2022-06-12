@@ -204,26 +204,25 @@ set noshowmode                  " Don't show --INSERT--, since lightline does th
 
 " Variables
 " ---------
-set autoindent                  " Copy indent from previous line.
-set autoread                    " Automatically reread externally changed files.
-set autowriteall                " Write the file when we switch buffers.
+" set autoindent                  " Copy indent from previous line.
+" set autoread                    " Automatically reread externally changed files.
+" set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
 set cursorline                  " Highlight the row that contains the cursor (color set below with `highlight CursorLine`)
-set cmdheight=2                 " Higher command area so that switching buffers doesn't result in "Press Enter or type command to continue"
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
-set laststatus=2                " Always show a status line, even on the last window.
-set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
+" set laststatus=2                " Always show a status line, even on the last window.
+" set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
 set list                        " Show invisible characters
-set modeline                    " Enable modeline support
-set modelines=4                 " Scan last four lines of file for modeline
-set noerrorbells                " Disable error bells
-set nojoinspaces                " Only one space after a period when joining lines.
-set nostartofline               " Don't reset cursor to start of line when moving around.
+" set modeline                    " Enable modeline support
+" set modelines=4                 " Scan last four lines of file for modeline
+" set noerrorbells                " Disable error bells
+" set nojoinspaces                " Only one space after a period when joining lines.
+" set nostartofline               " Don't reset cursor to start of line when moving around.
 set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
 set path+=**                    " Recursively search subdirectories for files on tab-complete.
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
 set shiftround                  " Round indent to multiple of 'shiftwidth'
-set showcmd                     " Show the command being entered.
+" set showcmd                     " Show the command being entered.
 set shortmess=atI               " Don't show the intro message when starting Vim
 set smartindent                 " Indent like C-like programs.
 
@@ -231,8 +230,8 @@ set smartindent                 " Indent like C-like programs.
 " set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%L\ \ \ %{strftime('%F\ %T')}
 
 " Search related
-set hlsearch                    " Highlight searches
-"set incsearch                  " (Set in vim.sensible)
+" set hlsearch                    " Highlight searches
+" set incsearch                  " (Set in vim.sensible)
 set ignorecase                  " Ignore case of searches
 set smartcase                   " Case-insensitive searching unless we type at least one capital letter
 
@@ -240,7 +239,7 @@ set smartcase                   " Case-insensitive searching unless we type at l
 " line number when I select text for copy/pasting.)
 set number                      " Show absolute line numbers
 set relativenumber              " Show relative line numbers; w/ above, accommodates both.
-set numberwidth=5               " Use common width for everything up to 9999.
+" set numberwidth=5               " Use common width for everything up to 9999.
 
 " TAB related
 set expandtab                   " Convert tabs to spaces
