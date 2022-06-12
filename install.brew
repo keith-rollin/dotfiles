@@ -43,8 +43,6 @@ APPS=(
 CASKS=(
     1password/tap/1password-cli
     emacs           # Recommended to install as cask in order to get GUI support
-    homebrew/cask-fonts/font-inconsolata-nerd-font
-    homebrew/cask-fonts/font-ubuntu-mono-nerd-font
     qlmarkdown      # QuickLook generator for Markdown files (NB:
                     # QLMarkdown.app needs to be manually launched at leat once
                     # in order for the QL generator to be registered.)
@@ -275,4 +273,6 @@ return 0
 # dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 
+    # homebrew/cask-fonts/font-inconsolata-nerd-font
+    # homebrew/cask-fonts/font-ubuntu-mono-nerd-font
 
