@@ -288,6 +288,9 @@ augroup custom_kr
 
     " Treat .mm files as Objective-C
     autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
+
+    " Briefly highlight the yanked selection
+    au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
 augroup END
 
 " Reload the .vimrc file, in case for some reason the autocmd above doesn't do
