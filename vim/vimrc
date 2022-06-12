@@ -156,7 +156,7 @@ Plug 'prabirshrestha/vim-lsp'               " lsp-server client for vim and neov
 
 call plug#end()
 
-" Ugh! Tooks me two days to figure out how to configure pylsp when it's
+" Ugh! Took me two days to figure out how to configure pylsp when it's
 " installed via vim-lsp-settings! I had been trying to install my settings
 " following the instructions in the vim-lsp repo, but my attempts there were
 " getting overridden by vim-lsp-settings.
