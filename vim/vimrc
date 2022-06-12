@@ -142,16 +142,17 @@ endif
 " Install plugins
 " ---------------
 call plug#begin()
-Plug 'ConradIrwin/vim-bracketed-paste'  " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
-Plug 'derekwyatt/vim-fswitch'           " Switching between companion files.
-Plug 'itchyny/lightline.vim'            " Powerline-ish
-Plug 'mattn/vim-lsp-settings'           " Auto configurations for Language Server for vim-lsp
-Plug 'prabirshrestha/async.vim'         " normalize async job control api for vim and neovim
+Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
+Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
+Plug 'itchyny/lightline.vim'                " Powerline-ish
+Plug 'tpope/vim-commentary'                 " Comment/uncomment
+Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
+
+Plug 'mattn/vim-lsp-settings'               " Auto configurations for Language Server for vim-lsp
+Plug 'prabirshrestha/async.vim'             " normalize async job control api for vim and neovim
 Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp
-Plug 'prabirshrestha/asyncomplete.vim'  " async completion in pure vim script for vim8 and neovim
-Plug 'prabirshrestha/vim-lsp'           " lsp-server client for vim and neovim.
-Plug 'tpope/vim-commentary'             " Comment/uncomment
-Plug 'tpope/vim-sensible'               " Sensible vim defaults.
+Plug 'prabirshrestha/asyncomplete.vim'      " async completion in pure vim script for vim8 and neovim
+Plug 'prabirshrestha/vim-lsp'               " lsp-server client for vim and neovim.
 
 call plug#end()
 
