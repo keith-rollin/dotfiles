@@ -146,7 +146,7 @@ fi
 
 # Get some commands: delete_brew, is_executable, prepend_path, and dont_sleep.
 
-source "${HOME}/.bashrc"
+source "${HOME}/.zshrc"
 
 # Do the work.
 

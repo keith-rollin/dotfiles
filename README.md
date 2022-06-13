@@ -14,8 +14,6 @@ $ dotfiles/install
 
 ```text
 $HOME/
-|-- .bash_profile@ -> $HPD/dotfiles/bashrc
-|-- .bashrc@ -> $HPD/dotfiles/bashrc
 |-- .clang-format@ -> $HPD/dotfiles/clang-format.in
 |-- .config/
 |   |-- 1password/
@@ -26,8 +24,7 @@ $HOME/
 |   `-- starship.toml@ -> $HPD/dotfiles/starship.toml
 |-- .gitconfig@ -> $HPD/dotfiles/gitconfig
 |-- .inputrc@ -> $HPD/dotfiles/inputrc
-|-- .vim@ -> $HPD/dotfiles/vim
-|-- .zshrc@ -> $HPD/dotfiles/bashrc
+|-- .zshrc@ -> $HPD/dotfiles/zshrc
 |-- Library/Application Support/Sublime Text 3/Packages
 |   `-- User -> $HPD/dotfiles/SublimeText-Packages-User/
 `-- src@ -> $HPD/src

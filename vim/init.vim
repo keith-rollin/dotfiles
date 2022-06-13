@@ -210,7 +210,7 @@ let mapleader = " "
 nnoremap <silent> <leader>.         <c-^>
 nnoremap <silent> <leader>,         :FSHere<CR>
 nnoremap <silent> <leader><space>   :call StripWhitespace()<CR>
-nnoremap <silent> <leader>eb        :edit ~/.bashrc<CR>
+nnoremap <silent> <leader>eb        :edit ~/.zshrc<CR>
 nnoremap <silent> <leader>eg        :edit ~/.gitconfig<CR>
 nnoremap <silent> <leader>ev        :edit $MYVIMRC<CR>
 nnoremap <silent> <leader>m         :call ParentMake()<CR>
@@ -353,7 +353,7 @@ endfunction
 
 " Reload the .vimrc file, in case for some reason the autocmd above doesn't do
 " the trick. This mirrors my bash command that does the same thing with the
-" .bashrc file.
+" .zshrc file.
 "
 command! Reload :source $MYVIMRC
 

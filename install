@@ -8,13 +8,12 @@
 #
 #   * Add the following links to my home directory, or update them if they
 #     already exist:
-#       * .bash_profile
-#       * .bashrc
+#       * .zshrc
 #       * .gitconfig
 #       * .inputrc
-#       * .vim
-#       * .zshrc
 #       * .clang-format (also copied to /Volumes/Data)
+#       * .config/starship.toml
+#       * .config/nvim/init.vim
 #       * src
 #   * Point Sublime Text preferences to the ones in this repo.
 #   * Install Homebrew
@@ -55,17 +54,17 @@ echo
 
 mkdir -p "${HOME}/.config/nvim"
 
-create_link_in_home "${HERE}/bashrc"            .bash_profile
-create_link_in_home "${HERE}/bashrc"            .bashrc
+create_link_in_home "${HERE}/zshrc"             .zshrc
 create_link_in_home "${HERE}/gitconfig"         .gitconfig
 create_link_in_home "${HERE}/inputrc"           .inputrc
-create_link_in_home "${HERE}/bashrc"            .zshrc
 create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
 create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
 create_link_in_home "$(dirname "${HERE}")"
 
 # Create a .clang-format in /Volumes/Data for any work I might do over there.
+# TODO: fix this error when re-running `install`:
+#   cp: symlink: /Users/keith/Documents/src/dotfiles/clang-format.in: File exists
 
 DOT_CLANG_FORMAT="/Volumes/Data/.clang-format"
 [[ -d $(dirname "${DOT_CLANG_FORMAT}") && ! -e "${DOT_CLANG_FORMAT}" ]] && \
@@ -116,7 +115,7 @@ fi
 
 # Get some handy functions defined: is_executable, maybe_source, dont_sleep.
 
-source "${HOME}/.bashrc"
+source "${HOME}/.zshrc"
 
 # Install Brew now.
 
