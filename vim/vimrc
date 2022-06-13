@@ -1,157 +1,54 @@
-set nocompatible    " Should not be needed if a vimrc file (this file) exists.
-                    " But I found that pastetoggle does not work unless I
-                    " explicitly include this statement.
-
-" Plugins to try out:
-"
-"   Lokaltog/powerline                  Deprecated/obsolete, see powerline/powerline
-"   powerline/powerline
-"   bling/vim-airline                   Redirects to vim-airline/vim-airline
-"   vim-airline/vim-airline
-"   itchyny/lightline.vim
-"   rbong/vim-crystalline
-"
-"   Valloric/YouCompleteMe
-"   airblade/vim-gitgutter              Show status of each line in the vim gutter
-"   altercation/vim-colors-solarized
-"   ap/vim-css-color
-"   davidhalter/jedi-vim                Python auto-completion
-"   docunext/closetag.vim
-"   embear/vim-localvimrc
-"   ervandew/supertab
-"   fatih/vim-go
-"   haya14busa/incsearch.vim
-"   junegunn/fzf.vim                    Reported to be a better version of CtrlP
-"   junegunn/goyo.vim
-"   kballard/vim-swift                  Supports syntastic
-"   landaire/deoplete-swift
-"   mitsuse/autocomplete-swift
-"   nathanaelkane/vim-indent-guides
-"   powerline/powerline
-"   python-rope/ropevim                 Python refactoring
-"   scrooloose/syntastic
-"   sheerun/vim-polyglot
-"   statico/vim-inform7
-"   suan/vim-instant-markdown
-"   tmux-plugins/vim-tmux
-"   tomasr/molokai
-"   toyamarinyon/vim-swift
-"   tpope/vim-endwise
-"   tpope/vim-eunuch
-"   tpope/vim-flagship
-"   tpope/vim-git
-"   tpope/vim-jdaddy
-"   tpope/vim-pathogen
-"   tpope/vim-repeat
-"   tpope/vim-rhubarb
-"   tpope/vim-rsi
-"   tpope/vim-sleuth
-"   tpope/vim-speeddating
-"   tpope/vim-tbone
-"   tpope/vim-unimpaired
-"   vim-scripts/DrawIt
-"   w0rp/ale                            Better syntastic
-"   wellle/targets.vim
-"
-"   Stuff in: https://github.com/nicknisi/dotfiles/blob/master/config/nvim/plugins.vim
-"
-"   Stuff from: https://gist.github.com/noam-g4/142a33c34740a20b21f2faeeab6f2b80
-"
-"   Plug 'preservim/nerdtree'
-"   Plug 'ryanoasis/vim-devicons'
-"   Plug 'tpope/vim-fugitive'
-"   Plug 'Xuyuanp/nerdtree-git-plugin'
-"   Plug 'https://github.com/morhetz/gruvbox'
-"   Plug 'vim-airline/vim-airline'
-"   Plug 'tpope/vim-commentary'
-"   Plug 'http://github.com/tpope/vim-surround'
-"   Plug 'https://github.com/kien/ctrlp.vim'
-"   Plug 'airblade/vim-gitgutter'
-"   Plug 'https://github.com/neoclide/coc.nvim', {'branch': 'release'}
-"   Plug 'puremourning/vimspector'
-"   Plug 'vim-airline/vim-airline-themes'
-"   Plug 'https://github.com/fatih/vim-go'
-"   Plug 'https://github.com/f-person/git-blame.nvim'
-"   Plug 'nvim-lua/plenary.nvim'
-"   Plug 'sindrets/diffview.nvim'
-"   Plug 'christoomey/vim-tmux-navigator'
-"   Plug 'mtdl9/vim-log-highlighting'
-"
-"   Review https://vimawesome.com/
-"
-"   From ThePrimeagen:
-"
-"   jremmen/vim-ripgrep
-"   vim-utils/vim-man
-"   lyuts/vim-rtags
-"   git@github.com:kien/ctrlp.vim.git   Why such a verbose path?
-"   mbbill/undotree
-"
-"   nvim-specific:
-"       From https://www.youtube.com/watch?v=P9jB7mz2Ax4
-"   https://github.com/nvim-telescope/telescope.nvim
-"   https://github.com/nvim-treesitter/nvim-treesitter
-"   https://github.com/ray-x/lsp_signature.nvim
-"   https://github.com/hrsh7th/nvim-compe
-"   https://github.com/tamago324/compe-zsh
-"   https://github.com/lewis6991/gitsigns.nvim
-"   https://github.com/kyazdani42/nvim-tree.lua
-"   https://github.com/akinsho/nvim-toggleterm.lua
-"   https://github.com/voldikss/vim-floaterm
-"
-" Plugins I used to install; maybe I will again:
-"
-" Plug '/usr/local/opt/fzf'               " Fuzzy Finder, loaded from brew installation.
-" Plug 'ctrlpvim/ctrlp.vim'               " Fuzzy file searching.
-" Plug 'junegunn/vim-easy-align'          " Aligning source code.
-" Plug 'keith/swift.vim'                  " Swift syntax highlighting and indenting.
-" Plug 'tacahiroy/ctrlp-funky'            " CtrlP extension that performs function navigation.
-" Plug 'tpope/vim-fugitive'               " Git integration.
-" Plug 'tpope/vim-surround'               " Quoting/parenthesizing made simple.
-
-" Configure plugins
-" -----------------
-
-" Configure CtrlP
-" TBD: Try out other variable mucking indicated below.
-" let g:ctrlp_map = '<c-p>'
-" let g:ctrlp_cmd = 'CtrlP'
-" let g:ctrlp_root_markers = ['Makefile.shared']
-" let g:ctrlp_match_window_bottom = 0       # Now ctrlp_match_window = "top, ..."
-" let g:ctrlp_match_window_reversed = 0     # Now ctrlp_match_window = "ttb, ..."
-" let g:ctrlp_custom_ignore = '\v\~$|\.(o|swp|pyc|wav|mp3|ogg|blend)$|(^|[/\\])\.(hg|git|bzr)($|[/\\])|__init__\.py'
-" let g:ctrlp_working_path_mode = 0
-" let g:ctrlp_dotfiles = 0                  # Now probably ctrlp_show-hidden
-" let g:ctrlp_switch_buffer = 0
-" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-" let g:ctrlp_use_caching = 0
-
-" Configure swift.vim: don't show the fancy -> in Swift source files.
-" let g:swift_no_conceal=1
 
 " Pull in vim-plug
 " ----------------
-let s:plug_base = has('nvim') ? stdpath("data") . '/site' : fnamemodify('~/.vim', ":p")
-let s:plug_path = s:plug_base  . "/autoload/plug.vim"
+" NOTE: Under nvim, vim-plug will install plugins into:
+"
+"   stdpath("data") . '/plugged'
+"
+" as opposed to:
+"
+"   stdpath("data") . '/site/pack'
+"
+" or perhaps:
+"
+"   stdpath("data") . '/site/pack/plugged/start'
+"
+" as indicated by ":help packages"
+"
+" Perhaps switch to minpac: https://github.com/k-takata/minpac.
+" See also: http://vimcasts.org/episodes/minpac/.
+" NOTE: minpac requires you to manually restart if new plugins are added.
+" NOTE: minpac will try to install into packpath[0] by default. This is the
+" ~/.vim directory. We may want to force to stdpath("config") or
+" stdpath("data") when calling minpac#init().
+"
+let s:plug_path = stdpath("data")  . "/site/autoload/plug.vim"
 let s:plug_repo = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 if empty(glob(s:plug_path))
-    silent execute "!curl --create-dirs --fail --location --output \"" . s:plug_path . "\" \"" . s:plug_repo . "\""
+    silent execute "!curl --create-dirs --fail --location --output \"" .
+                \ s:plug_path . "\" \"" . s:plug_repo . "\""
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Install plugins
 " ---------------
 call plug#begin()
-Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see https://cirw.in/blog/bracketed-paste)
+Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see
+                                            "   https://cirw.in/blog/bracketed-paste).
 Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
-Plug 'itchyny/lightline.vim'                " Powerline-ish
-Plug 'tpope/vim-commentary'                 " Comment/uncomment
+Plug 'tpope/vim-commentary'                 " Comment/uncomment.
 Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
 
-Plug 'mattn/vim-lsp-settings'               " Auto configurations for Language Server for vim-lsp
-Plug 'prabirshrestha/async.vim'             " normalize async job control api for vim and neovim
-Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp
-Plug 'prabirshrestha/asyncomplete.vim'      " async completion in pure vim script for vim8 and neovim
+" LSP-related
+"
+" NOTE: Even with all this shizzle here, getting an LSP server installed is a
+" manual process. See: ":help LspInstallServer". In my case, for Python, I
+" installed pylsp-all.
+"
+Plug 'mattn/vim-lsp-settings'               " Auto configurations for Language Server for vim-lsp.
+Plug 'prabirshrestha/async.vim'             " normalize async job control api for vim and neovim.
+Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp.
+Plug 'prabirshrestha/asyncomplete.vim'      " async completion in pure vim script for vim8 and neovim.
 Plug 'prabirshrestha/vim-lsp'               " lsp-server client for vim and neovim.
 
 call plug#end()
@@ -178,78 +75,48 @@ let g:lsp_settings = {
     \   }
     \ }
 
-
-let g:lightline = {
-    \   'active': {
-    \       'left': [ [ 'mode', 'paste' ],
-    \                 [ 'gitbranch', 'readonly', 'absolutepath', 'modified' ] ],
-    \       'right': [ [ 'date_time' ],
-    \                  [ 'lineinfo' ],
-    \                  [ 'percent' ] ]
-    \   },
-    \   'component': {
-    \       'date_time': "%{strftime('%F\ %T')}"
-    \   },
-    \   'component_function': {
-    \       'gitbranch': 'FugitiveHead'
-    \   },
-    \ }
-
-" colorscheme default
-colorscheme morning
-" colorscheme pablo
-
-" set background=dark
-set noshowmode                  " Don't show --INSERT--, since lightline does that.
+" Color scheme
+" ------------
+set background=light
+colorscheme morning             " I also like default (in a dark terminal) and pablo.
+highlight Normal ctermbg=none   " Use the terminal's background (why is this comment green?).
 
 " Variables
 " ---------
-" set autoindent                  " Copy indent from previous line.
-" set autoread                    " Automatically reread externally changed files.
-" set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
-set cursorline                  " Highlight the row that contains the cursor (color set below with `highlight CursorLine`)
+set cursorline                  " Highlight the row that contains the cursor.
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
-" set laststatus=2                " Always show a status line, even on the last window.
-" set lcs=tab:▸\ ,trail:•,nbsp:∆  " Treatment of invisible characters. (Overrides vim-sensible)
-set list                        " Show invisible characters
-" set modeline                    " Enable modeline support
-" set modelines=4                 " Scan last four lines of file for modeline
-" set noerrorbells                " Disable error bells
-" set nojoinspaces                " Only one space after a period when joining lines.
-" set nostartofline               " Don't reset cursor to start of line when moving around.
+set list                        " Show invisible characters.
 set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
 set path+=**                    " Recursively search subdirectories for files on tab-complete.
-set scrolloff=3                 " Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
-set shiftround                  " Round indent to multiple of 'shiftwidth'
-" set showcmd                     " Show the command being entered.
-set shortmess=atI               " Don't show the intro message when starting Vim
+set scrolloff=3                 " Keep cursor this many lines from top or bottom for context.
+                                " (Overrides vim-sensible)
+set shiftround                  " Round indent to multiple of 'shiftwidth'.
+set shortmess=atI               " Don't show the intro message when starting Vim.
 set smartindent                 " Indent like C-like programs.
 
-" Use this when we're not using lightline.
-" set statusline=%f\ %h%w%m%r%=%{fugitive#statusline()}\ \ \ %(%l,%c%V%)\ \ \ %P,%L\ \ \ %{strftime('%F\ %T')}
-
 " Search related
-" set hlsearch                    " Highlight searches
-" set incsearch                  " (Set in vim.sensible)
-set ignorecase                  " Ignore case of searches
-set smartcase                   " Case-insensitive searching unless we type at least one capital letter
+"
+set ignorecase                  " Ignore case of searches.
+set smartcase                   " Case-insensitive searching unless we type at least one capital letter.
 
 " Line number related. (Disabled, in part because I don't like selecting the
 " line number when I select text for copy/pasting.)
-set number                      " Show absolute line numbers
+"
+set number                      " Show absolute line numbers.
 set relativenumber              " Show relative line numbers; w/ above, accommodates both.
-" set numberwidth=5               " Use common width for everything up to 9999.
 
 " TAB related
-set expandtab                   " Convert tabs to spaces
+"
+set expandtab                   " Convert tabs to spaces.
 set shiftwidth=4                " Number of spaces to use for each step of (auto)indent.
-set softtabstop=4               " Number of spaces in tab when editing
-set tabstop=4                   " Number of visual spaces per TAB
+set softtabstop=4               " Number of spaces in tab when editing.
+set tabstop=4                   " Number of visual spaces per TAB.
 
 " Speling corections
 " ------------------
 abbr adn and
+abbr alos also
 abbr const_case const_cast
 abbr dynamic_case dynamic_cast
 abbr fitler filter
@@ -277,44 +144,26 @@ augroup custom_kr
     " `:source` .vimrc after we edit and save it.
     autocmd BufWritePost .vimrc,vimrc source $MYVIMRC
 
-    " Restore the last cursor position. From: 'help last-position-jump'
+    " Restore the last cursor position. From: 'help last-position-jump'.
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-    " Treat .json files as .js
+    " Treat .json files as .js.
     autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
 
-    " Treat .md files as Markdown
+    " Treat .md files as Markdown.
     autocmd BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md,*.MD setlocal filetype=markdown
 
-    " Treat .mm files as Objective-C
+    " Treat .mm files as Objective-C.
     autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
 
-    " Briefly highlight the yanked selection
-    au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+    " Briefly highlight the yanked selection.
+    " See ":help lua-highlight".
+    au TextYankPost * lua vim.highlight.on_yank()
 augroup END
 
-" Reload the .vimrc file, in case for some reason the autocmd above doesn't do
-" the trick. This mirrors my bash command that does the same thing with the
-" .bashrc file.
+" Match spec for git merge error markers.
 "
-command! Reload :source $MYVIMRC
-
-" Remind me what file I'm in.
-"
-command WhatAmI :echo expand("%")
-
-" Highlight colors
-"
-" highlight CursorLine cterm=NONE ctermbg=LightBlue ctermfg=Black guibg=LightBlue guifg=Black
-" highlight CursorLine cterm=NONE ctermbg=DarkBlue
-" highlight CursorLine cterm=NONE ctermbg=DarkGreen
-" highlight CursorLine cterm=NONE ctermbg=DarkCyan
-" highlight CursorLine cterm=NONE ctermbg=DarkRed
-highlight CursorLine cterm=underline ctermbg=None
-" highlight CursorLine cterm=NONE ctermbg=DarkMagenta
-" highlight CursorLine cterm=NONE ctermbg=DarkGrey
-" highlight LineNr ctermfg=grey
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge error markers
+match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Set the default highlighting style for shell scripts. This particular
 " setting assumes that our scripts are POSIX compatible and so shows things
@@ -322,27 +171,10 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'    " Match spec for git merge e
 "
 let g:is_posix = 1
 
-" netrw: Configuration -- compare to vinegar
+" netrw: Configuration
 "
-" Where did I get these settings? Because they are identical to those in the
-" following video, which I don't believe I've seen before. Searching the
-" interwebs, I do see lots of articles and .vimrc files with the exact same
-" lines, but I haven't found the origin. And why am I not using them?
-"
-"   https://www.youtube.com/watch?v=XA2WjJbmmoM
-"
-let g:netrw_banner=0        " disable banner
-" let g:netrw_browse_split=4  " open in prior window
-" let g:netrw_altv=1          " open splits to the right
-let g:netrw_liststyle=3     " tree view
-" let g:netrw_list_hide=netrw_gitignore#Hide() " hide gitignore'd files
-" let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+' " hide dotfiles by default (this is the string toggled by netrw-gh)
-
-" Some additional tweaks I must have picked up somewhere:
-"
-" let g:netrw_browse_split = 2
-" let g:netrw_banner = 0
-" let g:netrw_winsize = 25
+let g:netrw_banner=0        " Disable banner.
+let g:netrw_liststyle=3     " Tree view.
 
 " Custom keys
 " -----------
@@ -382,17 +214,11 @@ nnoremap <silent> <leader><space>   :call StripWhitespace()<CR>
 nnoremap <silent> <leader>eb        :edit ~/.bashrc<CR>
 nnoremap <silent> <leader>eg        :edit ~/.gitconfig<CR>
 nnoremap <silent> <leader>ev        :edit $MYVIMRC<CR>
-nnoremap <silent> <leader>fb        :CtrlPBuffer<CR>
-nnoremap <silent> <leader>ff        :CtrlPFunky<CR>
-nnoremap <silent> <leader>fu        :execute 'CtrlPFunky ' . expand('<cword>')<CR>
-nnoremap <silent> <leader>fz        :FZF<CR>
-nnoremap <silent> <leader>ga        <Plug>(EasyAlign)
-xnoremap <silent> <leader>ga        <Plug>(EasyAlign)
 nnoremap <silent> <leader>m         :call ParentMake()<CR>
 nnoremap <silent> <leader>si        :set cursorline!<CR>
 nnoremap <silent> <leader>sl        :set list!<CR>
 nnoremap <silent> <leader>ss        :set spell!<CR>
-" nnoremap <silent> <leader>v         :set paste!<CR> " Handled with 'pastetoggle'
+" nnoremap <silent> <leader>v         :set paste!<CR> " Handled with 'pastetoggle'.
 nnoremap <silent> <leader>w         :w<CR>
 
 " Take the selection and move it up or down, after which, reselect the text,
@@ -423,7 +249,7 @@ imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    setlocal tagfunc=lsp#tagfunc
     " nmap <buffer> gd <plug>(lsp-definition)
     " nmap <buffer> gs <plug>(lsp-document-symbol-search)
     " nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
@@ -447,7 +273,6 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-
 " clang-format support.
 "
 if executable('clang-format')
@@ -455,37 +280,31 @@ if executable('clang-format')
     let g:clang_format_root = fnamemodify(fnamemodify(g:clang_format_path, ":h"), ":h")
     let g:clang_format_py = g:clang_format_root . "/share/clang/clang-format.py"
     if ! empty(glob(g:clang_format_py))
-        if has('python')
-            let g:py_command = ":pyf"
-        elseif has('python3')
-            let g:py_command = ":py3f"
-        endif
+        function! FormatAll()
+            let l:lines = "all"
+            execute :pyfile g:clang_format_py
+        endfunction
 
-        if exists("g:py_command")
-            function! FormatAll()
-                let l:lines = "all"
-                execute g:py_command g:clang_format_py
-            endfunction
+        function! FormatSelection()
+            execute :pyfile g:clang_format_py
+        endfunction
 
-            function! FormatSelection()
-                execute g:py_command g:clang_format_py
-            endfunction
+        function! FormatChanged()
+            let l:formatdiff = 1
+            execute :pyfile g:clang_format_py
+        endfunction
 
-            function! FormatChanged()
-                let l:formatdiff = 1
-                execute g:py_command g:clang_format_py
-            endfunction
-
-            nnoremap <leader>cf :call FormatAll()<cr>
-            xnoremap <leader>cf :call FormatSelection()<cr>
-            autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatAll()
-        endif
+        nnoremap <leader>cf :call FormatAll()<cr>
+        xnoremap <leader>cf :call FormatSelection()<cr>
+        autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatAll()
     endif
 endif
 
-" Functions
-" ---------
-" Strip trailing whitespace
+" Functions/Commands
+" ------------------
+
+" Strip trailing whitespace.
+"
 function! StripWhitespace()
     let l:oldpos = getpos(".")
     let l:oldquery = getreg('/')
@@ -532,3 +351,14 @@ function! ParentMake()
     endif
     execute 'make -C ' . fnamemodify(l:makefile, ":h")
 endfunction
+
+" Reload the .vimrc file, in case for some reason the autocmd above doesn't do
+" the trick. This mirrors my bash command that does the same thing with the
+" .bashrc file.
+"
+command! Reload :source $MYVIMRC
+
+" Remind me what file I'm in.
+"
+command WhatAmI :echo expand("%")
+
