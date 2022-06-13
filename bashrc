@@ -198,7 +198,7 @@ did()
 {
     # From https://theptrk.com/2018/07/11/did-txt-file/
 
-    vim +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
+    v +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
 }
 
 dont_sleep()
@@ -614,10 +614,9 @@ v()
     "${EDITOR}" "${ARGS[@]}"
 }
 
-wh()
-{
-    which "$@"
-}
+vi() { v "$@" }
+vim() { v "$@" }
+nvim() { v "$@" }
 
 xc()
 {
@@ -669,8 +668,8 @@ zippy_daemons()
 # defined.
 
 _VI="/usr/bin/vi"
-[[ -x $(which vim) ]] && _VI=$(which vim)
-[[ -x $(which nvim) ]] && _VI=$(which nvim)
+[[ -x $(whence -p vim) ]] && _VI=$(whence -p vim)
+[[ -x $(whence -p nvim) ]] && _VI=$(whence -p nvim)
 
 export EDITOR="${_VI}"
 export HISTTIMEFORMAT="%F %T: "
