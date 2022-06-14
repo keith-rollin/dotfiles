@@ -28,24 +28,33 @@ LNS="${HERE}/bin/lns"
 
 # Create or update links in my home directory to handy things elsewhere.
 
-create_link_in_home()
+create_link()
 {
-    local file="$1"
-    local link="$2"
+    local real_file="$1"
+    local sym_file="$2"
 
-    [ -z "${link}" ] && link="$(basename "${file}")"
+    real_file="$("${REALPATH}" "${real_file}")"
 
-    file="$("${REALPATH}" "${file}")"
-    link="${HOME}/${link}"
-
-    if [ -e "${link}" -a ! -L "${link}" ]
+    if [ -e "${sym_file}" -a ! -L "${sym_file}" ]
     then
-        echo "### File ${link} exists but is not a link. Please move it aside."
+        echo "### File ${sym_file} exists but is not a link. Please move it aside."
         return
     fi
 
-    rm -f "${link}"
-    "${LNS}" "${file}" "${link}"
+    rm -f "${sym_file}"
+    "${LNS}" "${real_file}" "${sym_file}"
+}
+
+create_link_in_home()
+{
+    local real_file="$1"
+    local sym_file="$2"
+
+    [ -z "${sym_file}" ] && sym_file="$(basename "${real_file}")"
+
+    sym_file="${HOME}/${sym_file}"
+
+    create_link "$real_file" "$sym_file"
 }
 
 echo
@@ -63,12 +72,10 @@ create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
 create_link_in_home "$(dirname "${HERE}")"
 
 # Create a .clang-format in /Volumes/Data for any work I might do over there.
-# TODO: fix this error when re-running `install`:
-#   cp: symlink: /Users/keith/Documents/src/dotfiles/clang-format.in: File exists
 
 DOT_CLANG_FORMAT="/Volumes/Data/.clang-format"
-[[ -d $(dirname "${DOT_CLANG_FORMAT}") && ! -e "${DOT_CLANG_FORMAT}" ]] && \
-    cp -R "$HOME/.clang-format" "${DOT_CLANG_FORMAT}"
+[[ -d $(dirname "${DOT_CLANG_FORMAT}") ]] && \
+    create_link "${HERE}/clang-format.in" "${DOT_CLANG_FORMAT}"
 
 # If there's an empty ~/Library/Sublime Text 3/Packages/User directory, replace
 # it with a link to our dotfiles version.
