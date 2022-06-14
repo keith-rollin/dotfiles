@@ -10,7 +10,6 @@
 #     already exist:
 #       * .zshrc
 #       * .gitconfig
-#       * .inputrc
 #       * .clang-format (also copied to /Volumes/Data)
 #       * .config/starship.toml
 #       * .config/nvim/init.vim
@@ -65,7 +64,6 @@ mkdir -p "${HOME}/.config/nvim"
 
 create_link_in_home "${HERE}/zshrc"             .zshrc
 create_link_in_home "${HERE}/gitconfig"         .gitconfig
-create_link_in_home "${HERE}/inputrc"           .inputrc
 create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
 create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
