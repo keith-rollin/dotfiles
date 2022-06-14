@@ -87,6 +87,9 @@ set clipboard=unnamed           " Interoperate with the system clipboard.
 set cursorline                  " Highlight the row that contains the cursor.
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
 set list                        " Show invisible characters.
+set listchars=tab:▸\\x20        " Show TABs as RIGHT-ARROW + SPACEs. (Overrides vim-sensible)
+set listchars+=trail:•          " Show trailing spaces as bullets. (Overrides vim-sensible)
+set listchars+=nbsp:∆           " Show non-breaking spaces as deltas. (Overrides vim-sensible)
 set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
 set path+=**                    " Recursively search subdirectories for files on tab-complete.
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context.
