@@ -82,6 +82,7 @@ highlight Normal ctermbg=none   " Use the terminal's background (why is this com
 
 " Variables
 " ---------
+set autowriteall                " Write the file when we switch buffers.
 set clipboard=unnamed           " Interoperate with the system clipboard.
 set cursorline                  " Highlight the row that contains the cursor.
 set grepprg=rg\ --vimgrep       " Use ripgrep for grepping.
