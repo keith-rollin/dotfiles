@@ -99,17 +99,6 @@ grc()  { git rebase --continue ; }
 grm()  { git rebase master ; }
 gs()   { git status "$@" ; }
 
-ascii()
-{
-    #man ascii | col -b | grep -A 55 --color=never "octal set"
-    cat /usr/share/misc/ascii
-}
-
-badge()
-{
-    tput bel
-}
-
 bak()
 {
     # Make backups of the given files (copy them to *.bak).
@@ -160,14 +149,6 @@ cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-cheat()
-{
-    local TOPIC=$1
-    shift
-    local QUESTION=$(echo "$*" | tr ' ' '+')
-    curl "cheat.sh/${TOPIC}/${QUESTION}"
-}
-
 cleanupds()
 {
     local locations=(
@@ -193,36 +174,14 @@ cleanupds()
     fi
 }
 
-clr()
-{
-    clear && printf '\e[3J'
-}
-
 delete_brew()
 {
     sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
 }
 
-did()
-{
-    # From https://theptrk.com/2018/07/11/did-txt-file/
-
-    v +'normal ggO' +'r!date +"\%F \%T \%z \%a\%n\%n"' ~/Documents/did.txt
-}
-
 dont_sleep()
 {
     caffeinate -dim "$@"
-}
-
-edit_ff()
-{
-    vi $(ff "$1")
-}
-
-edit_fff()
-{
-    vi $(fff "$1")
 }
 
 element_in_array()
@@ -241,51 +200,6 @@ element_in_array()
         [ "$element_to_find" = "$element_in_array" ] && return 0
     done
     return 1
-}
-
-fs()
-{
-    # Determine size of a file or total size of a directory.
-
-    if du -b /dev/null > /dev/null 2>&1
-    then
-        local arg=-sbh
-    else
-        local arg=-sh
-    fi
-    if [ -n "$@" ]
-    then
-        du $arg -- "$@"
-    else
-        du $arg .[^.]* ./*
-    fi
-}
-
-git_diff()
-{
-    # Use Git’s colored diff.
-
-    git diff --no-index --color-words "$@"
-}
-
-git_edit_changed()
-{
-    local OLD_CWD="$(pwd)"
-    git_top
-    "${EDITOR}" $(git diff --name-only)
-    cd "${OLD_CWD}"
-}
-
-# Maybe this one? It seems to have a problem, though, where diff-index
-# sometimes includes a spurious (unchanged) file.
-# git_edit_changed()
-# {
-#     "${EDITOR}" $(git diff-index --name-only HEAD)
-# }
-
-git_edit_files_with_symbol()
-{
-    vi $(git grep --name-only "$1")
 }
 
 git_top()
@@ -322,11 +236,6 @@ hide_brew()
     export PATH="$(echo "$PATH" | sed -E -e 's|:'$(brew_path)'/bin||g')"
     export PATH="$(echo "$PATH" | sed -E -e 's|:'$(brew_path)'/sbin||g')"
     "$@"
-}
-
-hmapdump()
-{
-    $(xcode-select -p)/../PlugIns/Xcode3Core.ideplugin/Contents/Frameworks/DevToolsCore.framework/Resources/hmapdump "$@"
 }
 
 is_executable()
@@ -391,18 +300,6 @@ lips()
     printf '%20s: %s\n' "External IP" $EXTIP
 }
 
-lmk()
-{
-    say 'Process complete.'
-}
-
-manpath()
-{
-    # Show the "man path", one entry per line.
-
-    man -w | tr : '\n'
-}
-
 maybe_resolve()
 {
     # If `realpath` is available, use it to resolve the given path into a full,
@@ -445,21 +342,6 @@ mkcd()
     mkdir -p "$@" && cd "$@"
 }
 
-notify()
-{
-    osascript -e "display notification \"$1\" with title \"$2\""
-}
-
-on_ac_power()
-{
-    pmset -g ps | grep -q "AC Power"
-}
-
-on_battery_power()
-{
-    pmset -g ps | grep -q "Battery Power"
-}
-
 path()
 {
     # Show the PATH, one entry per line.
@@ -489,39 +371,14 @@ py()
     maybe_run "/usr/local/bin/python" "$@"
 }
 
-ql()
-{
-    qlmanage -p "$@" &> /dev/null &
-}
-
 reload()
 {
     source ~/.bash_profile
 }
 
-restart_touchbar()
-{
-    sudo pkill ControlStrip TouchBarServer
-}
-
 rg()
 {
     command rg -g '!ChangeLog*' "$@"
-}
-
-rgc()
-{
-    command rg -g '*.cmake' -g 'CMakeLists.txt' "$@"
-}
-
-search_goog()
-{
-    open https://www.google.com/search?q=$(echo "$@" | tr ' ' +)
-}
-
-search_wiki()
-{
-    open https://en.wikipedia.org/w/index.php?search=$(echo "$@" | tr ' ' +)
 }
 
 sudo_keep_alive()
@@ -570,16 +427,6 @@ up()
         local p="$(echo -n "$(pwd | sed -e "s/\(.*\/[^\/]*${rx}\)\/.*/\1/")")"
         cd "$p"
     fi
-}
-
-urlencode()
-{
-    python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1"
-}
-
-utcdate()
-{
-    TZ=utc date
 }
 
 v()
@@ -646,12 +493,6 @@ xc()
             ;;
         *)  echo "### Unknown command: $CMD" ;;
     esac
-}
-
-zippy_daemons()
-{
-    [[ "$1" == "on" ]] && sudo sysctl debug.lowpri_throttle_enabled=0
-    [[ "$1" == "off" ]] && sudo sysctl debug.lowpri_throttle_enabled=1
 }
 
 # Environment variables.
