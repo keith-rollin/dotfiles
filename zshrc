@@ -317,7 +317,7 @@ is_executable()
     # Determine if the given command is an actual command, alias, or shell
     # function -- that is, if it's something we can invoke.
 
-    command -v "$1" &> /dev/null
+    whence "$1" &> /dev/null
 }
 
 # UPDATE: I've had to disable the "less" function and revert to specifying
