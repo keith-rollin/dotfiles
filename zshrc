@@ -124,11 +124,28 @@ bak()
 
 brew_path()
 {
+    # If brew is one the path (for whatever reason), ask it where it is.
+
     if is_executable brew
     then
-        # echo $(dirname $(dirname $(which brew)))
         brew --prefix
+        return
     fi
+
+    # If brew is not on the path, then used some code cribbed from brew's
+    # installer to determine its location.
+
+    # (This conditional code is taken from homebrew's install.sh.)
+    local UNAME_MACHINE="$(/usr/bin/uname -m)"
+    if [[ "${UNAME_MACHINE}" == "arm64" ]]
+    then
+        # On ARM macOS, this script installs to /opt/homebrew only
+        local HOMEBREW_PREFIX="/opt/homebrew"
+    else
+        # On Intel macOS, this script installs to /usr/local only
+        local HOMEBREW_PREFIX="/usr/local"
+    fi
+    echo "${HOMEBREW_PREFIX}"
 }
 
 cdd()

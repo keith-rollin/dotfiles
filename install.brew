@@ -78,23 +78,9 @@ install_brew()
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
 
-    # Determine where it's getting installed so that we can add it to our path.
-    # It would be nice to be able to run `brew --prefix` in order to get the
-    # path, but we have a chicken-and-egg problem because we don't know where
-    # `brew` is in order to call it to find out where it is. (/usr/local may be
-    # on the $PATH, but /opt/homebrew will never be.)
+    # Get homebrew onto the PATH and see if it actually installed.
 
-    # (This conditional code is taken from homebrew's install.sh.)
-    local UNAME_MACHINE="$(/usr/bin/uname -m)"
-    if [[ "${UNAME_MACHINE}" == "arm64" ]]
-    then
-        # On ARM macOS, this script installs to /opt/homebrew only
-        local HOMEBREW_PREFIX="/opt/homebrew"
-    else
-        # On Intel macOS, this script installs to /usr/local only
-        local HOMEBREW_PREFIX="/usr/local"
-    fi
-
+    local HOMEBREW_PREFIX=$(brew_path)
     prepend_path "${HOMEBREW_PREFIX}/sbin"
     prepend_path "${HOMEBREW_PREFIX}/bin"
 
@@ -144,7 +130,8 @@ then
     exit 1
 fi
 
-# Get some commands: delete_brew, is_executable, prepend_path, and dont_sleep.
+# Get some commands: brew_path, delete_brew, is_executable, prepend_path, and
+# dont_sleep.
 
 source "${HOME}/.zshrc"
 
