@@ -215,9 +215,9 @@ let mapleader = " "
 nnoremap <silent> <leader>.         <c-^>
 nnoremap <silent> <leader>,         :FSHere<CR>
 nnoremap <silent> <leader><space>   :call StripWhitespace()<CR>
-nnoremap <silent> <leader>eb        :edit ~/.zshrc<CR>
 nnoremap <silent> <leader>eg        :edit ~/.gitconfig<CR>
 nnoremap <silent> <leader>ev        :edit $MYVIMRC<CR>
+nnoremap <silent> <leader>ez        :edit ~/.zshrc<CR>
 nnoremap <silent> <leader>m         :call ParentMake()<CR>
 nnoremap <silent> <leader>si        :set cursorline!<CR>
 nnoremap <silent> <leader>sl        :set list!<CR>
