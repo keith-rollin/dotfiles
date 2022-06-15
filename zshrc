@@ -373,7 +373,7 @@ py()
 
 reload()
 {
-    source ~/.bash_profile
+    source ~/.zshrc
 }
 
 rg()
