@@ -149,7 +149,7 @@ augroup custom_kr
     autocmd BufWritePost .vimrc,vimrc source $MYVIMRC
 
     " Restore the last cursor position. From: 'help last-position-jump'.
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    autocmd BufReadPost * if &ft!="gitcommit" && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
     " Treat .json files as .js.
     autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
