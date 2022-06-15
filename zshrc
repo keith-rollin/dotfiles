@@ -4,17 +4,9 @@
 #   https://github.com/webpro/dotfiles
 #   https://github.com/mathiasbynens/dotfiles
 
-# Determine what shell we're using.
-
-[ -n "${ZSH_VERSION}" ] && HOST_SHELL="zsh"
-[ -n "${BASH_VERSION}" ] && HOST_SHELL="bash"
-[ -z "${HOST_SHELL}"  ] && return 0    # We don't support this shell.
-
 # Get the path to this script so that we can find local resources.
 
-[ "${HOST_SHELL}" = "bash" ] && ME_BASE="${BASH_SOURCE[0]}"
-[ "${HOST_SHELL}" = "zsh"  ] && ME_BASE="${(%):-%N}"
-
+ME_BASE="${(%):-%N}"
 ME="$(readlink "${ME_BASE}")"
 [ -n "${ME}" ] || ME="${ME_BASE}"
 DOTFILES="$(dirname "${ME}")"
@@ -293,16 +285,7 @@ gitp()
 
 grep_core()
 {
-    if [ "$HOST_SHELL" = bash ]
-    then
-        local caller="${FUNCNAME[1]}"
-    elif [ "$HOST_SHELL" = zsh ]
-    then
-        local caller="${funcstack[@]:1:1}"
-    else
-        print "*** Unknown shell" >&2
-        return 1
-    fi
+    local caller="${funcstack[@]:1:1}"
 
     command ${caller} \
         --color=auto \
@@ -477,15 +460,8 @@ prepend_path()
     local p="$(maybe_resolve "$1")"
     [ -z "$p" ] && return 0
 
-    if [ "$HOST_SHELL" = bash ]
-    then
-        [[ "${PATH}" =~ .*$p:.* ]] && return 0
-        export PATH="$p:${PATH}"
-    elif [ "$HOST_SHELL" = zsh ]
-    then
-        element_in_array "$p" "${path[@]}" && return 0
-        path=("$p" "${path[@]}")
-    fi
+    element_in_array "$p" "${path[@]}" && return 0
+    path=("$p" "${path[@]}")
 }
 
 py()
@@ -680,39 +656,24 @@ export SHELL_SESSION_HISTORY=1
 
 unset _VI
 
-if [ "$HOST_SHELL" = bash ]
+if is_executable starship
 then
-    if is_executable starship
+    eval "$(starship init zsh)"
+else
+    if [[ -n "${GIT_PROMPT_SH}" ]]
     then
-        eval "$(starship init bash)"
+        setopt PROMPT_SUBST
+        PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
     else
-        maybe_source "${DOTFILES}/bashrc.console"
-        PS1="${FgiRed}${UserName}@${ShortHost}:${WorkingDirPath}${Reset}\n${StdPromptPrefix} "
-    fi
-elif [ "$HOST_SHELL" = zsh ]
-then
-    if is_executable starship
-    then
-        eval "$(starship init zsh)"
-    else
-        if [[ -n "${GIT_PROMPT_SH}" ]]
-        then
-            setopt PROMPT_SUBST
-            PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
-        else
-            PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
-        fi
+        PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
     fi
 fi
 
-if [ "$HOST_SHELL" = zsh ]
-then
-    HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-    HISTSIZE=SAVEHIST=10000
-    setopt share_history
-    setopt extended_history
-    setopt interactive_comments
-fi
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+HISTSIZE=SAVEHIST=10000
+setopt share_history
+setopt extended_history
+setopt interactive_comments
 
 # $PATH.
 
@@ -737,53 +698,33 @@ unset REAL_AGENT_SOCK
 
 # Shell.
 
-if [ "$HOST_SHELL" = bash ]
+autoload -U compinit
+compinit
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
+bindkey -s '`' '~'
+bindkey -e
+
+# Bring in command-line completion.
+if is_executable brew
 then
-    shopt -s cdspell
-    shopt -s checkwinsize
-    shopt -s nocaseglob
-
-    bind '"\e[A": history-search-backward'
-    bind '"\e[B": history-search-forward'
-    bind '"`": "~"'
-
-    # Bring in command-line completion.
-    # is_executable xcode-select && maybe_source "$(xcode-select -p)/usr/share/git-core/git-completion.bash"
-    if is_executable brew
-    then
-        HOMEBREW_COMPLETION_DIR="$(brew --prefix)/etc/bash_completion.d"
-        [ -d "${HOMEBREW_COMPLETION_DIR}" ] && maybe_source "${HOMEBREW_COMPLETION_DIR}/"*
-    fi
-elif [ "$HOST_SHELL" = zsh ]
-then
-    autoload -U compinit
-    compinit
-    zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
-
-    bindkey "^[[A" history-beginning-search-backward
-    bindkey "^[[B" history-beginning-search-forward
-    bindkey -s '`' '~'
-    bindkey -e
-
-    # Bring in command-line completion.
-    if is_executable brew
-    then
-        fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
-    fi
-
-    # Remove/disable git completion, since it's agonizingly slow on large
-    # projects like WebKit.
-    compdef -d git
-
-    # autoload -Uz run-help
-    # unalias run-help
-    # alias help=run-help
-
-    unalias run-help 2> /dev/null
-    autoload run-help
-    HELPDIR=$(echo /usr/share/zsh/*/help) # TODO: Deal with multiple matches
-    alias help=run-help
+    fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
 fi
+
+# Remove/disable git completion, since it's agonizingly slow on large
+# projects like WebKit.
+compdef -d git
+
+# autoload -Uz run-help
+# unalias run-help
+# alias help=run-help
+
+unalias run-help 2> /dev/null
+autoload run-help
+HELPDIR=$(echo /usr/share/zsh/*/help) # TODO: Deal with multiple matches
+alias help=run-help
 
 # The following was given as a tip for speeding up `git status`. I tried it out
 # on an APFS volume (which seems to have slowed down `git status` a lot) and it
@@ -823,8 +764,8 @@ BREW_PATH="$(brew_path)"
 FZF_BASE="${BREW_PATH}/opt/fzf"
 if [[ -d "${FZF_BASE}" ]]
 then
-    [[ $- == *i* ]] && source "${FZF_BASE}/shell/completion.${HOST_SHELL}" 2> /dev/null
-    source "${FZF_BASE}/shell/key-bindings.${HOST_SHELL}"
+    [[ $- == *i* ]] && source "${FZF_BASE}/shell/completion.zsh" 2> /dev/null
+    source "${FZF_BASE}/shell/key-bindings.zsh"
 fi
 unset BREW_PATH
 unset FZF_BASE
