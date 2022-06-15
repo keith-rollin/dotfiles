@@ -565,7 +565,8 @@ bindkey "^[[B" history-beginning-search-forward
 bindkey -s '`' '~'
 bindkey -e
 
-# Bring in command-line completion.
+# Bring in brew-provided command-line completion.
+
 if is_executable brew
 then
     fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
@@ -573,13 +574,49 @@ fi
 
 # Remove/disable git completion, since it's agonizingly slow on large
 # projects like WebKit.
+
 compdef -d git
 
-# autoload -Uz run-help
-# unalias run-help
-# alias help=run-help
+# Define a `help` function that (mostly) works like bash's.
+# Note that it won't directly bring you to documentation for low-level
+# built-ins like "if" or "while". Nor will it show help for commands in
+# /usr/local/zsh/<version>/functions. And it doesn't use the alt-screen.
 
-unalias run-help 2> /dev/null
-autoload run-help
-HELPDIR=$(echo /usr/share/zsh/*/help) # TODO: Deal with multiple matches
+# From: https://opensource.apple.com/source/zsh/zsh-72/zsh/StartupFiles/zshrc.auto.html
+
+export HELPDIR=/usr/share/zsh/$ZSH_VERSION/help  # directory for run-help function to find docs
+unalias run-help 2> /dev/null # Something aliases run-help to man, so remove that.
+autoload -Uz run-help
 alias help=run-help
+
+# This command attempts to look up command help in zshall. But it's kind of
+# flakey and doesn't work for everything.
+#
+# help()
+# {
+#     errcode=0
+#     if [ $# -eq 0 ]
+#     then
+#         >&2 echo "Not enough arguments";
+#         errcode=2
+#     fi
+#     if [ $# -eq 1 ]
+#     then
+#         PAGER="less -g -s '+/^       "$1" '" command man zshall
+#     fi
+#     if [ $# -eq 2 ]
+#     then
+#         PAGER="less -g -s '+/^       "$1" '" command man "$2"
+#     fi
+#     if [ $# -gt 2 ]
+#     then
+#         >&2 echo "Too many arguments"
+#         errcode=2
+#     fi
+#     if [ $errcode -gt 0 ]
+#     then
+#         $(exit $errcode)
+#     fi
+# }
+
+true # Exit with no error.
