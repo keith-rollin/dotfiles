@@ -38,6 +38,11 @@ grep() { grep_core "$@" ; }
 egrep() { grep_core "$@" ; }
 fgrep() { grep_core "$@" ; }
 
+v() { vim_core "$@" }
+vi() { vim_core  "$@" }
+vim() { vim_core  "$@" }
+nvim() { vim_core  "$@" }
+
 show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
 hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
@@ -430,13 +435,14 @@ up()
     fi
 }
 
-v()
+vim_core ()
 {
-    # Open a file in vi|vim|nvim, converting any parameter like this:
+    # Open a file in our editor, converting any parameter like this (which is
+    # how compilers emit error messages):
     #
     #   path/to/file.cpp:62
     #
-    # Into:
+    # into this (which is how vim-ish like it):
     #
     #   path/to/file.cpp +62
 
@@ -454,10 +460,6 @@ v()
 
     "${EDITOR}" "${ARGS[@]}"
 }
-
-vi() { v "$@" }
-vim() { v "$@" }
-nvim() { v "$@" }
 
 xc()
 {
