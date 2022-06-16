@@ -500,19 +500,35 @@ xc()
 
 # Environment variables.
 #
-# We need to force SHELL_SESSION_HISTORY to 1 in order to override the default
-# behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
-# defined.
+# Set up $PATH before setting $EDITOR so that we can find any brew-based
+# solutions if we have them installed.
 
-export EDITOR="/usr/bin/vi"
+BREW_PATH="$(brew_path)"
+if [ -n "${BREW_PATH}" ]
+then
+    prepend_path "${BREW_PATH}/sbin"
+    prepend_path "${BREW_PATH}/bin"
+fi
+unset BREW_PATH
+
+prepend_path "${DOTFILES}/bin"
+
+# Find the best-looking vim-ish.
+
+[[ -x $(whence -p vi) ]] && export EDITOR=$(whence -p vi)
 [[ -x $(whence -p vim) ]] && export EDITOR=$(whence -p vim)
 [[ -x $(whence -p nvim) ]] && export EDITOR=$(whence -p nvim)
+export VISUAL="${EDITOR}"
 
-export HISTTIMEFORMAT="%F %T: "
+# Misc. vars.
+
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
-export SHELL_SESSION_HISTORY=1
+
+# PROMPT/PS1
+#
+# TODO: zsh-ify this.
 
 if is_executable starship
 then
@@ -527,23 +543,24 @@ else
     fi
 fi
 
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-HISTSIZE=SAVEHIST=10000
+# We need to force SHELL_SESSION_HISTORY to 1 in order to override the default
+# behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
+# defined.
+#
+# TODO: See if we still need SHELL_SESSION_HISTORY. SHELL_SESSION_HISTORY was
+# needed when using bash. It's not clear if it's needed for zsh. On the one
+# hand, /etc/zshrc_Apple_Terminal seems to still support it. On the other hand,
+# zsh options like share_history seem to indicate that a built-in mechanism is
+# available.
+
+export SHELL_SESSION_HISTORY=1
+
+export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export HISTTIMEFORMAT="%F %T: "
+export HISTSIZE=SAVEHIST=10000
 setopt share_history
 setopt extended_history
 setopt interactive_comments
-
-# $PATH.
-
-BREW_PATH="$(brew_path)"
-if [ -n "${BREW_PATH}" ]
-then
-    prepend_path "${BREW_PATH}/sbin"
-    prepend_path "${BREW_PATH}/bin"
-fi
-unset BREW_PATH
-
-prepend_path "${DOTFILES}/bin"
 
 # Support for 1Password as ssh-agent.
 
