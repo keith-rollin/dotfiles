@@ -14,26 +14,30 @@ $ dotfiles/install
 
 ```text
 $HOME/
-|-- .clang-format@ -> $HPD/dotfiles/clang-format.in
+|-- .clang-format -> $HPD/dotfiles/clang-format.in
 |-- .config/
 |   |-- 1password/
-|   |-- broot/
-|   |-- emacs/
-|   |-- nvim/init.vim@ -> $HPD/dotfiles/vim/init.vim
+|   |   `-- agent.sock -> ...
+|   |-- nvim/
+|   |   `-- init.vim -> $HPD/dotfiles/vim/init.vim
 |   |-- op/
-|   `-- starship.toml@ -> $HPD/dotfiles/starship.toml
-|-- .gitconfig@ -> $HPD/dotfiles/gitconfig
-|-- .inputrc@ -> $HPD/dotfiles/inputrc
-|-- .zshenv@ -> $HPD/dotfiles/zshenv
-|-- .zshrc@ -> $HPD/dotfiles/zshrc
+|   |   |-- config
+|   |   `-- op-daemon.sock=
+|   |-- starship.toml -> $HPD/dotfiles/starship.toml
+|   `-- zsh/
+|       |-- zcompdump
+|       `-- zsh_history
+|-- .gitconfig -> $HPD/dotfiles/gitconfig
+|-- .zshenv -> $HPD/dotfiles/zshenv
+|-- .zshrc -> $HPD/dotfiles/zshrc
 |-- Library/Application Support/Sublime Text 3/Packages
 |   `-- User -> $HPD/dotfiles/SublimeText-Packages-User/
-`-- src@ -> $HPD/src
+`-- src -> $HPD/src
 
 $HPD/
 `-- dotfiles/
 
-/Volumes/Data
+/Volumes/Data (if it exists)
 `-- .clang-format
 
 /usr/local/ or /opt/homebrew/
