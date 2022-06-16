@@ -504,18 +504,15 @@ xc()
 # behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
 # defined.
 
-_VI="/usr/bin/vi"
-[[ -x $(whence -p vim) ]] && _VI=$(whence -p vim)
-[[ -x $(whence -p nvim) ]] && _VI=$(whence -p nvim)
+export EDITOR="/usr/bin/vi"
+[[ -x $(whence -p vim) ]] && export EDITOR=$(whence -p vim)
+[[ -x $(whence -p nvim) ]] && export EDITOR=$(whence -p nvim)
 
-export EDITOR="${_VI}"
 export HISTTIMEFORMAT="%F %T: "
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export SHELL_SESSION_HISTORY=1
-
-unset _VI
 
 if is_executable starship
 then
