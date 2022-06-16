@@ -24,6 +24,7 @@ $HOME/
 |   `-- starship.toml@ -> $HPD/dotfiles/starship.toml
 |-- .gitconfig@ -> $HPD/dotfiles/gitconfig
 |-- .inputrc@ -> $HPD/dotfiles/inputrc
+|-- .zshenv@ -> $HPD/dotfiles/zshenv
 |-- .zshrc@ -> $HPD/dotfiles/zshrc
 |-- Library/Application Support/Sublime Text 3/Packages
 |   `-- User -> $HPD/dotfiles/SublimeText-Packages-User/

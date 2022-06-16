@@ -244,6 +244,11 @@ hide_brew()
     "$@"
 }
 
+hist()
+{
+    history -i 0 "$@"
+}
+
 is_executable()
 {
     # Determine if the given command is an actual command, alias, or shell
@@ -543,20 +548,9 @@ else
     fi
 fi
 
-# We need to force SHELL_SESSION_HISTORY to 1 in order to override the default
-# behavior where per-session shell histories are disabled if HISTTIMEFORMAT is
-# defined.
-#
-# TODO: See if we still need SHELL_SESSION_HISTORY. SHELL_SESSION_HISTORY was
-# needed when using bash. It's not clear if it's needed for zsh. On the one
-# hand, /etc/zshrc_Apple_Terminal seems to still support it. On the other hand,
-# zsh options like share_history seem to indicate that a built-in mechanism is
-# available.
-
-export SHELL_SESSION_HISTORY=1
-
-export HISTFILE=${HOME}/.config/nvim/zsh_history
-export HISTTIMEFORMAT="%F %T: "
+ZSH_CONFIG_DIR="${HOME}/.config/zsh"
+mkdir -p "${ZSH_CONFIG_DIR}"
+export HISTFILE=${ZSH_CONFIG_DIR}/zsh_history
 export HISTSIZE=SAVEHIST=10000
 setopt share_history
 setopt extended_history
@@ -574,7 +568,7 @@ unset REAL_AGENT_SOCK
 # Shell.
 
 autoload -U compinit
-compinit -d "${HOME}/.config/nvim/zcompdump"
+compinit -d "${ZSH_CONFIG_DIR}/zcompdump"
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 
 bindkey "^[[A" history-beginning-search-backward
