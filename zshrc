@@ -555,7 +555,7 @@ fi
 
 export SHELL_SESSION_HISTORY=1
 
-export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export HISTFILE=${HOME}/.config/nvim/zsh_history
 export HISTTIMEFORMAT="%F %T: "
 export HISTSIZE=SAVEHIST=10000
 setopt share_history
@@ -574,7 +574,7 @@ unset REAL_AGENT_SOCK
 # Shell.
 
 autoload -U compinit
-compinit
+compinit -d "${HOME}/.config/nvim/zcompdump"
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 
 bindkey "^[[A" history-beginning-search-backward
