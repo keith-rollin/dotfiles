@@ -1,41 +1,42 @@
 #!/bin/sh
 
+# Return the given path in canonical format (with all .'s, ..'s, and ~'s
+# resolved) and all symlinks resolved.
+#
+# The comments here helped:
+#
+#   https://stackoverflow.com/questions/1055671/how-can-i-get-the-behavior-of-gnus-readlink-f-on-a-mac
+#
+# This script passes the unit tests in:
+#
+#   https://github.com/mkropat/sh-realpath
+#
+# Which needs the following for the unit tests:
+#
+#   https://github.com/kward/shunit2
+#
+# I've also verified that the tests work under zsh. Note that you need to apply
+# the following changes in order for the tests to run:
+#
+# * In shunit2, after the definition of __SHUNIT_CMD_ECHO_ESC, add:
+#
+#       setopt shwordsplit
+#
+# * In each of the tests under t/, add the following at the top of the file:
+#
+#       SHUNIT_PARENT=$0
+#
+# * In this script, include the following line before the `echo` line. The
+# tests want directories to end with '/', but my usage of this facility
+# doesn't.
+#
+#       [ -d "$result" ] && result="$result/"
+
+
 realpath()
 {
-    # Found on the web:
-    # Found it in here:  http://stackoverflow.com/questions/1055671/how-can-i-get-the-behavior-of-gnus-readlink-f-on-a-mac
-    # A variant is here: http://stackoverflow.com/questions/3572030/bash-script-absolute-path-with-osx
-    # A variant is here: http://stackoverflow.com/questions/5756524/how-to-get-absolute-path-name-of-shell-script-on-macos
-    # Seems solid.
-
-    TARGET_FILE="$1"
-
-    # Switch to the target directory, and get the bare file name.
-    cd "$(dirname "$TARGET_FILE")" > /dev/null 2>&1 || { echo ""; return; }
-    TARGET_FILE="$(basename "$TARGET_FILE")"
-
-    # Starting with the current directory and bare file name, iterate down a
-    # (possible) chain of symlinks. Resolve the file name, (possibly) getting a
-    # new directory and file name. CD to that directory and repeat until we no
-    # longer point to a symbolic link. When done, we should be in the final
-    # directory with $TARGET_FILE containing the real name.
-    while [ -L "$TARGET_FILE" ]
-    do
-        TARGET_FILE="$(readlink "$TARGET_FILE")"
-        cd "$(dirname "$TARGET_FILE")" > /dev/null 2>&1 || { echo ""; return; }
-        TARGET_FILE="$(basename "$TARGET_FILE")"
-    done
-
-    # Compute the canonicalized name by finding the physical path for the
-    # directory we're in and appending the target file. Perform special
-    # handling of "." and ".." so that we don't end up with "/x/y/z/." instead of
-    # "/x/y/z" or "/x/y/z/.." instead of "/x/y".
-
-    case "$TARGET_FILE" in
-        .)  echo "$(pwd -P)" ;;
-        ..) echo "$(dirname "$(pwd -P)")" ;;
-        *)  echo "$(pwd -P)/$TARGET_FILE" ;;
-    esac
+    [ -z "$1" ] && local result=$(pwd -P) || local result=$(readlink -f "%R" "$1")
+    echo "$result"
 }
 
 realpath "$1"
