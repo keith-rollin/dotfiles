@@ -156,6 +156,8 @@ defaults write com.apple.Safari     IncludeDevelopMenu              -int 1
 defaults write com.apple.Safari     NewTabBehavior                  -int 1  # Open to empty page
 defaults write com.apple.Safari     NewWindowBehavior               -int 1  # Open to empty page
 
+defaults write com.apple.screencapture disable-shadow               -bool true
+
 # Secret options from https://github.com/kpdecker/dotfiles/blob/master/setup/osx-defaults/safari.sh
 # defaults write com.apple.Safari     IncludeInternalDebugMenu        -int 1
 # defaults write com.apple.Safari     ShowFullURLInSmartSearchField   -int 1
