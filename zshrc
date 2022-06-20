@@ -10,6 +10,7 @@ ME_BASE="${(%):-%N}"
 ME="$(readlink "${ME_BASE}")"
 [ -n "${ME}" ] || ME="${ME_BASE}"
 DOTFILES="$(dirname "${ME}")"
+unset ME ME_BASE
 
 # Functions.
 
@@ -105,6 +106,51 @@ grc()  { git rebase --continue ; }
 grm()  { git rebase master ; }
 gs()   { git status "$@" ; }
 
+add_note() {
+    # Add note to Notes.app
+    # Usage: `note 'title' 'body'` or `echo 'body' | note`
+    # Title is optional
+
+    local title
+    local body
+    if [ -t 0 ]; then
+        title="$1"
+        body="$2"
+    else
+        title=$(cat)
+    fi
+
+    osascript >/dev/null <<EOF
+tell application "Notes"
+    tell account "iCloud"
+        tell folder "Notes"
+            make new note with properties {name:"$title", body:"$title" & "<br><br>" & "$body"}
+        end tell
+    end tell
+end tell
+EOF
+}
+
+add_reminder() {
+    # Add reminder to Reminders.app
+    # Usage: `remind 'foo'` or `echo 'foo' | remind`
+
+    local text
+    if [ -t 0 ]; then
+        text="$1"
+    else
+        text=$(cat)
+    fi
+
+    osascript >/dev/null <<EOF
+tell application "Reminders"
+    tell the default list
+        make new reminder with properties {name:"$text"}
+    end tell
+end tell
+EOF
+}
+
 bak()
 {
     # Make backups of the given files (copy them to *.bak).
@@ -142,6 +188,21 @@ brew_path()
     fi
     echo "${HOMEBREW_PREFIX}"
 }
+
+calc()
+{
+    local result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+    #                             └─ default (when `--mathlib` is used) is 20
+
+    if [[ "$result" == *.* ]]
+    then
+        printf "$result" | sed -e 's/0*$//;s/\.$//'   # remove trailing zeros
+    else
+        printf "$result"
+    fi
+    printf "\n"
+}
+
 
 cdd()
 {
