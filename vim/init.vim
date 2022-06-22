@@ -225,6 +225,10 @@ nnoremap <silent> <leader>ss        :set spell!<CR>
 " nnoremap <silent> <leader>v         :set paste!<CR> " Handled with 'pastetoggle'.
 nnoremap <silent> <leader>w         :w<CR>
 
+" Find or replace the word under the cursor.
+nnoremap <silent> <leader>f         /<C-r><C-w><CR>
+nnoremap <silent> <leader>r         :%s/\<<C-r><C-w>\>/<C-r><C-w>/g<Left><Left>
+
 " Take the selection and move it up or down, after which, reselect the text,
 " reformat/indent it, and select it again.
 "
