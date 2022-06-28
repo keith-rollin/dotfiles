@@ -39,3 +39,5 @@
 	transferEncoding = base64
 [log]
 	date = local
+[core]
+	fsmonitor = true
