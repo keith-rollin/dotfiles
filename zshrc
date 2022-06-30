@@ -577,6 +577,8 @@ then
 fi
 unset BREW_PATH
 
+[[ -d "${HOME}/.local/cargo/bin" ]] && prepend_path "${HOME}/.local/cargo/bin"
+
 prepend_path "${DOTFILES}/bin"
 
 # Find the best-looking vim-ish.
