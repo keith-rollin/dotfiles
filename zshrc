@@ -372,6 +372,32 @@ lips()
     printf '%20s: %s\n' "External IP" $EXTIP
 }
 
+wwls () # "Words with letter sequence"
+{
+    # Break up the command line into individual letters.
+
+    local all_letters=()
+    while [[ -n "$1" ]];
+    do
+        all_letters+=( $(echo "$1" | grep -o .) )
+        shift
+    done
+
+    # Create a pattern of those letters separated by .*'s.
+
+    local pattern='.*'
+    for letter in "${all_letters[@]}"
+    do
+        pattern+="${letter}"'.*'
+    done
+
+    # Search for words with the given letter sequence.
+
+    grep -i "$pattern" /usr/share/dict/words \
+        | awk '{ print length, $0 }' \
+        | sort -nr | awk '{ print $2 }'
+}
+
 maybe_resolve()
 {
     # If `realpath` is available, use it to resolve the given path into a full,
