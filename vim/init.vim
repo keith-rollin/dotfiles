@@ -1,3 +1,16 @@
+" Set mapleader here so that we can use it anywhere in the file.
+"
+let mapleader = " "
+
+" Clear out our custom autocommands. Do it here by itself so that, through
+" this file, we can open and close the group to add new commands without
+" having to worry if any particular group is the first one and that should be
+" the one to clear out old commands.
+"
+augroup custom_kr
+    autocmd!
+augroup END
+
 " Pull in vim-plug
 " ----------------
 " NOTE: Under nvim, vim-plug will install plugins into:
@@ -37,6 +50,9 @@ Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -
 Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
 Plug 'tpope/vim-commentary'                 " Comment/uncomment.
 Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
+Plug 'vim-autoformat/vim-autoformat'        " Provide easy code formatting in Vim by
+                                            " integrating existing code formatters.
+                                            " NOTE: needs pynvim installed in python.
 
 " LSP-related
 "
@@ -73,6 +89,15 @@ let g:lsp_settings = {
     \       }
     \   }
     \ }
+
+" Configure vim-autoformat
+"
+let g:python3_host_prog = exepath("python3")
+
+nnoremap <leader>ff :Autoformat<cr>
+augroup custom_kr
+    autocmd BufWrite *.py,*.rs :Autoformat
+augroup END
 
 " Color scheme
 " ------------
@@ -140,8 +165,6 @@ abbr x78x **********************************************************************
 " Misc.
 " -----
 augroup custom_kr
-    autocmd!
-
     " Set text width to 78 when a .txt file is created or opened.
     autocmd BufNewFile,BufRead *.txt set textwidth=78
 
@@ -182,7 +205,6 @@ let g:netrw_liststyle=3     " Tree view.
 
 " Custom keys
 " -----------
-let mapleader = " "
 
 " Cheat Sheet (from `:help :map-modes`):
 "
@@ -280,33 +302,6 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-
-" clang-format support.
-"
-if executable('clang-format')
-    let g:clang_format_path = exepath("clang-format")
-    let g:clang_format_root = fnamemodify(fnamemodify(g:clang_format_path, ":h"), ":h")
-    let g:clang_format_py = g:clang_format_root . "/share/clang/clang-format.py"
-    if ! empty(glob(g:clang_format_py))
-        function! FormatAll()
-            let l:lines = "all"
-            execute :pyfile g:clang_format_py
-        endfunction
-
-        function! FormatSelection()
-            execute :pyfile g:clang_format_py
-        endfunction
-
-        function! FormatChanged()
-            let l:formatdiff = 1
-            execute :pyfile g:clang_format_py
-        endfunction
-
-        nnoremap <leader>cf :call FormatAll()<cr>
-        xnoremap <leader>cf :call FormatSelection()<cr>
-        autocmd BufWritePre *.h,*.c,*.cc,*.cpp call FormatAll()
-    endif
-endif
 
 " Functions/Commands
 " ------------------
