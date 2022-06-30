@@ -146,7 +146,7 @@ augroup custom_kr
     autocmd BufNewFile,BufRead *.txt set textwidth=78
 
     " `:source` .vimrc after we edit and save it.
-    autocmd BufWritePost .vimrc,vimrc source $MYVIMRC
+    autocmd BufWritePost .vimrc,vimrc,init.vim source $MYVIMRC
 
     " Restore the last cursor position. From: 'help last-position-jump'.
     autocmd BufReadPost * if &ft!="gitcommit" && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
