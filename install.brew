@@ -4,7 +4,7 @@
 #
 # This script is not intended to be stand-alone. It's intended to be source'd
 # from `install`. In particular, the effects of prepend_path need to be made
-# persistant by this script being source'd at the top-level shell. Also, in
+# persistent by this script being source'd at the top-level shell. Also, in
 # case of error, this script aborts by using "return 1", which is how you exit
 # a source'd script.
 #
@@ -27,7 +27,7 @@ APPS=(
     clang-format    # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
     exa             # Modern replacement for 'ls'
     git             # Distributed revision control system
-    nvim            # Ambitious Vim-fork focused on extensibility and agility
+    neovim          # Ambitious Vim-fork focused on extensibility and agility
     python-tk@3.10
     python-tk@3.9
     python@3.10
@@ -45,8 +45,34 @@ CASKS=(
     1password/tap/1password-cli
     emacs           # Recommended to install as cask in order to get GUI support
     qlmarkdown      # QuickLook generator for Markdown files (NB:
-                    # QLMarkdown.app needs to be manually launched at leat once
+                    # QLMarkdown.app needs to be manually launched at least once
                     # in order for the QL generator to be registered.)
+)
+
+PYTHON_PACKAGES=(
+    beautifulsoup4  # Screen-scraping library
+    pynvim          # Python client to neovim
+    python-lsp-server   # Python Language Server for the Language Server Protocol
+    # python-lsp-server[all]  # Python Language Server for the Language Server Protocol
+
+    # Support for python-lsp-server
+    # https://github.com/python-lsp/python-lsp-server
+    #
+    autopep8        # for code formatting
+    flake8          # for error checking (disabled by default)
+    mccabe          # linter for complexity checking
+    pycodestyle     # linter for style checking
+    pydocstyle      # linter for docstring style checking (disabled by default)
+    pyflakes        # linter to detect various errors
+    pylint          # for code linting (disabled by default)
+    rope            # for Completions and renaming
+    yapf            # for code formatting (preferred over autopep8)
+
+    pylsp-mypy      # MyPy type checking for Python >=3.7.
+    pyls-isort      # code formatting using isort (automatic import sorting)
+    python-lsp-black    # code formatting using Black.
+    pyls-memestra   # detecting the use of deprecated APIs
+    pylsp-rope      # Extended refactoring capabilities using Rope
 )
 
 
@@ -97,8 +123,11 @@ install_brew()
     echo "*** Installing Homebrew apps"
     echo
 
-    dont_sleep brew install -q "${APPS[@]}"
-    dont_sleep brew install -q --cask "${CASKS[@]}"
+    local TO_INSTALL=( $(filter APPS $(brew list --formula)) )
+    (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q "${TO_INSTALL[@]}"
+
+    local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
+    (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
 
     # Prevent the following errors/messages when starting zsh:
     #
@@ -110,6 +139,50 @@ install_brew()
         compaudit | xargs chmod g-w
         compaudit | xargs chown root
     fi
+
+    echo
+    echo "*** Installing Python packages"
+    echo
+
+    # Install some Python packages now that we have Python installed.
+    #
+    # Get list of already-installed packages, remove them from the list of packages
+    # we want to install, and install the resulting set.
+
+    local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
+    (( $#TO_INSTALL > 0 )) && dont_sleep pip3 install "${TO_INSTALL[@]}"
+}
+
+filter()
+{
+    # Given the name of a list to filter and a list of items, get the items in
+    # the named list and return (echo) them if they don't appear in the given
+    # list of items.
+    #
+    # Allow for the fact that the named list may contain items in the form
+    # X/Y/Z, whereas the given items may include just Z. In that case, the
+    # prefix should be ignored and the item should still be removed.
+
+    local LIST_TO_FILTER=$1
+    local ITEMS_TO_FILTER=( "${(P)${LIST_TO_FILTER}[@]}" )
+    shift
+    local ITEMS_TO_REMOVE="$@"
+
+    local ITEM_TO_TEST
+    for ITEM_TO_TEST in "${ITEMS_TO_FILTER[@]}"
+    do
+        # If ITEM_TO_TEST has a prefix("*/"), remove it. Then see if the result
+        # is in ITEMS_TO_REMOVE by getting its index. If it's not there (the
+        # index is zero), echo it to the caller.
+        #
+        # TODO: I need a good way to return an array from a function. As it is,
+        # any items with spaces will be split into multiple items. Probably the
+        # best thing to do is pass in the name of an array to received the
+        # results and populate it indirectly. Maybe see:
+        # https://stackoverflow.com/a/49971213
+
+        (( $ITEMS_TO_REMOVE[(I)${ITEM_TO_TEST##*/}] )) || echo "${ITEM_TO_TEST}"
+    done
 }
 
 have_brew()
@@ -149,6 +222,7 @@ else
     install_brew
 fi
 
+unset PYTHON_PACKAGES
 unset CASKS
 unset APPS
 
