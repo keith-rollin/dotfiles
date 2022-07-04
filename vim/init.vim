@@ -48,47 +48,54 @@ call plug#begin()
 Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see
                                             "   https://cirw.in/blog/bracketed-paste).
 Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
+Plug 'neovim/nvim-lspconfig'                " Quickstart configs for Nvim LSP
 Plug 'tpope/vim-commentary'                 " Comment/uncomment.
 Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
 Plug 'vim-autoformat/vim-autoformat'        " Provide easy code formatting in Vim by
                                             " integrating existing code formatters.
                                             " NOTE: needs pynvim installed in python.
-
-" LSP-related
-"
-" NOTE: Even with all this shizzle here, getting an LSP server installed is a
-" manual process. See: ":help LspInstallServer". In my case, for Python, I
-" installed pylsp-all.
-"
-Plug 'mattn/vim-lsp-settings'               " Auto configurations for Language Server for vim-lsp.
-Plug 'prabirshrestha/async.vim'             " normalize async job control api for vim and neovim.
-Plug 'prabirshrestha/asyncomplete-lsp.vim'  " Provide LSPautocompletion source for asyncomplete.vim and vim-lsp.
-Plug 'prabirshrestha/asyncomplete.vim'      " async completion in pure vim script for vim8 and neovim.
-Plug 'prabirshrestha/vim-lsp'               " lsp-server client for vim and neovim.
-
 call plug#end()
 
-" Ugh! Took me two days to figure out how to configure pylsp when it's
-" installed via vim-lsp-settings! I had been trying to install my settings
-" following the instructions in the vim-lsp repo, but my attempts there were
-" getting overridden by vim-lsp-settings.
+" Configure LSP
 "
-" NB: I don't know the difference between 'config' and 'workspace_config', but
-" the latter is definitely what we want here.
+lua << END
+    -- Establish LSP mappings from:
+    --
+    --   https://github.com/neovim/nvim-lspconfig
+    --
 
-let g:lsp_settings = {
-    \   'pylsp-all': {
-    \       'workspace_config': {
-    \           'pylsp': {
-    \               'plugins': {
-    \                   'pycodestyle': {
-    \                       'ignore': [ 'E221', 'W503', 'W504' ]
-    \                   }
-    \               }
-    \           }
-    \       }
-    \   }
-    \ }
+    local do_map = function(keys, fn)
+        vim.keymap.set('n', '<leader>' .. keys, fn, { noremap = true, silent = true })
+    end
+    do_map('[d', vim.diagnostic.goto_prev)
+    do_map(']d', vim.diagnostic.goto_next)
+
+    local on_attach = function(client, bufnr)
+        local do_map = function(keys, fn)
+            vim.keymap.set('n', '<leader>' .. keys, fn, { noremap = true, silent = true, buffer = bufnr })
+        end
+        do_map('gd', vim.lsp.buf.definition)
+        do_map('gr', vim.lsp.buf.references)
+        do_map('K',  vim.lsp.buf.hover)
+        do_map('rn', vim.lsp.buf.rename)
+    end
+
+    require('lspconfig').pylsp.setup{
+        on_attach = on_attach,
+
+        --
+        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pylsp
+        --
+        settings = { pylsp = { plugins = { pycodestyle = {
+            ignore = {
+                -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
+                'E221', -- multiple spaces before operator
+                'W503', -- line break before binary operator
+                'W504', -- line break after binary operator
+            }
+        } } } }
+    }
+END
 
 " Configure vim-autoformat
 "
@@ -275,33 +282,6 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    setlocal tagfunc=lsp#tagfunc
-    " nmap <buffer> gd <plug>(lsp-definition)
-    " nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    " nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    " nmap <buffer> gr <plug>(lsp-references)
-    " nmap <buffer> gi <plug>(lsp-implementation)
-    " nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    " nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    " nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    " nmap <buffer> K <plug>(lsp-hover)
-    " nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    " nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 3000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
 
 " Functions/Commands
 " ------------------
