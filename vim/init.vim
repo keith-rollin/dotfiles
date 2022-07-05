@@ -130,6 +130,8 @@ set scrolloff=3                 " Keep cursor this many lines from top or bottom
 set shiftround                  " Round indent to multiple of 'shiftwidth'.
 set shortmess=atI               " Don't show the intro message when starting Vim.
 set smartindent                 " Indent like C-like programs.
+set splitbelow                  " New horizontal splits appear below.
+set splitright                  " New vertical splits appear to the right.
 
 " Search related
 "
@@ -283,6 +285,15 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
+
+" Split navigation
+"
+" NOTE: CTRL-L conflicts with vim-sensible's mapping that removes
+" highlighting. I really like the latter and may miss it.
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 " Functions/Commands
 " ------------------
