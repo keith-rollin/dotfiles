@@ -157,6 +157,7 @@ abbr const_case const_cast
 abbr dynamic_case dynamic_cast
 abbr fitler filter
 abbr funciton function
+abbr hte the
 abbr reinterpret_case reinterpret_cast
 abbr static_case static_cast
 abbr teh the
