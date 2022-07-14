@@ -135,9 +135,11 @@ augroup END
 
 " Color scheme
 " ------------
-set background=light
-colorscheme morning             " I also like default (in a dark terminal) and pablo.
-highlight Normal ctermbg=none   " Use the terminal's background (why is this comment green?).
+" set background=light
+" colorscheme morning             " I also like default (in a dark terminal) and pablo.
+" highlight Normal ctermbg=none   " Use the terminal's background (why is this comment green?).
+highlight CursorLine cterm=none " Turn off underlining, since it leaves residue in Terminal right now.
+highlight ColorColumn ctermbg=LightGrey
 
 " Variables
 " ---------
