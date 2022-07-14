@@ -331,6 +331,11 @@ nnoremap <C-H> <C-W><C-H>
 "
 nnoremap gf :edit <cfile><cr>
 
+" Remap n and N to keep the found text centered.
+"
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
 " Functions/Commands
 " ------------------
 
