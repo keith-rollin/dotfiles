@@ -208,7 +208,8 @@ augroup custom_kr
     " Set text width to 78 when a .txt file is created or opened.
     autocmd BufNewFile,BufRead *.txt set textwidth=78
 
-    " `:source` .vimrc after we edit and save it.
+    " `:source` init.vim after we edit and save it.
+    autocmd BufNewFile,BufRead *.vim set textwidth=0
     autocmd BufWritePost .vimrc,vimrc,init.vim source $MYVIMRC
 
     " Restore the last cursor position. From: 'help last-position-jump'.
