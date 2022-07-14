@@ -161,6 +161,7 @@ set shortmess=atI               " Don't show the intro message when starting Vim
 set smartindent                 " Indent like C-like programs.
 set splitbelow                  " New horizontal splits appear below.
 set splitright                  " New vertical splits appear to the right.
+set title                       " Set window title.
 
 " Search related
 "
