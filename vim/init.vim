@@ -284,6 +284,7 @@ nnoremap <silent> <leader><space>   :call StripWhitespace()<CR>
 nnoremap <silent> <leader>eg        :edit ~/.gitconfig<CR>
 nnoremap <silent> <leader>ev        :edit $MYVIMRC<CR>
 nnoremap <silent> <leader>ez        :edit ~/.zshrc<CR>
+nnoremap <silent> <leader>l         :nohlsearch<CR>
 nnoremap <silent> <leader>m         :call ParentMake()<CR>
 nnoremap <silent> <leader>si        :set cursorline!<CR>
 nnoremap <silent> <leader>sl        :set list!<CR>
@@ -323,7 +324,9 @@ imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
 " Split navigation
 "
 " NOTE: CTRL-L conflicts with vim-sensible's mapping that removes
-" highlighting. I really like the latter and may miss it.
+" highlighting. I really like the latter and may miss it. For now, I've mapped
+" <leader>l to do most of the same thing (vim-sensible's version does more
+" than I need).
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
