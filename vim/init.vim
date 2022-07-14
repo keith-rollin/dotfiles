@@ -48,6 +48,8 @@ call plug#begin()
 Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see
                                             "   https://cirw.in/blog/bracketed-paste).
 Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
+" Plug 'hrsh7th/nvim-cmp'                     " A completion plugin for neovim coded in Lua.
+" Plug 'hrsh7th/cmp-nvim-lsp'                 " nvim-cmp source for neovim builtin LSP client
 Plug 'neovim/nvim-lspconfig'                " Quickstart configs for Nvim LSP
 Plug 'tpope/vim-commentary'                 " Comment/uncomment.
 Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
@@ -59,6 +61,27 @@ call plug#end()
 " Configure LSP
 "
 lua << END
+
+    -- vim-cmp and cmp-nvim-lsp configurationn from:
+    -- https://github.com/hrsh7th/nvim-cmp
+
+--     cmp = require'cmp';
+--     cmp.setup {
+--         sources = {
+--             -- { name = 'nvim_lsp' }
+--         },
+--         mapping = cmp.mapping.preset.insert({
+--              -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+--              -- ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--              -- ['<C-Space>'] = cmp.mapping.complete(),
+--              -- ['<C-e>'] = cmp.mapping.abort(),
+--              -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
+--         }),
+--     }
+
+--     local capabilities = vim.lsp.protocol.make_client_capabilities()
+--     capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
     -- Establish LSP mappings from:
     --
     --   https://github.com/neovim/nvim-lspconfig
@@ -82,6 +105,7 @@ lua << END
 
     require('lspconfig').pylsp.setup{
         on_attach = on_attach,
+        -- capabilities = capabilities,
 
         --
         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pylsp
