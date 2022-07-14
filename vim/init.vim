@@ -215,6 +215,9 @@ augroup custom_kr
     " Restore the last cursor position. From: 'help last-position-jump'.
     autocmd BufReadPost * if &ft!="gitcommit" && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+    " Set a right-most colorcolumn for Python files.
+    autocmd BufNewFile,BufRead *.py setlocal textwidth=79 colorcolumn=+1
+
     " Treat .json files as .js.
     autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
 
