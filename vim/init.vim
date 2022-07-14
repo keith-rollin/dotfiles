@@ -314,13 +314,6 @@ vnoremap <silent> >                 >gv
 "
 nnoremap <silent>Y                  y$
 
-" Support for auto-completion in the asynccomplete plugin.
-"
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
-imap     <C-Space>      <Plug>(asyncomplete_force_refresh)
-
 " Split navigation
 "
 " NOTE: CTRL-L conflicts with vim-sensible's mapping that removes
