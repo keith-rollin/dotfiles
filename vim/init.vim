@@ -388,8 +388,8 @@ function! ParentMake()
     execute 'make -C ' . fnamemodify(l:makefile, ":h")
 endfunction
 
-" Reload the .vimrc file, in case for some reason the autocmd above doesn't do
-" the trick. This mirrors my bash command that does the same thing with the
+" Reload the init.vim file, in case for some reason the autocmd above doesn't
+" do the trick. This mirrors my bash command that does the same thing with the
 " .zshrc file.
 "
 command! Reload :source $MYVIMRC
