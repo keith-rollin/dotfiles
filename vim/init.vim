@@ -128,7 +128,7 @@ END
 "
 let g:python3_host_prog = exepath("python3")
 
-nnoremap <leader>ff :Autoformat<cr>
+nnoremap <leader>af :Autoformat<cr>
 augroup custom_kr
     autocmd BufWrite *.py,*.rs :Autoformat
 augroup END
