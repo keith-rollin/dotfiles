@@ -56,6 +56,9 @@ Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
 Plug 'vim-autoformat/vim-autoformat'        " Provide easy code formatting in Vim by
                                             " integrating existing code formatters.
                                             " NOTE: needs pynvim installed in python.
+Plug 'vim-scripts/indentpython.vim'         " PEP8 auto-indenting. TODO: This better handles
+                                            " ()'s, []'s, {}'s, and if/else, but doesn't handle
+                                            " long strings. Can I fix those issues?
 call plug#end()
 
 " Configure LSP
