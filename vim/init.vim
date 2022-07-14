@@ -325,6 +325,12 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" Remap gf to open the file under the cursor even if it doesn't exist. This
+" tip is from the help for 'gf'. However, that help says to just use the 'map'
+" command. I'm not sure if that's the best way to go, so I'm using nnoremap.
+"
+nnoremap gf :edit <cfile><cr>
+
 " Functions/Commands
 " ------------------
 
