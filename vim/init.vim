@@ -1,6 +1,6 @@
 " Set mapleader here so that we can use it anywhere in the file.
 "
-let mapleader = " "
+let mapleader = "\<space>"
 
 " Clear out our custom autocommands. Do it here by itself so that, through
 " this file, we can open and close the group to add new commands without
