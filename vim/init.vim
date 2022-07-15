@@ -307,13 +307,6 @@ vnoremap <silent> K                 :m '<-2<CR>gv=gv
 vnoremap <silent> <                 <gv
 vnoremap <silent> >                 >gv
 
-" From ":help Y":
-"
-"   If you like "Y" to work from the cursor to the end of line (which is more
-"   logical, but not Vi-compatible) use ":map Y y$".
-"
-nnoremap <silent>Y                  y$
-
 " Split navigation
 "
 " NOTE: CTRL-L conflicts with vim-sensible's mapping that removes
