@@ -45,11 +45,10 @@ endif
 " Install plugins
 " ---------------
 call plug#begin()
+
 Plug 'ConradIrwin/vim-bracketed-paste'      " Handle BPM (bracketed paste mode -- see
                                             "   https://cirw.in/blog/bracketed-paste).
 Plug 'derekwyatt/vim-fswitch'               " Switching between companion files.
-" Plug 'hrsh7th/nvim-cmp'                     " A completion plugin for neovim coded in Lua.
-" Plug 'hrsh7th/cmp-nvim-lsp'                 " nvim-cmp source for neovim builtin LSP client
 Plug 'neovim/nvim-lspconfig'                " Quickstart configs for Nvim LSP
 Plug 'tpope/vim-commentary'                 " Comment/uncomment.
 Plug 'tpope/vim-sensible'                   " Sensible vim defaults.
@@ -59,31 +58,97 @@ Plug 'vim-autoformat/vim-autoformat'        " Provide easy code formatting in Vi
 Plug 'vim-scripts/indentpython.vim'         " PEP8 auto-indenting. TODO: This better handles
                                             " ()'s, []'s, {}'s, and if/else, but doesn't handle
                                             " long strings. Can I fix those issues?
+
+" Completion
+Plug 'hrsh7th/nvim-cmp'                     " A completion plugin for neovim coded in Lua.
+Plug 'hrsh7th/cmp-buffer'                   " nvim-cmp source for buffer words.
+Plug 'hrsh7th/cmp-cmdline'                  " nvim-cmp source for vim's cmdline.
+Plug 'hrsh7th/cmp-nvim-lsp'                 " nvim-cmp source for neovim builtin LSP client.
+Plug 'hrsh7th/cmp-nvim-lua'                 " nvim-cmp source for nvim lua.
+Plug 'hrsh7th/cmp-path'                     " nvim-cmp source for path.
+Plug 'hrsh7th/cmp-vsnip'                    " nvim-cmp source for vim-vsnip.
+Plug 'hrsh7th/vim-vsnip'                    " Snippet plugin for vim/nvim that supports LSP/VSCode's snippet format.
+
 call plug#end()
 
 " Configure LSP
 "
+" Consider using williamboman/nvim-lsp-installer
+" (NOTE: "Additional Requirements" may be prohibitive.)
+"
 lua << END
 
-    -- vim-cmp and cmp-nvim-lsp configurationn from:
+    -- vim-cmp and cmp-nvim-lsp configuration from:
     -- https://github.com/hrsh7th/nvim-cmp
 
---     cmp = require'cmp';
---     cmp.setup {
---         sources = {
---             -- { name = 'nvim_lsp' }
---         },
---         mapping = cmp.mapping.preset.insert({
---              -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
---              -- ['<C-f>'] = cmp.mapping.scroll_docs(4),
---              -- ['<C-Space>'] = cmp.mapping.complete(),
---              -- ['<C-e>'] = cmp.mapping.abort(),
---              -- ['<CR>'] = cmp.mapping.confirm({ select = true }),
---         }),
---     }
+   local cmp = require'cmp';
+   cmp.setup {
 
---     local capabilities = vim.lsp.protocol.make_client_capabilities()
---     capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+       mapping = {
+            ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+            ["<C-e>"] = cmp.mapping.close(),
+            ["<C-y>"] = cmp.mapping.confirm {
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+                },
+            ["<C-space>"] = cmp.mapping.complete(),
+        },
+
+        -- Note that we can set attributes for each source:
+        --
+        --  * keyword_length
+        --  * priority
+        --  * max_item_count
+        --  * (others?)
+
+        sources = {
+            { name = 'nvim_lsp' },
+            { name = 'buffer', keyword_length = 5 },
+            { name = 'path' },
+            { name = 'cmdline' },
+            { name = 'vsnip' }
+        },
+
+        snippet = {
+            expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body)
+            end,
+        },
+
+        experimental = {
+            native_menu = false,
+            ghost_text = true,
+        },
+--        snippet = {
+--            expand = function(args)
+--                vim.fn["vsnip#anonymous"](args.body)
+--            end,
+--        },
+--
+--        sources = cmp.config.sources({
+--            { name = 'nvim_lsp' },
+--            { name = 'vsnip' }
+--        }, {
+--            { name = 'buffer' },
+--        }),
+--
+--        mapping = cmp.mapping.preset.insert({
+--            ['<C-j>'] = { i = cmp.mapping.select_next_item() },
+--            ['<C-k>'] = { i = cmp.mapping.select_prev_item() },
+--            ['<TAB>'] = { i = cmp.mapping.select_next_item() },
+--            ['<S-TAB>'] = { i = cmp.mapping.select_prev_item() },
+--
+--            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+--            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--            ['<C-Space>'] = cmp.mapping.complete(),
+--            ['<C-e>'] = cmp.mapping.abort(),
+--            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+--        })
+    }
+
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
     -- Establish LSP mappings from:
     --
@@ -106,9 +171,19 @@ lua << END
         do_map('rn', vim.lsp.buf.rename)
     end
 
+    require('lspconfig').rust_analyzer.setup{
+        on_attach = on_attach,
+        capabilities = capabilities,
+
+        -- Server-specific settings...
+--        settings = {
+--            ["rust-analyzer"] = {}
+--        }
+    }
+
     require('lspconfig').pylsp.setup{
         on_attach = on_attach,
-        -- capabilities = capabilities,
+        capabilities = capabilities,
 
         --
         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pylsp
