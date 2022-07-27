@@ -87,8 +87,12 @@ lua << END
        mapping = {
             ["<C-d>"] = cmp.mapping.scroll_docs(-4),
             ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ["<C-e>"] = cmp.mapping.close(),
-            ["<C-y>"] = cmp.mapping.confirm {
+            ['<C-j>'] = cmp.mapping.select_next_item(),
+            ['<C-k>'] = cmp.mapping.select_prev_item(),
+            ['<TAB>'] = cmp.mapping.select_next_item(),
+            ['<S-TAB>'] = cmp.mapping.select_prev_item(),
+            ["<ESC>"] = cmp.mapping.close(),
+            ["<CR>"] = cmp.mapping.confirm {
                 behavior = cmp.ConfirmBehavior.Insert,
                 select = true,
                 },
@@ -120,31 +124,6 @@ lua << END
             native_menu = false,
             ghost_text = true,
         },
---        snippet = {
---            expand = function(args)
---                vim.fn["vsnip#anonymous"](args.body)
---            end,
---        },
---
---        sources = cmp.config.sources({
---            { name = 'nvim_lsp' },
---            { name = 'vsnip' }
---        }, {
---            { name = 'buffer' },
---        }),
---
---        mapping = cmp.mapping.preset.insert({
---            ['<C-j>'] = { i = cmp.mapping.select_next_item() },
---            ['<C-k>'] = { i = cmp.mapping.select_prev_item() },
---            ['<TAB>'] = { i = cmp.mapping.select_next_item() },
---            ['<S-TAB>'] = { i = cmp.mapping.select_prev_item() },
---
---            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
---            ['<C-f>'] = cmp.mapping.scroll_docs(4),
---            ['<C-Space>'] = cmp.mapping.complete(),
---            ['<C-e>'] = cmp.mapping.abort(),
---            ['<CR>'] = cmp.mapping.confirm({ select = true }),
---        })
     }
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -227,7 +206,7 @@ set listchars=tab:▸\\x20        " Show TABs as RIGHT-ARROW + SPACEs. (Override
 set listchars+=trail:•          " Show trailing spaces as bullets. (Overrides vim-sensible)
 set listchars+=nbsp:∆           " Show non-breaking spaces as deltas. (Overrides vim-sensible)
 set mouse=a                     " Use mouse in all (normal, visual, insert, command) modes.
-set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
+" set pastetoggle=<leader>v       " Key sequence for toggling 'paste'.
 set path+=**                    " Recursively search subdirectories for files on tab-complete.
 set scrolloff=3                 " Keep cursor this many lines from top or bottom for context.
                                 " (Overrides vim-sensible)
