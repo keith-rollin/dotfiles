@@ -195,19 +195,29 @@ augroup END
 " Configure TreeSitter
 "
 lua << END
-    local update_treesitter_parsers = function()
-        if not vim.fn.exists(":TSInstall") then
+    local update_treesitter_parsers = function(state)
+        if vim.fn.exists(":TSInstallInfo") == 0 then
             return
         end
 
+        -- Call TSInstallInfo and parse the output:
+        --
+        -- agda              [✗] not installed
+        -- ...
+        -- c                 [✓] installed
+        -- ...
+
         local get_existing_parsers = function()
-                local tree_sitter_parser_dir = vim.fn.stdpath("data") .. "/plugged/nvim-treesitter/parser"
-                local existing_parser_paths = vim.fn.split(vim.fn.glob(tree_sitter_parser_dir .. "/*.so"))
-                local existing_parsers = {}
-                for _, existing_parser_path in pairs(existing_parser_paths) do
-                    table.insert(existing_parsers, vim.fn.fnamemodify(existing_parser_path, ":t:r"))
+            local existing_parsers = {}
+            local install_info_output = vim.api.nvim_exec("TSInstallInfo", true)
+            local parsers = vim.split(install_info_output, '\n')
+            for _, parser_info in pairs(parsers) do
+                local start, stop, parser_name = string.find(parser_info, "(%a+).+]%s+installed")
+                if parser_name then
+                    table.insert(existing_parsers, parser_name)
                 end
-                return existing_parsers
+            end
+            return existing_parsers
         end
 
         local desired_parsers = { "c", "cpp", "python", "rust" }
@@ -252,15 +262,15 @@ lua << END
     end
 
     if vim.v.vim_did_enter then
-        update_treesitter_parsers()
-    else
-        vim.api.nvim_create_augroup("update_treesitter_parsers", { clear = true })
-        vim.api.nvim_create_autocmd("VimEnter", {
-            group = "update_treesitter_parsers",
-            pattern = "*",
-            callback = update_treesitter_parsers,
-        })
+        update_treesitter_parsers("immediate")
     end
+
+    vim.api.nvim_create_augroup("update_treesitter_parsers", { clear = true })
+    vim.api.nvim_create_autocmd("VimEnter", {
+        group = "update_treesitter_parsers",
+        pattern = "*",
+        callback = function() update_treesitter_parsers("deferred") end
+    })
 
 END
 
