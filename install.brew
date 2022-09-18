@@ -41,6 +41,10 @@ APPS=(
 
     # Needed for building neovim.
     ninja libtool automake cmake pkg-config gettext curl
+
+    # Needed for getting VLC to play Blu-Rays.
+    libbluray
+    libaacs
 )
 
 # Packages to install as pre-built Mac binaries.
