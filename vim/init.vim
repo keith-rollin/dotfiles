@@ -210,9 +210,9 @@ lua << END
         local get_existing_parsers = function()
             local existing_parsers = {}
             local install_info_output = vim.api.nvim_exec("TSInstallInfo", true)
-            local parsers = vim.split(install_info_output, '\n')
-            for _, parser_info in pairs(parsers) do
-                local start, stop, parser_name = string.find(parser_info, "(%a+).+]%s+installed")
+            local install_info = vim.split(install_info_output, '\n')
+            for _, parser_info in pairs(install_info) do
+                local _, _, parser_name = string.find(parser_info, "(%a+).+]%s+installed")
                 if parser_name then
                     table.insert(existing_parsers, parser_name)
                 end
@@ -220,35 +220,27 @@ lua << END
             return existing_parsers
         end
 
+        local in_first_but_not_second = function(first, second)
+            local result = {}
+            for _, a_first in pairs(first) do
+                local first_exists_in_second = false
+                for _, a_second in pairs(second) do
+                    if a_first == a_second then
+                        first_exists_in_second = true
+                    end
+                end
+                if not first_exists_in_second then
+                    table.insert(result, a_first)
+                end
+            end
+            return result
+        end
+
         local desired_parsers = { "c", "cpp", "python", "rust" }
         local existing_parsers = get_existing_parsers()
 
-        local to_install = {}
-        local to_remove = {}
-
-        for _, desired_parser in pairs(desired_parsers) do
-            local parser_exists = false
-            for _, existing_parser in pairs(existing_parsers) do
-                if desired_parser == existing_parser then
-                    parser_exists = true
-                end
-            end
-            if not parser_exists then
-                table.insert(to_install, desired_parser)
-            end
-        end
-
-        for _, existing_parser in pairs(existing_parsers) do
-            local parser_exists = false
-            for _, desired_parser in pairs(desired_parsers) do
-                if desired_parser == existing_parser then
-                    parser_exists = true
-                end
-            end
-            if not parser_exists then
-                table.insert(to_remove, existing_parser)
-            end
-        end
+        local to_install = in_first_but_not_second(desired_parsers, existing_parsers)
+        local to_remove = in_first_but_not_second(existing_parsers, desired_parsers)
 
         for _, desired_parser in pairs(to_install) do
             vim.api.nvim_command("TSInstall " .. desired_parser)
