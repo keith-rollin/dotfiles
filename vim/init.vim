@@ -353,7 +353,7 @@ augroup custom_kr
     autocmd BufNewFile,BufRead *.json setlocal filetype=json syntax=javascript
 
     " Treat .md files as Markdown.
-    autocmd BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md,*.MD setlocal filetype=markdown
+    autocmd BufNewFile,BufRead *.markdown,*.mdown,*.mkd,*.mkdn,*.mdwn,*.md,*.MD setlocal filetype=markdown formatexpr= tw=80
 
     " Treat .mm files as Objective-C.
     autocmd BufNewFile,BufRead *.mm setlocal filetype=objc
