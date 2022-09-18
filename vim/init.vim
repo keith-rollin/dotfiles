@@ -59,6 +59,12 @@ Plug 'vim-scripts/indentpython.vim'         " PEP8 auto-indenting. TODO: This be
                                             " ()'s, []'s, {}'s, and if/else, but doesn't handle
                                             " long strings. Can I fix those issues?
 
+" rust-tools
+Plug 'simrat39/rust-tools.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
 " TreeSitter
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/playground'
@@ -155,6 +161,8 @@ lua << END
         do_map('ca', vim.lsp.buf.code_action)
     end
 
+    -- I'm told we don't need this if we're using rust-tools (below).
+    if false then
     require('lspconfig').rust_analyzer.setup{
         on_attach = on_attach,
         capabilities = capabilities,
@@ -164,6 +172,7 @@ lua << END
 --            ["rust-analyzer"] = {}
 --        }
     }
+    end
 
     require('lspconfig').pylsp.setup{
         on_attach = on_attach,
@@ -264,6 +273,29 @@ lua << END
         callback = function() update_treesitter_parsers("deferred") end
     })
 
+END
+
+" Configure rust-tools
+"
+lua << END
+    local rt = require("rust-tools")
+
+    rt.setup({
+        server = {
+            on_attach = function(_, bufnr)
+                -- Hover actions
+                vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+
+                -- Code action groups
+                vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+            end,
+        },
+        tools = {
+            inlay_hints = {
+                highlight = "DiagnosticHint",
+            },
+        },
+    })
 END
 
 " Color scheme
