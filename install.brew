@@ -38,6 +38,9 @@ APPS=(
     starship        # Cross-shell prompt for astronauts
     tree            # Display directories as trees (with optional color/HTML output)
     watch           # Executes a program periodically, showing output fullscreen
+
+    # Needed for building neovim.
+    ninja libtool automake cmake pkg-config gettext curl
 )
 
 # Packages to install as pre-built Mac binaries.
