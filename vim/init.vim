@@ -59,6 +59,10 @@ Plug 'vim-scripts/indentpython.vim'         " PEP8 auto-indenting. TODO: This be
                                             " ()'s, []'s, {}'s, and if/else, but doesn't handle
                                             " long strings. Can I fix those issues?
 
+" TreeSitter
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/playground'
+
 " Completion
 Plug 'hrsh7th/nvim-cmp'                     " A completion plugin for neovim coded in Lua.
 Plug 'hrsh7th/cmp-buffer'                   " nvim-cmp source for buffer words.
@@ -189,6 +193,78 @@ nnoremap <leader>af :Autoformat<cr>
 augroup custom_kr
     autocmd BufWrite *.py,*.rs :Autoformat
 augroup END
+
+" Configure TreeSitter
+"
+lua << END
+    local update_treesitter_parsers = function()
+        if not vim.fn.exists(":TSInstall") then
+            return
+        end
+
+        local get_existing_parsers = function()
+                local tree_sitter_parser_dir = vim.fn.stdpath("data") .. "/plugged/nvim-treesitter/parser"
+                local existing_parser_paths = vim.fn.split(vim.fn.glob(tree_sitter_parser_dir .. "/*.so"))
+                local existing_parsers = {}
+                for _, existing_parser_path in pairs(existing_parser_paths) do
+                    table.insert(existing_parsers, vim.fn.fnamemodify(existing_parser_path, ":t:r"))
+                end
+                return existing_parsers
+        end
+
+        local desired_parsers = { "c", "cpp", "python", "rust" }
+        local existing_parsers = get_existing_parsers()
+
+        local to_install = {}
+        local to_remove = {}
+
+        for _, desired_parser in pairs(desired_parsers) do
+            local parser_exists = false
+            for _, existing_parser in pairs(existing_parsers) do
+                if desired_parser == existing_parser then
+                    parser_exists = true
+                end
+            end
+            if not parser_exists then
+                table.insert(to_install, desired_parser)
+            end
+        end
+
+        for _, existing_parser in pairs(existing_parsers) do
+            local parser_exists = false
+            for _, desired_parser in pairs(desired_parsers) do
+                if desired_parser == existing_parser then
+                    parser_exists = true
+                end
+            end
+            if not parser_exists then
+                table.insert(to_remove, existing_parser)
+            end
+        end
+
+        for _, desired_parser in pairs(to_install) do
+            vim.api.nvim_command("TSInstall " .. desired_parser)
+        end
+
+        for _, existing_parser in pairs(to_remove) do
+            vim.api.nvim_command("TSUninstall " .. existing_parser)
+        end
+
+        return false
+    end
+
+    if vim.v.vim_did_enter then
+        update_treesitter_parsers()
+    else
+        vim.api.nvim_create_augroup("update_treesitter_parsers", { clear = true })
+        vim.api.nvim_create_autocmd("VimEnter", {
+            group = "update_treesitter_parsers",
+            pattern = "*",
+            callback = update_treesitter_parsers,
+        })
+    end
+
+END
 
 " Color scheme
 " ------------
