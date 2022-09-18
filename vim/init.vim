@@ -89,18 +89,17 @@ lua << END
    cmp.setup {
 
        mapping = {
-            ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-            ['<C-j>'] = cmp.mapping.select_next_item(),
-            ['<C-k>'] = cmp.mapping.select_prev_item(),
-            ['<TAB>'] = cmp.mapping.select_next_item(),
-            ['<S-TAB>'] = cmp.mapping.select_prev_item(),
-            ["<ESC>"] = cmp.mapping.close(),
-            ["<CR>"] = cmp.mapping.confirm {
-                behavior = cmp.ConfirmBehavior.Insert,
-                select = true,
-                },
-            ["<C-space>"] = cmp.mapping.complete(),
+            ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+
+            ['<LEFT>'] = cmp.mapping.select_prev_item(),
+            ['<RIGHT>'] = cmp.mapping.select_next_item(),
+            ['<UP>'] = cmp.mapping.select_prev_item(),
+            ['<DOWN>'] = cmp.mapping.select_next_item(),
+
+            ['<CR>'] = cmp.mapping.confirm { select = true },
+            ['<C-SPACE>'] = cmp.mapping.complete(),
+            ['<ESC>'] = cmp.mapping.close(),
         },
 
         -- Note that we can set attributes for each source:
@@ -112,7 +111,7 @@ lua << END
 
         sources = {
             { name = 'nvim_lsp' },
-            { name = 'buffer', keyword_length = 5 },
+            { name = 'buffer', keyword_length = 3 },
             { name = 'path' },
             { name = 'cmdline' },
             { name = 'vsnip' }
@@ -122,14 +121,6 @@ lua << END
             expand = function(args)
                 vim.fn["vsnip#anonymous"](args.body)
             end,
-        },
-
-        view = {
-            entries = "native",
-        },
-
-        experimental = {
-            ghost_text = true,
         },
     }
 
@@ -144,17 +135,24 @@ lua << END
     local do_map = function(keys, fn)
         vim.keymap.set('n', '<leader>' .. keys, fn, { noremap = true, silent = true })
     end
-    do_map('[d', vim.diagnostic.goto_prev)
-    do_map(']d', vim.diagnostic.goto_next)
+    do_map('dn', vim.diagnostic.goto_prev)
+    do_map('dp', vim.diagnostic.goto_next)
+
+    vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
     local on_attach = function(client, bufnr)
         local do_map = function(keys, fn)
             vim.keymap.set('n', '<leader>' .. keys, fn, { noremap = true, silent = true, buffer = bufnr })
         end
         do_map('gd', vim.lsp.buf.definition)
-        do_map('gr', vim.lsp.buf.references)
+        do_map('gi', vim.lsp.buf.implementation)
+        do_map('gt', vim.lsp.buf.type_definition)
+        do_map('sr', vim.lsp.buf.references)
+        do_map('sh', vim.lsp.buf.signature_help)
         do_map('K',  vim.lsp.buf.hover)
         do_map('rn', vim.lsp.buf.rename)
+        do_map('ff', vim.lsp.buf.formatting)
+        do_map('ca', vim.lsp.buf.code_action)
     end
 
     require('lspconfig').rust_analyzer.setup{
