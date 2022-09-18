@@ -27,6 +27,7 @@ APPS=(
     clang-format    # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
     exa             # Modern replacement for 'ls'
     git             # Distributed revision control system
+    git-delta       # Syntax-highlighting pager for git and diff output
     neovim          # Ambitious Vim-fork focused on extensibility and agility
     python-tk@3.10
     python-tk@3.9

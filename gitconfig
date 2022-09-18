@@ -41,3 +41,16 @@
 	date = local
 [core]
 	fsmonitor = true
+
+# `delta` support
+[core]
+    pager = delta --paging=always
+[interactive]
+	diffFilter = delta --color-only
+[add.interactive]
+	useBuiltin = false
+[delta]
+	navigate = true
+    light = true
+[diff]
+	colorMoved = default
