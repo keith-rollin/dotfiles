@@ -527,7 +527,7 @@ up()
     fi
 }
 
-vim_core ()
+vim_core()
 {
     # Open a file in our editor, converting any parameter like this (which is
     # how compilers emit error messages):
@@ -551,6 +551,11 @@ vim_core ()
     done
 
     "${EDITOR}" "${ARGS[@]}"
+}
+
+vss()
+{
+    vi $(find src -name '*.rs' | sort)
 }
 
 xc()
