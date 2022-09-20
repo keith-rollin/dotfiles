@@ -162,6 +162,8 @@ lua << END
     end
 
     -- I'm told we don't need this if we're using rust-tools (below).
+    -- Note that the keyboard mappings defined above and established below are
+    -- moved to the rust-tools initialization block.
     if false then
     require('lspconfig').rust_analyzer.setup{
         on_attach = on_attach,
@@ -283,11 +285,21 @@ lua << END
     rt.setup({
         server = {
             on_attach = function(_, bufnr)
-                -- Hover actions
-                vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
 
-                -- Code action groups
-                vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+                local do_map = function(keys, fn)
+                    vim.keymap.set('n', '<leader>' .. keys, fn, { noremap = true, silent = true, buffer = bufnr })
+                end
+
+                do_map('gc', rt.open_cargo_toml.open_cargo_toml)
+                do_map('gd', vim.lsp.buf.definition)
+                do_map('gi', vim.lsp.buf.implementation)
+                do_map('gt', vim.lsp.buf.type_definition)
+                do_map('sr', vim.lsp.buf.references)
+                do_map('sh', vim.lsp.buf.signature_help)
+                do_map('K',  vim.lsp.buf.hover)
+                do_map('rn', vim.lsp.buf.rename)
+                do_map('ff', vim.lsp.buf.formatting)
+                do_map('ca', vim.lsp.buf.code_action) -- Use rust-tools's?
             end,
         },
         tools = {
