@@ -206,75 +206,24 @@ augroup END
 " Configure TreeSitter
 "
 lua << END
-    local update_treesitter_parsers = function(state)
-        if vim.fn.exists(":TSInstallInfo") == 0 then
-            return
-        end
-
-        -- Call TSInstallInfo and parse the output:
-        --
-        -- agda              [✗] not installed
-        -- ...
-        -- c                 [✓] installed
-        -- ...
-
-        local get_existing_parsers = function()
-            local existing_parsers = {}
-            local install_info_output = vim.api.nvim_exec("TSInstallInfo", true)
-            local install_info = vim.split(install_info_output, '\n')
-            for _, parser_info in pairs(install_info) do
-                local _, _, parser_name = string.find(parser_info, "(%a+).+]%s+installed")
-                if parser_name then
-                    table.insert(existing_parsers, parser_name)
-                end
-            end
-            return existing_parsers
-        end
-
-        local in_first_but_not_second = function(first, second)
-            local result = {}
-            for _, a_first in pairs(first) do
-                local first_exists_in_second = false
-                for _, a_second in pairs(second) do
-                    if a_first == a_second then
-                        first_exists_in_second = true
-                    end
-                end
-                if not first_exists_in_second then
-                    table.insert(result, a_first)
-                end
-            end
-            return result
-        end
-
-        local desired_parsers = { "c", "cpp", "python", "rust" }
-        local existing_parsers = get_existing_parsers()
-
-        local to_install = in_first_but_not_second(desired_parsers, existing_parsers)
-        local to_remove = in_first_but_not_second(existing_parsers, desired_parsers)
-
-        for _, desired_parser in pairs(to_install) do
-            vim.api.nvim_command("TSInstall " .. desired_parser)
-        end
-
-        for _, existing_parser in pairs(to_remove) do
-            vim.api.nvim_command("TSUninstall " .. existing_parser)
-        end
-
-        return false
-    end
-
-    if vim.v.vim_did_enter then
-        update_treesitter_parsers("immediate")
-    end
-
-    vim.api.nvim_create_augroup("update_treesitter_parsers", { clear = true })
-    vim.api.nvim_create_autocmd("VimEnter", {
-        group = "update_treesitter_parsers",
-        pattern = "*",
-        callback = function() update_treesitter_parsers("deferred") end
-    })
-
+    require'nvim-treesitter.configs'.setup {
+        ensure_installed = {
+            "bash",
+            "c",
+            "cpp",
+            -- "gitignore", -- Requires Node
+            "http",
+            "json",
+            "lua",
+            "make",
+            "markdown",
+            "python",
+            "rust",
+            -- "swift", -- Requires Node
+            "toml",
+            "vim",
+        },
+    }
 END
 
 " Configure rust-tools
