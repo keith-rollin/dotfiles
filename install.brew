@@ -34,7 +34,6 @@ APPS=(
     python@3.10
     python@3.9      # (See the following regarding versions: https://docs.brew.sh/Homebrew-and-Python)
     ripgrep         # Search tool like grep and The Silver Searcher
-    rust-analyzer   # Experimental Rust compiler front-end for IDEs (for LSP)
     rustup-init     # Rust toolchain installer
     starship        # Cross-shell prompt for astronauts
     tree            # Display directories as trees (with optional color/HTML output)

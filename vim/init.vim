@@ -233,6 +233,7 @@ lua << END
 
     rt.setup({
         server = {
+            cmd = {"rustup", "run", "stable", "rust-analyzer" },
             on_attach = function(_, bufnr)
 
                 local do_map = function(keys, fn)
