@@ -134,7 +134,7 @@ maybe_source "${HERE}/install.brew"
 # See https://github.com/python-lsp/python-lsp-server for additional
 # installation options.
 
-# pip3 install "python-lsp-server[all]"
+pip3 install "python-lsp-server[all]"
 
 echo
 echo "*** Setting System Defaults"
