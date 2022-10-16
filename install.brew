@@ -29,10 +29,8 @@ APPS=(
     git             # Distributed revision control system
     git-delta       # Syntax-highlighting pager for git and diff output
     neovim          # Ambitious Vim-fork focused on extensibility and agility
-    python-tk@3.10
-    python-tk@3.9
-    python@3.10
-    python@3.9      # (See the following regarding versions: https://docs.brew.sh/Homebrew-and-Python)
+    python-tk
+    python
     ripgrep         # Search tool like grep and The Silver Searcher
     rustup-init     # Rust toolchain installer
     starship        # Cross-shell prompt for astronauts
