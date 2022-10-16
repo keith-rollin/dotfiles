@@ -54,3 +54,13 @@
     light = true
 [diff]
 	colorMoved = default
+[scalar]
+	repo = /Volumes/Data/github/WebKit
+	repo = /Volumes/Data/github/gcc/src
+	repo = /Volumes/Data/github/llvm/src
+	repo = /Volumes/Data/github/serenity
+[maintenance]
+	repo = /Volumes/Data/github/WebKit
+	repo = /Volumes/Data/github/gcc/src
+	repo = /Volumes/Data/github/llvm/src
+	repo = /Volumes/Data/github/serenity
