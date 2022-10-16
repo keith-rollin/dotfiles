@@ -650,6 +650,10 @@ setopt extended_history
 setopt interactive_comments
 
 # Support for 1Password as ssh-agent.
+#
+# Note that setting SSH_AUTH_SOCK takes the place of setting IdentityAgent that
+# is suggested in the 1Password Preferences > Developer dialog. I don't remember
+# why I take this approach rather than that one.
 
 REAL_AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 HOME_AGENT_SOCK="$HOME/.config/1password/agent.sock"
