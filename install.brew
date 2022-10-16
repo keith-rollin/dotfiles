@@ -53,6 +53,12 @@ CASKS=(
     qlmarkdown      # QuickLook generator for Markdown files (NB:
                     # QLMarkdown.app needs to be manually launched at least once
                     # in order for the QL generator to be registered.)
+
+    # Needed so that Starship has all the extended characters it needs.
+    homebrew/cask-fonts/font-inconsolata-go-nerd-font
+    # homebrew/cask-fonts/font-inconsolata-nerd-font
+    # homebrew/cask-fonts/font-ubuntu-mono-nerd-font
+
 )
 
 PYTHON_PACKAGES=(
@@ -339,8 +345,3 @@ return 0
 # Universal-ctags is its own project and should be installed from HEAD.
 # Do I need this if I'm also considering tree-sitter?
 # dont_sleep brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-
-
-    # homebrew/cask-fonts/font-inconsolata-nerd-font
-    # homebrew/cask-fonts/font-ubuntu-mono-nerd-font
-
