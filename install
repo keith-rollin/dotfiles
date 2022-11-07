@@ -13,7 +13,7 @@
 #       * .gitconfig
 #       * .clang-format (also copied to /Volumes/Data)
 #       * .config/starship.toml
-#       * .config/nvim/init.vim
+#       * .config/nvim
 #       * src
 #   * Point Sublime Text preferences to the ones in this repo.
 #   * Install Homebrew
@@ -61,14 +61,12 @@ echo
 echo "*** Creating/updating home directory links"
 echo
 
-mkdir -p "${HOME}/.config/nvim"
-
 create_link_in_home "${HERE}/zshrc"             .zshrc
 create_link_in_home "${HERE}/zshenv"            .zshenv
 create_link_in_home "${HERE}/gitconfig"         .gitconfig
 create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
-create_link_in_home "${HERE}/vim/init.vim"      .config/nvim/init.vim
+create_link_in_home "${HERE}/vim"               .config/nvim
 create_link_in_home "$(dirname "${HERE}")"
 
 # Create a .clang-format in /Volumes/Data for any work I might do over there.
