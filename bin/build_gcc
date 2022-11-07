@@ -1,0 +1,63 @@
+#!/bin/zsh
+
+# Get or update GCC sources.
+
+GCC_DIR=gcc
+BUILD_DIR=objdir-"${GCC_DIR}"
+MACOS_SDK=$(xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+
+if [[ -e "${GCC_DIR}" && ! -d "${GCC_DIR}" ]]
+then
+    echo "*** ${GCC_DIR} exists but is not a directory." >>&2
+    exit 1
+elif [[ ! -e "${GCC_DIR}" ]]
+then
+    echo "### Getting gcc repository"
+    git clone git://gcc.gnu.org/git/gcc.git
+else
+    echo "### Updating gcc repository"
+    cd "${GCC_DIR}"
+    git pull
+    cd ..
+fi
+
+
+# Get or update the contributed packages.
+
+cd "${GCC_DIR}"
+./contrib/download_prerequisites || exit $?
+cd ..
+
+
+# Configure and build.
+#
+# The bit about "--enable-checking=release" is to address the error reported
+# below. I don't know why it works; it's just something I found in someone
+# else's instrutions on how to build gcc on macOS.
+#
+#   https://stackoverflow.com/questions/52211390/trouble-building-gcc-on-mac-cant-find-system-headers
+#   https://solarianprogrammer.com/2019/10/12/compiling-gcc-macos/
+#
+# ./gstdint.h:49:22: error: conflicting types for ‘int_fast16_t’; have ‘int’
+#    49 | typedef int          int_fast16_t;
+#       |                      ^~~~~~~~~~~~
+#
+# /Users/keith/dev/gcc/objdir-gcc/./prev-gcc/include-fixed/stdint.h:50:26: note: previous declaration of ‘int_fast16_t’ with type ‘int_fast16_t’ {aka ‘short int’}
+#       |                          ^~~~~~~~~~~~
+#    50 | typedef int16_t          int_fast16_t;
+
+mkdir "${BUILD_DIR}"
+cd "${BUILD_DIR}"
+
+../"${GCC_DIR}"/configure \
+    --prefix="/opt/gcc/trunk" \
+    --with-sysroot="${MACOS_SDK}" \
+    --enable-languages=c,c++ \
+    --enable-checking=release \
+    #
+
+time make -j9
+
+sudo chmod -R 777 /opt/
+make install
+sudo chmod -R 755 /opt/
