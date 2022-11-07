@@ -33,7 +33,9 @@ APPS=(
     python@3.11
     ripgrep         # Search tool like grep and The Silver Searcher
     rustup-init     # Rust toolchain installer
+    shfmt           # Autoformat shell script source code
     starship        # Cross-shell prompt for astronauts
+    stylua          # Opinionated Lua code formatter
     tree            # Display directories as trees (with optional color/HTML output)
     watch           # Executes a program periodically, showing output fullscreen
 
