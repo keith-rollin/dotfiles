@@ -73,6 +73,7 @@ PYTHON_PACKAGES=(
     # https://github.com/python-lsp/python-lsp-server
     #
     autopep8        # for code formatting
+    black
     flake8          # for error checking (disabled by default)
     mccabe          # linter for complexity checking
     pycodestyle     # linter for style checking
