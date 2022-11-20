@@ -164,8 +164,8 @@ install_brew()
     # Get list of already-installed packages, remove them from the list of packages
     # we want to install, and install the resulting set.
 
-    local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
-    (( $#TO_INSTALL > 0 )) && dont_sleep pip3 install "${TO_INSTALL[@]}"
+    local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3.11 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
+    (( $#TO_INSTALL > 0 )) && dont_sleep pip3.11 install "${TO_INSTALL[@]}"
 }
 
 filter()
