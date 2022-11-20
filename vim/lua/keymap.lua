@@ -71,8 +71,8 @@ utils.set_keymap_visual("K", ":m '<-2<CR>gv=gv")
 
 -- Stay in visual mode when indenting.
 
-utils.set_keymap_normal("<", "<gv")
-utils.set_keymap_normal(">", ">gv")
+utils.set_keymap_visual("<", "<gv")
+utils.set_keymap_visual(">", ">gv")
 
 -- Split navigation
 --
