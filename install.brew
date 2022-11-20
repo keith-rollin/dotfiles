@@ -8,7 +8,8 @@
 # case of error, this script aborts by using "return 1", which is how you exit
 # a source'd script.
 #
-# To perform a simple, first-time install:
+# To perform a simple, first-time install, or to update the installation to
+# reflect newly added and/or deleted packages:
 #
 #       source ./install.brew
 #
