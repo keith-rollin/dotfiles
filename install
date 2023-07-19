@@ -14,6 +14,7 @@
 #       * .clang-format (also copied to /Volumes/Data)
 #       * .config/starship.toml
 #       * .config/nvim
+#       * .config/1password/ssh/agent.toml
 #       * src
 #   * Point Sublime Text preferences to the ones in this repo.
 #   * Install Homebrew
@@ -42,6 +43,7 @@ create_link()
     fi
 
     rm -f "${sym_file}"
+    mkdir -p "$(dirname "${sym_file}")"
     "${LNS}" "${real_file}" "${sym_file}"
 }
 
@@ -67,6 +69,7 @@ create_link_in_home "${HERE}/gitconfig"         .gitconfig
 create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/starship.toml"     .config/starship.toml
 create_link_in_home "${HERE}/vim"               .config/nvim
+create_link_in_home "${HERE}/agent.toml"        .config/1password/ssh/agent.toml
 create_link_in_home "$(dirname "${HERE}")"
 
 # Create a .clang-format in /Volumes/Data for any work I might do over there.
