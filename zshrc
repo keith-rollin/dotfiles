@@ -53,6 +53,7 @@ set_ls_options()
 {
     if is_executable exa
     then
+        LS_DATETIME_FORMAT="--time-style=long-iso"
         LS_EXECUTABLE="exa"
         LS_GIT_PROPS=""         # "--git" This is way too slow on large projects like WebKit or CyberArts
         LS_HIDE_GROUP=""
@@ -64,6 +65,7 @@ set_ls_options()
         LS_SHOW_HUMAN_READABLE=""
         LS_SORT_BY_TIME=(-s modified)
     else
+        LS_DATETIME_FORMAT=""
         LS_EXECUTABLE="/bin/ls"
         LS_GIT_PROPS=""
         LS_HIDE_GROUP="-o"
@@ -80,8 +82,8 @@ set_ls_options()
 la()        { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} "$@" ; }
 lart()      { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" ; }
 lax()       { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
-ll()        { set_ls_options; ls_common -l "$@" ; }
-llx()       { set_ls_options; ls_common -l ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
+ll()        { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} "$@" ; }
+llx()       { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
 ls()        { set_ls_options; ls_common "$@" ; }
 ls_common() {
     "${LS_EXECUTABLE}" \
