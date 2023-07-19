@@ -137,6 +137,17 @@ maybe_source "${HERE}/install.brew"
 
 pip3 install "python-lsp-server[all]"
 
+# I don't seem to have recorded the commands I used to install rust, but I
+# think -- after installing rustup-init with Homebrew -- it's something like:
+#
+# rustup-init --no-modify-path
+# rustup component add rust-analyzer
+#
+# Also, try to recover what we've installed with `rustup install`. Some tools
+# to consider (check out crates.io):
+#
+#   cargo-watch # Watches for changed source files and re-run tests
+
 echo
 echo "*** Setting System Defaults"
 echo
