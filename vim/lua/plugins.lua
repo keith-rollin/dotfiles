@@ -56,7 +56,7 @@ return packer.startup(function(use)
     use("vim-scripts/indentpython.vim") -- PEP8 auto-indenting. TODO: This better handles ()'s, []'s, {}'s, and if/else, but doesn't handle long strings. Can I fix those issues?
 
     -- rust-tools
-    use("simrat39/rust-tools.nvim")
+    use("simrat39/rust-tools.nvim") -- Tools for better development in rust using neovim's builtin lsp
     use("nvim-telescope/telescope.nvim")
 
     -- Treesitter
