@@ -449,6 +449,10 @@ path()
     echo "$PATH" | tr : '\n'
 }
 
+preman() {
+    mandoc -T pdf "$(/usr/bin/man -w $@)" | open -fa Preview
+}
+
 prepend_path()
 {
     [ -e "$1" ] || return 0
