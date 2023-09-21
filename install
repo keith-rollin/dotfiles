@@ -186,6 +186,9 @@ defaults write -g NSAlertMetricsGatheringEnabled                    -bool false
 # Use the system print dialog instead of Chrome's custom dialog.
 # defaults write com.google.Chrome    DisablePrintPreview             -bool true
 
+# Use the system print dialog instead of Arc's custom dialog.
+defaults write company.thebrowser.Browser   DisablePrintPreview     -bool true
+
 # Update our dotfiles/.git/config to point use "git" scheme (it's possible that
 # we checked out the repo using the http scheme because we hadn't yet installed
 # our ssh keys):
