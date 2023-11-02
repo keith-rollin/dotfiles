@@ -32,6 +32,7 @@ APPS=(
     neovim          # Ambitious Vim-fork focused on extensibility and agility
     python-tk@3.11
     python@3.11
+    python@3.12
     ripgrep         # Search tool like grep and The Silver Searcher
     rustup-init     # Rust toolchain installer
     shfmt           # Autoformat shell script source code
