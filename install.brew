@@ -34,6 +34,7 @@ APPS=(
     python@3.11
     python@3.12
     ripgrep         # Search tool like grep and The Silver Searcher
+    ruff            # Extremely fast Python linter, written in Rust
     rustup-init     # Rust toolchain installer
     shfmt           # Autoformat shell script source code
     starship        # Cross-shell prompt for astronauts
