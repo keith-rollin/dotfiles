@@ -6,7 +6,7 @@
     <string>com.phantomprogrammer.apod</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/python3.11</string>
+        <string>/usr/local/bin/python3</string>
         <string>/Users/keith/Documents/src/apod/main.py</string>
     </array>
     <key>WorkingDirectory</key>
@@ -20,7 +20,7 @@
     <string>Background</string>
     <key>EnvironmentVariables</key>
     <dict>
-        <key>PATH</key><string>/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>PATH</key><string>/opt/homebrew/sbin:/opt/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     </dict>
 </dict>
 </plist>
