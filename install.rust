@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+# NOTE: This script is normally source'd from `install`, but it can also be
+# source'd from the command-line.
+
+# Get some commands: is_being_sourced, source_rust_env
+
+source "${HOME}/.zshenv"
+source "${HOME}/.zshrc"
+
+if is_being_sourced
+then
+    if is_executable rustup
+    then
+        echo
+        echo "### Updating rust"
+        echo
+
+        rustup update
+    else
+        echo
+        echo "### Installing rust"
+        echo
+
+        # This method of installation -- where parameters are passed to the
+        # script -- is demonstrated in:
+        #
+        #   https://github.com/rust-lang/rustup/doc/user-guide/src/installation/other.md
+
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y -q
+
+        # Set $PATH so that we can call `rustup`.
+
+        source_rust_env
+
+        # Some tools to consider (check out crates.io):
+        #
+        #   cargo-watch # Watches for changed source files and re-run tests
+
+        rustup component add \
+            rust-analyzer \
+            llvm-tools \
+            rust-src
+    fi
+else
+    echo "*** install.rust should be source'd in order for \$PATH changes to take effect"
+fi
+
+true

@@ -16,22 +16,17 @@ $ dotfiles/install
 $HOME/
 |-- .clang-format -> $HPD/dotfiles/clang-format.in
 |-- .config/
-|   |-- 1password/
-|   |   `-- agent.sock -> ...
 |   |-- nvim/
 |   |   `-- init.vim -> $HPD/dotfiles/vim/init.vim
 |   |-- op/
 |   |   |-- config
 |   |   `-- op-daemon.sock=
-|   |-- starship.toml -> $HPD/dotfiles/starship.toml
 |   `-- zsh/
 |       |-- zcompdump
 |       `-- zsh_history
 |-- .gitconfig -> $HPD/dotfiles/gitconfig
 |-- .zshenv -> $HPD/dotfiles/zshenv
 |-- .zshrc -> $HPD/dotfiles/zshrc
-|-- Library/Application Support/Sublime Text 3/Packages
-|   `-- User -> $HPD/dotfiles/SublimeText-Packages-User/
 `-- src -> $HPD/src
 
 $HPD/

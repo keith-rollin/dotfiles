@@ -51,10 +51,10 @@ hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && ki
 
 set_ls_options()
 {
-    if is_executable exa
+    if is_executable eza
     then
         LS_DATETIME_FORMAT="--time-style=long-iso"
-        LS_EXECUTABLE="exa"
+        LS_EXECUTABLE="eza"
         LS_GIT_PROPS=""         # "--git" This is way too slow on large projects like WebKit or CyberArts
         LS_HIDE_GROUP=""
         LS_NATURAL_SORT=""
@@ -108,51 +108,6 @@ grc()  { git rebase --continue ; }
 grm()  { git rebase master ; }
 gs()   { git status "$@" ; }
 
-add_note() {
-    # Add note to Notes.app
-    # Usage: `note 'title' 'body'` or `echo 'body' | note`
-    # Title is optional
-
-    local title
-    local body
-    if [ -t 0 ]; then
-        title="$1"
-        body="$2"
-    else
-        title=$(cat)
-    fi
-
-    osascript >/dev/null <<EOF
-tell application "Notes"
-    tell account "iCloud"
-        tell folder "Notes"
-            make new note with properties {name:"$title", body:"$title" & "<br><br>" & "$body"}
-        end tell
-    end tell
-end tell
-EOF
-}
-
-add_reminder() {
-    # Add reminder to Reminders.app
-    # Usage: `remind 'foo'` or `echo 'foo' | remind`
-
-    local text
-    if [ -t 0 ]; then
-        text="$1"
-    else
-        text=$(cat)
-    fi
-
-    osascript >/dev/null <<EOF
-tell application "Reminders"
-    tell the default list
-        make new reminder with properties {name:"$text"}
-    end tell
-end tell
-EOF
-}
-
 bak()
 {
     # Make backups of the given files (copy them to *.bak).
@@ -167,7 +122,7 @@ bak()
 
 brew_path()
 {
-    # If brew is one the path (for whatever reason), ask it where it is.
+    # If brew is on the path (for whatever reason), ask it where it is.
 
     if is_executable brew
     then
@@ -190,21 +145,6 @@ brew_path()
     fi
     echo "${HOMEBREW_PREFIX}"
 }
-
-calc()
-{
-    local result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
-    #                             └─ default (when `--mathlib` is used) is 20
-
-    if [[ "$result" == *.* ]]
-    then
-        printf "$result" | sed -e 's/0*$//;s/\.$//'   # remove trailing zeros
-    else
-        printf "$result"
-    fi
-    printf "\n"
-}
-
 
 cdd()
 {
@@ -243,6 +183,38 @@ cleanupds()
     fi
 }
 
+create_link()
+{
+    # Create or update links in my home directory to handy things elsewhere.
+
+    local real_file="$1"
+    local sym_file="$2"
+
+    real_file="$("${REALPATH}" "${real_file}")"
+
+    if [ -e "${sym_file}" -a ! -L "${sym_file}" ]
+    then
+        echo "### File ${sym_file} exists but is not a link. Please move it aside."
+        return
+    fi
+
+    rm -f "${sym_file}"
+    mkdir -p "$(dirname "${sym_file}")"
+    "${LNS}" "${real_file}" "${sym_file}"
+}
+
+create_link_in_home()
+{
+    local real_file="$1"
+    local sym_file="$2"
+
+    [ -z "${sym_file}" ] && sym_file="$(basename "${real_file}")"
+
+    sym_file="${HOME}/${sym_file}"
+
+    create_link "$real_file" "$sym_file"
+}
+
 delete_brew()
 {
     sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
@@ -269,6 +241,38 @@ element_in_array()
         [ "$element_to_find" = "$element_in_array" ] && return 0
     done
     return 1
+}
+
+filter()
+{
+    # Given the name of a list to filter and a list of items, get the items in
+    # the named list and return (echo) them if they don't appear in the given
+    # list of items.
+    #
+    # Allow for the fact that the named list may contain items in the form
+    # X/Y/Z, whereas the given items may include just Z. In that case, the
+    # prefix should be ignored and the item should still be removed.
+
+    local LIST_TO_FILTER=$1
+    local ITEMS_TO_FILTER=( "${(P)${LIST_TO_FILTER}[@]}" )
+    shift
+    local ITEMS_TO_REMOVE="$@"
+
+    local ITEM_TO_TEST
+    for ITEM_TO_TEST in "${ITEMS_TO_FILTER[@]}"
+    do
+        # If ITEM_TO_TEST has a prefix("*/"), remove it. Then see if the result
+        # is in ITEMS_TO_REMOVE by getting its index. If it's not there (the
+        # index is zero), echo it to the caller.
+        #
+        # TODO: I need a good way to return an array from a function. As it is,
+        # any items with spaces will be split into multiple items. Probably the
+        # best thing to do is pass in the name of an array to received the
+        # results and populate it indirectly. Maybe see:
+        # https://stackoverflow.com/a/49971213
+
+        (( $ITEMS_TO_REMOVE[(I)${ITEM_TO_TEST##*/}] )) || echo "${ITEM_TO_TEST}"
+    done
 }
 
 git_top()
@@ -310,6 +314,14 @@ hide_brew()
 hist()
 {
     history -i 0 "$@"
+}
+
+is_being_sourced()
+{
+    # When a script is source'd, the current context is preserved, and so
+    # "file" is appended.
+
+    [[ "$ZSH_EVAL_CONTEXT" =~ toplevel:file.* ]]
 }
 
 is_executable()
@@ -486,6 +498,13 @@ rg()
     command rg -g '!ChangeLog*' "$@"
 }
 
+source_rust_env()
+{
+    [[ -f "${CARGO_HOME}/env" ]] && { source "${CARGO_HOME}/env"; return; }
+    [[ -f "${HOME}/.cargo/env" ]] && { source "${HOME}/.cargo/env"; return; }
+    [[ -f "${HOME}/.local/cargo/env" ]] && { source "${HOME}/.local/cargo/env"; return; }
+}
+
 sudo_keep_alive()
 {
     # Go into sudo mode and stay in sudo mode until the current script quits.
@@ -608,16 +627,35 @@ xc()
 # solutions if we have them installed.
 
 BREW_PATH="$(brew_path)"
-if [ -n "${BREW_PATH}" ]
+if [ -e "${BREW_PATH}/bin/brew" ]
 then
-    prepend_path "${BREW_PATH}/sbin"
-    prepend_path "${BREW_PATH}/bin"
+    # Suggested from the brew installation instructions printed after it's
+    # installed. This sets up variables like PATH, MANPATH, and INFOPATH, as
+    # well as defines HOMEBREW_PREFIX, HOMEBREW_CELLAR, and
+    # HOMEBREW_REPOSITORY.
+
+    eval "$(${BREW_PATH}/bin/brew shellenv)"
+
+    # "curl is keg-only, which means it was not symlinked into /usr/local,
+    # because macOS already provides this software and installing another version in
+    # parallel can cause all kinds of trouble."
+    #
+    # If you need to have curl first in your PATH, run:
+
+    # prepend_path "${BREW_PATH}/opt/curl/bin" # Do I want this?
 fi
 unset BREW_PATH
 
-[[ -d "${HOME}/.local/cargo/bin" ]] && prepend_path "${HOME}/.local/cargo/bin"
+source_rust_env
 
 prepend_path "${DOTFILES}/bin"
+
+# Do I want to do this (from brew package installation ouput)?
+#
+# All commands have been installed with the prefix "g".
+# If you need to use these commands with their normal names, you
+# can add a "gnubin" directory to your PATH from your bashrc like:
+#   PATH="/usr/local/opt/libtool/libexec/gnubin:$PATH"
 
 # Find the best-looking vim-ish.
 
@@ -636,18 +674,8 @@ export LESS=-IMR
 #
 # TODO: zsh-ify this.
 
-if is_executable starship
-then
-    eval "$(starship init zsh)"
-else
-    if [[ -n "${GIT_PROMPT_SH}" ]]
-    then
-        setopt PROMPT_SUBST
-        PS1=$'%F{red}%U%n@%m:%~$(__git_ps1 "%%f%%u %%F{green}%%U[%s]")%f%u\n%# '
-    else
-        PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
-    fi
-fi
+PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
+
 
 ZSH_CONFIG_DIR="${HOME}/.config/zsh"
 mkdir -p "${ZSH_CONFIG_DIR}"
@@ -656,19 +684,6 @@ export HISTSIZE=SAVEHIST=10000
 setopt share_history
 setopt extended_history
 setopt interactive_comments
-
-# Support for 1Password as ssh-agent.
-#
-# Note that setting SSH_AUTH_SOCK takes the place of setting IdentityAgent that
-# is suggested in the 1Password Preferences > Developer dialog. I don't remember
-# why I take this approach rather than that one.
-
-REAL_AGENT_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-HOME_AGENT_SOCK="$HOME/.config/1password/agent.sock"
-mkdir -p $(dirname "$HOME_AGENT_SOCK") && ln -sf "$REAL_AGENT_SOCK" "$HOME_AGENT_SOCK"
-[[ -L "$HOME_AGENT_SOCK" ]] && export SSH_AUTH_SOCK="$HOME_AGENT_SOCK"
-unset HOME_AGENT_SOCK
-unset REAL_AGENT_SOCK
 
 # Shell.
 
@@ -704,35 +719,5 @@ export HELPDIR=/usr/share/zsh/$ZSH_VERSION/help  # directory for run-help functi
 unalias run-help 2> /dev/null # Something aliases run-help to man, so remove that.
 autoload -Uz run-help
 alias help=run-help
-
-# This command attempts to look up command help in zshall. But it's kind of
-# flakey and doesn't work for everything.
-#
-# help()
-# {
-#     errcode=0
-#     if [ $# -eq 0 ]
-#     then
-#         >&2 echo "Not enough arguments";
-#         errcode=2
-#     fi
-#     if [ $# -eq 1 ]
-#     then
-#         PAGER="less -g -s '+/^       "$1" '" command man zshall
-#     fi
-#     if [ $# -eq 2 ]
-#     then
-#         PAGER="less -g -s '+/^       "$1" '" command man "$2"
-#     fi
-#     if [ $# -gt 2 ]
-#     then
-#         >&2 echo "Too many arguments"
-#         errcode=2
-#     fi
-#     if [ $errcode -gt 0 ]
-#     then
-#         $(exit $errcode)
-#     fi
-# }
 
 true # Exit with no error.

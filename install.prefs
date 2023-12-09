@@ -1,323 +1,441 @@
-# (This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`.)
+#!/bin/zsh
 
-# UPDATE: A lot of this stuff is fragile and breaks across system releases. For
-# now, I'm just tweaking things by hand instead. But I'm keeping this around in
-# case I change my mind.
+echo
+echo "### Setting System Defaults"
+echo
 
-return
+defaults write NSGlobalDomain               AppleICUDateFormatStrings       -array "y-MM-dd"
+defaults write NSGlobalDomain               AppleICUForce24HourTime         -bool true
+defaults write NSGlobalDomain               AppleKeyboardUIMode             -int 3          # Tab through dialogs; needs reboot?
+defaults write NSGlobalDomain               AppleMeasurementUnits           -string "Centimeters"
+defaults write NSGlobalDomain               AppleMetricUnits                -bool true
+defaults write NSGlobalDomain               AppleShowAllExtensions          -bool true
+defaults write NSGlobalDomain               AppleTemperatureUnit            -string "Celcius" # Doesn't take effect until reboot?
+defaults write NSGlobalDomain               InitialKeyRepeat                -int 25         # Doesn't take effect until reboot?
+defaults write NSGlobalDomain               KeyRepeat                       -int 2          # Doesn't take effect until reboot?
+defaults write NSGlobalDomain               NSUserKeyEquivalents            -dict "Enter Full Screen" "@^f" "Exit Full Screen" "@^f"
+defaults write NSGlobalDomain               com.apple.sound.beep.feedback   -bool false     # Don't beep when changing volume
 
-# Install system/application preferences via defaults, nvram, pmset, tmutil,
-# systemsetup, scutil, mdutil, plistbuddy, etc.
+defaults write com.apple.ActivityMonitor    UpdatePeriod                    -int 1          # Very frequent updates
 
-# Cribbed from:
-#   https://github.com/webpro/dotfiles/blob/master/osx/defaults.sh
-#   https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+defaults write com.apple.dock               autohide                        -bool true
+defaults write com.apple.dock               mru-spaces                      -bool false
+defaults write com.apple.dock               orientation                     -string "right"
+defaults write com.apple.dock               static-only                     -bool true      # Only show open apps
+
+# Hot corners
+# Possible values:
+#  0: no-op
+#  2: Mission Control
+#  3: Show application windows
+#  4: Desktop
+#  5: Start screen saver
+#  6: Disable screen saver
+#  7: Dashboard
+# 10: Put display to sleep
+# 11: Launchpad
+# 12: Notification Center
+# 13: Lock Screen
+# 14: Quit Note
+
+defaults write com.apple.dock               wvous-bl-corner                 -int 10
+defaults write com.apple.dock               wvous-br-corner                 -int 5
+defaults write com.apple.dock               wvous-tr-corner                 -int 6
+
+defaults write com.apple.finder             AppleShowAllFiles               -bool true
+defaults write com.apple.finder             FXEnableExtensionChangeWarning  -bool false
+defaults write com.apple.finder             FXEnableRemoveFromICloudDriveWarning -bool false
+defaults write com.apple.finder             FXRemoveOldTrashItems           -bool true
+defaults write com.apple.finder             NewWindowTarget                 -string "PfHm"
+defaults write com.apple.finder             NewWindowTargetPath             -string "file:///Users/keith/"
+defaults write com.apple.finder             ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder             ShowHardDrivesOnDesktop         -bool false
+defaults write com.apple.finder             ShowMountedServersOnDesktop     -bool false
+defaults write com.apple.finder             ShowPathbar                     -bool true
+defaults write com.apple.finder             ShowRemovableMediaOnDesktop     -bool false
+defaults write com.apple.finder             ShowStatusBar                   -bool true
+defaults write com.apple.finder             WarnOnEmptyTrash                -bool false
+
+defaults write com.apple.menuextra.clock    ShowDate                        -bool true
+defaults write com.apple.menuextra.clock    ShowDayOfWeek                   -bool true
+defaults write com.apple.menuextra.clock    ShowSeconds                     -bool true
+
+defaults write com.apple.screencapture      disable-shadow                  -bool true
+
+defaults write com.apple.universalaccess    com.apple.custommenu.apps       -array NSGlobalDomain    # Needed to activate NSUserKeyEquivalents
+defaults write com.apple.universalaccess    reduceTransparency              -bool true
+
+defaults write com.apple.Safari             AlwaysRestoreSessionAtLaunch    -bool true
+defaults write com.apple.Safari             AutoOpenSafeDownloads           -bool false
+defaults write com.apple.Safari             DownloadsClearingPolicy         -int 2          # Upon successful download
+defaults write com.apple.Safari             HistoryAgeInDaysLimit           -int 365000
+defaults write com.apple.Safari             NewTabBehavior                  -int 1          # Open to empty page
+defaults write com.apple.Safari             NewWindowBehavior               -int 1          # Open to empty page
+
+defaults write com.apple.TextEdit           HeightInChars                   -int 80
+defaults write com.apple.TextEdit           NSFixedPitchFont                -string "Menlo-Regular"
+defaults write com.apple.TextEdit           NSFixedPitchFontSize            -int 14
+defaults write com.apple.TextEdit           RichText                        -bool false
+defaults write com.apple.TextEdit           TabWidth                        -int 4
+defaults write com.apple.TextEdit           WidthInChars                    -int 120
+
+
+# Set the delay before the proxy icon appears. The first controls only the
+# Finder; the second is global. See:
 #
-# See also:
-#   https://github.com/kevinSuttle/OSXDefaults/blob/master/REFERENCE.md
+#   <https://brettterpstra.com/2021/04/14/fixing-the-big-sur-proxy-icon-delay-globally/>
 
-defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-defaults write NSGlobalDomain AppleLanguages -array "en"
-defaults write NSGlobalDomain AppleLocale -string "en_US@currency=USD"
-defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
-defaults write NSGlobalDomain AppleMetricUnits -bool true
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
-defaults write NSGlobalDomain InitialKeyRepeat -int 25
-defaults write NSGlobalDomain KeyRepeat -int 2
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
-defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
-defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
-defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool false
-defaults write NSGlobalDomain NSUserKeyEquivalents -dict "Enter Full Screen" "@^f" "Exit Full Screen" "@^f"
-defaults write com.apple.universalaccess com.apple.custommenu.apps -array NSGlobalDomain    # Needed to activate the previous line
-defaults write com.apple.ActivityMonitor IconType -int 5
-defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
-defaults write com.apple.ActivityMonitor ShowCategory -int 0
-defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
-defaults write com.apple.ActivityMonitor SortDirection -int 0
-defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
-defaults write com.apple.Safari HomePage -string "about:blank"
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
-defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
-defaults write com.apple.TextEdit PlainTextEncoding -int 4
-defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
-defaults write com.apple.TextEdit RichText -int 0
-defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-defaults write com.apple.dashboard mcx-disabled -bool true
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock dashboard-in-overlay -bool true
-defaults write com.apple.dock mouse-over-hilite-stack -bool true
-defaults write com.apple.dock mru-spaces -bool false
-defaults write com.apple.dock show-process-indicators -bool true
-defaults write com.apple.dock showhidden -bool true
-defaults write com.apple.dock wvous-bl-corner -int 10
-defaults write com.apple.dock wvous-bl-modifier -int 0
-defaults write com.apple.dock wvous-br-corner -int 0
-defaults write com.apple.dock wvous-br-modifier -int 0
-defaults write com.apple.dock wvous-tl-corner -int 0
-defaults write com.apple.dock wvous-tl-modifier -int 0
-defaults write com.apple.dock wvous-tr-corner -int 0
-defaults write com.apple.dock wvous-tr-modifier -int 0
-defaults write com.apple.finder AppleShowAllFiles -bool true
-defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
-defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-defaults write com.apple.finder QLEnableTextSelection -bool true
-defaults write com.apple.finder QuitMenuItem -bool true
-defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
-defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
-defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
-defaults write com.apple.finder ShowPathbar -bool true
-defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
-defaults write com.apple.finder ShowStatusBar -bool true
-defaults write com.apple.finder WarnOnEmptyTrash -bool false
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-defaults write com.apple.helpviewer DevMode -bool true
-defaults write com.apple.mail ConversationViewMarkAllAsRead -bool true
-defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
-defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" -string "@\\U21a9"
-defaults write com.apple.menuextra.battery ShowPercent -string "NO"
-defaults write com.apple.menuextra.battery ShowTime -string "YES"
-defaults write com.apple.menuextra.clock DateFormat -string "EEE HH:mm:ss"
-defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
-defaults write com.apple.screensaver askForPassword -int 1
-defaults write com.apple.screensaver askForPasswordDelay -int 5
-defaults write com.apple.speech.voice.prefs SelectedVoiceName -string "Vicki"
-defaults write com.apple.terminal "Bell" -bool false
-defaults write com.apple.terminal "Default Window Settings" -string "Basic"
-defaults write com.apple.terminal "Startup Window Settings" -string "Basic"
-defaults write com.apple.terminal "VisualBell" -bool false
-defaults write com.apple.terminal StringEncodings -array 4
-defaults write com.apple.universalaccess reduceTransparency -bool true
+# defaults write com.apple.Finder NSToolbarTitleViewRolloverDelay     -float 0
+defaults write NSGlobalDomain               NSToolbarTitleViewRolloverDelay -float 0
 
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
+
+# Show the classic-style dialogs rather than the vertically-arranged dialogs.
+# (Does this still work? I don't recall seeing the old layout in quite a
+# while.)
+
+defaults write NSGlobalDomain               NSAlertMetricsGatheringEnabled  -bool false
+
+
+# Use the system print dialog instead of Chrome's/Arc's custom dialog.
+
+defaults write com.google.Chrome            DisablePrintPreview             -bool true
+defaults write company.thebrowser.Browser   DisablePrintPreview             -bool true
 
 chflags nohidden ~/Library
 
-#sudo nvram SystemAudioVolume=" " # For older Macs (not sure how old). Reset by deleting.
-sudo nvram StartupMute=%01 # Restore by setting to %00.
+killall Dock # For static-only to take effect
+killall Finder
+killall ControlCenter # For clock changes to take effect
 
-sudo systemsetup -setrestartfreeze on
-sudo systemsetup -settimezone "America/Los_Angeles" > /dev/null
+true
 
-sudo tmutil disablelocal
+## Fodder for future consideration.
 
-sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
-defaults write com.apple.spotlight orderedItems -array \
-    '{ "enabled" = 1; "name" = "APPLICATIONS"; }' \
-    '{ "enabled" = 1; "name" = "SYSTEM_PREFS"; }' \
-    \
-    '{ "enabled" = 0; "name" = "MENU_SPOTLIGHT_SUGGESTIONS"; }' \
-    '{ "enabled" = 0; "name" = "MENU_CONVERSION"; }' \
-    '{ "enabled" = 0; "name" = "MENU_EXPRESSION"; }' \
-    '{ "enabled" = 0; "name" = "MENU_DEFINITION"; }' \
-    '{ "enabled" = 0; "name" = "DOCUMENTS"; }' \
-    '{ "enabled" = 0; "name" = "DIRECTORIES"; }' \
-    '{ "enabled" = 0; "name" = "PRESENTATIONS"; }' \
-    '{ "enabled" = 0; "name" = "SPREADSHEETS"; }' \
-    '{ "enabled" = 0; "name" = "PDF"; }' \
-    '{ "enabled" = 0; "name" = "MESSAGES"; }' \
-    '{ "enabled" = 0; "name" = "CONTACT"; }' \
-    '{ "enabled" = 0; "name" = "EVENT_TODO"; }' \
-    '{ "enabled" = 0; "name" = "IMAGES"; }' \
-    '{ "enabled" = 0; "name" = "BOOKMARKS"; }' \
-    '{ "enabled" = 0; "name" = "MUSIC"; }' \
-    '{ "enabled" = 0; "name" = "MOVIES"; }' \
-    '{ "enabled" = 0; "name" = "FONTS"; }' \
-    '{ "enabled" = 0; "name" = "MENU_OTHER"; }' \
-    '{ "enabled" = 0; "name" = "MENU_WEBSEARCH"; }' \
-    '{ "enabled" = 0; "name" = "SOURCE"; }'
-killall mds &> /dev/null
-mdutil -i on / > /dev/null
-mdutil -E / > /dev/null
+## Install system/application preferences via defaults, nvram, pmset, tmutil,
+## systemsetup, scutil, mdutil, plistbuddy, etc.
 
-killall \
-    "Address Book" \
-    "Calendar" \
-    "Contacts" \
-    "Dock" \
-    "Finder" \
-    "Mail" \
-    "Safari" \
-    "SystemUIServer" \
-    "iCal" \
-    "iTunes" \
-    &> /dev/null
+## Cribbed from:
+##   https://github.com/webpro/dotfiles/blob/master/osx/defaults.sh
+##   https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+##
+## See also:
+##   https://github.com/kevinSuttle/OSXDefaults/blob/master/REFERENCE.md
+##   https://github.com/kpdecker/dotfiles/blob/master/setup/osx-defaults/safari.sh
+##   https://macos-defaults.com
 
+#defaults write com.apple.systemuiserver menuExtras -array \
+#"/System/Library/CoreServices/Menu Extras/AirPort.menu" \
+#"/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
+#"/System/Library/CoreServices/Menu Extras/Clock.menu" \
+#"/System/Library/CoreServices/Menu Extras/Displays.menu" \
+#"/System/Library/CoreServices/Menu Extras/Volume.menu"
 
-# From: http://tech.masterofsql.com/os-x/unload-disable-unwanted-agents-daemons-os-x.html
-# Here are some more things to mess with. To investigate:
+## See the following for setting the date format:
+##
+## https://www.tech-otaku.com/mac/setting-the-date-and-time-format-for-the-macos-menu-bar-clock-using-terminal/
+## https://github.com/tech-otaku/menu-bar-clock
 
-su root
-cd /
-mkdir RemovedFiles
-cd RemovedFiles
-mkdir System-Library-LaunchAgents
-FLA=/RemovedFiles/System-Library-LaunchAgents/
-cd /System/Library/LaunchAgents/
+#defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+#defaults write NSGlobalDomain AppleLanguages -array "en"
+#defaults write NSGlobalDomain AppleLocale -string "en_US@currency=USD"
+#defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+#defaults write NSGlobalDomain AppleMetricUnits -bool true
+#defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+#defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+#defaults write NSGlobalDomain InitialKeyRepeat -int 25
+#defaults write NSGlobalDomain KeyRepeat -int 2
+#defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+#defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+#defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+#defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+#defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+#defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
+#defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+#defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+#defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+#defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+#defaults write NSGlobalDomain com.apple.sound.beep.feedback -bool false
+#defaults write NSGlobalDomain NSUserKeyEquivalents -dict "Enter Full Screen" "@^f" "Exit Full Screen" "@^f"
+#defaults write com.apple.universalaccess com.apple.custommenu.apps -array NSGlobalDomain    # Needed to activate the previous line
+#defaults write com.apple.ActivityMonitor IconType -int 5
+#defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+#defaults write com.apple.ActivityMonitor ShowCategory -int 0
+#defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+#defaults write com.apple.ActivityMonitor SortDirection -int 0
+#defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+#defaults write com.apple.Safari HomePage -string "about:blank"
+#defaults write com.apple.Safari IncludeDevelopMenu -bool true
+#defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+#defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+#defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+#defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+#defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+#defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks -bool true
+#defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -int 0
+#defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+#defaults write com.apple.TextEdit PlainTextEncoding -int 4
+#defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+#defaults write com.apple.TextEdit RichText -int 0
+#defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+#defaults write com.apple.dashboard mcx-disabled -bool true
+#defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+#defaults write com.apple.dock autohide -bool true
+#defaults write com.apple.dock dashboard-in-overlay -bool true
+#defaults write com.apple.dock mouse-over-hilite-stack -bool true
+#defaults write com.apple.dock mru-spaces -bool false
+#defaults write com.apple.dock show-process-indicators -bool true
+#defaults write com.apple.dock showhidden -bool true
+#defaults write com.apple.dock wvous-bl-corner -int 10
+#defaults write com.apple.dock wvous-bl-modifier -int 0
+#defaults write com.apple.dock wvous-br-corner -int 0
+#defaults write com.apple.dock wvous-br-modifier -int 0
+#defaults write com.apple.dock wvous-tl-corner -int 0
+#defaults write com.apple.dock wvous-tl-modifier -int 0
+#defaults write com.apple.dock wvous-tr-corner -int 0
+#defaults write com.apple.dock wvous-tr-modifier -int 0
+#defaults write com.apple.finder AppleShowAllFiles -bool true
+#defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+#defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+#defaults write com.apple.finder FXInfoPanesExpanded -dict General -bool true OpenWith -bool true Privileges -bool true
+#defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+#defaults write com.apple.finder QLEnableTextSelection -bool true
+#defaults write com.apple.finder QuitMenuItem -bool true
+#defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+#defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+#defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+#defaults write com.apple.finder ShowPathbar -bool true
+#defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+#defaults write com.apple.finder ShowStatusBar -bool true
+#defaults write com.apple.finder WarnOnEmptyTrash -bool false
+#defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+#defaults write com.apple.helpviewer DevMode -bool true
+#defaults write com.apple.mail ConversationViewMarkAllAsRead -bool true
+#defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+#defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
+#defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
+#defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
+#defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" -string "@\\U21a9"
+#defaults write com.apple.menuextra.battery ShowPercent -string "NO"
+#defaults write com.apple.menuextra.battery ShowTime -string "YES"
+#defaults write com.apple.menuextra.clock DateFormat -string "EEE HH:mm:ss"
+#defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+#defaults write com.apple.screensaver askForPassword -int 1
+#defaults write com.apple.screensaver askForPasswordDelay -int 5
+#defaults write com.apple.speech.voice.prefs SelectedVoiceName -string "Vicki"
+#defaults write com.apple.terminal "Bell" -bool false
+#defaults write com.apple.terminal "Default Window Settings" -string "Basic"
+#defaults write com.apple.terminal "Startup Window Settings" -string "Basic"
+#defaults write com.apple.terminal "VisualBell" -bool false
+#defaults write com.apple.terminal StringEncodings -array 4
+#defaults write com.apple.universalaccess reduceTransparency -bool true
 
+#/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
+#/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
 
+#chflags nohidden ~/Library
 
-# Disable AddressBook and Calendar
-mv com.apple.AddressBook*                      $FLA
-mv com.apple.CalendarAgent.plist               $FLA
+##sudo nvram SystemAudioVolume=" " # For older Macs (not sure how old). Reset by deleting.
+#sudo nvram StartupMute=%01 # Restore by setting to %00.
 
+#sudo systemsetup -setrestartfreeze on
+#sudo systemsetup -settimezone "America/Los_Angeles" > /dev/null
 
-# iCloud-related
-mv com.apple.iCloudUserNotifications.plist     $FLA
-mv com.apple.icbaccountsd.plist                $FLA
-mv com.apple.icloud.fmfd.plist                 $FLA
-mv com.apple.cloud*                            $FLA
+#sudo tmutil disablelocal
 
+#sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+#defaults write com.apple.spotlight orderedItems -array \
+#    '{ "enabled" = 1; "name" = "APPLICATIONS"; }' \
+#    '{ "enabled" = 1; "name" = "SYSTEM_PREFS"; }' \
+#    \
+#    '{ "enabled" = 0; "name" = "MENU_SPOTLIGHT_SUGGESTIONS"; }' \
+#    '{ "enabled" = 0; "name" = "MENU_CONVERSION"; }' \
+#    '{ "enabled" = 0; "name" = "MENU_EXPRESSION"; }' \
+#    '{ "enabled" = 0; "name" = "MENU_DEFINITION"; }' \
+#    '{ "enabled" = 0; "name" = "DOCUMENTS"; }' \
+#    '{ "enabled" = 0; "name" = "DIRECTORIES"; }' \
+#    '{ "enabled" = 0; "name" = "PRESENTATIONS"; }' \
+#    '{ "enabled" = 0; "name" = "SPREADSHEETS"; }' \
+#    '{ "enabled" = 0; "name" = "PDF"; }' \
+#    '{ "enabled" = 0; "name" = "MESSAGES"; }' \
+#    '{ "enabled" = 0; "name" = "CONTACT"; }' \
+#    '{ "enabled" = 0; "name" = "EVENT_TODO"; }' \
+#    '{ "enabled" = 0; "name" = "IMAGES"; }' \
+#    '{ "enabled" = 0; "name" = "BOOKMARKS"; }' \
+#    '{ "enabled" = 0; "name" = "MUSIC"; }' \
+#    '{ "enabled" = 0; "name" = "MOVIES"; }' \
+#    '{ "enabled" = 0; "name" = "FONTS"; }' \
+#    '{ "enabled" = 0; "name" = "MENU_OTHER"; }' \
+#    '{ "enabled" = 0; "name" = "MENU_WEBSEARCH"; }' \
+#    '{ "enabled" = 0; "name" = "SOURCE"; }'
+#killall mds &> /dev/null
+#mdutil -i on / > /dev/null
+#mdutil -E / > /dev/null
 
-# Disable imclient (Facetime) and smth else
-mv com.apple.imagent.plist                     $FLA
-mv com.apple.IMLoggingAgent.plist              $FLA
-
-
-# Disable Notification Centre
-mv com.apple.notificationcenterui.plist        $FLA
-killall NotificationCenter
-
-
-# spindump (see also code below)
-mv com.apple.spindump_agent.plist              $FLA
-
-
-# Safari is not the only browser in the world
-mv com.apple.safaridavclient.plist             $FLA
-mv com.apple.SafariNotificationAgent.plist     $FLA
-# in future versions of OS X
-mv com.apple.SafariCloudHistoryPushAgent.plist $FLA
-
-
-# Explain these
-mv com.apple.AirPlayUIAgent.plist              $FLA
-mv com.apple.AirPortBaseStationAgent.plist     $FLA
-mv com.apple.bird.plist                        $FLA
-mv com.apple.findmymacmessenger.plist          $FLA
-mv com.apple.gamed.plist                       $FLA
-mv com.apple.parentalcontrols.check.plist      $FLA
-mv com.apple.soagent.plist                     $FLA
-mv com.apple.SocialPushAgent.plist             $FLA
-mv com.apple.DictationIM.plist                 $FLA
-mv com.apple.Maps.pushdaemon.plist             $FLA
-mv com.apple.locationmenu.plist                $FLA
-mv com.apple.java.updateSharing.plist          $FLA
-mv com.apple.appstoreupdateagent.plist         $FLA
-mv com.apple.softwareupdate_notify_agent.plist $FLA
-mv com.apple.ScreenReaderUIServer.plist        $FLA
-mv com.apple.speech.*                          $FLA
-
-
-su root
-cd /System/Library/LaunchDaemons/
-
-
-
-# I don't have Apple TV so disable AirPlay
-launchctl unload -wF com.apple.AirPlayXPCHelper.plist
-
-
-# Disable Apple push notification
-launchctl unload -wF com.apple.apsd.plist
-
-
-# Disable location services (should have done it from System Preferences first)
-launchctl unload -wF com.apple.locationd.plist
-
-
-# No point trying to find your mac
-launchctl unload -wF com.apple.findmymac.plist
-launchctl unload -wF com.apple.findmymacmessenger.plist
-
-
-# iCloud. Enough said
-launchctl unload -wF com.apple.icloud.findmydeviced.plist
-launchctl unload -wF com.apple.cloudfamilyrestrictionsd-mac.plist 
-launchctl unload -wF com.apple.mbicloudsetupd.plist
-
-
-# Disable apple software updates - know why you'd do that
-launchctl unload -wF com.apple.softwareupdate*
-
-
-# don't even have DVD these days
-launchctl unload -wF com.apple.dvdplayback.setregion.plist 
-
-
-# no, thank you
-launchctl unload -wF com.apple.SubmitDiagInfo.plist 
-launchctl unload -wF com.apple.CrashReporterSupportHelper.plist 
-launchctl unload -wF com.apple.ReportCrash.Root.plist 
-launchctl unload -wF com.apple.GameController.gamecontrollerd.plist
-
-
-# Not using FTP these days
-launchctl unload -wF com.apple.ftp-proxy.plist
-
-
-# Disable spindump (spindump is a tool used by various system components
-# to create hang reports and notify the user of application hangs)
-# if it's crashed - it's crashed, get on with your life and don't slow my system down
-# I wonder what OzzyMan would have to say about it
-launchctl unload -wF com.apple.spindump.plist
-launchctl unload -wF com.apple.metadata.mds.spindump.plist
-
-
-
-# Disable IPv6 - if not using it yet
-# Run this for each network interface (assuming they are called Wi-Fi and Ethernet)
-networksetup -setv6off Wi-Fi
-networksetup -setv6off Ethernet
-
-
-# WARNING - this command disables swap file
-# Only use it if you know why you're doing it
-#launchctl unload -wF com.apple.dynamic_pager.plist
-
-
-# Disable cups (common unix printing service)
-# Don't disable if you have a printer(s) (and wanna use it)
-#launchctl unload -wF org.cups.cupsd.plist
-#launchctl unload -wF org.cups.cups-lpd.plist
+#killall \
+#    "Address Book" \
+#    "Calendar" \
+#    "Contacts" \
+#    "Dock" \
+#    "Finder" \
+#    "Mail" \
+#    "Safari" \
+#    "SystemUIServer" \
+#    "iCal" \
+#    "iTunes" \
+#    &> /dev/null
 
 
-# mDNSresponder/discoveryd - Required for DNS (converting domain name into IP address)
-#launchctl unload -wF com.apple.mDNSResponder.plist
-#launchctl unload -wF com.apple.mDNSResponderHelper.plist
-#launchctl unload -wF com.apple.discoveryd.plist
-#launchctl unload -wF com.apple.discoveryd_helper.plist
-# Disable NetBIOS - need to check if macbook actually needs this
-#launchctl unload -wF com.apple.netbiosd.plist
+## From: http://tech.masterofsql.com/os-x/unload-disable-unwanted-agents-daemons-os-x.html
+## Here are some more things to mess with. To investigate:
+
+#su root
+#cd /
+#mkdir RemovedFiles
+#cd RemovedFiles
+#mkdir System-Library-LaunchAgents
+#FLA=/RemovedFiles/System-Library-LaunchAgents/
+#cd /System/Library/LaunchAgents/
 
 
-# Required for Wi-Fi icon
-#launchctl unload -wF com.apple.airport.wps.plist
-#launchctl unload -wF com.apple.airportd.plist
 
+## Disable AddressBook and Calendar
+#mv com.apple.AddressBook*                      $FLA
+#mv com.apple.CalendarAgent.plist               $FLA
+
+
+## iCloud-related
+#mv com.apple.iCloudUserNotifications.plist     $FLA
+#mv com.apple.icbaccountsd.plist                $FLA
+#mv com.apple.icloud.fmfd.plist                 $FLA
+#mv com.apple.cloud*                            $FLA
+
+
+## Disable imclient (Facetime) and smth else
+#mv com.apple.imagent.plist                     $FLA
+#mv com.apple.IMLoggingAgent.plist              $FLA
+
+
+## Disable Notification Centre
+#mv com.apple.notificationcenterui.plist        $FLA
+#killall NotificationCenter
+
+
+## spindump (see also code below)
+#mv com.apple.spindump_agent.plist              $FLA
+
+
+## Safari is not the only browser in the world
+#mv com.apple.safaridavclient.plist             $FLA
+#mv com.apple.SafariNotificationAgent.plist     $FLA
+## in future versions of OS X
+#mv com.apple.SafariCloudHistoryPushAgent.plist $FLA
+
+
+## Explain these
+#mv com.apple.AirPlayUIAgent.plist              $FLA
+#mv com.apple.AirPortBaseStationAgent.plist     $FLA
+#mv com.apple.bird.plist                        $FLA
+#mv com.apple.findmymacmessenger.plist          $FLA
+#mv com.apple.gamed.plist                       $FLA
+#mv com.apple.parentalcontrols.check.plist      $FLA
+#mv com.apple.soagent.plist                     $FLA
+#mv com.apple.SocialPushAgent.plist             $FLA
+#mv com.apple.DictationIM.plist                 $FLA
+#mv com.apple.Maps.pushdaemon.plist             $FLA
+#mv com.apple.locationmenu.plist                $FLA
+#mv com.apple.java.updateSharing.plist          $FLA
+#mv com.apple.appstoreupdateagent.plist         $FLA
+#mv com.apple.softwareupdate_notify_agent.plist $FLA
+#mv com.apple.ScreenReaderUIServer.plist        $FLA
+#mv com.apple.speech.*                          $FLA
+
+
+#su root
+#cd /System/Library/LaunchDaemons/
+
+
+
+## I don't have Apple TV so disable AirPlay
+#launchctl unload -wF com.apple.AirPlayXPCHelper.plist
+
+
+## Disable Apple push notification
+#launchctl unload -wF com.apple.apsd.plist
+
+
+## Disable location services (should have done it from System Preferences first)
+#launchctl unload -wF com.apple.locationd.plist
+
+
+## No point trying to find your mac
+#launchctl unload -wF com.apple.findmymac.plist
+#launchctl unload -wF com.apple.findmymacmessenger.plist
+
+
+## iCloud. Enough said
+#launchctl unload -wF com.apple.icloud.findmydeviced.plist
+#launchctl unload -wF com.apple.cloudfamilyrestrictionsd-mac.plist 
+#launchctl unload -wF com.apple.mbicloudsetupd.plist
+
+
+## Disable apple software updates - know why you'd do that
+#launchctl unload -wF com.apple.softwareupdate*
+
+
+## don't even have DVD these days
+#launchctl unload -wF com.apple.dvdplayback.setregion.plist 
+
+
+## no, thank you
+#launchctl unload -wF com.apple.SubmitDiagInfo.plist 
+#launchctl unload -wF com.apple.CrashReporterSupportHelper.plist 
+#launchctl unload -wF com.apple.ReportCrash.Root.plist 
+#launchctl unload -wF com.apple.GameController.gamecontrollerd.plist
+
+
+## Not using FTP these days
+#launchctl unload -wF com.apple.ftp-proxy.plist
+
+
+## Disable spindump (spindump is a tool used by various system components
+## to create hang reports and notify the user of application hangs)
+## if it's crashed - it's crashed, get on with your life and don't slow my system down
+## I wonder what OzzyMan would have to say about it
+#launchctl unload -wF com.apple.spindump.plist
+#launchctl unload -wF com.apple.metadata.mds.spindump.plist
+
+
+
+## Disable IPv6 - if not using it yet
+## Run this for each network interface (assuming they are called Wi-Fi and Ethernet)
+#networksetup -setv6off Wi-Fi
+#networksetup -setv6off Ethernet
+
+
+## WARNING - this command disables swap file
+## Only use it if you know why you're doing it
+##launchctl unload -wF com.apple.dynamic_pager.plist
+
+
+## Disable cups (common unix printing service)
+## Don't disable if you have a printer(s) (and wanna use it)
+##launchctl unload -wF org.cups.cupsd.plist
+##launchctl unload -wF org.cups.cups-lpd.plist
+
+
+## mDNSresponder/discoveryd - Required for DNS (converting domain name into IP address)
+##launchctl unload -wF com.apple.mDNSResponder.plist
+##launchctl unload -wF com.apple.mDNSResponderHelper.plist
+##launchctl unload -wF com.apple.discoveryd.plist
+##launchctl unload -wF com.apple.discoveryd_helper.plist
+## Disable NetBIOS - need to check if macbook actually needs this
+##launchctl unload -wF com.apple.netbiosd.plist
+
+
+## Required for Wi-Fi icon
+##launchctl unload -wF com.apple.airport.wps.plist
+##launchctl unload -wF com.apple.airportd.plist

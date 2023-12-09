@@ -2,11 +2,8 @@
 
 # Install, update, or remove homebrew along with my desired packages.
 #
-# This script is not intended to be stand-alone. It's intended to be source'd
-# from `install`. In particular, the effects of prepend_path need to be made
-# persistent by this script being source'd at the top-level shell. Also, in
-# case of error, this script aborts by using "return 1", which is how you exit
-# a source'd script.
+# NOTE: This script is normally source'd from `install`, but it can also be
+# source'd from the command-line.
 #
 # To perform a simple, first-time install, or to update the installation to
 # reflect newly added and/or deleted packages:
@@ -20,77 +17,65 @@
 # To remove homebrew and then re-install it:
 #
 #       CLEAN_INSTALL=1 source ./install.brew
+#
+# TERMINOLOGY CHEAT SHEET:
+#
+# (See: https://docs.brew.sh/Formula-Cookbook)
+#
+# * Tap: A Git repository of Formulae. E.g., homebrew-core.
+# * Formula: The Ruby file describing the package.
+# * Cellar: Build/intallation location. Prefixed by project/version.
+# * Keg: The versioned installation path in the Cellar.
+# * Keg-only: Not made visible to $HOMEBREW_PREFIX/{bin,lib,etc}
+# * Bottle: Prebuilt Keg.
+# * Cask: Facility for installing macOS native applications.
+# * Bundle: Something about homebrew dependencies.
 
 
 # Packages to install as source (formulae) or pre-built (bottles).
 
 APPS=(
+    1password-cli   # Command-line interface for 1Password
     clang-format    # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
-    exa             # Modern replacement for 'ls'
+    eza             # Modern replacement for 'ls'
     git             # Distributed revision control system
     git-delta       # Syntax-highlighting pager for git and diff output
     neovim          # Ambitious Vim-fork focused on extensibility and agility
-    python-tk@3.11
-    python@3.11
-    python@3.12
+    python-tk@3.11  # Python interface to Tcl/Tk
+    python@3.11     # Interpreted, interactive, object-oriented programming language
     ripgrep         # Search tool like grep and The Silver Searcher
     ruff            # Extremely fast Python linter, written in Rust
-    rustup-init     # Rust toolchain installer
     shfmt           # Autoformat shell script source code
-    starship        # Cross-shell prompt for astronauts
     stylua          # Opinionated Lua code formatter
     tree            # Display directories as trees (with optional color/HTML output)
     watch           # Executes a program periodically, showing output fullscreen
 
     # Needed for building neovim.
-    ninja libtool automake cmake pkg-config gettext curl
+    #
+    # Note that cmake -- which is also required -- is installed below as a
+    # cask. This seems to be the approach recommended by homebrew, which prints
+    # a warning if installed by formula. I suppose this is so we can get the
+    # macOS configuration program.
 
-    # Needed for getting VLC to play Blu-Rays.
-    libbluray
-    libaacs
+    ninja libtool automake pkg-config gettext curl
 )
 
 # Packages to install as pre-built Mac binaries.
 
 CASKS=(
-    1password/tap/1password-cli
+    cmake           # Needed for building neovim.
     emacs           # Recommended to install as cask in order to get GUI support
-    qlmarkdown      # QuickLook generator for Markdown files (NB:
-                    # QLMarkdown.app needs to be manually launched at least once
-                    # in order for the QL generator to be registered.)
 
-    # Needed so that Starship has all the extended characters it needs.
-    homebrew/cask-fonts/font-inconsolata-go-nerd-font
-    # homebrew/cask-fonts/font-inconsolata-nerd-font
-    # homebrew/cask-fonts/font-ubuntu-mono-nerd-font
-
-)
-
-PYTHON_PACKAGES=(
-    beautifulsoup4  # Screen-scraping library
-    pynvim          # Python client to neovim
-    python-lsp-server   # Python Language Server for the Language Server Protocol
-    # python-lsp-server[all]  # Python Language Server for the Language Server Protocol
-
-    # Support for python-lsp-server
-    # https://github.com/python-lsp/python-lsp-server
+    # TODO: Test the installation of these:
     #
-    autopep8        # for code formatting
-    black
-    flake8          # for error checking (disabled by default)
-    mccabe          # linter for complexity checking
-    pycodestyle     # linter for style checking
-    pydocstyle      # linter for docstring style checking (disabled by default)
-    pyflakes        # linter to detect various errors
-    pylint          # for code linting (disabled by default)
-    rope            # for Completions and renaming
-    yapf            # for code formatting (preferred over autopep8)
-
-    pylsp-mypy      # MyPy type checking for Python >=3.7.
-    pyls-isort      # code formatting using isort (automatic import sorting)
-    python-lsp-black    # code formatting using Black.
-    pyls-memestra   # detecting the use of deprecated APIs
-    pylsp-rope      # Extended refactoring capabilities using Rope
+    # arc
+    # backblaze
+    # dash
+    # electrum
+    # google-earth-pro
+    # hazeover
+    # moom
+    # warp
 )
 
 
@@ -98,12 +83,12 @@ remove_brew()
 {
     if ! have_brew
     then
-        echo "### Asked to uninstall brew, but it doesn't seem to be installed."
+        echo "*** Asked to uninstall brew, but it doesn't seem to be installed."
         error 1
     fi
 
     echo
-    echo "*** Uninstalling Homebrew"
+    echo "### Uninstalling Homebrew"
     echo
 
     brew rm --zap "${CASKS[@]}"
@@ -117,7 +102,7 @@ install_brew()
     if ! have_brew
     then
         echo
-        echo "*** Cloning Homebrew repository"
+        echo "### Cloning Homebrew repository"
         echo
 
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -131,14 +116,14 @@ install_brew()
 
     if ! have_brew
     then
-        echo "### Could not find brew executable after installing"
+        echo "*** Could not find brew executable after installing"
         error 1
     fi
 
     # Install the apps I want.
 
     echo
-    echo "*** Installing Homebrew apps"
+    echo "### Installing Homebrew apps"
     echo
 
     local TO_INSTALL=( $(filter APPS $(brew list --formula)) )
@@ -146,61 +131,6 @@ install_brew()
 
     local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
     (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
-
-    # Prevent the following errors/messages when starting zsh:
-    #
-    # zsh compinit: insecure directories, run compaudit for list.
-    # Ignore insecure directories and continue [y] or abort compinit [n]?
-
-    if [ "$HOST_SHELL" = zsh ]
-    then
-        compaudit | xargs chmod g-w
-        compaudit | xargs chown root
-    fi
-
-    echo
-    echo "*** Installing Python packages"
-    echo
-
-    # Install some Python packages now that we have Python installed.
-    #
-    # Get list of already-installed packages, remove them from the list of packages
-    # we want to install, and install the resulting set.
-
-    local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3.11 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
-    (( $#TO_INSTALL > 0 )) && dont_sleep pip3.11 install "${TO_INSTALL[@]}"
-}
-
-filter()
-{
-    # Given the name of a list to filter and a list of items, get the items in
-    # the named list and return (echo) them if they don't appear in the given
-    # list of items.
-    #
-    # Allow for the fact that the named list may contain items in the form
-    # X/Y/Z, whereas the given items may include just Z. In that case, the
-    # prefix should be ignored and the item should still be removed.
-
-    local LIST_TO_FILTER=$1
-    local ITEMS_TO_FILTER=( "${(P)${LIST_TO_FILTER}[@]}" )
-    shift
-    local ITEMS_TO_REMOVE="$@"
-
-    local ITEM_TO_TEST
-    for ITEM_TO_TEST in "${ITEMS_TO_FILTER[@]}"
-    do
-        # If ITEM_TO_TEST has a prefix("*/"), remove it. Then see if the result
-        # is in ITEMS_TO_REMOVE by getting its index. If it's not there (the
-        # index is zero), echo it to the caller.
-        #
-        # TODO: I need a good way to return an array from a function. As it is,
-        # any items with spaces will be split into multiple items. Probably the
-        # best thing to do is pass in the name of an array to received the
-        # results and populate it indirectly. Maybe see:
-        # https://stackoverflow.com/a/49971213
-
-        (( $ITEMS_TO_REMOVE[(I)${ITEM_TO_TEST##*/}] )) || echo "${ITEM_TO_TEST}"
-    done
 }
 
 have_brew()
@@ -213,87 +143,34 @@ error()
     return "$@"
 }
 
+# Get some commands: brew_path, delete_brew, dont_sleep, filter,
+# is_being_sourced, is_executable, prepend_path
 
-# Make sure we're being source'd.
-
-if [[ "$ZSH_EVAL_CONTEXT" != "toplevel:file" ]]
-then
-    echo "### This script needs to be source'd from the top-level of the shell in order to set \$PATH"
-    exit 1
-fi
-
-# Get some commands: brew_path, delete_brew, is_executable, prepend_path, and
-# dont_sleep.
-
+source "${HOME}/.zshenv"
 source "${HOME}/.zshrc"
 
-# Do the work.
-
-if [[ "${CLEAN_INSTALL}" == "1" ]]
+if is_being_sourced
 then
-    remove_brew
-    install_brew
-elif [[ "${UNINSTALL}" == "1" ]]
-then
-    remove_brew
+    if [[ "${CLEAN_INSTALL}" == "1" ]]
+    then
+        remove_brew
+        install_brew
+    elif [[ "${UNINSTALL}" == "1" ]]
+    then
+        remove_brew
+    else
+        install_brew
+    fi
 else
-    install_brew
+    echo "*** install.brew should be source'd in order for \$PATH changes to take effect"
 fi
 
-unset PYTHON_PACKAGES
 unset CASKS
 unset APPS
 
-return 0
-
+true
 
 # ===== OLD JUNK BELOW THIS LINE =====
-
-    # To clean things up before we can perform a new install:
-    #
-    # $ PROMPT="$ " # Unhook starfish.
-    # $ RPROMPT="$ " # Unhook starfish.
-    # $ brew rm --zap $CASKS # Clean up things that uninstall.sh won't.
-    # $ delete_brew # Runs the official uninstall.sh script.
-    # $ # If we didn't run `brew rm --zap $CASKS`, then we also need to clean up
-    # $ # the following by hand:
-    # $ rm -rf \
-    # $     /Applications/Emacs.app \
-    # $     /usr/local/bin/ebrowse \
-    # $     /usr/local/bin/emacs \
-    # $     /usr/local/bin/emacsclient \
-    # $     /usr/local/bin/etags \
-    # $     /usr/local/share/man/man1/ebrowse.1.gz \
-    # $     /usr/local/share/man/man1/emacs.1.gz \
-    # $     /usr/local/share/man/man1/emacsclient.1.gz \
-    # $     /usr/local/share/man/man1/etags.1.gz \
-    # $     /Applications/QLMarkdown.app \
-    # $     ~/Library/Fonts/Ubuntu* \
-    # $     ~/Library/Fonts/Inconsolata*
-    # $ source install.brew
-    # $ reload # starfish is back, so fix the prompts.
-
-# TERMINOLOGY CHEAT SHEET:
-#
-# (See: https://docs.brew.sh/Formula-Cookbook)
-#
-# * Tap: A Git repository of Formulae. E.g., homebrew-core.
-# * Formula: The Ruby file describing the package.
-# * Cellar: Build/intallation location. Prefixed by project/version.
-# * Keg: The versioned installation path in the Cellar.
-# * Keg-only: Not made visible to $HOMEBREW_PREFIX/{bin,lib,etc}
-# * Bottle: Prebuilt Keg.
-# * Cask: Facility for installing macOS native applications.
-# * Bundle: Something about homebrew dependencies.
-#
-# Further, there's the notion of the "homebrew prefix". This prefix is
-# established below where we define HOMEBREW_PREFIX. It is the root of (almost)
-# all homebrew files. Not only are the installed bin, lib, etc., directories
-# created/stored there, but so are the meta-directories Cask, Cellar, Homebrew,
-# etc. After installation, this path is returned by $(brew --prefix) and in the
-# HOMEBREW_PREFIX field returned by $(brew --config) or $(brew --env). Some
-# additional files are stored at $(brew --cache) (e.g.,
-# ~/Library/Caches/Homebrew)
 
 # Some tools to consider from:
 #
@@ -325,11 +202,14 @@ return 0
 # dust            # More intuitive version of du in rust
 # fd              # Simple, fast and user-friendly alternative to find
 # fzf
+# #git-svn
 # github-keygen   # (Using 1Password instead)
 # htop            # Improved top (interactive process viewer)
 # jsonpp          # Command-line JSON pretty-printer
+# mas
 # ninja
 # procs           # Modern replacement for ps written by Rust
+# starfish
 # telnet
 # tldr            # Simplified and community-driven man pages
 # tokei           # Program that allows you to count code, quickly
