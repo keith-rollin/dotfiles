@@ -2,7 +2,7 @@ local utils = require("utils")
 
 -- Tell vim-autoformat where python is.
 
-vim.g.python3_host_prog = vim.fn.exepath("python3.11")
+vim.g.python3_host_prog = vim.fn.exepath("python3")
 
 -- Configure stylua to indent with spaces, not tabs. This is the default
 -- configuration line for formatdef_stylua but with "--indent-type Spaces"
