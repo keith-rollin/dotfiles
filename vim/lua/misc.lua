@@ -25,9 +25,8 @@ vim.g.netrw_liststyle = 3 -- Tree view.
 
 StripWhitespace = function()
     -- TODO: Translate to native Lua.
-    vim.cmd(
-        "let l:oldpos = getpos('.') | let l:oldquery = getreg('/') | :%s/s+$//e | call setpos('.', l:oldpos) | call setreg('/', l:oldquery)"
-    )
+    -- "let l:oldpos = getpos('.') | let l:oldquery = getreg('/') | :%s/s+$//e | call setpos('.', l:oldpos) | call setreg('/', l:oldquery)"
+    vim.cmd(":%s/s+$//e")
 end
 
 ---- Bottleneck function for appending a new component to a path. This is not
