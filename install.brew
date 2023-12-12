@@ -84,8 +84,9 @@ remove_brew()
 {
     if ! have_brew
     then
-        echo "*** Asked to uninstall brew, but it doesn't seem to be installed."
-        error 1
+        # echo "*** Asked to uninstall brew, but it doesn't seem to be installed."
+        # error 1
+        return
     fi
 
     echo
@@ -94,6 +95,7 @@ remove_brew()
 
     brew rm --zap "${CASKS[@]}"
     delete_brew
+    sudo rm -rf $(brew_path)
 }
 
 install_brew()
@@ -191,9 +193,10 @@ fi
 # (Will the following code break if there's more than one version of neovim
 # installed?)
 
-maybe_hide(path)
+maybe_hide()
 {
-    [[ -d "${path}" ]] && mv "${path}" "${path}.bak"
+    echo "### Attempting to move $1"
+    [[ -d "$1" ]] && mv "$1" "$1.bak"
 }
 
 NEOVIM_PATH="$(brew list --versions neovim | tr ' ' / | tail -1)"
@@ -202,6 +205,8 @@ then
     NEOVIM_PATH="$(brew --cellar)/${NEOVIM_PATH}"
     maybe_hide "${NEOVIM_PATH}/lib/nvim/parser"
     maybe_hide "${NEOVIM_PATH}/share/nvim/queries"
+else
+    echo "*** Unable to find neovim"
 fi
 
 unset CASKS
