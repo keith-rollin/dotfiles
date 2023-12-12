@@ -44,15 +44,17 @@
 
 local utils = require("utils")
 
+-- do, dp, dn, dl defined in init-mason
+-- gD, gd, gi, gt defined in init-mason
+-- ca, ff, K, rn, sh, sr defined in init-mason
+-- Items starting with "t" are reserved for Telescope
 utils.set_keymap_normal("<leader>.", "<c-^>")
 utils.set_keymap_normal("<leader>,", ":FSHere<CR>")
 utils.set_keymap_normal("<leader> ", ":lua StripWhitespace()<CR>")
-utils.set_keymap_normal("<leader>af", ":Autoformat<CR>")
 utils.set_keymap_normal("<leader>eg", ":edit ~/.gitconfig<CR>")
 utils.set_keymap_normal("<leader>ev", ":edit " .. vim.env.MYVIMRC .. "<CR>")
 utils.set_keymap_normal("<leader>ez", ":edit ~/.zshrc<CR>")
 utils.set_keymap_normal("<leader>l", ":nohlsearch<CR>")
--- utils.set_keymap_normal("<leader>m",  ":call ParentMake()<CR>")
 utils.set_keymap_normal("<leader>si", ":set cursorline!<CR>")
 utils.set_keymap_normal("<leader>sl", ":set list!<CR>")
 utils.set_keymap_normal("<leader>ss", ":set spell!<CR>")

@@ -79,9 +79,9 @@ set_ls_options()
     fi
 }
 
-la()        { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} "$@" ; }
-lart()      { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" ; }
-lax()       { set_ls_options; ls_common -l ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
+la()        { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} "$@" ; }
+lart()      { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" ; }
+lax()       { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
 ll()        { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} "$@" ; }
 llx()       { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
 ls()        { set_ls_options; ls_common "$@" ; }
@@ -218,6 +218,20 @@ create_link_in_home()
 delete_brew()
 {
     sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+}
+
+delete_lazy()
+{
+    rm -rf ~/.local/{share,state}/nvim/lazy
+}
+
+delete_mason() {
+    rm -rf ~/.local/share/nvim/mason
+}
+
+delete_treesitter() {
+    rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser/*.so
+    rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser-info/*.revision
 }
 
 dont_sleep()

@@ -1,11 +1,11 @@
 local M = {}
 
 M.set_keymap_normal = function(lhs, rhs)
-    vim.api.nvim_set_keymap("n", lhs, rhs, { noremap = true, silent = true })
+    vim.keymap.set("n", lhs, rhs, { noremap = true, silent = true })
 end
 
 M.set_keymap_visual = function(lhs, rhs)
-    vim.api.nvim_set_keymap("v", lhs, rhs, { noremap = true, silent = true })
+    vim.keymap.set("v", lhs, rhs, { noremap = true, silent = true })
 end
 
 M.set_local = function(name, value)

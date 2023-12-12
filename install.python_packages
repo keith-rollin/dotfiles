@@ -19,26 +19,6 @@ source "${HOME}/.zshrc"
 PYTHON_PACKAGES=(
     beautifulsoup4  # Screen-scraping library
     pynvim          # Python client to neovim
-
-    # Support for python-lsp-server
-    # https://github.com/python-lsp/python-lsp-server
-
-    autopep8        # for code formatting
-    black
-    flake8          # for error checking (disabled by default)
-    mccabe          # linter for complexity checking
-    pycodestyle     # linter for style checking
-    pydocstyle      # linter for docstring style checking (disabled by default)
-    pyflakes        # linter to detect various errors
-    pylint          # for code linting (disabled by default)
-    rope            # for Completions and renaming
-    yapf            # for code formatting (preferred over autopep8)
-
-    pylsp-mypy      # MyPy type checking for Python >=3.7.
-    pyls-isort      # code formatting using isort (automatic import sorting)
-    python-lsp-black    # code formatting using Black.
-    pyls-memestra   # detecting the use of deprecated APIs
-    pylsp-rope      # Extended refactoring capabilities using Rope
 )
 
 local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
@@ -46,19 +26,5 @@ echo $TO_INSTALL
 (( $#TO_INSTALL > 0 )) && dont_sleep pip3 install "${TO_INSTALL[@]}"
 
 unset PYTHON_PACKAGES
-
-# Installing python-lsp-server is weird. It has that "[all]" option. This
-# doesn't show up when running `pip3 list`, and so our filter() routine doesn't
-# think the package is installed. Until I can figure out how to handle that in
-# a general way, use some custom code.
-#
-# See https://github.com/python-lsp/python-lsp-server for additional
-# installation options.
-
-pip3 list | grep 'python-lsp-server' &>/dev/null
-if (( ${pipestatus[2]} ))
-then
-    dont_sleep pip3 install 'python-lsp-server[all]'  # Python Language Server for the Language Server Protocol
-fi
 
 true
