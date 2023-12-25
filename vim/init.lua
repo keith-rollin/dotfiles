@@ -18,9 +18,22 @@
 --      * .config/nvim          : init.lua and supporting scripts
 --      * .local/share/nvim     : "user data directory"
 --      * .local/state/nvim     : drafts, swap, undo, shada, logs
+--
+-- TODO: Check out the following:
+--      * Neovide: https://neovide.dev/
+--      * LazyVim: https://lazyvim.org https://github.com/LazyVim/LazyVim
+--      * LunarVim: https://github.com/LunarVim/LunarVim
+--      * AstroNvim: https://github.com/AstroNvim/AstroNvim
+--      * NvChad: https://github.com/NvChad/NvChad
+--      * Kickstart: https://github.com/nvim-lua/kickstart.nvim
+--      * SpaceVim: https://spacevim.org/
+--      * CosmicNvim: https://github.com/CosmicNvim/CosmicNvim
+--      * lsp-zero: https://github.com/VonHeikemen/lsp-zero.nvim
+--      * Awesome Neovim: https://github.com/rockerBOO/awesome-neovim
 
 -- Set mapleader here so that we can use it anywhere in the file (even outside
--- of keymap.lua). This has to actually be defined before any place that uses it.
+-- of keymap.lua). This has to actually be defined before any place that uses
+-- it.
 
 vim.g.mapleader = " "
 
