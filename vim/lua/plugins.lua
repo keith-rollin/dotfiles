@@ -458,10 +458,11 @@ local function init_formatter()
         filetype = {
             lua = {
                 function()
-                    local base_spec = require("formatter.filetypes.lua").stylua()
-                    table.insert(base_spec.args, 1, "--indent-type")
-                    table.insert(base_spec.args, 2, "Spaces")
-                    return base_spec
+                    -- Default: `stylua --search-parent-directories ...`
+                    local cmd = require("formatter.filetypes.lua").stylua()
+                    table.insert(cmd.args, 1, "--indent-type")
+                    table.insert(cmd.args, 2, "Spaces")
+                    return cmd
                 end,
             },
             python = {
