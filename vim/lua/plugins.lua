@@ -51,7 +51,7 @@ local function init_lazy()
             "nvim-telescope/telescope.nvim",
             { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
             "nvim-treesitter/playground",
-            "tpope/vim-commentary",
+            "tpope/vim-commentary", -- TODO: Compare to https://github.com/tomtom/tcomment_vim and https://github.com/numToStr/Comment.nvim
             "tpope/vim-sensible",
 
             -- Completion
@@ -67,10 +67,19 @@ local function init_lazy()
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
+            -- "mfussenegger/nvim-dap",
             -- "mfussenegger/nvim-lint",
-            "mhartington/formatter.nvim",
+            "mhartington/formatter.nvim", -- Provides :Format[Write][Lock] commands, which can be used in Buf events or bound to <leader> keys. Does no formatting while typing; use LSP services for that. TODO: compare to stevearc/conform.nvim
 
+            -- "echasnovski/mini.nvim"  -- The Tim Pope of Lua, and then some!
             -- "simrat39/rust-tools.nvim", -- Tools for better development in rust using neovim's builtin lsp
+            -- "nvim-neo-tree/neo-tree.nvim"
+            -- "nvim-tree/nvim-tree.lua",
+            -- "nvim-lualine/lualine.nvim",
+            -- "kyazdani42/nvim-web-devicons",
+            -- { "glepnir/lspsaga.nvim", branch = "main" } -- See the following for keybindings: https://youtu.be/vdn_pKJUda8?si=VXnW4xurpH3O4Tcy&t=3106
+            -- "windwp/nvim-autopairs",
+            -- "lewis6991/gitsigns.nvim",
         },
 
         -- Move the lazy-lock file from my vim directory to the share directory
