@@ -344,6 +344,29 @@ local function init_mason_lspconfig()
             end,
 
             -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pylsp
+            --
+            -- Looks like pylsp automatically installs the following support
+            -- tools. This means that we don't need to duplicate them elsewhere
+            -- (like when configuring formatter.nvim).
+            --
+            -- * autopep8
+            -- * flake8
+            -- * get_gprof
+            -- * get_objgraph
+            -- * isort
+            -- * isort-identify-imports
+            -- * pycodestyle
+            -- * pydocstyle
+            -- * pyflakes
+            -- * pylint
+            -- * pylint-config
+            -- * pylsp
+            -- * pyreverse
+            -- * symilar
+            -- * undill
+            -- * yapf
+            -- * yapf-diff
+
             ["pylsp"] = function()
                 default_handler("pylsp", {
                     settings = {
