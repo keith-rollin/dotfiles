@@ -690,15 +690,6 @@ export LESS=-IMR
 
 PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 
-
-ZSH_CONFIG_DIR="${HOME}/.config/zsh"
-mkdir -p "${ZSH_CONFIG_DIR}"
-export HISTFILE=${ZSH_CONFIG_DIR}/zsh_history
-export HISTSIZE=SAVEHIST=10000
-setopt share_history
-setopt extended_history
-setopt interactive_comments
-
 # Shell.
 
 autoload -U compinit
@@ -709,6 +700,10 @@ bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward
 bindkey -s '`' '~'
 bindkey -e
+
+setopt share_history
+setopt extended_history
+setopt interactive_comments
 
 # Bring in brew-provided command-line completion.
 
