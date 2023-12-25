@@ -15,6 +15,7 @@ defaults write NSGlobalDomain               InitialKeyRepeat                -int
 defaults write NSGlobalDomain               KeyRepeat                       -int 2          # Doesn't take effect until reboot?
 defaults write NSGlobalDomain               NSUserKeyEquivalents            -dict "Enter Full Screen" "@^f" "Exit Full Screen" "@^f"
 defaults write NSGlobalDomain               com.apple.sound.beep.feedback   -bool false     # Don't beep when changing volume
+defaults write NSGlobalDomain               com.apple.trackpad.scaling      -float 1        # 0, 0.125, 0.5, 0.6875, 0.875, 1, 1.5, 2, 2.5, 3
 
 defaults write com.apple.ActivityMonitor    UpdatePeriod                    -int 1          # Very frequent updates
 
