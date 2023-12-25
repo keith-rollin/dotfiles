@@ -81,11 +81,6 @@ utils.set_keymap_visual("<", "<gv")
 utils.set_keymap_visual(">", ">gv")
 
 -- Split navigation
---
--- NOTE: CTRL-L conflicts with vim-sensible's (and nvim's) mapping that removes
--- highlighting. I really like the latter and may miss it. For now, I've mapped
--- <leader>l to do most of the same thing (vim-sensible's version does more
--- than I need).
 
 utils.set_keymap_normal("<C-J>", "<C-W><C-J>")
 utils.set_keymap_normal("<C-K>", "<C-W><C-K>")
