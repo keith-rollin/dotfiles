@@ -400,6 +400,7 @@ local function init_mason_lspconfig()
                                     maxLineLength = 88, -- Match what ruff applies.
                                     ignore = {
                                         -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
+                                        "E203", -- whitespace before ':' (fight between pyls and ruff)
                                         "E221", -- multiple spaces before operator
                                         "E241", -- multiple spaces after ':'
                                         "W503", -- line break before binary operator
