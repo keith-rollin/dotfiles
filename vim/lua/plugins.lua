@@ -279,9 +279,9 @@ end
 local function init_mason_lspconfig()
     vim.api.nvim_create_autocmd("LspAttach", {
         desc = "LSP actions",
-        callback = function(ev)
+        callback = function(event)
             local bufmap = function(keys, fn)
-                local opts = { noremap = true, silent = true, buffer = ev.buf }
+                local opts = { noremap = true, silent = true, buffer = event.buf }
                 vim.keymap.set("n", "<leader>" .. keys, fn, opts)
             end
 
