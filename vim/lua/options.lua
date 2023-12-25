@@ -5,6 +5,7 @@
 --  * I would like to set pastetoggle to "<leader>v", but doing so breaks nvim-cmp:
 --      <https://github.com/hrsh7th/nvim-cmp/issues/1095>
 
+vim.opt.autoindent = true -- Normally 'autoindent' should also be on when using 'smartindent'.
 vim.opt.autowriteall = true -- Write the file when we switch buffers.
 vim.opt.clipboard = "unnamed" -- Interoperate with the system clipboard.
 vim.opt.grepprg = "rg --vimgrep" -- Use ripgrep for grepping.
