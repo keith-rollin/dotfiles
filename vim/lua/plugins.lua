@@ -484,6 +484,8 @@ local function init_formatter()
     })
 
     require("utils").on_write_post({ "*.lua", "*.py", "*.rs", "*.sh", "*.bash", "*.zsh" }, function()
+        -- Do we need format.nvim? Could we just use the LSP server?
+        --      vim.lsp.buf.format({ async = false })
         vim.cmd("FormatWrite")
     end)
 end
