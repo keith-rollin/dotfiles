@@ -397,6 +397,7 @@ local function init_mason_lspconfig()
                         pylsp = {
                             plugins = {
                                 pycodestyle = {
+                                    maxLineLength = 88, -- Match what ruff applies.
                                     ignore = {
                                         -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
                                         "E221", -- multiple spaces before operator
