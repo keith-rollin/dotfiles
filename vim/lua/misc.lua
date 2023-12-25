@@ -30,9 +30,7 @@ StripWhitespace = function()
     vim.cmd(":%s/s+$//e")
 end
 
--- Reload the init.vim file, in case for some reason the autocmd above doesn't
--- do the trick. This mirrors my bash command that does the same thing with the
--- .zshrc file.
+-- Reload the init.lua file.
 
 vim.api.nvim_create_user_command("Reload", ":source " .. vim.env.MYVIMRC, {})
 
