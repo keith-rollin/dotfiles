@@ -396,6 +396,9 @@ local function init_mason_lspconfig()
                     settings = {
                         pylsp = {
                             plugins = {
+                                -- mccabe = {
+                                --     threshold = 100,
+                                -- },
                                 pycodestyle = {
                                     maxLineLength = 88, -- Match what ruff applies.
                                     ignore = {
