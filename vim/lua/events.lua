@@ -9,7 +9,7 @@ end)
 -- Set a right-most colorcolumn for Python files.
 
 utils.on_create_or_open({ "*.py" }, function()
-    utils.set_local("textwidth", 80)
+    utils.set_local("textwidth", 88)
     utils.set_local("colorcolumn", "+1")
 end)
 
