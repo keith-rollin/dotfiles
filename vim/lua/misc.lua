@@ -7,17 +7,6 @@ vim.api.nvim_set_hl(0, "ColorColumn", { ctermbg = "LightGrey" })
 
 vim.cmd("match ErrorMsg '^(<|=|>){7}([^=].+)?$'")
 
--- Set the default highlighting style for shell scripts. This particular
--- setting assumes that our scripts are POSIX compatible and so shows things
--- like $(...) without flagging it as invalid.
-
-vim.g.is_posix = 1
-
--- netrw: Configuration
-
-vim.g.netrw_banner = 0 -- Disable banner.
-vim.g.netrw_liststyle = 3 -- Tree view.
-
 -- Functions/Commands
 -- ------------------
 
