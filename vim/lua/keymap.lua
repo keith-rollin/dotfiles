@@ -46,8 +46,9 @@ local utils = require("utils")
 
 -- do, dp, dn, dl defined in init-mason
 -- gD, gd, gi, gt defined in init-mason
--- ca, ff, K, rn, sh, sr defined in init-mason
+-- ca, ff, K, rn, sh*, sr defined in init-mason
 -- Items starting with "t" are reserved for Telescope
+-- * Removed so that we can use it below.
 utils.set_keymap_normal("<leader>.", "<c-^>")
 utils.set_keymap_normal("<leader>,", ":FSHere<CR>")
 utils.set_keymap_normal("<leader> ", ":lua StripWhitespace()<CR>")
@@ -55,9 +56,12 @@ utils.set_keymap_normal("<leader>eg", ":edit ~/.gitconfig<CR>")
 utils.set_keymap_normal("<leader>ev", ":edit " .. vim.env.MYVIMRC .. "<CR>")
 utils.set_keymap_normal("<leader>ez", ":edit ~/.zshrc<CR>")
 utils.set_keymap_normal("<leader>l", ":nohlsearch<CR>")
+utils.set_keymap_normal("<leader>sh", ":split<CR>")
 utils.set_keymap_normal("<leader>si", ":set cursorline!<CR>")
 utils.set_keymap_normal("<leader>sl", ":set list!<CR>")
 utils.set_keymap_normal("<leader>ss", ":set spell!<CR>")
+utils.set_keymap_normal("<leader>sv", ":vsplit<CR>")
+utils.set_keymap_normal("<leader>sx", ":close<CR>")
 utils.set_keymap_normal("<leader>w", ":w<CR>")
 
 -- Find or replace the word under the cursor.
