@@ -424,7 +424,7 @@ local function init_mason_tool_installer()
             "stylua",
 
             -- python
-            "autoflake",
+            "autoflake", -- Removes unused imports and unused variables as reported by pyflakes
             "isort",
             "ruff",
 
