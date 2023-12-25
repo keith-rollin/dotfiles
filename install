@@ -89,3 +89,5 @@ fi
 
 source "${HOME}/.zshenv"
 source "${HOME}/.zshrc"
+
+mkdir -p "${ZSH_CONFIG_DIR}"
