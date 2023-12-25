@@ -299,6 +299,26 @@ local function init_mason_lspconfig()
             bufmap("rn", vim.lsp.buf.rename)
             -- bufmap("sh", vim.lsp.buf.signature_help)
             bufmap("sr", vim.lsp.buf.references)
+
+            -- Use something along these lines to unset 'formatexpr' if the LSP
+            -- does not support formatting. That way, maybe we'll get 'gq'
+            -- back.
+            --
+            -- vim.api.nvim_create_autocmd("LspAttach", {
+            --   callback = function(args)
+            --     local bufnr = args.buf
+            --     local client = vim.lsp.get_client_by_id(args.data.client_id)
+            --     if client.server_capabilities.completionProvider then
+            --       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+            --     end
+            --     if client.server_capabilities.definitionProvider then
+            --       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+            --     end
+            --   end,
+            -- })
+            --
+            -- To get the LSP server capabilities:
+            -- lua =vim.lsp.get_active_clients()[1].server_capabilities
         end,
     })
 
@@ -337,6 +357,10 @@ local function init_mason_lspconfig()
                             diagnostics = {
                                 enable = true,
                                 globals = { "vim", "bufnr" },
+                            },
+                            -- For what it's worth...it doesn't give me 'gq' back...
+                            format = {
+                                enable = false,
                             },
                         },
                     },
