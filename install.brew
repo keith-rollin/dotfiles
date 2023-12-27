@@ -40,6 +40,7 @@ APPS=(
     git             # Distributed revision control system
     git-delta       # Syntax-highlighting pager for git and diff output
     neovim          # Ambitious Vim-fork focused on extensibility and agility
+    node            # Platform built on V8 to build network applications (Needed for some LSP plugins)
     python-tk@3.11  # Python interface to Tcl/Tk
     python@3.11     # Interpreted, interactive, object-oriented programming language
     ripgrep         # Search tool like grep and The Silver Searcher

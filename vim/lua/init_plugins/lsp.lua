@@ -33,9 +33,24 @@ return {
             -- possible for that package to try to initialize the plugins before
             -- mason-lsp-config had finished loading them.
 
+            local augroup = vim.api.nvim_create_augroup("formatting_group", {})
+
             vim.api.nvim_create_autocmd("LspAttach", {
                 desc = "LSP actions",
                 callback = function(event)
+                    local bufnr = event.buf
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client.supports_method("textDocument/formatting") then
+                        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            group = augroup,
+                            buffer = bufnr,
+                            callback = function()
+                                vim.lsp.buf.format({ async = false, bufnr = bufnr })
+                            end,
+                        })
+                    end
+
                     local bufmap = function(keys, fn)
                         local opts = { noremap = true, silent = true, buffer = event.buf }
                         vim.keymap.set("n", "<leader>" .. keys, fn, opts)
@@ -91,7 +106,12 @@ return {
 
             require("mason-lspconfig").setup({
                 ensure_installed = {
-                    -- understands your C++ code and adds smart features to
+
+                    -- A language server for Bash.
+
+                    "bashls",
+
+                    -- Understands your C++ code and adds smart features to
                     -- your editor: code completion, compile errors,
                     -- go-to-definition and more (https://clangd.llvm.org)
 
@@ -103,24 +123,11 @@ return {
 
                     "lua_ls",
 
-                    -- A fast static code analyzer & language server for Python
-                    -- (https://github.com/mtshiba/pylyzer)
-                    --
-                    -- This is putting up some errors when I try to use it. And it's slow to build/install.
-                    --
-                    -- "pylyzer",
-
                     -- Fork of the python-language-server project, maintained
                     -- by the Spyder IDE team and the community
                     -- (https://github.com/python-lsp/python-lsp-server)
 
                     "pylsp",
-
-                    -- A Language Server Protocol implementation for Ruff - An
-                    -- extremely fast Python linter, written in Rust
-                    -- (https://github.com/astral-sh/ruff-lsp/)
-
-                    "ruff_lsp",
 
                     -- rust-analyzer is an implementation of the Language
                     -- Server Protocol for the Rust programming language. It
@@ -129,19 +136,16 @@ return {
                     -- (https://github.com/rust-lang/rust-analyzer)
 
                     "rust_analyzer",
-
-                    -- Sourcery is a tool available in your IDE, GitHub, or as
-                    -- a CLI that suggests refactoring improvements to help
-                    -- make your code more readable and generally higher
-                    -- quality (https://docs.sourcery.ai/)
-                    --
-                    -- This is putting up some errors when I try to use it.
-                    --
-                    -- "sourcery",
                 },
 
                 handlers = {
                     default_handler,
+
+                    ["bashls"] = function()
+                        default_handler("bashls", {
+                            filetypes = { 'zsh' },
+                        })
+                    end,
 
                     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
                     ["lua_ls"] = function()
@@ -150,55 +154,63 @@ return {
                                 Lua = {
                                     diagnostics = {
                                         enable = true,
-                                        globals = { "vim", "bufnr" },
+                                        globals = { "vim" },
                                     },
-                                    -- For what it's worth...it doesn't give me 'gq' back...
                                     format = {
-                                        enable = false,
+                                        enable = true,
                                     },
                                 },
                             },
                         })
                     end,
 
-                    -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pylsp
+                    -- Things we can configure to varying degrees:
                     --
-                    -- Looks like pylsp automatically installs the following
-                    -- support tools. This means that we don't need to
-                    -- duplicate them elsewhere (like when configuring
-                    -- formatter.nvim).
+                    -- - [Jedi](https://github.com/davidhalter/jedi) to provide Completions, Definitions, Hover, References, Signature Help, and Symbols
+                    -- - [Rope](https://github.com/python-rope/rope) for Completions and renaming
+                    -- - [Pyflakes](https://github.com/PyCQA/pyflakes) linter to detect various errors
+                    -- - [McCabe](https://github.com/PyCQA/mccabe) linter for complexity checking
+                    -- - [pycodestyle](https://github.com/PyCQA/pycodestyle) linter for style checking
+                    -- - [pydocstyle](https://github.com/PyCQA/pydocstyle) linter for docstring style checking (disabled by default)
+                    -- - [autopep8](https://github.com/hhatto/autopep8) for code formatting
+                    -- - [YAPF](https://github.com/google/yapf) for code formatting (preferred over autopep8)
+                    -- - [flake8](https://github.com/pycqa/flake8) for error checking (disabled by default)
+                    -- - [pylint](https://github.com/PyCQA/pylint) for code linting (disabled by default)
                     --
-                    -- * autopep8
-                    -- * flake8
-                    -- * get_gprof
-                    -- * get_objgraph
-                    -- * isort
-                    -- * isort-identify-imports
-                    -- * pycodestyle
-                    -- * pydocstyle
-                    -- * pyflakes
-                    -- * pylint
-                    -- * pylint-config
-                    -- * pylsp
-                    -- * pyreverse
-                    -- * symilar
-                    -- * undill
-                    -- * yapf
-                    -- * yapf-diff
+                    -- √ autopep8
+                    --   flake8
+                    -- √ jedi_completion
+                    -- √ jedi_hover
+                    -- √ jedi_references
+                    -- √ jedi_signature_help
+                    -- √ jedi_symbols
+                    -- √ mccabe
+                    -- √ preload
+                    -- √ pycodestyle
+                    --   pydocstyle
+                    -- √ pyflakes
+                    --   pylint
+                    --   rope_autoimport
+                    -- √ rope_autoimport.completions
+                    -- √ rope_autoimport.code_actions
+                    --   rope_completion
+                    -- √ yapf
 
                     ["pylsp"] = function()
                         default_handler("pylsp", {
                             settings = {
                                 pylsp = {
                                     plugins = {
-                                        -- mccabe = {
-                                        --     threshold = 100,
-                                        -- },
+                                        rope_autoimport = {
+                                            enabled = true,
+                                        },
+                                        rope_completion = {
+                                            enabled = true,
+                                        },
                                         pycodestyle = {
-                                            maxLineLength = 88, -- Match what ruff applies.
+                                            maxLineLength = 88, -- Something is formatting us to 88 characters, so don't complain about it
                                             ignore = {
                                                 -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
-                                                "E203", -- whitespace before ':' (fight between pyls and ruff)
                                                 "E221", -- multiple spaces before operator
                                                 "E241", -- multiple spaces after ':'
                                                 "W503", -- line break before binary operator
@@ -212,95 +224,6 @@ return {
                     end,
                 },
             })
-        end,
-    },
-    {
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-        config = function()
-            -- Use mason-tool-installer to download the non-LSP (formatting,
-            -- linting) plugins
-            --
-            -- These are installed on VimEnter (that is, just after vim
-            -- finishes starting up).
-
-            require("mason-tool-installer").setup({
-                ensure_installed = {
-                    -- lua
-                    "stylua",
-
-                    -- python
-                    "autoflake", -- Removes unused imports and unused variables as reported by pyflakes
-                    "isort",
-                    "ruff",
-
-                    -- Loading rustfmt is deprecated. The :Mason dialog tells
-                    -- us to use rustup (that is, the version that comes
-                    -- standard with rust) instead.
-
-                    -- rust
-                    -- "rustfmt",
-
-                    -- sh
-                    "beautysh",
-                },
-            })
-        end,
-    },
-    -- "mfussenegger/nvim-dap",
-    -- "mfussenegger/nvim-lint",
-    {
-        -- Provides :Format[Write][Lock] commands, which can be used in Buf
-        -- events or bound to <leader> keys. Does no formatting while typing;
-        -- use LSP services for that. TODO: compare to stevearc/conform.nvim
-        "mhartington/formatter.nvim",
-        config = function()
-            -- Use formatter.nvim to configure the formatting plugins
-            --
-            -- Formatting is done in response to :Format[Write][Lock] commands.
-            -- We extend this by adding a BufWritePost handler to invoke
-            -- FormatWrite. This approach is recommended by the formatting.nvim
-            -- docs. It's not apparent to me why the documentation recommends
-            -- this approach rather than calling Format on a BufWritePre hook.
-
-            local filetypes_ok, _ = pcall(require, "formatter.filetypes")
-            if not filetypes_ok then
-                return
-            end
-
-            require("formatter").setup({
-                filetype = {
-                    lua = {
-                        function()
-                            -- Default: `stylua --search-parent-directories ...`
-                            local cmd = require("formatter.filetypes.lua").stylua()
-                            table.insert(cmd.args, 1, "--indent-type")
-                            table.insert(cmd.args, 2, "Spaces")
-                            return cmd
-                        end,
-                    },
-                    python = {
-                        require("formatter.filetypes.python").autoflake,
-                        require("formatter.filetypes.python").isort,
-                        require("formatter.filetypes.python").ruff,
-                    },
-                    rust = {
-                        require("formatter.filetypes.rust").rustfmt,
-                    },
-                    zsh = {
-                        require("formatter.filetypes.zsh").beautysh,
-                    },
-
-                    ["*"] = {
-                        require("formatter.filetypes.any").remove_trailing_whitespace,
-                    },
-                },
-            })
-
-            require("utils").on_write_post({ "*.lua", "*.py", "*.rs", "*.sh", "*.bash", "*.zsh" }, function()
-                -- Do we need format.nvim? Could we just use the LSP server?
-                --      vim.lsp.buf.format({ async = false })
-                vim.cmd("FormatWrite")
-            end)
         end,
     },
 }
