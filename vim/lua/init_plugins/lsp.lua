@@ -118,8 +118,11 @@ return {
                         vim.bo[bufnr].formatexpr = nil
                     end
 
+                    -- Set up some LSP-related shortcuts (perform code action,
+                    -- go to definition, show references, etc.)
+
                     local bufmap = function(keys, fn)
-                        local opts = { noremap = true, silent = true, buffer = event.buf }
+                        local opts = { noremap = true, silent = true, buffer = bufnr }
                         vim.keymap.set("n", "<leader>" .. keys, fn, opts)
                     end
 
@@ -140,13 +143,13 @@ return {
                 end,
             })
 
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
             local lspconfig = require("lspconfig")
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local default_opts = {
+                capabilities = capabilities,
+            }
 
             local function default_handler(server_name, opts)
-                local default_opts = {
-                    capabilities = capabilities,
-                }
                 local merged_opts = vim.tbl_extend("keep", opts or {}, default_opts)
                 lspconfig[server_name].setup(merged_opts)
             end
