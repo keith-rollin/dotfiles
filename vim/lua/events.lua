@@ -1,8 +1,8 @@
 local utils = require("utils")
 
--- Set text width to 80 for text files.
+-- Set text width to 80 for text and Lua files.
 
-utils.on_create_or_open({ "*.txt" }, function()
+utils.on_create_or_open({ "*.txt", "*.lua" }, function()
     utils.set_local("textwidth", 80)
 end)
 
