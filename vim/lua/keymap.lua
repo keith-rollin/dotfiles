@@ -100,7 +100,10 @@ mapn("gf", ":edit <cfile><cr>")
 
 mapn("n", "nzzzv")
 mapn("N", "NzzzV")
-
+mapn("<C-D>", "<C-D>zz")
+mapn("<C-U>", "<C-U>zz")
+mapn("<C-F>", "<C-F>zz")
+mapn("<C-B>", "<C-B>zz")
 
 -- Tab / Shift-Tab to change buffers.
 
