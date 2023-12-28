@@ -43,57 +43,70 @@
 --      nnoremap & :&&<CR>
 
 local utils = require("utils")
+local mapn = utils.set_keymap_normal
+local mapv = utils.set_keymap_visual
 
 -- do, dp, dn, dl defined in init-mason
 -- gD, gd, gi, gt defined in init-mason
 -- ca, ff, K, rn, sh*, sr defined in init-mason
 -- Items starting with "t" are reserved for Telescope
 -- * Removed so that we can use it below.
-utils.set_keymap_normal("<leader>.", "<c-^>")
-utils.set_keymap_normal("<leader>,", ":FSHere<CR>")
-utils.set_keymap_normal("<leader> ", ":lua StripWhitespace()<CR>")
-utils.set_keymap_normal("<leader>eg", ":edit ~/.gitconfig<CR>")
-utils.set_keymap_normal("<leader>ev", ":edit " .. vim.env.MYVIMRC .. "<CR>")
-utils.set_keymap_normal("<leader>ez", ":edit ~/.zshrc<CR>")
-utils.set_keymap_normal("<leader>l", ":nohlsearch<CR>")
-utils.set_keymap_normal("<leader>sh", ":split<CR>")
-utils.set_keymap_normal("<leader>si", ":set cursorline!<CR>")
-utils.set_keymap_normal("<leader>sl", ":set list!<CR>")
-utils.set_keymap_normal("<leader>ss", ":set spell!<CR>")
-utils.set_keymap_normal("<leader>sv", ":vsplit<CR>")
-utils.set_keymap_normal("<leader>sx", ":close<CR>")
-utils.set_keymap_normal("<leader>w", ":w<CR>")
+
+mapn("<leader>.", "<c-^>")
+mapn("<leader>,", ":FSHere<CR>")
+mapn("<leader> ", ":lua StripWhitespace()<CR>")
+mapn("<leader>eg", ":edit ~/.gitconfig<CR>")
+mapn("<leader>ev", ":edit " .. vim.env.MYVIMRC .. "<CR>")
+mapn("<leader>ez", ":edit ~/.zshrc<CR>")
+mapn("<leader>l", ":nohlsearch<CR>")
+mapn("<leader>sh", ":split<CR>")
+mapn("<leader>si", ":set cursorline!<CR>")
+mapn("<leader>sl", ":set list!<CR>")
+mapn("<leader>ss", ":set spell!<CR>")
+mapn("<leader>sv", ":vsplit<CR>")
+mapn("<leader>sx", ":close<CR>")
+mapn("<leader>w", ":w<CR>")
 
 -- Find or replace the word under the cursor.
 
-utils.set_keymap_normal("<leader>f", "/<C-r><C-w><CR>")
-utils.set_keymap_normal("<leader>r", ":%s/<<C-r><C-w>>/<C-r><C-w>/g<Left><Left>")
+mapn("<leader>f", "/<C-r><C-w><CR>")
+mapn("<leader>r", ":%s/<<C-r><C-w>>/<C-r><C-w>/g<Left><Left>")
 
 -- Take the selection and move it up or down, after which, reselect the text,
 -- reformat/indent it, and select it again.
 
-utils.set_keymap_visual("J", ":m '>+1<CR>gv=gv")
-utils.set_keymap_visual("K", ":m '<-2<CR>gv=gv")
+mapv("J", ":m '>+1<CR>gv=gv")
+mapv("K", ":m '<-2<CR>gv=gv")
 
 -- Stay in visual mode when indenting.
 
-utils.set_keymap_visual("<", "<gv")
-utils.set_keymap_visual(">", ">gv")
+mapv("<", "<gv")
+mapv(">", ">gv")
 
 -- Split navigation
 
-utils.set_keymap_normal("<C-J>", "<C-W><C-J>")
-utils.set_keymap_normal("<C-K>", "<C-W><C-K>")
-utils.set_keymap_normal("<C-L>", "<C-W><C-L>")
-utils.set_keymap_normal("<C-H>", "<C-W><C-H>")
+mapn("<C-J>", "<C-W><C-J>")
+mapn("<C-K>", "<C-W><C-K>")
+mapn("<C-L>", "<C-W><C-L>")
+mapn("<C-H>", "<C-W><C-H>")
 
 -- Remap gf to open the file under the cursor even if it doesn't exist. This
 -- tip is from the help for 'gf'. However, that help says to just use the 'map'
 -- command. I'm not sure if that's the best way to go, so I'm using nnoremap.
 
-utils.set_keymap_normal("gf", ":edit <cfile><cr>")
+mapn("gf", ":edit <cfile><cr>")
 
 -- Remap n and N to keep the found text centered.
 
-utils.set_keymap_normal("n", "nzzzv")
-utils.set_keymap_normal("N", "NzzzV")
+mapn("n", "nzzzv")
+mapn("N", "NzzzV")
+
+
+-- Tab / Shift-Tab to change buffers.
+
+mapn("<Tab>", ":bnext<CR>")
+mapn("<S-Tab>", ":bprevious<CR>")
+
+-- Space-n toggles netrw tree view
+
+mapn("<leader>n", ":20Lex<CR>")
