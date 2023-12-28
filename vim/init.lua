@@ -37,14 +37,13 @@
 
 vim.g.mapleader = " "
 
-require("abbr") -- Set our abbreviations (mostly to fix spelling errors)
-require("events") -- Set event handlers (e.g. respond to file loads/writes)
-require("keymap") -- Set our custom key bindings
-require("misc") -- Stuuuuuffff
+-- It's probably a good idea to require plugins last. It's a great place for
+-- things to fail, and we would like that to happen after everything else is
+-- set up and vim is feeling comfy.
+
+require("abbr")    -- Set our abbreviations (mostly to fix spelling errors)
+require("events")  -- Set event handlers (e.g. respond to file loads/writes)
+require("keymap")  -- Set our custom key bindings
+require("misc")    -- Stuuuuuffff
 require("options") -- Set our options ("set" and "setlocal" equivalents)
-
--- It's probably a good idea to do this last. It's a great place for things to
--- fail, and we would like that to happen after everything else is set up and
--- vim is feeling comfy.
-
 require("plugins") -- Download, install, configure, setup, etc., plugins
