@@ -40,6 +40,10 @@ return {
                 desc = "LSP actions",
                 callback = function(event)
                     local bufnr = event.buf
+
+                    -- If the LSP supports formatting, set up a callback to
+                    -- invoke it when the buffer is saved.
+
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.supports_method("textDocument/formatting") then
                         vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
@@ -50,6 +54,19 @@ return {
                                 vim.lsp.buf.format({ async = false, bufnr = bufnr })
                             end,
                         })
+                    else
+                        -- nvim sets this to v:lua.vim.lsp.formatexpr(). This
+                        -- has the effect of breaking 'gq' to reformat a range
+                        -- if the associated LSP doesn't support formatting.
+                        -- So, if that's the case, unset formatexpr to get back
+                        -- the default behavior.
+                        --
+                        -- (Well, that's the theory, anyway. Unfortunately,
+                        -- 'gq' still doesn't seem to work, for example, for
+                        -- this Lua file. But it *does* restore functionality
+                        -- to my .zshrc file.)
+
+                        vim.bo[bufnr].formatexpr = nil
                     end
 
                     local bufmap = function(keys, fn)
@@ -71,26 +88,6 @@ return {
                     bufmap("rn", vim.lsp.buf.rename)
                     -- bufmap("sh", vim.lsp.buf.signature_help)
                     bufmap("sr", vim.lsp.buf.references)
-
-                    -- Use something along these lines to unset 'formatexpr' if the LSP
-                    -- does not support formatting. That way, maybe we'll get 'gq'
-                    -- back.
-                    --
-                    -- vim.api.nvim_create_autocmd("LspAttach", {
-                    --   callback = function(args)
-                    --     local bufnr = args.buf
-                    --     local client = vim.lsp.get_client_by_id(args.data.client_id)
-                    --     if client.server_capabilities.completionProvider then
-                    --       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-                    --     end
-                    --     if client.server_capabilities.definitionProvider then
-                    --       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
-                    --     end
-                    --   end,
-                    -- })
-                    --
-                    -- To get the LSP server capabilities:
-                    -- lua =vim.lsp.get_active_clients()[1].server_capabilities
                 end,
             })
 
