@@ -1,6 +1,55 @@
 return {
-
-    -- Management of LSP, DAP, lint, and formatting tools
+    -- Managing plugins for LSP, formatting, and linting is kind of a pain.
+    --
+    -- Mason is a pretty good tool for this, but it only gets you part of the
+    -- way there. Mason knows about tons of plugins and how to load them, but
+    -- it will only load them via its MasonInstall command. This command is not
+    -- very friendly to run when executing startup Lua scripts since that
+    -- command will bring up the "Installing..." dialog. It does have an API
+    -- that will avoid this, but it's pretty inscrutable. Fortunately, there is
+    -- a Github project called mason-tool-installer that takes care of working
+    -- with this API.
+    --
+    -- For the most part, we can avoid this dialog by using mason-lspconfig and
+    -- nvim-lspconfig. The latter can be used to load LSP plugins. But it will
+    -- only load the set that it knows about. This set is a subset of what Mason
+    -- supports. In particular, it only knows about LSP plugins, not anything
+    -- about formatting or linting plugins. Wrapped around this is
+    -- mason-lspconfig, which will take care of making sure that the set of
+    -- plugins we require are automatically downloaded and will take care of
+    -- initializing them when that's done. This all works pretty well, but --
+    -- again -- it only works for LSP servers.
+    --
+    -- To handle the installing and initializing of non-LSP tools, we use
+    -- null-ls. (NOTE: the original null-ls is no longer supported by its
+    -- original author. His old project has been taken over by a new group and
+    -- has been renamed to none-ls.nvim.) This tool can handle the installing
+    -- and initializing very simply and magically makes these tools look like
+    -- LSP servers to nvim, making their utilization consistent with the actual
+    -- LSP servers. However, it doesn't do anything to download the formatters
+    -- and linters. For that, we turn to mason-tool-installer.
+    --
+    -- In short:
+    --
+    -- * the LSP servers are specified in "ensure_installed", are downloaded by
+    --   Mason, and are installed and initialized by a combination of
+    --   nvim-lspconfig and mason-lspconfig,
+    -- * the non-LSP servers are installed by mason-tool-installer,
+    -- * the non-LSP servers are initialized by none-ls.nvim, null-ls, null_ls.
+    --
+    -- For reference, the list of everything that Mason can install through its
+    -- UI and that mason-tool-installer can install is here:
+    --
+    --      https://github.com/mason-org/mason-registry/blob/main/packages/isort/package.yaml
+    --
+    -- The list of everything that mason-lspconfig can install through its
+    -- ensure_installed facility is here:
+    --
+    --      https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+    --
+    -- The list of things that null-ls can initialize is here:
+    --
+    --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
     {
         "williamboman/mason.nvim",
@@ -105,10 +154,6 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
 
-                    -- A language server for Bash.
-
-                    "bashls",
-
                     -- Understands your C++ code and adds smart features to
                     -- your editor: code completion, compile errors,
                     -- go-to-definition and more (https://clangd.llvm.org)
@@ -138,12 +183,6 @@ return {
 
                 handlers = {
                     default_handler,
-
-                    ["bashls"] = function()
-                        default_handler("bashls", {
-                            filetypes = { 'zsh' },
-                        })
-                    end,
 
                     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
                     ["lua_ls"] = function()
@@ -220,6 +259,41 @@ return {
                             },
                         })
                     end,
+                },
+            })
+        end,
+    },
+
+    {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        dependencies = {
+            "williamboman/mason.nvim",
+        },
+        config = function()
+            require("mason-tool-installer").setup({
+                ensure_installed = {
+                    "beautysh",
+                    "black",
+                    "isort",
+                },
+            })
+        end,
+    },
+
+    {
+        "nvimtools/none-ls.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
+        config = function()
+            local null_ls = require("null-ls")
+            null_ls.setup({
+                sources = {
+                    null_ls.builtins.formatting.beautysh,
+                    null_ls.builtins.formatting.black,
+                    null_ls.builtins.formatting.isort,
+                    null_ls.builtins.completion.spell,
                 },
             })
         end,
