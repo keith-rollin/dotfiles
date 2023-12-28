@@ -25,13 +25,14 @@ return {
         config = function()
             -- Use Mason-lspconfig to install the LSP plugins
             --
-            -- Fun fact: I was wondering why there was a 'handlers' field here to
-            -- initialize the plugins when there was a perfectly fine mechanism for doing
-            -- this in nvim-lspconfig. It turns out that the versions here are invoked
-            -- after any plugins are downloaded and installed. If we were to put this
-            -- configuration process in the nvim-lspconfig setup() function, it would be
-            -- possible for that package to try to initialize the plugins before
-            -- mason-lsp-config had finished loading them.
+            -- Fun fact: I was wondering why there was a 'handlers' field here
+            -- to initialize the plugins when there was a perfectly fine
+            -- mechanism for doing this in nvim-lspconfig. It turns out that the
+            -- versions here are invoked after any plugins are downloaded and
+            -- installed. If we were to put this configuration process in the
+            -- nvim-lspconfig setup() function, it would be possible for that
+            -- package to try to initialize the plugins before mason-lsp-config
+            -- had finished loading them.
 
             local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
