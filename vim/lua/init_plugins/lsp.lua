@@ -50,6 +50,9 @@ return {
     -- The list of things that null-ls can initialize is here:
     --
     --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
+    --
+    -- Consider adding DAP support. See the following starting at 9:50:
+    -- https://www.youtube.com/watch?v=4BnVeOUeZxc
 
     {
         "williamboman/mason.nvim",
