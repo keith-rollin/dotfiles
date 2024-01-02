@@ -172,11 +172,9 @@ return {
 
                     "lua_ls",
 
-                    -- Fork of the python-language-server project, maintained
-                    -- by the Spyder IDE team and the community
-                    -- (https://github.com/python-lsp/python-lsp-server)
+                    -- Static Type Checker for Python (from Microsoft)
 
-                    "pylsp",
+                    "pyright",
 
                     -- rust-analyzer is an implementation of the Language
                     -- Server Protocol for the Rust programming language. It
@@ -207,64 +205,6 @@ return {
                         })
                     end,
 
-                    -- Things we can configure to varying degrees:
-                    --
-                    -- - [Jedi](https://github.com/davidhalter/jedi) to provide Completions, Definitions, Hover, References, Signature Help, and Symbols
-                    -- - [Rope](https://github.com/python-rope/rope) for Completions and renaming
-                    -- - [Pyflakes](https://github.com/PyCQA/pyflakes) linter to detect various errors
-                    -- - [McCabe](https://github.com/PyCQA/mccabe) linter for complexity checking
-                    -- - [pycodestyle](https://github.com/PyCQA/pycodestyle) linter for style checking
-                    -- - [pydocstyle](https://github.com/PyCQA/pydocstyle) linter for docstring style checking (disabled by default)
-                    -- - [autopep8](https://github.com/hhatto/autopep8) for code formatting
-                    -- - [YAPF](https://github.com/google/yapf) for code formatting (preferred over autopep8)
-                    -- - [flake8](https://github.com/pycqa/flake8) for error checking (disabled by default)
-                    -- - [pylint](https://github.com/PyCQA/pylint) for code linting (disabled by default)
-                    --
-                    -- √ autopep8
-                    --   flake8
-                    -- √ jedi_completion
-                    -- √ jedi_hover
-                    -- √ jedi_references
-                    -- √ jedi_signature_help
-                    -- √ jedi_symbols
-                    -- √ mccabe
-                    -- √ preload
-                    -- √ pycodestyle
-                    --   pydocstyle
-                    -- √ pyflakes
-                    --   pylint
-                    --   rope_autoimport
-                    -- √ rope_autoimport.completions
-                    -- √ rope_autoimport.code_actions
-                    --   rope_completion
-                    -- √ yapf
-
-                    ["pylsp"] = function()
-                        default_handler("pylsp", {
-                            settings = {
-                                pylsp = {
-                                    plugins = {
-                                        rope_autoimport = {
-                                            enabled = true,
-                                        },
-                                        rope_completion = {
-                                            enabled = true,
-                                        },
-                                        pycodestyle = {
-                                            maxLineLength = 88, -- Something is formatting us to 88 characters, so don't complain about it
-                                            ignore = {
-                                                -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
-                                                "E221", -- multiple spaces before operator
-                                                "E241", -- multiple spaces after ':'
-                                                "W503", -- line break before binary operator
-                                                "W504", -- line break after binary operator
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        })
-                    end,
                 },
             })
         end,
@@ -279,6 +219,7 @@ return {
             require("mason-tool-installer").setup({
                 ensure_installed = {
                     "beautysh",
+                    "ruff",
                     "black",
                     "isort",
                 },
@@ -296,10 +237,10 @@ return {
             local null_ls = require("null-ls")
             null_ls.setup({
                 sources = {
+                    null_ls.builtins.diagnostics.ruff,
                     null_ls.builtins.formatting.beautysh,
                     null_ls.builtins.formatting.black,
                     null_ls.builtins.formatting.isort,
-                    null_ls.builtins.completion.spell,
                 },
             })
         end,
