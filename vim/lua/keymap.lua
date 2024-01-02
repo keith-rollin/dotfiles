@@ -96,14 +96,14 @@ mapn("<C-H>", "<C-W><C-H>")
 
 mapn("gf", ":edit <cfile><cr>")
 
--- Remap n and N to keep the found text centered.
+-- Remap commands to keep the found text centered.
 
 mapn("n", "nzzzv")
-mapn("N", "NzzzV")
+mapn("N", "Nzzzv")
 mapn("<C-D>", "<C-D>zz")
 mapn("<C-U>", "<C-U>zz")
-mapn("<C-F>", "<C-F>zz")
-mapn("<C-B>", "<C-B>zz")
+-- mapn("<C-F>", "<C-F>zz") -- These changes turn these commands into
+-- mapn("<C-B>", "<C-B>zz") -- C-D and C-U.
 
 -- Tab / Shift-Tab to change buffers.
 
