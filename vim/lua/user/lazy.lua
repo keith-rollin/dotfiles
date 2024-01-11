@@ -25,7 +25,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("init_plugins", {
+require("lazy").setup("user.plugins", {
 
     -- Move the lazy-lock file from my vim directory to the share directory
     -- so that I don't have to deal with version controlling it in git.

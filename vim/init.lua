@@ -42,9 +42,9 @@ vim.g.maplocalleader = " " -- Not really sure what this does, if anything
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
 
-require("abbr")    -- Set our abbreviations (mostly to fix spelling errors)
-require("events")  -- Set event handlers (e.g. respond to file loads/writes)
-require("keymap")  -- Set our custom key bindings
-require("misc")    -- Stuuuuuffff
-require("options") -- Set our options ("set" and "setlocal" equivalents)
-require("plugins") -- Download, install, configure, setup, etc., plugins
+require("user.abbr")    -- Set our abbreviations (mostly to fix spelling errors)
+require("user.events")  -- Set event handlers (e.g. respond to file loads/writes)
+require("user.keymap")  -- Set our custom key bindings
+require("user.misc")    -- Stuuuuuffff
+require("user.options") -- Set our options ("set" and "setlocal" equivalents)
+require("user.lazy")    -- Download, install, configure, setup, etc., plugins
