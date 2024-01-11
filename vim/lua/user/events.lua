@@ -7,16 +7,16 @@ local on_event = function(event, pattern, callback)
     })
 end
 
-local on_read_post = function(pattern, callback)
-    on_event("BufReadPost", pattern, callback)
+local on_file_type = function(pattern, callback)
+    on_event("FileType", pattern, callback)
 end
 
 -- Restore the last cursor position.
 -- Based on idea from: 'help last-position-jump'.
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
 
-on_read_post("*", function()
-    if vim.o.filetype ~= "commit" and vim.o.filetype ~= "rebase" then
+on_file_type("*", function()
+    if (vim.o.filetype ~= "gitcommit") and (vim.o.filetype ~= "gitrebase") then
         local position = vim.api.nvim_buf_get_mark(0, '"')
         if position ~= { 0, 0 } then
             vim.api.nvim_win_set_cursor(0, position)
