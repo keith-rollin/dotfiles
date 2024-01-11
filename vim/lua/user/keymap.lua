@@ -60,6 +60,16 @@ local mapv = function(lhs, rhs)
     vim.keymap.set("v", lhs, rhs, opts)
 end
 
+StripWhitespace = function()
+    -- Originally from some old vim.org tip that I can't find any more.
+    -- Modified with trim_trailing_whitespace handler in
+    -- editor/lua/editorconfig.lua
+    local oldquery = vim.fn.getreg('/')
+    local view = vim.fn.winsaveview()
+    vim.cmd("silent keepjumps keeppatterns %s/\\s\\+$//e")
+    vim.fn.winrestview(view)
+    vim.fn.setreg('/', oldquery)
+end
 
 -- do, dp, dn, dl defined in lsp.lua
 -- gD, gd, gi, gt defined in lsp.lua

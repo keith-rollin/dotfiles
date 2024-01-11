@@ -10,15 +10,6 @@ vim.cmd("match ErrorMsg '^(<|=|>){7}([^=].+)?$'")
 -- Functions/Commands
 -- ------------------
 
--- Strip trailing whitespace.
-
-StripWhitespace = function()
-    -- TODO: Translate to native Lua.
-    -- NOTE: Had to disable this full version. Things like "l:oldpos" are now flagged as errors in nvim 0.9.4.
-    -- "let l:oldpos = getpos('.') | let l:oldquery = getreg('/') | :%s/s+$//e | call setpos('.', l:oldpos) | call setreg('/', l:oldquery)"
-    vim.cmd(":%s/s+$//e")
-end
-
 -- Reload the init.lua file.
 
 vim.api.nvim_create_user_command("Reload", ":source " .. vim.env.MYVIMRC, {})
