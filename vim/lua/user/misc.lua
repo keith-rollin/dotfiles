@@ -1,6 +1,7 @@
 -- Color scheme
 
-vim.api.nvim_set_hl(0, "ColorColumn", { ctermbg = "LightGrey" })
+vim.cmd.highlight("ColorColumn", "ctermbg=DarkRed")
+
 
 -- Match spec for git merge error markers.
 -- TODO: Is there a lua-native equivalent?
