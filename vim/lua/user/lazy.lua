@@ -34,7 +34,7 @@ require("lazy").setup("user.plugins", {
     lockfile = vim.fn.stdpath("data") .. "/lazy/lazy-lock.json",
 
     ui = {
-        border = "rounded",
+        border = "double",
         change_detection = {
             enabled = true,
             notify = false,
