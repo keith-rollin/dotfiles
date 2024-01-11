@@ -124,8 +124,8 @@ return {
                     -- Set up some LSP-related shortcuts (perform code action,
                     -- go to definition, show references, etc.)
 
+                    local opts = { noremap = true, silent = true, buffer = bufnr }
                     local bufmap = function(keys, fn)
-                        local opts = { noremap = true, silent = true, buffer = bufnr }
                         vim.keymap.set("n", "<leader>" .. keys, fn, opts)
                     end
 

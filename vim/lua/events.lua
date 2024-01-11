@@ -1,10 +1,21 @@
-local utils = require("utils")
+local custom_group = vim.api.nvim_create_augroup("custom_events", {})
+local on_event = function(event, pattern, callback)
+    vim.api.nvim_create_autocmd(event, {
+        group = custom_group,
+        pattern = pattern,
+        callback = callback,
+    })
+end
+
+local on_read_post = function(pattern, callback)
+    on_event("BufReadPost", pattern, callback)
+end
 
 -- Restore the last cursor position.
 -- Based on idea from: 'help last-position-jump'.
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
 
-utils.on_read_post("*", function()
+on_read_post("*", function()
     if vim.o.filetype ~= "commit" and vim.o.filetype ~= "rebase" then
         local position = vim.api.nvim_buf_get_mark(0, '"')
         if position ~= { 0, 0 } then
@@ -19,7 +30,7 @@ end)
 -- See also this video clip showing a Lua version:
 --      https://youtu.be/m62UCkdQ8Ck?t=795
 
-utils.on_event(
+on_event(
     "TextYankPost",
     "*",
     function()

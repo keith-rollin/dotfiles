@@ -9,10 +9,6 @@ return {
     config = function()
         local cmp = require("cmp")
 
-        -- Suggested by nvim-cmp
-
-        vim.opt.completeopt = { "menu", "menuone", "noselect" }
-
         -- To find out about options, see:
         --
         --      https://github.com/hrsh7th/nvim-cmp/blob/main/doc/cmp.txt

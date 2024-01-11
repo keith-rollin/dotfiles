@@ -36,6 +36,7 @@
 -- it.
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = " " -- Not really sure what this does, if anything
 
 -- It's probably a good idea to require plugins last. It's a great place for
 -- things to fail, and we would like that to happen after everything else is
