@@ -206,16 +206,32 @@ return {
                         default_handler,
 
                         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
+                        -- https://luals.github.io/wiki/settings/
                         ["lua_ls"] = function()
                             default_handler("lua_ls", {
                                 settings = {
                                     Lua = {
                                         diagnostics = {
                                             enable = true,
-                                            globals = { "vim" },
+                                            globals = { "vim", "spec" },
                                         },
                                         format = {
                                             enable = true,
+                                        },
+                                        hint = {
+                                            enable = true,
+                                        },
+                                        runtime = {
+                                            special = {
+                                                spec = "require",
+                                            },
+                                            version = "LuaJIT",
+                                        },
+                                        workspace = {
+                                            library = {
+                                                [vim.env.VIMRUNTIME .. "/lua"] = true,
+                                                [vim.fn.stdpath("config") .. "lua"] = true,
+                                            },
                                         },
                                     },
                                 },
