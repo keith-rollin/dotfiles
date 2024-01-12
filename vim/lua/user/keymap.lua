@@ -71,26 +71,24 @@ StripWhitespace = function()
     vim.fn.setreg('/', oldquery)
 end
 
--- do, dp, dn, dl defined in lsp.lua
--- gD, gd, gi, gt defined in lsp.lua
--- ca, ff, K, rn, sh*, sr defined in lsp.lua
--- Items starting with "t" are reserved for Telescope
--- * Removed from lsp.lua so that we can use it below.
-
 mapn("<leader>.", "<c-^>") -- Edit alternate file
 mapn("<leader>,", ":FSHere<CR>")
 mapn("<leader> ", ":lua StripWhitespace()<CR>")
+-- dn, dl, do, dp defined in lsp.lua ("vim.diagnostics")
 mapn("<leader>eg", ":edit ~/.gitconfig<CR>")
 mapn("<leader>ev", ":edit " .. vim.env.MYVIMRC .. "<CR>")
 mapn("<leader>ez", ":edit ~/.zshrc<CR>")
-mapn("<leader>l", ":nohlsearch<CR>")
+mapn("<leader>ll", ":nohlsearch<CR>")
+-- lc, lD, ld, lf, lh, li, lr, ls, lt defined in lsp.lua ("vim.lsp")
 mapn("<leader>n", ":20Lex<CR>")
+-- rn defined in lsp.lua (other)
 mapn("<leader>sh", ":split<CR>")
 mapn("<leader>si", ":set cursorline!<CR>")
 mapn("<leader>sl", ":set list!<CR>")
 mapn("<leader>ss", ":set spell!<CR>")
 mapn("<leader>sv", ":vsplit<CR>")
 mapn("<leader>sx", ":close<CR>")
+-- Items starting with "t" are reserved for Telescope
 mapn("<leader>w", ":w<CR>")
 mapn("<leader>W", ":set wrap!<CR>")
 

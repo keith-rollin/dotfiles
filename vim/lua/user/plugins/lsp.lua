@@ -57,6 +57,8 @@
 --
 --      https://www.youtube.com/watch?v=oYzZxi3SSnM
 
+-- https://www.youtube.com/live/KGJV0n70Mxs?si=yzKH6oWxE8TfPH1S&t=5600
+--
 local LSP_SERVERS = {
     "clangd",
     "lua_ls",
@@ -100,6 +102,16 @@ return {
             -- when we enter a buffer that an LSP supports.
 
             local function initialize_keymap()
+                local bufmap = function(keys, fn, opts)
+                    vim.keymap.set("n", "<leader>" .. keys, fn, opts)
+                end
+
+                local opts = { noremap = true, silent = true }
+                bufmap("dl", vim.diagnostic.setloclist, opts)
+                bufmap("dn", vim.diagnostic.goto_next, opts)
+                bufmap("do", vim.diagnostic.open_float, opts)
+                bufmap("dp", vim.diagnostic.goto_prev, opts)
+
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
                 vim.api.nvim_create_autocmd("LspAttach", {
@@ -139,25 +151,17 @@ return {
                         -- Set up some LSP-related shortcuts (perform code
                         -- action, go to definition, show references, etc.)
 
-                        local opts = { noremap = true, silent = true, buffer = bufnr }
-                        local bufmap = function(keys, fn)
-                            vim.keymap.set("n", "<leader>" .. keys, fn, opts)
-                        end
-
-                        bufmap("K", vim.lsp.buf.hover)
-                        bufmap("ca", vim.lsp.buf.code_action)
-                        bufmap("do", vim.diagnostic.open_float)
-                        bufmap("dp", vim.diagnostic.goto_prev)
-                        bufmap("dn", vim.diagnostic.goto_next)
-                        bufmap("dl", vim.diagnostic.setloclist)
-                        bufmap("ff", vim.lsp.buf.format)
-                        bufmap("gD", vim.lsp.buf.declaration)
-                        bufmap("gd", vim.lsp.buf.definition)
-                        bufmap("gi", vim.lsp.buf.implementation)
-                        bufmap("gt", vim.lsp.buf.type_definition)
-                        bufmap("rn", vim.lsp.buf.rename)
-                        -- bufmap("sh", vim.lsp.buf.signature_help)
-                        bufmap("sr", vim.lsp.buf.references)
+                        opts = { noremap = true, silent = true, buffer = bufnr }
+                        bufmap("lc", vim.lsp.buf.code_action, opts)
+                        bufmap("lD", vim.lsp.buf.declaration, opts)
+                        bufmap("ld", vim.lsp.buf.definition, opts)
+                        bufmap("lf", vim.lsp.buf.format, opts)
+                        bufmap("lh", vim.lsp.buf.hover, opts)
+                        bufmap("li", vim.lsp.buf.implementation, opts)
+                        bufmap("lr", vim.lsp.buf.references, opts)
+                        bufmap("ls", vim.lsp.buf.signature_help, opts)
+                        bufmap("lt", vim.lsp.buf.type_definition, opts)
+                        bufmap("rn", vim.lsp.buf.rename, opts)
                     end,
                 })
             end
