@@ -47,4 +47,11 @@ require("user.events")  -- Set event handlers (e.g. respond to file loads/writes
 require("user.keymap")  -- Set our custom key bindings
 require("user.misc")    -- Stuuuuuffff
 require("user.options") -- Set our options ("set" and "setlocal" equivalents)
-require("user.lazy")    -- Download, install, configure, setup, etc., plugins
+require("user.prelazy") -- Define 'spec' function
+spec("user.plugins.completion")
+spec("user.plugins.lsp")
+spec("user.plugins.misc")
+spec("user.plugins.popup")
+spec("user.plugins.telescope")
+spec("user.plugins.treesitter")
+require("user.lazy") -- Download, install, configure, setup, etc., plugins
