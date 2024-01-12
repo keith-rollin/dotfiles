@@ -2,7 +2,11 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-cmdline",
         "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-path",
         "hrsh7th/cmp-vsnip",
         "hrsh7th/vim-vsnip"
     },
@@ -33,7 +37,20 @@ return {
 
             sources = {
                 { name = "nvim_lsp" },
+                -- { name = "buffer" },
+                -- { name = "cmdline" },
+                { name = "nvim_lua" },
+                { name = "path" },
                 { name = "vsnip" },
+            },
+
+            window = {
+                completion = {
+                    border = "double",
+                },
+                documentation = {
+                    border = "double",
+                },
             },
         }
 
