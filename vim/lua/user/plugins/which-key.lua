@@ -21,11 +21,34 @@ return {
     },
     config = function()
         local wk = require("which-key")
+        _G.kr = {
+            mapping = {
+                set = function(mapping, opts)
+                    wk.register(mapping, opts)
+                end,
+                set_normal = function(mapping)
+                    local n_mode = { mode = "n", prefix = "" }
+                    kr.mapping.set(mapping, n_mode)
+                end,
+                set_normal_leader = function(mapping)
+                    local n_mode = { mode = "n", prefix = "<leader>" }
+                    kr.mapping.set(mapping, n_mode)
+                end,
+                set_visual = function(mapping)
+                    local v_mode = { mode = "v", prefix = "" }
+                    kr.mapping.set(mapping, v_mode)
+                end,
+                set_visual_select = function(mapping)
+                    local x_mode = { mode = "x", prefix = "" }
+                    kr.mapping.set(mapping, x_mode)
+                end,
+            }
+        }
 
         StripWhitespace = function()
             -- Originally from some old vim.org tip that I can't find any more.
             -- Modified with trim_trailing_whitespace handler in
-            -- editor/lua/editorconfig.lua
+            -- runtime/editor/lua/editorconfig.lua
             local oldquery = vim.fn.getreg('/')
             local view = vim.fn.winsaveview()
             vim.cmd("silent keepjumps keeppatterns %s/\\s\\+$//e")
@@ -33,11 +56,7 @@ return {
             vim.fn.setreg('/', oldquery)
         end
 
-        local n_mode = { mode = "n", prefix = "" }
-        local v_mode = { mode = "v", prefix = "" }
-        local x_mode = { mode = "x", prefix = "" }
-
-        wk.register({
+        kr.mapping.set_normal_leader({
             [","] = { "<cmd>FSHere<CR>", "Switch to paired file" },
             ["."] = { "<c-^>", "Edit alternate file" },
             [" "] = { "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space" },
@@ -73,9 +92,6 @@ return {
                 name = "TreeSitter",
             },
             w = { "<cmd>w<CR>", "Write current file" },
-
-        }, {
-            prefix = "<leader>",
         })
 
         local n_mappings = {
@@ -109,7 +125,7 @@ return {
             ["<S-Tab>"] = { "<cmd>bprevious<CR>", "Previous buffer" },
             ["<M-Tab>"] = { "<c-^>", "Edit alternate file" },
         }
-        wk.register(n_mappings, n_mode)
+        kr.mapping.set_normal(n_mappings)
 
         local v_mappings = {
             -- Take the selection and move it up or down, after which, reselect
@@ -121,13 +137,13 @@ return {
             ["<"] = { "<gv", "Stay in visual mode when indenting" },
             [">"] = { ">gv", "Stay in visual mode when indenting" },
         }
-        wk.register(v_mappings, v_mode)
+        kr.mapping.set_visual(v_mappings)
 
         local nx_mappings = {
             H = { "^", "Alias for ^" },
             L = { "g_", "Alias for g_" },
         }
-        wk.register(nx_mappings, n_mode)
-        wk.register(nx_mappings, x_mode)
+        kr.mapping.set_normal(nx_mappings)
+        kr.mapping.set_visual_select(nx_mappings)
     end,
 }
