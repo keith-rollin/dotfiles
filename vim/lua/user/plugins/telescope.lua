@@ -33,13 +33,13 @@ return {
                     g = { "<cmd>Telescope grep_string<CR>", "Search directory for hot string" },
                     f = { "<cmd>Telescope find_files<CR>", "Search for files" },
                     t = { "<cmd>Telescope treesitter<CR>", "Show Treesitter query results" },
-                    c = { "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Like it says" },
+                    c = { "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer" },
                 },
 
                 t = {
                     name = "Tags",
-                    t = { "<cmd>Telescope tags<CR>", "Ctags support" },
-                    c = { "<cmd>Telescope current_buffer_tags<CR>", "Ctags support" },
+                    t = { "<cmd>Telescope tags<CR>", "List tags in current directory" },
+                    c = { "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer" },
                 },
 
                 g = {
