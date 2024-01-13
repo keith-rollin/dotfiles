@@ -74,7 +74,7 @@ return {
                 name = "LSP" -- defined in lsp.lua ("vim.lsp"},
             },
             n = { "<cmd>20Lex<CR>", "Show directory tree" },
-            -- r defined in lsp.lua (rename},
+            -- r defined in lsp.lua (rename),
             s = {
                 name = "Toggle settings",
                 i = { "<cmd>set cursorline!<CR>", "Toggle 'cursorline'" },
@@ -89,7 +89,7 @@ return {
                 x = { "<cmd>close<CR>", "Close split" },
             },
             t = {
-                name = "TreeSitter",
+                name = "Telescope", -- defined in telescope.lua
             },
             w = { "<cmd>w<CR>", "Write current file" },
         })
