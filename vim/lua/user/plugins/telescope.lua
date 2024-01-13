@@ -28,12 +28,24 @@ return {
             t = {
                 name = "Telescope",
                 f = {
-                    "Find files",
+                    name = "Find files",
                     l = { "<cmd>Telescope live_grep<CR>", "Search open buffers" },
                     g = { "<cmd>Telescope grep_string<CR>", "Search directory for hot string" },
                     f = { "<cmd>Telescope find_files<CR>", "Search for files" },
                     t = { "<cmd>Telescope treesitter<CR>", "Show Treesitter query results" },
                     c = { "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer" },
+                },
+
+                l = {
+                    name = "LSP",
+                    r = { "<cmd>Telescope lsp_references<CR>", "List references for hot string" },
+                    I = { "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string" },
+                    O = { "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string" },
+                    d = { "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string" },
+                    t = { "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string" },
+                    i = { "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string" },
+                    s = { "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer" },
+                    S = { "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace" },
                 },
 
                 t = {
