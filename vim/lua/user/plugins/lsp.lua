@@ -93,6 +93,7 @@ return {
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = {
+            "folke/which-key.nvim",
             "hrsh7th/nvim-cmp",
             "neovim/nvim-lspconfig",
             "williamboman/mason.nvim",
@@ -102,15 +103,19 @@ return {
             -- when we enter a buffer that an LSP supports.
 
             local function initialize_keymap()
-                local bufmap = function(keys, fn, opts)
-                    vim.keymap.set("n", "<leader>" .. keys, fn, opts)
-                end
-
-                local opts = { noremap = true, silent = true }
-                bufmap("dl", vim.diagnostic.setloclist, opts)
-                bufmap("dn", vim.diagnostic.goto_next, opts)
-                bufmap("do", vim.diagnostic.open_float, opts)
-                bufmap("dp", vim.diagnostic.goto_prev, opts)
+                local wk = require("which-key")
+                wk.register({
+                    name = "Diagnostics",
+                    d = {
+                        l = { vim.diagnostic.setloclist, "Set location list" },
+                        n = { vim.diagnostic.goto_next, "Go to next diagnostic" },
+                        o = { vim.diagnostic.open_float, "Show diagnostics" },
+                        p = { vim.diagnostic.goto_prev, "Go to previous diagnostic" },
+                    }
+                }, {
+                    mode = "n",
+                    prefix = "<leader>",
+                })
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
@@ -151,17 +156,25 @@ return {
                         -- Set up some LSP-related shortcuts (perform code
                         -- action, go to definition, show references, etc.)
 
-                        opts = { noremap = true, silent = true, buffer = bufnr }
-                        bufmap("lc", vim.lsp.buf.code_action, opts)
-                        bufmap("lD", vim.lsp.buf.declaration, opts)
-                        bufmap("ld", vim.lsp.buf.definition, opts)
-                        bufmap("lf", vim.lsp.buf.format, opts)
-                        bufmap("lh", vim.lsp.buf.hover, opts)
-                        bufmap("li", vim.lsp.buf.implementation, opts)
-                        bufmap("lr", vim.lsp.buf.references, opts)
-                        bufmap("ls", vim.lsp.buf.signature_help, opts)
-                        bufmap("lt", vim.lsp.buf.type_definition, opts)
-                        bufmap("rn", vim.lsp.buf.rename, opts)
+                        wk.register({
+                            name = "LSP",
+                            l = {
+                                c = { vim.lsp.buf.code_action, "Code action" },
+                                D = { vim.lsp.buf.declaration, "Go to declaraction" },
+                                d = { vim.lsp.buf.definition, "Go to definition" },
+                                f = { vim.lsp.buf.format, "Format file" },
+                                h = { vim.lsp.buf.hover, "Display information about symbol under cursor" },
+                                i = { vim.lsp.buf.implementation, "Go to implementation" },
+                                r = { vim.lsp.buf.references, "Show references" },
+                                s = { vim.lsp.buf.signature_help, "Show signature help" },
+                                t = { vim.lsp.buf.type_definition, "Go to type definition" },
+                            },
+                            r = { vim.lsp.buf.rename, "LSP rename" }
+                        }, {
+                            mode = "n",
+                            prefix = "<leader>",
+                            buffer = bufnr,
+                        })
                     end,
                 })
             end
