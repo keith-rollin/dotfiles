@@ -38,11 +38,11 @@ return {
 
                 p = {
                     name = "Pickers",
-                    b = { "<cmd>Telescope builtin" },
-                    r = { "<cmd>Telescope resume" },
+                    b = { "<cmd>Telescope builtin<CR>", "Show builtin pickers" },
+                    r = { "<cmd>Telescope resume<CR>", "Resume the previous picker" },
                 },
 
-                k = { "<cmd>Telescope keymaps" },
+                k = { "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps" },
             }
         })
     end,
