@@ -46,6 +46,7 @@ require("user.events")  -- Set event handlers (e.g. respond to file loads/writes
 require("user.misc")    -- Stuuuuuffff
 require("user.options") -- Set our options ("set" and "setlocal" equivalents)
 require("user.prelazy") -- Define 'spec' function
+spec("user.plugins.comment")
 spec("user.plugins.completion")
 spec("user.plugins.lsp")
 spec("user.plugins.misc")
