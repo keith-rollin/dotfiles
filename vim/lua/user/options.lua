@@ -2,8 +2,6 @@
 
 -- Note:
 --  * I would like to enable cursorline, but doing so leave artifacts on the screen
---  * I would like to set pastetoggle to "<leader>v", but doing so breaks nvim-cmp:
---      <https://github.com/hrsh7th/nvim-cmp/issues/1095>
 
 vim.opt.autoindent = true -- Normally 'autoindent' should also be on when using 'smartindent'.
 vim.opt.autowriteall = true -- Write the file when we switch buffers.
