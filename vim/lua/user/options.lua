@@ -43,12 +43,6 @@ vim.opt.shiftwidth = 4   -- Number of spaces to use for each step of (auto)inden
 vim.opt.softtabstop = 4  -- Number of spaces in tab when editing.
 vim.opt.tabstop = 4      -- Number of visual spaces per TAB.
 
--- Set the default highlighting style for shell scripts. This particular
--- setting assumes that our scripts are POSIX compatible and so shows things
--- like $(...) without flagging it as invalid.
-
-vim.g.is_posix = 1
-
 -- netrw: Configuration
 
 vim.g.netrw_banner = 0    -- Disable banner.
