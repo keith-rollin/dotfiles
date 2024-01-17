@@ -68,9 +68,10 @@ local LSP_SERVERS = {
 
 local NON_LSP_SERVERS = {
     "beautysh",
-    "ruff",
     "black",
     "isort",
+    "ruff",
+    "stylua",
 }
 
 return {
@@ -110,7 +111,7 @@ return {
                         n = { vim.diagnostic.goto_next, "Go to next diagnostic" },
                         o = { vim.diagnostic.open_float, "Show diagnostics" },
                         p = { vim.diagnostic.goto_prev, "Go to previous diagnostic" },
-                    }
+                    },
                 })
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
@@ -129,9 +130,7 @@ return {
                             vim.api.nvim_create_autocmd("BufWritePre", {
                                 group = augroup,
                                 buffer = bufnr,
-                                callback = function()
-                                    vim.lsp.buf.format({ bufnr = bufnr })
-                                end,
+                                callback = function() vim.lsp.buf.format({ bufnr = bufnr }) end,
                             })
                         else
                             -- nvim sets the buffer option 'formatexpr' to
@@ -165,7 +164,7 @@ return {
                                 s = { vim.lsp.buf.signature_help, "Show signature help" },
                                 t = { vim.lsp.buf.type_definition, "Go to type definition" },
                             },
-                            r = { vim.lsp.buf.rename, "LSP rename" }
+                            r = { vim.lsp.buf.rename, "LSP rename" },
                         })
                     end,
                 })
@@ -281,6 +280,14 @@ return {
                     null_ls.builtins.formatting.beautysh,
                     null_ls.builtins.formatting.black,
                     null_ls.builtins.formatting.isort,
+                    null_ls.builtins.formatting.stylua.with({
+                        extra_args = {
+                            "--indent-type",
+                            "Spaces",
+                            "--collapse-simple-statement",
+                            "Always",
+                        },
+                    }),
                 },
             })
         end,
