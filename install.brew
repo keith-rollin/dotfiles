@@ -68,6 +68,10 @@ CASKS=(
     cmake           # Needed for building neovim.
     emacs           # Recommended to install as cask in order to get GUI support
 
+    homebrew/cask-fonts/font-jetbrains-mono-nerd-font
+    homebrew/cask-fonts/font-cousine-nerd-font
+
+
     # TODO: Test the installation of these:
     #
     # arc
@@ -79,7 +83,6 @@ CASKS=(
     # moom
     # warp
 )
-
 
 remove_brew()
 {
