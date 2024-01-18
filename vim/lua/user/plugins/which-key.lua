@@ -60,6 +60,9 @@ return {
             [","] = { "<cmd>FSHere<CR>", "Switch to paired file" },
             ["."] = { "<c-^>", "Edit alternate file" },
             [" "] = { "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space" },
+            D = {
+                name = "Debug" -- defined in dap.lua
+            },
             d = {
                 name = "Diagnostics" -- defined in lsp.lua ("vim.diagnostics"},
             },
