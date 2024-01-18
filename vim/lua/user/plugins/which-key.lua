@@ -70,6 +70,12 @@ return {
                 z = { "<cmd>edit ~/.zshrc<CR>", ".zshrc" },
             },
             h = { "<cmd>nohlsearch<CR>", "Disable highlight" },
+            i = {
+                name = "Info",
+                l = { "<cmd>LspInfo<CR>", "LSP" },
+                m = { "<cmd>Mason<CR>", "Mason" },
+                z = { "<cmd>Lazy<CR>", "Lazy" },
+            },
             l = {
                 name = "LSP" -- defined in lsp.lua ("vim.lsp"},
             },
