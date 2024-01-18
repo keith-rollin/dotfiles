@@ -1,42 +1,63 @@
 -- Managing plugins for LSP, formatting, and linting is kind of a pain.
 --
--- Mason is a pretty good tool for this, but it only gets you part of the way
--- there. Mason knows about tons of plugins and how to load them, but it will
--- only load them via its MasonInstall command. This command is not very
--- friendly to run when executing startup Lua scripts since that command will
--- bring up the "Installing..." dialog. It does have an API that will avoid
--- this, but it's pretty inscrutable. Fortunately, there is a Github project
--- called mason-tool-installer that takes care of working with this API.
+-- Managing a plugin involves two steps:
 --
--- For the most part, we can avoid this dialog by using mason-lspconfig and
--- nvim-lspconfig. The latter can be used to load LSP plugins. But it will only
--- load the set that it knows about. This set is a subset of what Mason
--- supports. In particular, it only knows about LSP plugins, not anything about
--- formatting or linting plugins. Wrapped around this is mason-lspconfig, which
--- will take care of making sure that the set of plugins we require are
--- automatically downloaded and will take care of initializing them when that's
--- done. This all works pretty well, but -- again -- it only works for LSP
--- servers.
+--  * Downloading/installing the plugin so that it's available somewhere in your
+--    environment.
+--  * Initializing/configuring/setting up the plugin by invoking its setup()
+--    function or equivalent.
 --
--- To handle the installing and initializing of non-LSP tools, we use null-ls.
--- (NOTE: the original null-ls is no longer supported by its original author.
--- His old project has been taken over by a new group and has been renamed to
--- none-ls.nvim.) This tool can handle the installing and initializing very
--- simply and magically makes these tools look like LSP servers to nvim, making
--- their utilization consistent with the actual LSP servers. However, it doesn't
--- do anything to download the formatters and linters. For that, we turn to
--- mason-tool-installer.
+-- Mason is a pretty good tool for downloading/installing, but it only gets you
+-- part of the way there. Mason knows about tons of plugins and how to load
+-- them, but it will only load them via its API or its MasonInstall command. The
+-- command is not very friendly to run when executing startup Lua scripts since
+-- that command will bring up the "Installing..." dialog. The API will avoid
+-- this, but it's pretty inscrutable. More on this later.
 --
--- In short:
+-- One Mason has downloaded/installed the tools that we've specified, we need to
+-- initialize/configure/setup those tools. The nvim-lspconfig provides some help
+-- in this area. It contains information on how to utilize most known/major LSP
+-- servers. For the most part, the configuration information it provides is
+-- sufficient out-of-the-box. However, the user may want to provide their own
+-- customizations to these configurations (for example, I need to tell lua_ls
+-- that "vim" is a special global variable). When using nvim-lspconfig to
+-- configure our tools, it provides a mechanism for doing this.
 --
--- * the LSP servers are specified in "ensure_installed", are downloaded by
---   Mason, and are initialized by a combination of nvim-lspconfig and
---   mason-lspconfig,
--- * the non-LSP servers are downloaded by mason-tool-installer,
--- * the non-LSP servers are initialized by none-ls.nvim, null-ls, null_ls.
+-- However, we can't just naively invoke nvim-lspconfig to configure our tools.
+-- Since Mason downloads the tools asynchronously, it's possible that the tools
+-- have not yet downloaded when we try to configure them. Therefore, we need to
+-- make use of mason-lspconfig, which provides support for this issue.
+-- mason-lspconfig will make sure that any downloads have completed, and will
+-- then arrange for the tools to finally be configured. This configuration is
+-- achieved by setting mason-lspconfig up with configuration 'handlers'. These
+-- handlers -- one per tool that we've installed -- are invoked by
+-- mason-lspconfig when the tools can safely be configured.
+--
+-- mason-lspconfig also arranges to kick off the downloading of the tools via
+-- Mason. This is done by listing the tools you want installed in a
+-- mason-lspconfig configuration setting called 'ensure_installed'.
+-- Unfortunately, only actual LSP servers can be specified in
+-- 'ensure_installed'. Attempting to include any of the other non-LSP servers
+-- that Mason knows about in this list will result in an error at startup saying
+-- "Server Foo is not a valid entry in ensure_installed. Make sure to only
+-- provide lspconfig server names." This leaves us with our not being able to
+-- automatically download non-LSP servers when using mason-lspconfig.
+--
+-- To make up for this lack, we use mason-tool-installer. This plugin can be
+-- configured with any list of tools to install -- both LSP and non-LSP.
+-- mason-tool-installer is basically a simple loop that schedules the required
+-- set of tools to be installed via Mason's API.
+--
+-- Once the tools are installed, as mentioned, mason-lspconfig will arrange for
+-- the LSP servers to be configured via the 'handlers' we've registered with it.
+-- But it doesn't have support for configuring the non-LSP servers. (Or does it?
+-- I may need to investigate that.) Therefore, we use a tool called null-ls to
+-- take care of that. (NOTE: the original null-ls is no longer supported by its
+-- original author. His old project has been taken over by a new group and has
+-- been renamed to none-ls.nvim.)
 --
 -- For reference, the list of everything that Mason can install through its UI
--- and that mason-tool-installer can install is here:
+-- and that mason-tool-installer can install via Mason's API is here:
 --
 --      https://github.com/mason-org/mason-registry/blob/main/packages/isort/package.yaml
 --
@@ -58,15 +79,13 @@
 --      https://www.youtube.com/watch?v=oYzZxi3SSnM
 
 -- https://www.youtube.com/live/KGJV0n70Mxs?si=yzKH6oWxE8TfPH1S&t=5600
---
-local LSP_SERVERS = {
+
+local ENSURE_INSTALLED = {
     "clangd",
     "lua_ls",
     "pyright",
     "rust_analyzer",
-}
 
-local NON_LSP_SERVERS = {
     "beautysh",
     "black",
     "isort",
@@ -81,10 +100,9 @@ return {
             require("mason").setup({
                 ui = {
                     border = "double",
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "-",
+                    keymaps = {
+                        apply_language_filter = "f",
+                        toggle_help = "?",
                     },
                 },
             })
@@ -209,7 +227,6 @@ return {
 
             local function initialize_mason_lspconfig(default_handler)
                 require("mason-lspconfig").setup({
-                    ensure_installed = LSP_SERVERS,
                     handlers = {
                         default_handler,
 
@@ -259,10 +276,11 @@ return {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         dependencies = {
             "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
         },
         config = function()
             require("mason-tool-installer").setup({
-                ensure_installed = NON_LSP_SERVERS,
+                ensure_installed = ENSURE_INSTALLED,
             })
         end,
     },
