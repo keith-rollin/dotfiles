@@ -27,13 +27,4 @@ echo $TO_INSTALL
 
 unset PYTHON_PACKAGES
 
-# Create a utility directory for Python virtual environments, create one for
-# debugpy (a Python debugger), and install debugpy into it. This package will
-# be used by a DAP adapter I'm installing into nvim.
-
-mkdir -p ~/.local/virtualenvs
-cd ~/.local/virtualenvs
-python3 -m venv debugpy
-./debugpy/bin/python3 -m pip install debugpy
-
 true

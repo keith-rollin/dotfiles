@@ -86,6 +86,8 @@ local ENSURE_INSTALLED = {
     "pyright",
     "rust_analyzer",
 
+    "debugpy",
+
     "beautysh",
     "black",
     "isort",

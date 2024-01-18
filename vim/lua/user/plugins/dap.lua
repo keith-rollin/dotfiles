@@ -1,30 +1,11 @@
 return {
     {
-        "rcarriga/nvim-dap-ui",
-    },
-    {
-        "mfussenegger/nvim-dap-python",
-    },
-    {
         "mfussenegger/nvim-dap",
         dependencies = {
-            "rcarriga/nvim-dap-ui",
-            "mfussenegger/nvim-dap-python",
             "folke/which-key.nvim",
         },
         config = function()
             local dap = require("dap")
-            -- local widgets = require("dap.widgets")
-            local dapui = require("dapui")
-            local dap_python = require("dap-python")
-
-            dapui.setup()
-            dap_python.setup("~/.local/virtualenvs/debugpy/bin/python3")
-
-            dap.listeners.before.attach.dapui_config = dapui.open
-            dap.listeners.before.launch.dapui_config = dapui.open
-            dap.listeners.before.event_terminated.dapui_config = dapui.close
-            dap.listeners.before.event_exited.dapui_config = dapui.close
 
             -- Maybe move these to "<Leader>D"?
             kr.mapping.set_normal({
@@ -49,6 +30,32 @@ return {
                     -- 's', { function() widgets.centered_float(widgets.scopes) end, "Open Scopes?" },
                 },
             })
+        end,
+    },
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = {
+            "mfussenegger/nvim-dap",
+        },
+        config = function()
+            local dap = require("dap")
+            local dapui = require("dapui")
+            dapui.setup()
+            dap.listeners.before.attach.dapui_config = dapui.open
+            dap.listeners.before.launch.dapui_config = dapui.open
+            dap.listeners.before.event_terminated.dapui_config = dapui.close
+            dap.listeners.before.event_exited.dapui_config = dapui.close
+        end,
+    },
+    {
+        "mfussenegger/nvim-dap-python",
+        dependencies = {
+            "mfussenegger/nvim-dap",
+        },
+        config = function()
+            local dap_python = require("dap-python")
+            local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3"
+            dap_python.setup(path)
         end,
     },
 }
