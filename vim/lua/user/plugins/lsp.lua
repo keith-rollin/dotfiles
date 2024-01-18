@@ -69,16 +69,6 @@
 -- The list of things that null-ls can initialize is here:
 --
 --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
---
--- Consider adding DAP support. See the following starting at 9:50:
---
---      https://www.youtube.com/watch?v=4BnVeOUeZxc
---
--- and
---
---      https://www.youtube.com/watch?v=oYzZxi3SSnM
-
--- https://www.youtube.com/live/KGJV0n70Mxs?si=yzKH6oWxE8TfPH1S&t=5600
 
 local ENSURE_INSTALLED = {
     "clangd",
