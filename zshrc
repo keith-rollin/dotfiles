@@ -495,11 +495,14 @@ prepend_path()
 
 py()
 {
-    maybe_run "/usr/local/opt/python@3.12/bin/python3.12" "$@" || \
-        maybe_run "/usr/local/opt/python@3.11/bin/python3.11" "$@" || \
-        maybe_run "/usr/local/opt/python@3.10/bin/python3.10" "$@" || \
-        maybe_run "/usr/local/bin/python3" "$@" || \
-        maybe_run "/usr/local/bin/python" "$@"
+    false || \
+        maybe_run "$(brew --prefix)/bin/python3.12" "$@" || \
+        maybe_run "$(brew --prefix)/bin/python3.11" "$@" || \
+        maybe_run "$(brew --prefix)/bin/python3" "$@" || \
+        maybe_run "$(brew --prefix)/bin/python" "$@" || \
+        maybe_run "python3" "$@" || \
+        maybe_run "python" "$@" || \
+        echo "Could not find a python"
 }
 
 reload()
