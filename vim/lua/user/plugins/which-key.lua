@@ -8,7 +8,7 @@ return {
         plugins = {
             marks = false,
             registers = false,
-            spelling = { enabled = false, },
+            spelling = { enabled = false },
         },
         key_labels = {
             ["<space>"] = "SPC",
@@ -23,9 +23,7 @@ return {
         local wk = require("which-key")
         _G.kr = {
             mapping = {
-                set = function(mapping, opts)
-                    wk.register(mapping, opts)
-                end,
+                set = function(mapping, opts) wk.register(mapping, opts) end,
                 set_normal = function(mapping)
                     local n_mode = { mode = "n", prefix = "" }
                     kr.mapping.set(mapping, n_mode)
@@ -42,18 +40,18 @@ return {
                     local x_mode = { mode = "x", prefix = "" }
                     kr.mapping.set(mapping, x_mode)
                 end,
-            }
+            },
         }
 
         StripWhitespace = function()
             -- Originally from some old vim.org tip that I can't find any more.
             -- Modified with trim_trailing_whitespace handler in
             -- runtime/editor/lua/editorconfig.lua
-            local oldquery = vim.fn.getreg('/')
+            local oldquery = vim.fn.getreg("/")
             local view = vim.fn.winsaveview()
             vim.cmd("silent keepjumps keeppatterns %s/\\s\\+$//e")
             vim.fn.winrestview(view)
-            vim.fn.setreg('/', oldquery)
+            vim.fn.setreg("/", oldquery)
         end
 
         kr.mapping.set_normal_leader({
@@ -61,10 +59,10 @@ return {
             ["."] = { "<c-^>", "Edit alternate file" },
             [" "] = { "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space" },
             D = {
-                name = "Debug" -- defined in dap.lua
+                name = "Debug", -- defined in dap.lua
             },
             d = {
-                name = "Diagnostics" -- defined in lsp.lua ("vim.diagnostics"},
+                name = "Diagnostics", -- defined in lsp.lua ("vim.diagnostics"},
             },
             e = {
                 name = "Edit",
@@ -72,7 +70,6 @@ return {
                 v = { "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", ".init.lua" },
                 z = { "<cmd>edit ~/.zshrc<CR>", ".zshrc" },
             },
-            h = { "<cmd>nohlsearch<CR>", "Disable highlight" },
             i = {
                 name = "Info",
                 l = { "<cmd>LspInfo<CR>", "LSP" },
@@ -80,7 +77,8 @@ return {
                 z = { "<cmd>Lazy<CR>", "Lazy" },
             },
             l = {
-                name = "LSP" -- defined in lsp.lua ("vim.lsp"},
+                name = "LSP", -- defined in lsp.lua ("vim.lsp"},
+                l = { "<cmd>nohlsearch<CR>", "Disable highlight" },
             },
             n = { "<cmd>20Lex<CR>", "Show directory tree" },
             -- r defined in lsp.lua (rename),
