@@ -26,24 +26,25 @@ vim.opt.title = true -- Set window title.
 vim.opt.undofile = true -- Persistent undo
 vim.opt.wrap = false -- Don't wrap text at the right side of the screen.
 
--- Search related
+-- Search/replace related
 
-vim.opt.ignorecase = true -- Ignore case of searches.
-vim.opt.smartcase = true  -- Case-insensitive searching unless we type at least one capital letter.
+vim.opt.ignorecase = true -- Ignore case of text and tag searches.
+vim.opt.inccommand = "split" -- Show prospective changed lines in a split.
+vim.opt.smartcase = true -- Case-insensitive searching unless we type at least one capital letter.
 
 -- Line number related.
 
-vim.opt.number = true         -- Show absolute line numbers.
+vim.opt.number = true -- Show absolute line numbers.
 vim.opt.relativenumber = true -- Show relative line numbers; w/ above, accommodates both.
 
 -- TAB related
 
 vim.opt.expandtab = true -- Convert tabs to spaces.
-vim.opt.shiftwidth = 4   -- Number of spaces to use for each step of (auto)indent.
-vim.opt.softtabstop = 4  -- Number of spaces in tab when editing.
-vim.opt.tabstop = 4      -- Number of visual spaces per TAB.
+vim.opt.shiftwidth = 4 -- Number of spaces to use for each step of (auto)indent.
+vim.opt.softtabstop = 4 -- Number of spaces in tab when editing.
+vim.opt.tabstop = 4 -- Number of visual spaces per TAB.
 
 -- netrw: Configuration
 
-vim.g.netrw_banner = 0    -- Disable banner.
+vim.g.netrw_banner = 0 -- Disable banner.
 vim.g.netrw_liststyle = 3 -- Tree view.
