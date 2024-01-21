@@ -71,7 +71,7 @@
 --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
 local ENSURE_INSTALLED = {
-    "clangd",
+    -- "clangd",
     "lua_ls",
     "pyright",
     "rust_analyzer",
