@@ -116,18 +116,6 @@ return {
 
             ["gf"] = { "<cmd>edit <cfile><cr>", "Edit file under cursor" },
 
-            -- Remap commands to keep the found text centered. Use 'zv' to open
-            -- folds in case the selected text is hidden.
-
-            n = { "nzzzv", "Find next and re-center" },
-            N = { "Nzzzv", "Find previous and re-center" },
-            ["*"] = { "*zzzv", "Find next word under cursor and re-center" },
-            ["#"] = { "#zzzv", "Find previous word under cursor and re-center" },
-            -- ["g*"] = { "g*zzzv" },
-            -- ["g#"] = { "g#zzzv" },
-            -- ["<C-D>"] = { "<C-D>zz" },
-            -- ["<C-U>"] = { "<C-U>zz" },
-
             -- Tab / Shift-Tab to change buffers.
 
             ["<Tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
