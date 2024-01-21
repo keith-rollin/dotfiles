@@ -172,49 +172,14 @@ else
     echo "*** install.brew should be source'd in order for \$PATH changes to take effect"
 fi
 
-# The following paths are causing us problems:
-#
-#       /opt/homebrew/Cellar/neovim/0.9.4/share/nvim/runtime/queries/*.scm
-#       /opt/homebrew/Cellar/neovim/0.9.4/lib/nvim/parser/*.so
-#
-# There seems to be some conflict between them and treesitter, which tries to
-# install its own versions. One confuses the other, leading to a long, unclear
-# error message:
-#
-#       "lua/plugins.lua" <last line of file>, 18245B
-#       Error detected while processing BufReadPost Autocommands for "*":
-#       Error executing lua callback: ...brew/Cellar/neovim/0.9.4/share/nvim/runtime/filetype.lua:24:
-#       Error executing lua: ...brew/Cellar/neovim/0.9.4/share/nvim/runtime/filetype.lua:25:
-#       BufReadPost Autocommands for "*"..FileType Autocommands for "*":
-#       Vim(append):
-#       Error executing lua callback: ...im/0.9.4/share/nvim/runtime/lua/vim/treesitter/query.lua:259:
-#       query: invalid structure at position 2992 for language lua
-#       ...more...
-#
-# We can avoid this error by moving the built-in versions out of the way before
-# invoking neovim and having treesitter throw its fit.
-#
-# (Will the following code break if there's more than one version of neovim
-# installed?)
-
-maybe_hide()
-{
-    echo "### Attempting to move $1"
-    [[ -d "$1" ]] && mv "$1" "$1.bak"
-}
-
-NEOVIM_PATH="$(brew list --versions neovim | tr ' ' / | tail -1)"
-if [[ -n "${NEOVIM_PATH}" ]]
-then
-    NEOVIM_PATH="$(brew --cellar)/${NEOVIM_PATH}"
-    maybe_hide "${NEOVIM_PATH}/lib/nvim/parser"
-    maybe_hide "${NEOVIM_PATH}/share/nvim/queries"
-else
-    echo "*** Unable to find neovim"
-fi
-
 unset CASKS
 unset APPS
+
+# Neovim and Treesitter are currently at odds with each other. Call fix_nvim to
+# help them sort out their issues. See comments in the function for the
+# details.
+
+fix_nvim
 
 true
 
