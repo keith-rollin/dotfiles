@@ -21,9 +21,9 @@ PYTHON_PACKAGES=(
     pynvim          # Python client to neovim
 )
 
-local TO_INSTALL=( $(filter PYTHON_PACKAGES $(pip3 list 2> /dev/null | awk 'NR>2 { print $1; }')) )
+local TO_INSTALL=( $(filter PYTHON_PACKAGES $(py -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
 echo $TO_INSTALL
-(( $#TO_INSTALL > 0 )) && dont_sleep pip3 install "${TO_INSTALL[@]}"
+(( $#TO_INSTALL > 0 )) && py -m pip install "${TO_INSTALL[@]}"
 
 unset PYTHON_PACKAGES
 
