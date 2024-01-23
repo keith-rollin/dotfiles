@@ -229,6 +229,24 @@ delete_mason() {
     rm -rf ~/.local/share/nvim/mason
 }
 
+delete_python_packages()
+{
+    local all_packages=( \
+            $( \
+                py -m pip list  \
+                | tail -n +3 \
+                | grep -v '^pip' \
+                | grep -v '^wheel' \
+                | awk '{print $1}' \
+            ) \
+        )
+
+    if (( "${#all_packages}" != 0 ))
+    then
+        py -m pip uninstall --yes "${all_packages[@]}"
+    fi
+}
+
 delete_treesitter() {
     rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser/*.so
     rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser-info/*.revision
@@ -608,6 +626,22 @@ up()
         local rx=$(echo "$1" | sed -e "s/\s\+//g" -e "s/\(.\)/\1[^\/]*/g")
         local p="$(echo -n "$(pwd | sed -e "s/\(.*\/[^\/]*${rx}\)\/.*/\1/")")"
         cd "$p"
+    fi
+}
+
+update_python_packages()
+{
+    local out_of_date=( \
+            $( \
+                py -m pip list --outdated \
+                | tail -n +3 \
+                | awk '{print $1}' \
+            ) \
+        )
+
+    if (( "${#out_of_date}" != 0 ))
+    then
+        py -m pip install --upgrade "${out_of_date[@]}"
     fi
 }
 
