@@ -23,7 +23,9 @@ return {
         local wk = require("which-key")
         _G.kr = {
             mapping = {
-                set = function(mapping, opts) wk.register(mapping, opts) end,
+                set = function(mapping, opts)
+                    wk.register(mapping, opts)
+                end,
                 set_normal = function(mapping, opts)
                     local n_mode = vim.tbl_extend("error", { mode = "n" }, opts or {})
                     kr.mapping.set(mapping, n_mode)

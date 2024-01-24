@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd("FileType", {
                 vim.api.nvim_win_set_cursor(0, position)
             end
         end
-    end
+    end,
 })
 
 -- Briefly highlight the yanked selection.
@@ -28,6 +28,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     group = custom_group,
     pattern = "*",
     callback = function()
-        vim.highlight.on_yank({ higroup = 'Visual' })
-    end -- Why can't I just set the callback to vim.highlight.on_yank?
+        vim.highlight.on_yank({ higroup = "Visual" })
+    end, -- Why can't I just set the callback to vim.highlight.on_yank?
 })
