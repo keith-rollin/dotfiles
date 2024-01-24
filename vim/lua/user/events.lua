@@ -8,7 +8,8 @@ vim.api.nvim_create_autocmd("FileType", {
     group = custom_group,
     pattern = "*",
     callback = function()
-        if (vim.o.filetype ~= "gitcommit") and (vim.o.filetype ~= "gitrebase") then
+        local hands_off_these_files = { "gitcommit", "gitrebase", "netrw" }
+        if not vim.tbl_contains(hands_off_these_files, vim.o.filetype) then
             local position = vim.api.nvim_buf_get_mark(0, '"')
             if position ~= { 0, 0 } then
                 vim.api.nvim_win_set_cursor(0, position)
