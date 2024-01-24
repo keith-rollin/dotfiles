@@ -16,7 +16,6 @@ return {
             --     ["<F12>"] = { dap.step_out, "Step Out" },
             -- })
             kr.mapping.set_normal({
-            kr.mapping.set_normal_leader({
                 D = {
                     name = "Debug",
                     c = { dap.continue, "Continue" },
@@ -31,7 +30,7 @@ return {
                     -- 'f', { function() widgets.centered_float(widgets.frames) end, "Open Frames?" },
                     -- 's', { function() widgets.centered_float(widgets.scopes) end, "Open Scopes?" },
                 },
-            })
+            }, { prefix = "<leader>" })
         end,
     },
     {

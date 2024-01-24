@@ -114,7 +114,7 @@ return {
             -- when we enter a buffer that an LSP supports.
 
             local function initialize_keymap()
-                kr.mapping.set_normal_leader({
+                kr.mapping.set_normal({
                     name = "Diagnostics",
                     d = {
                         l = { vim.diagnostic.setloclist, "Set location list" },
@@ -122,7 +122,7 @@ return {
                         o = { vim.diagnostic.open_float, "Show diagnostics" },
                         p = { vim.diagnostic.goto_prev, "Go to previous diagnostic" },
                     },
-                })
+                }, { prefix = "<leader>" })
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
@@ -161,7 +161,7 @@ return {
                         -- Set up some LSP-related shortcuts (perform code
                         -- action, go to definition, show references, etc.)
 
-                        kr.mapping.set_normal_leader({
+                        kr.mapping.set_normal({
                             name = "LSP",
                             l = {
                                 c = { vim.lsp.buf.code_action, "Code action" },
@@ -175,7 +175,7 @@ return {
                                 t = { vim.lsp.buf.type_definition, "Go to type definition" },
                             },
                             r = { vim.lsp.buf.rename, "LSP rename" },
-                        })
+                        }, { prefix = "<leader>", buffer = bufnr })
                     end,
                 })
             end
@@ -294,8 +294,6 @@ return {
                         extra_args = {
                             "--indent-type",
                             "Spaces",
-                            "--collapse-simple-statement",
-                            "Always",
                         },
                     }),
                 },

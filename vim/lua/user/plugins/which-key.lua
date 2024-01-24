@@ -24,20 +24,16 @@ return {
         _G.kr = {
             mapping = {
                 set = function(mapping, opts) wk.register(mapping, opts) end,
-                set_normal = function(mapping)
-                    local n_mode = { mode = "n", prefix = "" }
+                set_normal = function(mapping, opts)
+                    local n_mode = vim.tbl_extend("error", { mode = "n" }, opts or {})
                     kr.mapping.set(mapping, n_mode)
                 end,
-                set_normal_leader = function(mapping)
-                    local n_mode = { mode = "n", prefix = "<leader>" }
-                    kr.mapping.set(mapping, n_mode)
-                end,
-                set_visual = function(mapping)
-                    local v_mode = { mode = "v", prefix = "" }
+                set_visual = function(mapping, opts)
+                    local v_mode = vim.tbl_extend("error", { mode = "v" }, opts or {})
                     kr.mapping.set(mapping, v_mode)
                 end,
-                set_visual_select = function(mapping)
-                    local x_mode = { mode = "x", prefix = "" }
+                set_visual_select = function(mapping, opts)
+                    local x_mode = vim.tbl_extend("error", { mode = "x" }, opts or {})
                     kr.mapping.set(mapping, x_mode)
                 end,
             },
@@ -54,7 +50,7 @@ return {
             vim.fn.setreg("/", oldquery)
         end
 
-        kr.mapping.set_normal_leader({
+        kr.mapping.set_normal({
             [","] = { "<cmd>FSHere<CR>", "Switch to paired file" },
             ["."] = { "<c-^>", "Edit alternate file" },
             [" "] = { "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space" },
@@ -99,7 +95,7 @@ return {
                 name = "Telescope", -- defined in telescope.lua
             },
             w = { "<cmd>w<CR>", "Write current file" },
-        })
+        }, { prefix = "<leader>" })
 
         local n_mappings = {
             ["<C-J>"] = { "<C-W><C-J>" },

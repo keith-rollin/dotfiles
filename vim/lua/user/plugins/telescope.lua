@@ -47,10 +47,9 @@ return {
                 lsp_declarations = { theme = "dropdown", initial_mode = "normal" },
                 lsp_implementations = { theme = "dropdown", initial_mode = "normal" },
             },
-
         })
 
-        kr.mapping.set_normal_leader({
+        kr.mapping.set_normal({
             t = {
                 name = "Telescope",
                 f = {
@@ -97,7 +96,7 @@ return {
                 },
 
                 k = { "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps" },
-            }
-        })
+            },
+        }, { prefix = "<leader>" })
     end,
 }
