@@ -7,13 +7,15 @@ return {
         config = function()
             local dap = require("dap")
 
+            -- Function keys on a Mac are awkward.
             -- Maybe move these to "<Leader>D"?
+            -- kr.mapping.set_normal({
+            --     ["<F5>"] = { dap.continue, "Continue" },
+            --     ["<F10>"] = { dap.step_over, "Step Over" },
+            --     ["<F11>"] = { dap.step_into, "Step Into" },
+            --     ["<F12>"] = { dap.step_out, "Step Out" },
+            -- })
             kr.mapping.set_normal({
-                ["<F5>"] = { dap.continue, "Continue" },
-                ["<F10>"] = { dap.step_over, "Step Over" },
-                ["<F11>"] = { dap.step_into, "Step Into" },
-                ["<F12>"] = { dap.step_out, "Step Out" },
-            })
             kr.mapping.set_normal_leader({
                 D = {
                     name = "Debug",
