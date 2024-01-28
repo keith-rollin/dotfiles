@@ -21,7 +21,7 @@ return {
     },
     config = function()
         local wk = require("which-key")
-        _G.kr = {
+        kr.extend({
             mapping = {
                 set = function(mapping, opts)
                     wk.register(mapping, opts)
@@ -39,7 +39,7 @@ return {
                     kr.mapping.set(mapping, x_mode)
                 end,
             },
-        }
+        })
 
         StripWhitespace = function()
             -- Originally from some old vim.org tip that I can't find any more.

@@ -37,6 +37,14 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " " -- Not really sure what this does, if anything
 
+-- Function to self-add things to my global utility table.
+
+_G.kr = {
+    extend = function(tbl)
+        _G.kr = vim.tbl_extend("error", tbl, _G.kr)
+    end,
+}
+
 -- It's probably a good idea to require plugins last. It's a great place for
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
