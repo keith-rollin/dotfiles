@@ -232,7 +232,7 @@ return {
                                     Lua = {
                                         diagnostics = {
                                             enable = true,
-                                            globals = { "vim", "spec" },
+                                            globals = { "vim", "spec", "kr" },
                                         },
                                         format = {
                                             enable = true,
