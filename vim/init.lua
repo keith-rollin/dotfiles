@@ -45,6 +45,14 @@ _G.kr = {
     end,
 }
 
+-- I can never remember which means left and which means right, so define some
+-- aliases.
+
+kr.extend({
+    keep_left = "keep",
+    keep_right = "force",
+})
+
 -- It's probably a good idea to require plugins last. It's a great place for
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.

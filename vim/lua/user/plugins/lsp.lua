@@ -200,7 +200,7 @@ return {
                 }
 
                 local function default_handler(server_name, opts)
-                    local merged_opts = vim.tbl_extend("keep", opts or {}, default_opts)
+                    local merged_opts = vim.tbl_extend(kr.keep_left, opts or {}, default_opts)
                     lspconfig[server_name].setup(merged_opts)
                 end
 
