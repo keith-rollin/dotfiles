@@ -39,6 +39,7 @@ APPS=(
     eza             # Modern replacement for 'ls'
     git             # Distributed revision control system
     git-delta       # Syntax-highlighting pager for git and diff output
+    hatch           # Modern, extensible Python project management
     neovim          # Ambitious Vim-fork focused on extensibility and agility
     node            # Platform built on V8 to build network applications (Needed for some LSP plugins)
     python-tk@3.11  # Python interface to Tcl/Tk
@@ -46,11 +47,6 @@ APPS=(
     ripgrep         # Search tool like grep and The Silver Searcher
     tree            # Display directories as trees (with optional color/HTML output)
     watch           # Executes a program periodically, showing output fullscreen
-
-    #clang-format    # Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
-    #ruff            # Extremely fast Python linter, written in Rust
-    #shfmt           # Autoformat shell script source code
-    #stylua          # Opinionated Lua code formatter
 
     # Needed for building neovim.
     #
