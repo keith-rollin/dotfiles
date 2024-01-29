@@ -650,6 +650,16 @@ update_python_packages()
     fi
 }
 
+vap()
+{
+    vi $(command ls *.py | sort)
+}
+
+var()
+{
+    vi $(find src -name '*.rs' | sort)
+}
+
 vim_core()
 {
     # Open a file in our editor, converting any parameter like this (which is
@@ -674,11 +684,6 @@ vim_core()
     done
 
     "${EDITOR}" "${ARGS[@]}"
-}
-
-vss()
-{
-    vi $(find src -name '*.rs' | sort)
 }
 
 xc()
