@@ -629,6 +629,11 @@ up()
     fi
 }
 
+update_pip()
+{
+    py -m pip install --upgrade pip setuptools wheel
+}
+
 update_python_packages()
 {
     local out_of_date=( \
