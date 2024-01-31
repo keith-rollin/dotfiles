@@ -653,7 +653,7 @@ update_python_packages()
 
 vap()
 {
-    vi $(command ls *.py | sort)
+    vi $(command ls [a-zA-Z]*.py | sort)
 }
 
 var()
