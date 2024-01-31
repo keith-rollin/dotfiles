@@ -18,7 +18,9 @@ source "${HOME}/.zshrc"
 
 PYTHON_PACKAGES=(
     beautifulsoup4  # Screen-scraping library
-    pynvim          # Python client to neovim
+    pynvim          # Python client for Neovim
+    build           # A simple, correct Python build frontend
+    twine           # Collection of utilities for publishing packages on PyPI
 )
 
 local TO_INSTALL=( $(filter PYTHON_PACKAGES $(py -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
