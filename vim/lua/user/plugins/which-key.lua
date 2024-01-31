@@ -112,6 +112,10 @@ return {
 
             ["gf"] = { "<cmd>edit <cfile><cr>", "Edit file under cursor" },
 
+            -- Change ZZ to not winge about not having visited every buffer.
+
+            ["ZZ"] = { "<cmd>xa<cr>", "Quit without whining" },
+
             -- Tab / Shift-Tab to change buffers.
 
             ["<Tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
