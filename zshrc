@@ -554,8 +554,9 @@ prepend_path()
 
 py()
 {
-    false || \
-        maybe_run "$(brew --prefix)/bin/python3.12" "$@" || \
+    # maybe_run "$(brew --prefix)/bin/python3.12" "$@" || \
+
+        false || \
         maybe_run "$(brew --prefix)/bin/python3.11" "$@" || \
         maybe_run "$(brew --prefix)/bin/python3" "$@" || \
         maybe_run "$(brew --prefix)/bin/python" "$@" || \
