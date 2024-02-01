@@ -307,12 +307,6 @@ filter()
     done
 }
 
-fix_nvim_maybe_hide()
-{
-    echo "### Attempting to move $1"
-    [[ -d "$1" ]] && mv "$1" "$1.bak"
-}
-
 fix_nvim()
 {
     # The following paths are causing us problems:
@@ -337,12 +331,18 @@ fix_nvim()
     # We can avoid this error by moving the built-in versions out of the way before
     # invoking neovim and having treesitter throw its fit.
 
+    maybe_hide()
+    {
+        echo "### Attempting to move $1"
+        [[ -d "$1" ]] && mv "$1" "$1.bak"
+    }
+
     NEOVIM_PATH="$(brew list --versions neovim | tr ' ' / | tail -1)"
     if [[ -n "${NEOVIM_PATH}" ]]
     then
         NEOVIM_PATH="$(brew --cellar)/${NEOVIM_PATH}"
-        fix_nvim_maybe_hide "${NEOVIM_PATH}/lib/nvim/parser"
-        fix_nvim_maybe_hide "${NEOVIM_PATH}/share/nvim/queries"
+        maybe_hide "${NEOVIM_PATH}/lib/nvim/parser"
+        maybe_hide "${NEOVIM_PATH}/share/nvim/queries"
     else
         echo "*** Unable to find neovim"
     fi
