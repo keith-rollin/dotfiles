@@ -554,15 +554,29 @@ prepend_path()
 
 py()
 {
-    # maybe_run "$(brew --prefix)/bin/python3.12" "$@" || \
+    find_python_root()
+    {
+        local P=$(realpath .)
+        while true
+        do
+            [ "$P" = "/" ] && break
+            [ -f "$P/pyvenv.cfg" ] && break
+            P=$(dirname "$P")
+        done
+        echo "$P"
+    }
 
-        false || \
-        maybe_run "$(brew --prefix)/bin/python3.11" "$@" || \
-        maybe_run "$(brew --prefix)/bin/python3" "$@" || \
-        maybe_run "$(brew --prefix)/bin/python" "$@" || \
-        maybe_run "python3" "$@" || \
-        maybe_run "python" "$@" || \
-        echo "Could not find a python"
+    try_python()
+    {
+        is_executable "$1" || { false; return; }
+        "$@"
+        true
+    }
+
+    try_python "$(find_python_root)/bin/python3" "$@" && return 0
+    try_python "$(brew --prefix)/bin/python3" "$@" && return 0
+    try_python "python3" "$@" && return 0
+    echo "Could not find a python"
 }
 
 reload()
