@@ -554,28 +554,31 @@ prepend_path()
 
 py()
 {
+    local result=0
+
     find_python_root()
     {
-        local P=$(realpath .)
+        local root=$(realpath .)
         while true
         do
-            [ "$P" = "/" ] && break
-            [ -f "$P/pyvenv.cfg" ] && break
-            P=$(dirname "$P")
+            [ "$root" = "/" ] && break
+            [ -f "$root/pyvenv.cfg" ] && { echo "/does_not_exist"; return; }
+            root=$(dirname "$root")
         done
-        echo "$P"
+        echo "$root"
     }
 
     try_python()
     {
         is_executable "$1" || { false; return; }
         "$@"
+        result=$?
         true
     }
 
-    try_python "$(find_python_root)/bin/python3" "$@" && return 0
-    try_python "$(brew --prefix)/bin/python3" "$@" && return 0
-    try_python "python3" "$@" && return 0
+    try_python "$(find_python_root)/bin/python3" "$@" && return $result
+    try_python "$(brew --prefix)/bin/python3" "$@" && return $result
+    try_python "python3" "$@" && return $result
     echo "Could not find a python"
 }
 
