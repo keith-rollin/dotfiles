@@ -561,11 +561,15 @@ py()
         local root=$(realpath .)
         while true
         do
-            [ "$root" = "/" ] && break
-            [ -f "$root/pyvenv.cfg" ] && { echo "/does_not_exist"; return; }
+            [ "$root" = "/" ] && { echo "/tmp/venv_does_not_exist"; return; }
+            [ -f "$root/pyvenv.cfg" ] && { echo "$root"; return; }
+            for d in $(find "$root" -maxdepth 1 -type d)
+            do
+                [ -f "$d/pyvenv.cfg" ] && { echo "$d"; return; }
+            done
             root=$(dirname "$root")
         done
-        echo "$root"
+        echo "/tmp/should_not_get_here"
     }
 
     try_python()
