@@ -224,6 +224,16 @@ return {
                     handlers = {
                         default_handler,
 
+                        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
+                        -- https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+                        -- ["pyright"] = function()
+                        --     default_handler("pyright", {
+                        --         root_dir = function()
+                        --             vim.fn.getcwd()
+                        --         end,
+                        --     })
+                        -- end,
+
                         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
                         -- https://luals.github.io/wiki/settings/
                         ["lua_ls"] = function()
