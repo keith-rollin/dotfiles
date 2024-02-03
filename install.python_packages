@@ -18,7 +18,6 @@ source "${HOME}/.zshrc"
 
 PYTHON_PACKAGES=(
     beautifulsoup4  # Screen-scraping library
-    pynvim          # Python client for Neovim
     build           # A simple, correct Python build frontend
     twine           # Collection of utilities for publishing packages on PyPI
 )
