@@ -28,8 +28,8 @@ HERE=$(dirname -- "$(readlink -f "%R" "$0")")
 # Get some handy functions defined: create_link_in_home, is_being_sourced,
 # maybe_source.
 
-source "${HERE}/zshenv"
-source "${HERE}/zshrc"
+source "${DOTFILES}/zshenv"
+source "${DOTFILES}/bin/shell_functions.zsh"
 
 # Make sure we're being source'd. install.brew and install.rust (at the current
 # time, at least) make $PATH and environment variable changes. That call to
@@ -84,9 +84,9 @@ fi
 # Source these one more time so that things can be initialized/configured in
 # the context of all related tools now being available (e.g., $EDITOR being set
 # to nvim). This should actually largely be done already due to the sub-install
-# scripts invoking .zshrc, but let's not assume that.
+# scripts invoking shell_functions.zsh, but let's not assume that.
 
-source "${HOME}/.zshenv"
-source "${HOME}/.zshrc"
+source "${DOTFILES}/zshenv"
+source "${DOTFILES}/bin/shell_functions.zsh"
 
 mkdir -p "${ZSH_CONFIG_DIR}"

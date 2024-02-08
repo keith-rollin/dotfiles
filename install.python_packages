@@ -9,7 +9,8 @@ echo
 
 # Get some commands: dont_sleep, filter
 
-source "${HOME}/.zshrc"
+source "${DOTFILES}/zshenv"
+source "${DOTFILES}/bin/shell_functions.zsh"
 
 # Install some Python packages now that we have Python installed.
 #

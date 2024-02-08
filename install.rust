@@ -5,8 +5,8 @@
 
 # Get some commands: is_being_sourced, source_rust_env
 
-source "${HOME}/.zshenv"
-source "${HOME}/.zshrc"
+source "${DOTFILES}/zshenv"
+source "${DOTFILES}/bin/shell_functions.zsh"
 
 if is_being_sourced
 then

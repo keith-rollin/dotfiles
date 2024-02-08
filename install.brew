@@ -149,8 +149,8 @@ error()
 # Get some commands: brew_path, delete_brew, dont_sleep, filter,
 # is_being_sourced, is_executable, prepend_path
 
-source "${HOME}/.zshenv"
-source "${HOME}/.zshrc"
+source "${DOTFILES}/zshenv"
+source "${DOTFILES}/bin/shell_functions.zsh"
 
 if is_being_sourced
 then
