@@ -1,6 +1,8 @@
 [user]
 	name = Keith Rollin
 	email = keith.rollin@gmail.com
+[init]
+	defaultBranch = main
 [push]
 	default = simple
 [alias]
