@@ -4,13 +4,55 @@
 #   https://github.com/webpro/dotfiles
 #   https://github.com/mathiasbynens/dotfiles
 
-# Get the path to this script so that we can find local resources.
+# Get the path to this script so that we can find local resources. This needs
+# some explaining, since we can't just get our name from $0. It would be nice
+# to use something like:
+#
+#   mypath=${0:A}
+#   mydir=${0:A:h}
+#
+# But that requires a $0, which is not set to what we want of we're being
+# invoked at shell startup ($0 is set to -zsh, and $0:A is set to $HOME/-zsh).
+# So we need another approach. What we'll be doing is evaluating/expanding
+# "${(%):-%N}".
+#
+# From "Parameter expansion flags" of `man zshexpn`:
+#
+#   "If the opening brace is directly followed by an opening parenthesis, the
+#    string up to the matching closing parenthesis will be taken as a list of
+#    flags.
+#
+#   "%      Expand all % escapes in the resulting words in the same way as in
+#           prompts (see EXPANSION OF PROMPT SEQUENCES in zshmisc(1)). If this
+#           flag is given twice, full prompt expansion is done on the resulting
+#           words, depending on the setting of the PROMPT_PERCENT, PROMPT_SUBST
+#           and PROMPT_BANG options."
+#
+# From "PARAMETER EXPANSION" of `man zshexpn`:
+#
+#   "${name-word}
+#    ${name:-word}
+#           If name is set, or in the second form is non-null, then substitute
+#           its value; otherwise substitute word.  In the second form name may
+#           be omitted, in which case word is always substituted."
+#
+# From "SIMPLE PROMPT ESCAPES" of `man zshmisc`:
+#
+#   "%N     The name of the script, sourced file, or shell function that zsh is
+#           currently executing, whichever was started most recently.  If there
+#           is none, this is equivalent to the parameter $0.  An integer may
+#           follow the `%' to specify a number of trailing path components to
+#           show; zero means the full path.  A negative integer specifies
+#           leading components."
+#
+# So, "${(%):-%N}" means:
+#
+#   * Use "(%)" to enable prompt expansion.
+#   * Use "%N" to expand to the name of this file.
+#   * Use ":-" to provide that file name as the substitution value of this whole
+#     ${...} expression."
 
-ME_BASE="${(%):-%N}"
-ME="$(readlink "${ME_BASE}")"
-[ -n "${ME}" ] || ME="${ME_BASE}"
-DOTFILES="$(dirname "${ME}")"
-unset ME ME_BASE
+DOTFILES=$(dirname -- "$(readlink -f "%R" "${(%):-%N}")")
 
 # Functions.
 

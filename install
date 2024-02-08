@@ -23,11 +23,7 @@
 #   * Update dotfiles's gitconfig
 #   * Appease zsh
 
-HERE="$(dirname "${0}")"
-REALPATH="${HERE}/bin/realpath"
-HERE="$("${REALPATH}" "${HERE}")"
-REALPATH="${HERE}/bin/realpath"
-LNS="${HERE}/bin/lns"
+HERE=$(dirname -- "$(readlink -f "%R" "$0")")
 
 # Get some handy functions defined: create_link_in_home, is_being_sourced,
 # maybe_source.
