@@ -4,6 +4,12 @@
 # stand-alone.
 
 echo
+echo "### Updating core Python packages"
+echo
+
+py -m pip install --upgrade pip setuptools wheel
+
+echo
 echo "### Installing Python packages"
 echo
 
