@@ -38,12 +38,10 @@ APPS=(
     1password-cli   # Command-line interface for 1Password
     eza             # Modern replacement for 'ls'
     git             # Distributed revision control system
-    git-delta       # Syntax-highlighting pager for git and diff output
-    hatch           # Modern, extensible Python project management
     neovim          # Ambitious Vim-fork focused on extensibility and agility
     node            # Platform built on V8 to build network applications (Needed for some LSP plugins)
-    python-tk@3.11  # Python interface to Tcl/Tk
-    python@3.11     # Interpreted, interactive, object-oriented programming language
+    python          # Interpreted, interactive, object-oriented programming language
+    python-tk       # Python interface to Tcl/Tk
     ripgrep         # Search tool like grep and The Silver Searcher
     tree            # Display directories as trees (with optional color/HTML output)
     watch           # Executes a program periodically, showing output fullscreen
@@ -62,9 +60,7 @@ APPS=(
 
 CASKS=(
     cmake           # Needed for building neovim.
-    emacs           # Recommended to install as cask in order to get GUI support
 
-    homebrew/cask-fonts/font-jetbrains-mono-nerd-font
     homebrew/cask-fonts/font-cousine-nerd-font
 
 
