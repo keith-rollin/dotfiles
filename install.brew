@@ -130,6 +130,12 @@ install_brew()
 
     local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
     (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
+
+    # Neovim and Treesitter are currently at odds with each other. Call fix_nvim to
+    # help them sort out their issues. See comments in the function for the
+    # details.
+
+    fix_nvim
 }
 
 have_brew()
@@ -166,12 +172,6 @@ fi
 
 unset CASKS
 unset APPS
-
-# Neovim and Treesitter are currently at odds with each other. Call fix_nvim to
-# help them sort out their issues. See comments in the function for the
-# details.
-
-fix_nvim
 
 true
 
