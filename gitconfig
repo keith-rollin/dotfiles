@@ -55,3 +55,4 @@
 	repo = /Volumes/Data/github/serenity
 [fetch]
 	showForcedUpdates = true
+	prune = true
