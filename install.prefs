@@ -22,7 +22,6 @@ defaults write com.apple.ActivityMonitor    UpdatePeriod                    -int
 defaults write com.apple.dock               autohide                        -bool true
 defaults write com.apple.dock               mru-spaces                      -bool false
 defaults write com.apple.dock               orientation                     -string "right"
-defaults write com.apple.dock               static-only                     -bool true      # Only show open apps
 
 # Hot corners
 # Possible values:
