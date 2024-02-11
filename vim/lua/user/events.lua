@@ -10,10 +10,17 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         local hands_off_these_files = { "gitcommit", "gitrebase", "netrw" }
         if not vim.tbl_contains(hands_off_these_files, vim.o.filetype) then
+            -- Get the last position as {row, col}, where row is 1-based. Get
+            -- {0,0} if there is no mark.
             local position = vim.api.nvim_buf_get_mark(0, '"')
-            if position ~= { 0, 0 } then
-                vim.api.nvim_win_set_cursor(0, position)
+            if position == { 0, 0 } then
+                return
             end
+            local max_line = vim.fn.line("$")
+            if position[1] > max_line then
+                position[1] = max_line
+            end
+            vim.api.nvim_win_set_cursor(0, position)
         end
     end,
 })
