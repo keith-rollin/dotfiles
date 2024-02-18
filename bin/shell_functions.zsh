@@ -146,6 +146,33 @@ cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
+chpwd()
+{
+    local venv_path=$(find_python_root)
+    if [ "$venv_path" = "/tmp/venv_does_not_exist" ]
+    then
+        # We are not in a directory tree that has a virtual env. If a virtual
+        # env is activated, deactivate it. Otherwise, there's nothing to do.
+
+        if [ -n "${VIRTUAL_ENV}" ]
+        then
+            deactivate
+        fi
+    else
+        # We are in a directory tree that has a virtual env. Ensure that
+        # there's an "activate" script and invoke it (first checking that the
+        # environment we're activating isn't already the current one).
+
+        if [ "${venv_path}" != "${VIRTUAL_ENV}" ]
+        then
+            if [ -f "${venv_path}/bin/activate" ]
+            then
+                source "${venv_path}/bin/activate"
+            fi
+        fi
+    fi
+}
+
 cleanupds()
 {
     local locations=(
@@ -170,6 +197,20 @@ cleanupds()
         find -x "${locations[@]}" -type f -name '.DS_Store' -print -delete 2> /dev/null
     fi
 }
+
+# command_not_found_handler()
+# {
+#     if [ -x "./venv/bin/$1" ]
+#     then
+#         local exe="./venv/bin/$1"
+#         shift
+#         "$exe" "$@"
+#         return $?
+#     else
+#         echo "zsh: command not found: $1"
+#         return 127
+#     fi
+# }
 
 create_link()
 {
@@ -221,7 +262,7 @@ delete_python_packages()
 {
     local all_packages=( \
             $( \
-                py -m pip list  \
+                python3 -m pip list  \
                 | tail -n +3 \
                 | grep -v '^pip' \
                 | grep -v '^wheel' \
@@ -231,7 +272,7 @@ delete_python_packages()
 
     if (( "${#all_packages}" != 0 ))
     then
-        py -m pip uninstall --yes "${all_packages[@]}"
+        python3 -m pip uninstall --yes "${all_packages[@]}"
     fi
 }
 
@@ -293,6 +334,22 @@ filter()
 
         (( $ITEMS_TO_REMOVE[(I)${ITEM_TO_TEST##*/}] )) || echo "${ITEM_TO_TEST}"
     done
+}
+
+find_python_root()
+{
+    local root=$(realpath .)
+    while true
+    do
+        [ "$root" = "/" ] && { echo "/tmp/venv_does_not_exist"; return; }
+        [ -f "$root/pyvenv.cfg" ] && { echo "$root"; return; }
+        for d in $(find "$root" -maxdepth 1 -type d)
+        do
+            [ -f "$d/pyvenv.cfg" ] && { echo "$d"; return; }
+        done
+        root=$(dirname "$root")
+    done
+    echo "/tmp/should_not_get_here"
 }
 
 fix_nvim()
@@ -540,39 +597,23 @@ prepend_path()
     path=("$p" "${path[@]}")
 }
 
-py()
-{
-    local result=0
-
-    find_python_root()
-    {
-        local root=$(realpath .)
-        while true
-        do
-            [ "$root" = "/" ] && { echo "/tmp/venv_does_not_exist"; return; }
-            [ -f "$root/pyvenv.cfg" ] && { echo "$root"; return; }
-            for d in $(find "$root" -maxdepth 1 -type d)
-            do
-                [ -f "$d/pyvenv.cfg" ] && { echo "$d"; return; }
-            done
-            root=$(dirname "$root")
-        done
-        echo "/tmp/should_not_get_here"
-    }
-
-    try_python()
-    {
-        is_executable "$1" || { false; return; }
-        "$@"
-        result=$?
-        true
-    }
-
-    try_python "$(find_python_root)/bin/python3" "$@" && return $result
-    try_python "$(brew --prefix)/bin/python3" "$@" && return $result
-    try_python "python3" "$@" && return $result
-    echo "Could not find a python"
-}
+# py()
+# {
+#     local result=0
+#
+#     try_python()
+#     {
+#         is_executable "$1" || { false; return; }
+#         "$@"
+#         result=$?
+#         true
+#     }
+#
+#     try_python "$(find_python_root)/bin/python3" "$@" && return $result
+#     try_python "$(brew --prefix)/bin/python3" "$@" && return $result
+#     try_python "python3" "$@" && return $result
+#     echo "Could not find a python"
+# }
 
 reload()
 {
@@ -641,14 +682,14 @@ up()
 
 update_pip()
 {
-    py -m pip install --upgrade pip setuptools wheel
+    python3 -m pip install --upgrade pip setuptools wheel
 }
 
 update_python_packages()
 {
     local out_of_date=( \
             $( \
-                py -m pip list --outdated \
+                python3 -m pip list --outdated \
                 | tail -n +3 \
                 | awk '{print $1}' \
             ) \
@@ -656,7 +697,7 @@ update_python_packages()
 
     if (( "${#out_of_date}" != 0 ))
     then
-        py -m pip install --upgrade "${out_of_date[@]}"
+        python3 -m pip install --upgrade "${out_of_date[@]}"
     fi
 }
 

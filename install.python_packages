@@ -30,9 +30,9 @@ PYTHON_PACKAGES=(
     onepassword-keyring # Implementation of 1Password as keyring backend (keyring installed by twine)
 )
 
-local TO_INSTALL=( $(filter PYTHON_PACKAGES $(py -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
+local TO_INSTALL=( $(filter PYTHON_PACKAGES $(python3 -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
 echo $TO_INSTALL
-(( $#TO_INSTALL > 0 )) && py -m pip install "${TO_INSTALL[@]}"
+(( $#TO_INSTALL > 0 )) && python3 -m pip install "${TO_INSTALL[@]}"
 
 unset PYTHON_PACKAGES
 
