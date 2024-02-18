@@ -106,6 +106,7 @@ export VISUAL="${EDITOR}"
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
+export OP_ACCOUNT='rollin-family.1password.com'
 
 # PROMPT/PS1
 #

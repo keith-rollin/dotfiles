@@ -27,6 +27,7 @@ PYTHON_PACKAGES=(
     beautifulsoup4  # Screen-scraping library
     build           # A simple, correct Python build frontend
     twine           # Collection of utilities for publishing packages on PyPI
+    onepassword-keyring # Implementation of 1Password as keyring backend (keyring installed by twine)
 )
 
 local TO_INSTALL=( $(filter PYTHON_PACKAGES $(py -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
