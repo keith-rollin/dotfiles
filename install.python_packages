@@ -25,9 +25,10 @@ source "${DOTFILES}/bin/shell_functions.zsh"
 
 PYTHON_PACKAGES=(
     beautifulsoup4  # Screen-scraping library
-    build           # A simple, correct Python build frontend
-    twine           # Collection of utilities for publishing packages on PyPI
-    onepassword-keyring # Implementation of 1Password as keyring backend (keyring installed by twine)
+    # build           # A simple, correct Python build frontend
+    # twine           # Collection of utilities for publishing packages on PyPI
+    keyring         # Store and access your passwords safely
+    onepassword-keyring # Implementation of 1Password as keyring backend
 )
 
 local TO_INSTALL=( $(filter PYTHON_PACKAGES $(python3 -m pip list 2> /dev/null | awk 'NR>2 { print $1; }')) )
