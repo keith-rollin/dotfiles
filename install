@@ -54,8 +54,12 @@ create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/vim"               .config/nvim
 create_link_in_home "${HERE}/agent.toml"        .config/1password/ssh/agent.toml
 create_link_in_home "$(dirname "${HERE}")"
-create_link_in_home "${HERE}/LaunchAgents/com.phantomprogrammer.apod.plist" \
-    Library/LaunchAgents/com.phantomprogrammer.apod.plist
+
+# Installing a symbolic link doesn't work here -- launchd will skip over it,
+# even though `launchctl load <plist>` succeeds. So copy the file over instead.
+
+mkdir -p "${HOME}/Library/LaunchAgents"
+cp "${HERE}/LaunchAgents/com.phantomprogrammer.apod.plist" "${HOME}/Library/LaunchAgents"
 
 # Install other things.
 
