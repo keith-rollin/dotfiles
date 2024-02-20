@@ -79,11 +79,8 @@ git -C "${HERE}" remote set-url origin git@github.com:keith-rollin/dotfiles.git
 # zsh compinit: insecure directories, run compaudit for list.
 # Ignore insecure directories and continue [y] or abort compinit [n]?
 
-if [ "$HOST_SHELL" = zsh ]
-then
-    compaudit | xargs chmod g-w
-    compaudit | xargs chown root
-fi
+compaudit | xargs chmod g-w
+compaudit | xargs chown root
 
 # Source these one more time so that things can be initialized/configured in
 # the context of all related tools now being available (e.g., $EDITOR being set
