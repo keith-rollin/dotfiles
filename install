@@ -68,8 +68,8 @@ maybe_source "${HERE}/install.python_packages" # Do this after install.brew (for
 maybe_source "${HERE}/install.rust"
 maybe_source "${HERE}/install.prefs"
 
-# Update our dotfiles/.git/config to point use "git" scheme (it's possible that
-# we checked out the repo using the http scheme because we hadn't yet installed
+# Update our dotfiles/.git/config to use "git" scheme (it's possible that we
+# checked out the repo using the http scheme because we hadn't yet installed
 # our ssh keys):
 
 git -C "${HERE}" remote set-url origin git@github.com:keith-rollin/dotfiles.git
