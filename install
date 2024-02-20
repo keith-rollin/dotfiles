@@ -53,6 +53,7 @@ create_link_in_home "${HERE}/gitconfig"         .gitconfig
 create_link_in_home "${HERE}/clang-format.in"   .clang-format
 create_link_in_home "${HERE}/vim"               .config/nvim
 create_link_in_home "${HERE}/agent.toml"        .config/1password/ssh/agent.toml
+create_link_in_home "${HERE}/pypirc"            .config/twine/pypirc
 create_link_in_home "$(dirname "${HERE}")"
 
 # Installing a symbolic link doesn't work here -- launchd will skip over it,
