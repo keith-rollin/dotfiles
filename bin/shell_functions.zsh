@@ -185,9 +185,6 @@ cleanupds()
         /sbin
         /Users
         /usr
-        /Volumes/Data
-        /Volumes/Spare
-        /Volumes/Video
     )
 
     if [[ "${1}" == "-n" ]]
