@@ -91,4 +91,11 @@ compaudit | xargs chown root
 source "${DOTFILES}/zshenv"
 source "${DOTFILES}/bin/shell_functions.zsh"
 
-mkdir -p "${ZSH_CONFIG_DIR}"
+mkdir -p "${XDG_CACHE_HOME}"
+mkdir -p "${XDG_CONFIG_HOME}"
+mkdir -p "${XDG_DATA_HOME}"
+mkdir -p "${XDG_STATE_HOME}"
+
+mkdir -p "${ZSH_STATE_DIR}"
+mkdir -p "${RUST_STATE_DIR}"
+mkdir -p "${PYTHON_STATE_DIR}"

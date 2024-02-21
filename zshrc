@@ -130,7 +130,7 @@ PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 # Shell.
 
 autoload -U compinit
-compinit -d "${ZSH_CONFIG_DIR}/zcompdump"
+compinit -d "${ZSH_STATE_DIR}/zcompdump"
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 
 bindkey "^[[A" history-beginning-search-backward
