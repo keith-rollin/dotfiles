@@ -57,9 +57,9 @@ export DOTFILES=$(dirname -- "$(readlink -f "%R" "${(%):-%N}")")
 # The normal zsh startup sequence is as follows:
 #
 #   * /etc/zshenv   then $ZDOTDIR/.zshenv      Always
-#   * /etc/zprofile then $ZDOTDIR/zprofile     If login shell
-#   * /etc/zshrc    then $ZDOTDIR/zshrc        If interactive shell
-#   * /etc/zlogin   then $ZDOTDIR/zlogin       If login shell
+#   * /etc/zprofile then $ZDOTDIR/.zprofile    If login shell
+#   * /etc/zshrc    then $ZDOTDIR/.zshrc       If interactive shell
+#   * /etc/zlogin   then $ZDOTDIR/.zlogin      If login shell
 #
 # This means that there are places where settings in my .zshenv file can get
 # overridden. And they are. /etc/zshrc is overriding my history file settings.
