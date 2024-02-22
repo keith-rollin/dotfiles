@@ -108,7 +108,10 @@ export OP_ACCOUNT='rollin-family.1password.com'
 
 # PROMPT/PS1
 #
-# TODO: zsh-ify this.
+#   <RED_ON><UNDERLINE_ON>
+#   <USERNAME>@<HOSTNAME>:<CWD>
+#   <RED_OFF><UNDERLINE_OFF>
+#   <CR><%_OR_#>SPACE
 
 PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 
