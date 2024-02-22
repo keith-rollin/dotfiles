@@ -85,27 +85,12 @@ then
     # HOMEBREW_REPOSITORY.
 
     eval "$(${BREW_PATH}/bin/brew shellenv)"
-
-    # "curl is keg-only, which means it was not symlinked into /usr/local,
-    # because macOS already provides this software and installing another version in
-    # parallel can cause all kinds of trouble."
-    #
-    # If you need to have curl first in your PATH, run:
-
-    # prepend_path "${BREW_PATH}/opt/curl/bin" # Do I want this?
 fi
 unset BREW_PATH
 
 source_rust_env
 
 prepend_path "${DOTFILES}/bin"
-
-# Do I want to do this (from brew package installation ouput)?
-#
-# All commands have been installed with the prefix "g".
-# If you need to use these commands with their normal names, you
-# can add a "gnubin" directory to your PATH from your bashrc like:
-#   PATH="/usr/local/opt/libtool/libexec/gnubin:$PATH"
 
 # Find the best-looking vim-ish.
 
