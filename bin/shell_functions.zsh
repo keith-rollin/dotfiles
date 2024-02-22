@@ -241,11 +241,6 @@ create_link_in_home()
     create_link "$real_file" "$sym_file"
 }
 
-delete_brew()
-{
-    sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
-}
-
 delete_lazy()
 {
     rm -rf ~/.local/{share,state}/nvim/lazy
