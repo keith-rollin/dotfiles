@@ -90,7 +90,7 @@ remove_brew()
     echo
 
     brew rm --zap "${CASKS[@]}"
-    delete_brew
+    sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
     sudo rm -rf $(brew_path)
 }
 
