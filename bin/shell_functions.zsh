@@ -627,6 +627,7 @@ source_rust_env()
     [[ -f "${CARGO_HOME}/env" ]] && { source "${CARGO_HOME}/env"; return; }
     [[ -f "${HOME}/.cargo/env" ]] && { source "${HOME}/.cargo/env"; return; }
     [[ -f "${HOME}/.local/cargo/env" ]] && { source "${HOME}/.local/cargo/env"; return; }
+    [[ -f "${HOME}/.local/state/rust/cargo/env" ]] && { source "${HOME}/.local/state/rust/cargo/env"; return; }
 }
 
 sudo_keep_alive()
