@@ -6,7 +6,7 @@
     <string>com.phantomprogrammer.apod</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/opt/homebrew/bin/python3</string>
+        <string>/Users/keith/Documents/src/apod/venv/bin/python3</string>
         <string>/Users/keith/Documents/src/apod/main.py</string>
     </array>
     <key>WorkingDirectory</key>
