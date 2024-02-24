@@ -17,7 +17,6 @@
 #       * com.phantomprogrammer.apod.plist
 #       * src
 #   * Install Homebrew
-#   * Install Python packages
 #   * Install Rust
 #   * Set system/application settings
 #   * Update dotfiles's gitconfig
@@ -65,7 +64,6 @@ cp "${HERE}/LaunchAgents/com.phantomprogrammer.apod.plist" "${HOME}/Library/Laun
 # Install other things.
 
 maybe_source "${HERE}/install.brew"
-maybe_source "${HERE}/install.python_packages" # Do this after install.brew (for python)
 maybe_source "${HERE}/install.rust"
 maybe_source "${HERE}/install.prefs"
 
