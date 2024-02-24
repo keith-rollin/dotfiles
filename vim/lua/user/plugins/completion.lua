@@ -30,8 +30,10 @@ return {
             },
 
             mapping = cmp.mapping.preset.insert({
-                ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-                ["<Tab>"] = cmp.mapping.select_next_item(),
+                -- These conflict with github-copilot. Let's rely on the default
+                -- Up/Down handlers for now.
+                -- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+                -- ["<Tab>"] = cmp.mapping.select_next_item(),
                 ["<CR>"] = cmp.mapping.confirm({ select = false }),
                 ["<ESC>"] = cmp.mapping.abort(),
             }),

@@ -63,6 +63,7 @@ require("user.misc") -- Stuuuuuffff
 require("user.options") -- Set our options ("set" and "setlocal" equivalents)
 require("user.prelazy") -- Define 'spec' function
 spec("user.plugins.comment")
+spec("user.plugins.copilot")
 spec("user.plugins.completion")
 spec("user.plugins.dap")
 spec("user.plugins.indent")
