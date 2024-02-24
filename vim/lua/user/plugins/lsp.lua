@@ -78,7 +78,8 @@ local ENSURE_INSTALLED = {
 
     "debugpy",
 
-    "beautysh",
+    -- "beautysh", -- No longer supported
+    -- "bashls", -- I'm not sure if this is the same as beautysh
     "black",
     "isort",
     "ruff",
@@ -299,7 +300,7 @@ return {
             local null_ls = require("null-ls")
             null_ls.setup({
                 sources = {
-                    null_ls.builtins.formatting.beautysh,
+                    -- null_ls.builtins.formatting.beautysh,
                     null_ls.builtins.formatting.black,
                     null_ls.builtins.formatting.isort,
                     null_ls.builtins.formatting.stylua.with({
