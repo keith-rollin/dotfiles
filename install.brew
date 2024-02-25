@@ -43,7 +43,9 @@ APPS=(
     python          # Interpreted, interactive, object-oriented programming language
     python-tk       # Python interface to Tcl/Tk
     ripgrep         # Search tool like grep and The Silver Searcher
+    ruff            # An extremely fast Python linter and code formatter, written in Rust
     tree            # Display directories as trees (with optional color/HTML output)
+    uv              # An extremely fast Python package installer and resolver, written in Rust
     watch           # Executes a program periodically, showing output fullscreen
 
     # Needed for building neovim.
