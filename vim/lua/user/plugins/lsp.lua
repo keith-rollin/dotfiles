@@ -78,8 +78,7 @@ local ENSURE_INSTALLED = {
 
     "debugpy",
 
-    -- "beautysh", -- No longer supported
-    -- "bashls", -- I'm not sure if this is the same as beautysh
+    "beautysh",
     "black",
     "isort",
     "ruff",
@@ -293,14 +292,16 @@ return {
     {
         "nvimtools/none-ls.nvim",
         dependencies = {
+            "nvimtools/none-ls-extras.nvim",
             "nvim-lua/plenary.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         config = function()
             local null_ls = require("null-ls")
+            -- local null_ls_extras = require("none-ls")
             null_ls.setup({
                 sources = {
-                    -- null_ls.builtins.formatting.beautysh,
+                    -- null_ls_extras.builtins.formatting.beautysh,
                     null_ls.builtins.formatting.black,
                     null_ls.builtins.formatting.isort,
                     null_ls.builtins.formatting.stylua.with({
