@@ -59,10 +59,11 @@
 -- For reference, the list of everything that Mason can install through its UI
 -- and that mason-tool-installer can install via Mason's API is here:
 --
---      https://github.com/mason-org/mason-registry/blob/main/packages/isort/package.yaml
+--      https://github.com/mason-org/mason-registry/tree/main/packages
 --
 -- The list of everything that mason-lspconfig can install through its
--- ensure_installed facility is here:
+-- ensure_installed facility is here (the string to specify is the left-hand
+-- one):
 --
 --      https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
 --
@@ -71,17 +72,19 @@
 --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
 local ENSURE_INSTALLED = {
+    -- LSP servers, handled by mason
     -- "clangd",
     "lua_ls",
-    "pyright",
+    "pyright",  -- I keep this around only for symbol renaming.
     "rust_analyzer",
+    "ruff_lsp", -- NOTE: it's possible to install `ruff` via Mason, but I'm opting to do it via homebrew.
 
+    -- DAP servers, handled by nvim-dap
     "debugpy",
 
+    -- Linters/formatters, handled by none-ls
     "beautysh",
-    "black",
-    "isort",
-    "ruff",
+    "isort", -- I keep this around to re-sort on save (ruff will re-sort on demand, but doesn't seem to do that on save).
     "stylua",
 }
 
@@ -138,6 +141,7 @@ return {
                         if client and client.supports_method("textDocument/formatting") then
                             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
                             vim.api.nvim_create_autocmd("BufWritePre", {
+                                desc = "Format on save",
                                 group = augroup,
                                 buffer = bufnr,
                                 callback = function()
@@ -224,16 +228,6 @@ return {
                     handlers = {
                         default_handler,
 
-                        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#pyright
-                        -- https://github.com/microsoft/pyright/blob/main/docs/configuration.md
-                        -- ["pyright"] = function()
-                        --     default_handler("pyright", {
-                        --         root_dir = function()
-                        --             vim.fn.getcwd()
-                        --         end,
-                        --     })
-                        -- end,
-
                         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#lua_ls
                         -- https://luals.github.io/wiki/settings/
                         ["lua_ls"] = function()
@@ -301,7 +295,6 @@ return {
             local extras_formatting = require("null-ls.formatting")
             null_ls.setup({
                 sources = {
-                    null_ls.builtins.formatting.black,
                     extras_formatting.beautysh,
                     null_ls.builtins.formatting.isort,
                     null_ls.builtins.formatting.stylua.with({
