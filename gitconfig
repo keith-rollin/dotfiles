@@ -44,15 +44,13 @@
 [core]
 	fsmonitor = true
 [scalar]
-	repo = /Volumes/Data/github/WebKit
-	repo = /Volumes/Data/github/gcc/src
-	repo = /Volumes/Data/github/llvm/src
-	repo = /Volumes/Data/github/serenity
+	repo = /Users/keith/Data/github/webkit/src
+	repo = /Users/keith/Data/github/serenity/src
+	repo = /Users/keith/Data/github/jakt/src
 [maintenance]
-	repo = /Volumes/Data/github/WebKit
-	repo = /Volumes/Data/github/gcc/src
-	repo = /Volumes/Data/github/llvm/src
-	repo = /Volumes/Data/github/serenity
+	repo = /Users/keith/Data/github/webkit/src
+	repo = /Users/keith/Data/github/serenity/src
+	repo = /Users/keith/Data/github/jakt/src
 [fetch]
 	showForcedUpdates = true
 	prune = true
