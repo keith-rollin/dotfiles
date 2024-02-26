@@ -116,6 +116,9 @@ export OP_ACCOUNT='rollin-family.1password.com'
 PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 
 # If we are using brew and have git installed, then set up the git prompt.
+# Because we're taking control over how this looks, we'll need to reimplement a
+# bit of what venv/virtualenv/uv does when it shows the current virtual
+# environment in the prompt.
 
 BREW_PATH="$(brew_path)"
 BREW_APP="${BREW_PATH}/bin/brew"
@@ -127,7 +130,12 @@ then
     then
         source "${GIT_PROMPT}"
         precmd () {
-            __git_ps1 '%F{red}%B>>> %~' $'%f%b\n%# ' ' >>> %s'
+            if [ -n "${VIRTUAL_ENV}" ]
+            then
+                __git_ps1 "%F{red}%B>>> $(basename "${VIRTUAL_ENV}") >>> %~" $'%f%b\n%# ' ' >>> %s'
+            else
+                __git_ps1 '%F{red}%B>>> %~' $'%f%b\n%# ' ' >>> %s'
+            fi
         }
         export GIT_PS1_SHOWDIRTYSTATE=1
         export GIT_PS1_SHOWSTASHSTATE=1
