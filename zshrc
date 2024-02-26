@@ -115,6 +115,30 @@ export OP_ACCOUNT='rollin-family.1password.com'
 
 PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
 
+# If we are using brew and have git installed, then set up the git prompt.
+
+BREW_PATH="$(brew_path)"
+BREW_APP="${BREW_PATH}/bin/brew"
+if [[ -e "${BREW_APP}" && "$(whence -p git)" == "${BREW_PATH}/bin/git" ]]
+then
+    GIT_VERSION=$(git --version | cut -d' ' -f3)
+    GIT_PROMPT=$("${BREW_APP}" --cellar)/git/${GIT_VERSION}/etc/bash_completion.d/git-prompt.sh
+    if [ -e "${GIT_PROMPT}" ]
+    then
+        source "${GIT_PROMPT}"
+        precmd () {
+            __git_ps1 '%F{red}%B>>> %~' $'%f%b\n%# ' ' >>> %s'
+        }
+        export GIT_PS1_SHOWDIRTYSTATE=1
+        export GIT_PS1_SHOWSTASHSTATE=1
+        export GIT_PS1_SHOWUNTRACKEDFILES=1
+        export GIT_PS1_SHOWUPSTREAM="auto"
+        export GIT_PS1_SHOWCONFLICTSTATE="yes"
+    fi
+fi
+unset BREW_APP BREW_PATH GIT_PROMPT GIT_VERSION
+
+
 # Shell.
 
 autoload -U compinit
@@ -136,11 +160,6 @@ if is_executable brew
 then
     fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
 fi
-
-# Remove/disable git completion, since it's agonizingly slow on large
-# projects like WebKit.
-
-compdef -d git
 
 # Define a `help` function that (mostly) works like bash's.
 # Note that it won't directly bring you to documentation for low-level
