@@ -30,12 +30,13 @@ return {
             },
 
             mapping = cmp.mapping.preset.insert({
-                -- These conflict with github-copilot. Let's rely on the default
-                -- Up/Down handlers for now.
-                -- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-                -- ["<Tab>"] = cmp.mapping.select_next_item(),
-                ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                ["<ESC>"] = cmp.mapping.abort(),
+                -- I'd like to use <TAB>/<S-TAB>, but they conflict with github-copilot.
+                ["<Left"] = cmp.mapping.select_prev_item(),         -- Alias for <Up>
+                ["<C-k"] = cmp.mapping.select_prev_item(),          -- Alias for <Up>
+                ["<Right>"] = cmp.mapping.select_next_item(),       -- Alias for <Down>
+                ["<C-j>"] = cmp.mapping.select_next_item(),         -- Alias for <Down>
+                ["<CR>"] = cmp.mapping.confirm({ select = false }), -- Alias for <C-y>
+                ["<ESC>"] = cmp.mapping.abort(),                    -- Alias for <C-e>
             }),
 
             sources = {
