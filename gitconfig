@@ -43,14 +43,6 @@
 	date = local
 [core]
 	fsmonitor = true
-[scalar]
-	repo = /Users/keith/Data/github/webkit/src
-	repo = /Users/keith/Data/github/serenity/src
-	repo = /Users/keith/Data/github/jakt/src
-[maintenance]
-	repo = /Users/keith/Data/github/webkit/src
-	repo = /Users/keith/Data/github/serenity/src
-	repo = /Users/keith/Data/github/jakt/src
 [fetch]
 	showForcedUpdates = true
 	prune = true
