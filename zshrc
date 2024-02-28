@@ -114,6 +114,7 @@ export OP_ACCOUNT='rollin-family.1password.com'
 #   <CR><%_OR_#>SPACE
 
 PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
+PS1=$'%F{red}%B>>> %~%f%b\n%# '
 
 # If we are using brew and have git installed, then set up the git prompt.
 # Because we're taking control over how this looks, we'll need to reimplement a
@@ -142,6 +143,11 @@ then
         export GIT_PS1_SHOWUNTRACKEDFILES=1
         export GIT_PS1_SHOWUPSTREAM="auto"
         export GIT_PS1_SHOWCONFLICTSTATE="yes"
+        # unset GIT_PS1_SHOWDIRTYSTATE
+        # unset GIT_PS1_SHOWSTASHSTATE
+        unset GIT_PS1_SHOWUNTRACKEDFILES
+        # unset GIT_PS1_SHOWUPSTREAM
+        # unset GIT_PS1_SHOWCONFLICTSTATE
     fi
 fi
 unset BREW_APP BREW_PATH GIT_PROMPT GIT_VERSION
