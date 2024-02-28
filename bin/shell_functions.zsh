@@ -330,7 +330,26 @@ filter()
 
 find_python_root()
 {
-    local root=$(realpath .)
+    local here=$(realpath .)
+
+    # If a virtual environment is active, see if we're in a directory that's
+    # under it.
+
+    if [[ -n "${VIRTUAL_ENV}" ]]
+    then
+        local virtual_env_parent=$(dirname "${VIRTUAL_ENV}")
+        if [[ "${here}" =~ "${virtual_env_parent}".* ]]
+        then
+            echo "${virtual_env_parent}"
+            return
+        fi
+    fi
+
+    # I'm not sure if this should happen, but even if a virtual environment is
+    # not activated, see if we're in a directory hierarchy that nonetheless has
+    # one.
+
+    local root="$here"
     while true
     do
         [ "$root" = "/" ] && { echo "/tmp/venv_does_not_exist"; return; }
