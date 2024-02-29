@@ -195,20 +195,6 @@ cleanupds()
     fi
 }
 
-# command_not_found_handler()
-# {
-#     if [ -x "./venv/bin/$1" ]
-#     then
-#         local exe="./venv/bin/$1"
-#         shift
-#         "$exe" "$@"
-#         return $?
-#     else
-#         echo "zsh: command not found: $1"
-#         return 127
-#     fi
-# }
-
 create_link()
 {
     # Create or update links in my home directory to handy things elsewhere.
@@ -607,24 +593,6 @@ prepend_path()
     element_in_array "$p" "${path[@]}" && return 0
     path=("$p" "${path[@]}")
 }
-
-# py()
-# {
-#     local result=0
-#
-#     try_python()
-#     {
-#         is_executable "$1" || { false; return; }
-#         "$@"
-#         result=$?
-#         true
-#     }
-#
-#     try_python "$(find_python_root)/bin/python3" "$@" && return $result
-#     try_python "$(brew --prefix)/bin/python3" "$@" && return $result
-#     try_python "python3" "$@" && return $result
-#     echo "Could not find a python"
-# }
 
 reload()
 {
