@@ -197,10 +197,27 @@ cleanupds()
 
 create_link()
 {
+    # Test to see if HERE is set or not. We use this check to determine if
+    # we're being called from the install script (which is the only context in
+    # which this function should be called).
+    #
+    # The approach taken here is from: https://stackoverflow.com/a/42655305. I
+    # don't know how/why it works. I don't see anything in the Bash manual
+    # describing what it means to append "+1" to a parameter name.
+
+    if [ -z "${HERE+1}" ]
+    then
+        echo "### create_link() should only be called from the 'install' script."
+        return
+    fi
+
     # Create or update links in my home directory to handy things elsewhere.
 
     local real_file="$1"
     local sym_file="$2"
+
+    local REALPATH="${HERE}/bin/realpath"
+    local LNS="${HERE}/bin/lns"
 
     real_file="$("${REALPATH}" "${real_file}")"
 
@@ -211,7 +228,7 @@ create_link()
     fi
 
     rm -f "${sym_file}"
-    mkdir -p "$(dirname "${sym_file}")"
+    [[ -e "$(dirname "${sym_file}")" ]] || mkdir -p "$(dirname "${sym_file}")"
     "${LNS}" "${real_file}" "${sym_file}"
 }
 
