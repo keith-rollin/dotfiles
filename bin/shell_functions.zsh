@@ -197,29 +197,28 @@ cleanupds()
 
 create_link()
 {
-    # Test to see if HERE is set or not. We use this check to determine if
-    # we're being called from the install script (which is the only context in
-    # which this function should be called).
-    #
-    # The approach taken here is from: https://stackoverflow.com/a/42655305. I
-    # don't know how/why it works. I don't see anything in the Bash manual
-    # describing what it means to append "+1" to a parameter name.
-
-    if [ -z "${HERE+1}" ]
-    then
-        echo "### create_link() should only be called from the 'install' script."
-        return
-    fi
-
     # Create or update links in my home directory to handy things elsewhere.
 
     local real_file="$1"
     local sym_file="$2"
 
-    local REALPATH="${HERE}/bin/realpath"
-    local LNS="${HERE}/bin/lns"
+    # Test to see if DOTFILES is set or not. We need this variable find our
+    # `realpath` and `lns` utilities during installation.
+    #
+    # The approach taken here is from: https://stackoverflow.com/a/42655305. I
+    # don't know how/why it works. I don't see anything in the Bash manual
+    # describing what it means to append "+1" to a parameter name.
 
-    real_file="$("${REALPATH}" "${real_file}")"
+    if [ -z "${DOTFILES+1}" ]
+    then
+        echo "### create_link() should only be called with DOTFILES already set."
+        return
+    fi
+
+    local _realpath="${DOTFILES}/bin/realpath"
+    local _lns="${DOTFILES}/bin/lns"
+
+    real_file="$("${_realpath}" "${real_file}")"
 
     if [ -e "${sym_file}" -a ! -L "${sym_file}" ]
     then
@@ -229,7 +228,7 @@ create_link()
 
     rm -f "${sym_file}"
     [[ -e "$(dirname "${sym_file}")" ]] || mkdir -p "$(dirname "${sym_file}")"
-    "${LNS}" "${real_file}" "${sym_file}"
+    "${_lns}" "${real_file}" "${sym_file}"
 }
 
 create_link_in_home()
