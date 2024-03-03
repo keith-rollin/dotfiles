@@ -131,11 +131,15 @@ then
     then
         source "${GIT_PROMPT}"
         precmd () {
+            local line1='%F{red}%B>>> %~%F{blue}'
+            local line2=$'%f%b\n%# '
+            local git_bit=' >>> %s'
             if [ -n "${VIRTUAL_ENV}" ]
             then
-                __git_ps1 "%F{red}%B>>> $(basename "${VIRTUAL_ENV}") >>> %~" $'%f%b\n%# ' ' >>> %s'
+                local line1_venv="%F{green}%B>>> $(basename "${VIRTUAL_ENV}")"
+                __git_ps1 "$line1_venv $line1" "$line2" "$git_bit"
             else
-                __git_ps1 '%F{red}%B>>> %~' $'%f%b\n%# ' ' >>> %s'
+                __git_ps1 "$line1" "$line2" "$git_bit"
             fi
         }
         export GIT_PS1_SHOWDIRTYSTATE=1
@@ -143,11 +147,13 @@ then
         export GIT_PS1_SHOWUNTRACKEDFILES=1
         export GIT_PS1_SHOWUPSTREAM="auto"
         export GIT_PS1_SHOWCONFLICTSTATE="yes"
+        export GIT_PS1_SHOWCOLORHINTS=1
         # unset GIT_PS1_SHOWDIRTYSTATE
         # unset GIT_PS1_SHOWSTASHSTATE
         unset GIT_PS1_SHOWUNTRACKEDFILES
         # unset GIT_PS1_SHOWUPSTREAM
         # unset GIT_PS1_SHOWCONFLICTSTATE
+        unset GIT_PS1_SHOWCOLORHINTS
     fi
 fi
 unset BREW_APP BREW_PATH GIT_PROMPT GIT_VERSION
