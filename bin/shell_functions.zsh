@@ -435,7 +435,7 @@ fix_nvim()
     fi
 }
 
-git_top()
+gtop()
 {
     # Go To Git Top.
 
@@ -637,6 +637,12 @@ prepend_path()
 
     element_in_array "$p" "${path[@]}" && return 0
     path=("$p" "${path[@]}")
+}
+
+ptop()
+{
+    local python_root=$(find_python_root)
+    [ -n "${python_root}" ] && cd "${python_root}"
 }
 
 reload()
