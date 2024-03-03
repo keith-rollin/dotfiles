@@ -108,56 +108,76 @@ export OP_ACCOUNT='rollin-family.1password.com'
 
 # PROMPT/PS1
 #
-#   <RED_ON><UNDERLINE_ON>
-#   <USERNAME>@<HOSTNAME>:<CWD>
-#   <RED_OFF><UNDERLINE_OFF>
-#   <CR><%_OR_#>SPACE
+# Show two lines. The first line show the directory in red as:
+#
+#   ">>> /path/to/working/directory"
+#
+# We also prepare for the possibility of showing the git status by setting up
+# subsequent text to be blue.
+#
+# The second line shows the prompt simply as '%' or '#' depending on whether we
+# are in 'su' mode or not.
+#
+# If we do need to show the python virtual environment or git status, we'll
+# handle that in the precmd function.
 
-PS1=$'%F{red}%U%n@%m:%~%f%u\n%# '
-PS1=$'%F{red}%B>>> %~%f%b\n%# '
+PS1_LINE1='%F{red}%B>>> %~%F{blue}'
+PS1_LINE2=$'%f%b\n%# '
 
-# If we are using brew and have git installed, then set up the git prompt.
-# Because we're taking control over how this looks, we'll need to reimplement a
-# bit of what venv/virtualenv/uv does when it shows the current virtual
-# environment in the prompt.
+# If we are using brew and have git installed, then bring in __git_ps1 that we
+# can use to show the git status in the prompt.
 
-BREW_PATH="$(brew_path)"
-BREW_APP="${BREW_PATH}/bin/brew"
-if [[ -e "${BREW_APP}" && "$(whence -p git)" == "${BREW_PATH}/bin/git" ]]
+BREW_APP="$(brew_path)/bin/brew"
+GIT_APP="$(whence -p git)"
+if [[ -e "${BREW_APP}" && -e "${GIT_APP}" ]]
 then
-    GIT_VERSION=$(git --version | cut -d' ' -f3)
+    GIT_VERSION=$("${GIT_APP}" --version | cut -d' ' -f3)
     GIT_PROMPT=$("${BREW_APP}" --cellar)/git/${GIT_VERSION}/etc/bash_completion.d/git-prompt.sh
-    if [ -e "${GIT_PROMPT}" ]
+    if [[ -e "${GIT_PROMPT}" ]]
     then
         source "${GIT_PROMPT}"
-        precmd () {
-            local line1='%F{red}%B>>> %~%F{blue}'
-            local line2=$'%f%b\n%# '
-            local git_bit=' >>> %s'
-            if [ -n "${VIRTUAL_ENV}" ]
-            then
-                local line1_venv="%F{green}%B>>> $(basename "${VIRTUAL_ENV}")"
-                __git_ps1 "$line1_venv $line1" "$line2" "$git_bit"
-            else
-                __git_ps1 "$line1" "$line2" "$git_bit"
-            fi
-        }
-        export GIT_PS1_SHOWDIRTYSTATE=1
-        export GIT_PS1_SHOWSTASHSTATE=1
-        export GIT_PS1_SHOWUNTRACKEDFILES=1
-        export GIT_PS1_SHOWUPSTREAM="auto"
-        export GIT_PS1_SHOWCONFLICTSTATE="yes"
-        export GIT_PS1_SHOWCOLORHINTS=1
-        # unset GIT_PS1_SHOWDIRTYSTATE
-        # unset GIT_PS1_SHOWSTASHSTATE
-        unset GIT_PS1_SHOWUNTRACKEDFILES
-        # unset GIT_PS1_SHOWUPSTREAM
-        # unset GIT_PS1_SHOWCONFLICTSTATE
+
+        GIT_BIT=' >>> %s'
+
+        GIT_PS1_SHOWCONFLICTSTATE="yes"
+        GIT_PS1_SHOWDIRTYSTATE=1
+        GIT_PS1_SHOWSTASHSTATE=1
+        GIT_PS1_SHOWUPSTREAM="auto"
+
+        unset GIT_PS1_COMPRESSSPARSESTATE
+        unset GIT_PS1_DESCRIBE_STYLE
+        unset GIT_PS1_HIDE_IF_PWD_IGNORED
+        unset GIT_PS1_OMITSPARSESTATE
         unset GIT_PS1_SHOWCOLORHINTS
+        unset GIT_PS1_SHOWUNTRACKEDFILES
+        unset GIT_PS1_STATESEPARATOR
     fi
 fi
-unset BREW_APP BREW_PATH GIT_PROMPT GIT_VERSION
+unset BREW_APP GIT_APP GIT_VERSION GIT_PROMPT
 
+# Now build up the prompt. If git is installed, call __git_ps1 to add the git
+# status. If we have a python virtual environment, add an indicator if it's
+# activated.
+
+precmd () {
+    if [ -n "${VIRTUAL_ENV}" ]
+    then
+        local LINE1_VENV="%F{green}%B>>> $(basename "${VIRTUAL_ENV}")"
+        if [ -n "${GIT_BIT}" ]
+        then
+            __git_ps1 "$LINE1_VENV $PS1_LINE1" "$PS1_LINE2" "$GIT_BIT"
+        else
+            PS1="$LINE1_VENV $PS1_LINE1$PS1_LINE2"
+        fi
+    else
+        if [ -n "${GIT_BIT}" ]
+        then
+            __git_ps1 "$PS1_LINE1" "$PS1_LINE2" "$GIT_BIT"
+        else
+            PS1="$PS1_LINE1$PS1_LINE2"
+        fi
+    fi
+}
 
 # Shell.
 
