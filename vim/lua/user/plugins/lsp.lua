@@ -292,10 +292,9 @@ return {
         },
         config = function()
             local null_ls = require("null-ls")
-            local extras_formatting = require("null-ls.formatting")
             null_ls.setup({
                 sources = {
-                    extras_formatting.beautysh,
+                    require("none-ls.formatting.beautysh"),
                     null_ls.builtins.formatting.isort,
                     null_ls.builtins.formatting.stylua.with({
                         extra_args = {
