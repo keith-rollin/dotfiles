@@ -341,13 +341,11 @@ find_python_root()
     while true
     do
         [ "${root}" = "/" ] && break
-        [ -f "${root}/pyproject.toml" ] && { echo "${root}"; return 0; }
-        [ -f "${root}/setup.cfg" ] && { echo "${root}"; return 0; }
-        [ -f "${root}/setup.py" ] && { echo "${root}"; return 0; }
+        [ -f "${root}/pyproject.toml" ] && { echo "${root}"; return; }
+        [ -f "${root}/setup.cfg" ] && { echo "${root}"; return; }
+        [ -f "${root}/setup.py" ] && { echo "${root}"; return; }
         root=$(dirname "${root}")
     done
-
-    return 1
 }
 
 find_python_venv()
@@ -355,7 +353,10 @@ find_python_venv()
     local here=$(realpath .)
 
     # If a virtual environment is active, see if we're in a directory that's
-    # under it.
+    # under it. When doing this, we assume that VIRTUAL_ENV points to a
+    # directory within our python project root, rather than to the root itself
+    # (which is not conventional, but is something I did when first learning
+    # about virtual environments).
 
     if [ -n "${VIRTUAL_ENV}" ]
     then
@@ -363,35 +364,28 @@ find_python_venv()
         if [[ "${here}" =~ "${virtual_env_parent}".* ]]
         then
             echo "${VIRTUAL_ENV}"
-            return 0
+            return
         fi
     fi
 
-    # I'm not sure if this should happen, but even if a virtual environment is
-    # not activated, see if we're in a directory hierarchy that nonetheless has
-    # one. Do this by looking for a pyvenv.cfg file in a nearby sub-directory.
-    #
-    # This check is expensive, so we do it last.
+    # A virtual environment is not active, so look for an non-activated one. We
+    # do this by moving up the hierarchy, looking for a directory that has a
+    # subdirectory with a pyvenv.cfg file in it.
 
     local root="${here}"
     while true
     do
         [ "${root}" = "/" ] && break
-        if [ -f "${root}/pyproject.toml" -o -f "${root}/setup.cfg" -o -f "${root}/setup.py" ]
+        local pyvenv="$(find "${root}" -maxdepth 2 -path "${root}"/'*'/pyvenv.cfg | head -1)"
+        if [ -n "${pyvenv}" ]
         then
-            local pyvenv="$(find "${root}" -maxdepth 2 -path "${root}"/'*'/pyvenv.cfg | head -1)"
-            if [ -n "${pyvenv}" ]
-            then
-                echo "$(dirname "${pyvenv}")"
-                return 0
-            fi
+            echo "$(dirname "${pyvenv}")"
+            return
         fi
         root=$(dirname "${root}")
     done
 
     # Could not find a virtual environment.
-
-    return 1
 }
 
 fix_nvim()
