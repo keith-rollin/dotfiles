@@ -4,21 +4,6 @@ return {
         vim.o.timeout = true
         vim.o.timeoutlen = 1000
     end,
-    opts = {
-        plugins = {
-            marks = false,
-            registers = false,
-            spelling = { enabled = false },
-        },
-        key_labels = {
-            ["<space>"] = "SPC",
-            ["<cr>"] = "RET",
-            ["<tab>"] = "TAB",
-        },
-        window = {
-            border = "double",
-        },
-    },
     config = function()
         local wk = require("which-key")
         kr.extend({
@@ -52,6 +37,22 @@ return {
             vim.fn.setreg("/", oldquery)
         end
 
+        wk.setup({
+            plugins = {
+                marks = false,
+                registers = false,
+                spelling = { enabled = false },
+            },
+            key_labels = {
+                ["<space>"] = "SPC",
+                ["<cr>"] = "RET",
+                ["<tab>"] = "TAB",
+            },
+            window = {
+                border = "double",
+            },
+        })
+
         kr.mapping.set_normal({
             [","] = { "<cmd>FSHere<CR>", "Switch to paired file" },
             ["."] = { "<c-^>", "Edit alternate file" },
@@ -65,7 +66,7 @@ return {
             e = {
                 name = "Edit",
                 g = { "<cmd>edit ~/.gitconfig<CR>", ".gitconfig" },
-                v = { "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", ".init.lua" },
+                v = { "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua" },
                 z = { "<cmd>edit ~/.zshrc<CR>", ".zshrc" },
             },
             i = {
@@ -78,19 +79,19 @@ return {
                 name = "LSP", -- defined in lsp.lua ("vim.lsp"},
                 l = { "<cmd>nohlsearch<CR>", "Disable highlight" },
             },
-            n = { "<cmd>20Lex<CR>", "Show directory tree" },
+            -- n = { "<cmd>20Lex<CR>", "Show directory tree" },
             -- r defined in lsp.lua (rename),
             s = {
-                name = "Toggle settings",
+                name = "Toggle Settings",
                 i = { "<cmd>set cursorline!<CR>", "Toggle 'cursorline'" },
                 l = { "<cmd>set list!<CR>", "Toggle 'list'" },
                 s = { "<cmd>set spell!<CR>", "Toggle 'spell'" },
                 w = { "<cmd>set wrap!<CR>", "Toggle line wrapping" },
             },
             S = {
-                name = "Split management",
-                h = { "<cmd>split<CR>", "Create horizontal split" },
-                v = { "<cmd>vsplit<CR>", "Create vertical split" },
+                name = "Split Management",
+                h = { "<cmd>split<CR>", "Split horizontally" },
+                v = { "<cmd>vsplit<CR>", "Split vertically" },
                 x = { "<cmd>close<CR>", "Close split" },
             },
             t = {
