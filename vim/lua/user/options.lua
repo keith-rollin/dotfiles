@@ -5,7 +5,7 @@
 
 vim.opt.autoindent = true -- Normally 'autoindent' should also be on when using 'smartindent'.
 vim.opt.autowriteall = true -- Write the file when we switch buffers.
-vim.opt.clipboard = "unnamed" -- Interoperate with the system clipboard.
+vim.opt.clipboard = "unnamedplus" -- Interoperate with the system clipboard.
 vim.opt.completeopt = { "menu", "menuone", "noselect" } -- Mostly for "cmp"
 vim.opt.grepprg = "rg --vimgrep" -- Use ripgrep for grepping.
 vim.opt.list = true -- Show invisible characters.
