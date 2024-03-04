@@ -72,17 +72,28 @@
 --      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
 
 local ENSURE_INSTALLED = {
+    -- All of these are loaded via mason-tool-installer. The names used here are
+    -- the canonical Mason names, as shown on the right hand side of:
+    --
+    --      https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+    --
+    -- Or in the contents of:
+    --
+    --      https://github.com/mason-org/mason-registry/tree/main/packages
+
     -- LSP servers, handled by mason
-    -- "clangd",
-    "lua_ls",
-    "pyright",  -- I keep this around only for symbol renaming.
-    "rust_analyzer",
-    "ruff_lsp", -- NOTE: it's possible to install `ruff` via Mason, but I'm opting to do it via homebrew.
+
+    "lua-language-server",
+    "pyright", -- I keep this around only for symbol renaming.
+    "rust-analyzer",
+    "ruff-lsp", -- NOTE: it's possible to install `ruff` via Mason, but I'm opting to do it via homebrew.
 
     -- DAP servers, handled by nvim-dap
+
     "debugpy",
 
     -- Linters/formatters, handled by none-ls
+
     "beautysh",
     "isort", -- I keep this around to re-sort on save (ruff will re-sort on demand, but doesn't seem to do that on save).
     "stylua",
@@ -91,26 +102,24 @@ local ENSURE_INSTALLED = {
 return {
     {
         "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup({
-                ui = {
-                    border = "double",
-                    keymaps = {
-                        apply_language_filter = "f",
-                        toggle_help = "?",
-                    },
+        opts = {
+            ui = {
+                border = "double",
+                keymaps = {
+                    apply_language_filter = "f",
+                    toggle_help = "?",
                 },
-            })
-        end,
+            },
+        },
     },
 
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = {
-            "folke/which-key.nvim",
-            "hrsh7th/nvim-cmp",
-            "neovim/nvim-lspconfig",
-            "williamboman/mason.nvim",
+            "folke/which-key.nvim", -- So we can establish associated key bindings.
+            "hrsh7th/nvim-cmp", -- So we can hook in code completion.
+            "neovim/nvim-lspconfig", -- So we can call it to configure our LSP servers.
+            "williamboman/mason.nvim", -- So mlsp can call mason-core, mason-core.functional, etc.
         },
         config = function()
             -- Set up an event handler to establish LSP-related key bindings
@@ -273,23 +282,42 @@ return {
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
+            "williamboman/mason.nvim", -- Required for base package downloading functionality.
+            "williamboman/mason-lspconfig.nvim", -- Handy for translating from lspconfig names to Mason package names.
         },
-        config = function()
-            require("mason-tool-installer").setup({
-                ensure_installed = ENSURE_INSTALLED,
-            })
-        end,
+
+        -- Package downloading is actually handled on the VimEnter event.
+
+        opts = {
+            ensure_installed = ENSURE_INSTALLED,
+        },
     },
+
+    -- At the time of this writing, the maintainer of none-ls is removing
+    -- support for many plugins. It's not apparent why he's doing this, but it's
+    -- affected me in that I now have to get beautysh from none-ls-extras.nvim.
+    -- Instead, I may want to move to https://github.com/stevearc/conform.nvim.
+    -- It supports the plugins I currently use.
 
     {
         "nvimtools/none-ls.nvim",
         dependencies = {
-            "nvimtools/none-ls-extras.nvim",
-            "nvim-lua/plenary.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "nvim-lua/plenary.nvim", -- Documented requirement.
+            "nvimtools/none-ls-extras.nvim", -- For beautysh.
         },
+
+        -- This will register the formatters and linters that we want to use.
+        -- Nothing will actually happen until a file of the matching type is
+        -- opened.
+        --
+        -- (Since mason-tool-installer doesn't actually download the tools until
+        -- the VimEnter event, we may end up in a situation where we try to use
+        -- one of the following tools before they're available. This will lead
+        -- to a rough startup, but it should only happen rarely/once.)
+        --
+        -- (NB: I tried setting this up as a simple 'opts' attribute, but I got
+        -- errors trying to resolve the 'require("none-ls...")' statement.)
+
         config = function()
             local null_ls = require("null-ls")
             null_ls.setup({
