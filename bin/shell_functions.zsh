@@ -376,7 +376,7 @@ find_python_venv()
     while true
     do
         [ "${root}" = "/" ] && break
-        local pyvenv="$(find "${root}" -maxdepth 2 -path "${root}"/'*'/pyvenv.cfg | head -1)"
+        local pyvenv="$(find "${root}" -maxdepth 2 -path "${root}"/'*'/pyvenv.cfg 2> /dev/null | head -1)"
         if [ -n "${pyvenv}" ]
         then
             echo "$(dirname "${pyvenv}")"
