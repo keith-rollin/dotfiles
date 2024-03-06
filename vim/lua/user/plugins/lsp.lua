@@ -84,7 +84,7 @@ local ENSURE_INSTALLED = {
     -- LSP servers, handled by mason
 
     "lua-language-server",
-    "pyright", -- I keep this around only for symbol renaming.
+    "pyright",  -- I keep this around only for symbol renaming.
     "rust-analyzer",
     "ruff-lsp", -- NOTE: it's possible to install `ruff` via Mason, but I'm opting to do it via homebrew.
 
@@ -116,9 +116,9 @@ return {
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = {
-            "folke/which-key.nvim", -- So we can establish associated key bindings.
-            "hrsh7th/nvim-cmp", -- So we can hook in code completion.
-            "neovim/nvim-lspconfig", -- So we can call it to configure our LSP servers.
+            "folke/which-key.nvim",    -- So we can establish associated key bindings.
+            "hrsh7th/nvim-cmp",        -- So we can hook in code completion.
+            "neovim/nvim-lspconfig",   -- So we can call it to configure our LSP servers.
             "williamboman/mason.nvim", -- So mlsp can call mason-core, mason-core.functional, etc.
         },
         config = function()
@@ -282,7 +282,7 @@ return {
     {
         "WhoIsSethDaniel/mason-tool-installer.nvim",
         dependencies = {
-            "williamboman/mason.nvim", -- Required for base package downloading functionality.
+            "williamboman/mason.nvim",           -- Required for base package downloading functionality.
             "williamboman/mason-lspconfig.nvim", -- Handy for translating from lspconfig names to Mason package names.
         },
 
@@ -298,11 +298,18 @@ return {
     -- affected me in that I now have to get beautysh from none-ls-extras.nvim.
     -- Instead, I may want to move to https://github.com/stevearc/conform.nvim.
     -- It supports the plugins I currently use.
+    --
+    -- Others to investigate:
+    --
+    --      * formatter.nvim
+    --      * nvim-lint (https://github.com/mfussenegger/nvim-lint)
+    --      * efm-langserver (https://github.com/mattn/efm-langserver with
+    --        https://github.com/creativenull/efmls-configs-nvim)
 
     {
         "nvimtools/none-ls.nvim",
         dependencies = {
-            "nvim-lua/plenary.nvim", -- Documented requirement.
+            "nvim-lua/plenary.nvim",         -- Documented requirement.
             "nvimtools/none-ls-extras.nvim", -- For beautysh.
         },
 
