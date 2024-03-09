@@ -339,12 +339,14 @@ find_python_root()
     # pyproject.toml, setup.cfg, or setup.py.
 
     local root="${here}"
-    while true
+    local prev_root=
+    while [ "${root}" != "${prev_root}" ]
     do
-        [ "${root}" = "/" ] && break
         [ -f "${root}/pyproject.toml" ] && { echo "${root}"; return; }
         [ -f "${root}/setup.cfg" ] && { echo "${root}"; return; }
         [ -f "${root}/setup.py" ] && { echo "${root}"; return; }
+
+        prev_root=${root}
         root=$(dirname "${root}")
     done
 }
@@ -374,15 +376,17 @@ find_python_venv()
     # subdirectory with a pyvenv.cfg file in it.
 
     local root="${here}"
-    while true
+    local prev_root=
+    while [ "${root}" != "${prev_root}" ]
     do
-        [ "${root}" = "/" ] && break
         local pyvenv="$(find "${root}" -maxdepth 2 -path "${root}"/'*'/pyvenv.cfg 2> /dev/null | head -1)"
         if [ -n "${pyvenv}" ]
         then
             echo "$(dirname "${pyvenv}")"
             return
         fi
+
+        prev_root=${root}
         root=$(dirname "${root}")
     done
 
