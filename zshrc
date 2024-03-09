@@ -159,7 +159,7 @@ unset BREW_APP GIT_APP GIT_VERSION GIT_PROMPT
 # status. If we have a python virtual environment, add an indicator if it's
 # activated.
 
-precmd () {
+precmd_set_prompt () {
     if [ -n "${VIRTUAL_ENV}" ]
     then
         local LINE1_VENV="%F{green}%B>>> $(basename "${VIRTUAL_ENV}")"
@@ -178,6 +178,7 @@ precmd () {
         fi
     fi
 }
+add-zsh-hook precmd precmd_set_prompt
 
 # Shell.
 

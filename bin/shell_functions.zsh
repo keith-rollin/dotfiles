@@ -146,7 +146,7 @@ cdf()
     cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
-chpwd()
+chpwd_activate()
 {
     local venv_path=$(find_python_venv)
     if [ -z "${venv_path}"  ]
@@ -172,6 +172,7 @@ chpwd()
         fi
     fi
 }
+add-zsh-hook chpwd chpwd_activate
 
 cleanupds()
 {
