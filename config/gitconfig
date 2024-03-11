@@ -28,7 +28,7 @@
 	status = auto
 	interactive = auto
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [rerere]
 	enabled = true
 [sendemail]
