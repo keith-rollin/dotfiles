@@ -7,26 +7,20 @@
 	default = simple
 [alias]
 	br = branch
-	co = checkout
 	ci = commit
+	co = checkout
+	fix = commit -a --amend --no-edit
 	h = help
-	unstage = reset HEAD --
-	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
-	s = status -s
-	st = status
 	list-remote-branches = ls-remote --heads
 	log1 = log -1
 	logf = log --raw
-	logg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	logl = log --oneline
 	logp = log -p
-	spull = !git svn rebase
-	spush = !git svn dcommit
-	srev = !sh -c 'git svn find-rev r$1 | xargs git show' -
-	unstash = stash pop
-	fix = commit -a --amend --no-edit
+	ls-alias = !git config --list | fgrep 'alias.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | sort
 	shorty = status --short --branch
-	grog = log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+	st = status
+	unstage = reset HEAD --
+	unstash = stash pop
 	wip = commit -a -m wip
 [color]
 	branch = auto
