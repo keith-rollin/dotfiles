@@ -1,0 +1,475 @@
+#!/usr/bin/env zsh
+#
+# Compare with:
+#
+#   * https://cookiecutter.readthedocs.io/en/latest/
+#   * An approach that works from a template directory.
+
+write_about()
+{
+    cat <<-EOS
+		# SPDX-FileCopyrightText: $YEAR-present $AUTHOR
+		#
+		# SPDX-License-Identifier: $LICENSE
+
+
+		__version__ = "1.0.0.dev1"
+	EOS
+}
+
+write_init()
+{
+    cat <<-EOS
+		# SPDX-FileCopyrightText: $YEAR-present $AUTHOR
+		#
+		# SPDX-License-Identifier: $LICENSE
+
+
+		from .__about__ import __version__
+	EOS
+}
+
+write_main()
+{
+	cat <<-EOS
+		# SPDX-FileCopyrightText: $YEAR-present $AUTHOR
+		#
+		# SPDX-License-Identifier: $LICENSE
+
+
+		import sys
+
+		from $PROJECT_NAME.cli import main
+
+		sys.exit(main())
+	EOS
+}
+
+write_cli()
+{
+    cat <<-EOS
+		# SPDX-FileCopyrightText: $YEAR-present $AUTHOR
+		#
+		# SPDX-License-Identifier: $LICENSE
+
+
+		import argparse
+		import sys
+
+		from ${PROJECT_NAME}.__about__ import __version__
+
+
+		def main() -> int:
+		    parser = argparse.ArgumentParser(description="A command-line interface for $PROJECT_NAME")
+		    parser.add_argument("--version", action="version", version=f"$PROJECT_NAME {__version__}")
+		    args = parser.parse_args()
+
+		    print("Hello, world!")
+
+		    return 0
+
+		if __name__ == "__main__":
+		    sys.exit(main())
+	EOS
+}
+
+write_dot_gitignore()
+{
+    cat <<-EOS
+		*.egg-info/
+		.DS_Store
+		__pycache__/
+		bin/
+		dist/
+		include/
+		lib/
+		pyvenv.cfg
+		venv/
+    EOS
+}
+
+write_readme()
+{
+    cat <<-EOS
+		# $PROJECT_NAME
+
+		## Description
+
+		## Installation
+
+		## Usage
+
+		## Development
+
+		## License
+
+		$PROJECT_NAME is licensed under the $LICENSE license. Please see the [LICENSE](LICENSE) file for more information.
+	EOS
+}
+
+write_license()
+{
+    fold -w 80 -s <(curl https://raw.githubusercontent.com/spdx/license-list-data/main/text/$LICENSE.txt)
+}
+
+write_pyproject_toml()
+{
+    cat <<-EOS
+		[build-system]
+		requires = ["setuptools"]
+		build-backend = "setuptools.build_meta"
+
+		[project]
+		name = "$PROJECT_NAME"
+		dynamic = ["version"]
+		description = "Description"
+		readme = "README.md"
+		requires-python = ">=3.11"
+		license = { text = "$LICENSE" }
+		keywords = []
+		authors = [
+		    { name = "$AUTHOR", email = "email@example.com" },
+		]
+		classifiers = [
+		    "Development Status :: 2 - Pre-Alpha",
+		    "Environment :: Console",
+		    "Intended Audience :: Developers",
+		    "License :: OSI Approved :: $LICENSE License",
+		    "Operating System :: OS Independent",
+		    "Programming Language :: Python",
+		    "Programming Language :: Python :: 3.11",
+		    "Programming Language :: Python :: 3.12",
+		    "Programming Language :: Python :: Implementation :: CPython",
+		    "Programming Language :: Python :: Implementation :: PyPy",
+		]
+		dependencies = [
+		]
+
+		[project.optional-dependencies]
+		dev = [
+		    "build",
+		    "twine",
+		    "keyring",
+		    "onepassword-keyring",
+		]
+
+		[project.urls]
+		Documentation = "https://github.com/keith.rollin/${PROJECT_NAME}#readme"
+		Issues = "https://github.com/keith.rollin/${PROJECT_NAME}/issues"
+		Source = "https://github.com/keith.rollin/${PROJECT_NAME}"
+
+		[project.scripts]
+		${PROJECT_NAME} = "${PROJECT_NAME}.cli:main"
+
+		[tool.setuptools.dynamic]
+		version = {attr = "${PROJECT_NAME}.__about__.__version__"}
+
+		# You can find the rule prefixes in:
+		#
+		#   https://github.com/astral-sh/ruff/blob/main/crates/ruff_linter/src/registry.rs
+		#
+		# You can find all the actual codes in:
+		#
+		#   https://github.com/astral-sh/ruff/blob/main/crates/ruff_linter/src/codes.rs
+
+		[tool.ruff.lint]
+		select = [ "ALL" ]
+		ignore = [
+		    # Completely disabled rules:
+		    "AIR",      # Airflow: We don't use airflow
+		    "ASYNC",    # flake8-async: We don't use async/await
+		    "BLE",      # flake8-blind-except: I'm consciously using a bare except
+		    "COM",      # flake8-commas: Trailing comma issues (I disagree with these rules)
+		    "DJ",       # flake8-django: We don't use Django
+		    "EM",       # flake8-errmsg: I disagree with these rules
+		    "ERA",      # eradicate: I have too many comments that look like code
+		    "FLY",      # flynt: We don't use old-style string formatting
+		    "INT",      # flake8-gettext: We don't use gettext
+		    "LOG",      # flake8-logging: We don't use logging
+		    "NPY",      # NumPy-specific rules: We don't use numpy
+		    "PD",       # pandas-vet: We don't use pandas
+		    "PT",       # flake8-pytest-style: We don't use pytest at the moment
+		    "PYI",      # flake8-pyi: We don't use pyi
+		    "TRIO",     # flake8-trio: We don't use trio
+		    "YTT",      # flake8-2020: We don't do anything that this extension is looking for
+
+		    # Individual rules to disable:
+		    "ANN101",   # flake8-annotations: Missing type annotation for self
+		    "ANN102",   # flake8-annotations: Missing type annotation for cls
+		    "D100",     # pydocstyle: Missing docstring in public module
+		    "D101",     # pydocstyle: Missing docstring in public class
+		    "D102",     # pydocstyle: Missing docstring in public method
+		    "D103",     # pydocstyle: Missing docstring in public function
+		    "D104",     # pydocstyle: Missing docstring in public package
+		    "D105",     # pydocstyle: Missing docstring in magic method
+		    "D107",     # pydocstyle: Missing docstring in __init__
+		    "I001",     # isort: (Complains that "from __future__ import annotations" is unsorted)
+		    "PLR0911",  # Pylint: Too many return statements
+		    "PLR0915",  # Pylint: Too many statements (x > 50)
+		    "S105",     # flake8-bandit: Possible hardcoded password assigned to {var} (complains because of assignment to variable named "token")
+		    "S608",     # flake8-bandit: Possible SQL injection vector through string-based query construction
+		    "T201",     # flake8-print: print found
+		    "TRY",      # tryceratops: Avoid specifying long messages outside the exception class
+
+		    # Rules to disable only in development
+		    "FIX002",   # flake8-fixme: Line contains TODO (We're still in development)
+		    "PIE790",   # flake8-pie: Unnecessary `...` literal
+		    "S101",     # flake8-bandit: Use of assert detected
+		    "SLF001",   # flake8-self: Private member accessed
+		    "TD002",    # flake8-todos: Missing author in TODO
+		    "TD003",    # flake8-todos: Missing issue link on the line following this TODO
+		    "TD005",    # flake8-todos: Missing issue description after TODO
+
+		    # The ruff documentation also explicitly recommends the following:
+		    #
+		    #   https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+		    #
+		    # "Ruff's formatter is designed to be used alongside the linter. However,
+		    #  the linter includes some rules that, when enabled, can cause conflicts
+		    #  with the formatter, leading to unexpected behavior. When configured
+		    #  appropriately, the goal of Ruff's formatter-linter compatibility is such
+		    #  that running the formatter should never introduce new lint errors.
+		    #
+		    # "When using Ruff as a formatter, we recommend avoiding the following lint
+		    #  rules:"
+		    #
+		    # "W191",     # tab-indentation (W191)
+		    # "E111",     # indentation-with-invalid-multiple (E111)
+		    # "E114",     # indentation-with-invalid-multiple-comment (E114)
+		    # "E117",     # over-indented (E117)
+		    # "D206",     # indent-with-spaces (D206)
+		    # "D300",     # triple-single-quotes (D300)
+		    # "Q000",     # bad-quotes-inline-string (Q000)
+		    # "Q001",     # bad-quotes-multiline-string (Q001)
+		    # "Q002",     # bad-quotes-docstring (Q002)
+		    # "Q003",     # avoidable-escaped-quote (Q003)
+		    # "COM812",   # missing-trailing-comma (COM812)
+		    # "COM819",   # prohibited-trailing-comma (COM819)
+		    # "ISC001",   # single-line-implicit-string-concatenation (ISC001)
+		    # "ISC002",   # multi-line-implicit-string-concatenation (ISC002)
+		    #
+		    # However, I'm not following these recommendations for now since they are
+		    # not affecting me.
+		]
+
+		[tool.ruff.lint.mccabe]
+		max-complexity = 15
+
+		[tool.isort]
+		py_version = 311 # (Do I need this, when I have requires-python in the [project] section?)
+		force_single_line = true # The ruff docs recommend against this, but it seems to be working.
+
+		[tool.pyright]
+		python_version = "3.11" # (Do I need this, when I have requires-python in the [project] section?)
+
+		# Let ruff do all the kvetching. I'm only using pyright for the symbol-renaming
+		# facility.
+		analyzeUnannotatedFunctions = false
+		strictParameterNoneValue = false
+		enableTypeIgnoreComments = false
+		disableBytesTypePromotions = false
+		strictListInference = false
+		strictDictionaryInference = false
+		strictSetInference = false
+		deprecateTypingAliases = false
+		enableExperimentalFeatures = false
+		reportMissingModuleSource = "none"
+		reportInvalidTypeForm = "none"
+		reportMissingImports = "none"
+		reportUndefinedVariable = "none"
+		reportAssertAlwaysTrue = "none"
+		reportInvalidStringEscapeSequence = "none"
+		reportInvalidTypeVarUse = "none"
+		reportMissingTypeStubs = "none"
+		reportSelfClsParameterName = "none"
+		reportUnsupportedDunderAll = "none"
+		reportUnusedExpression = "none"
+		reportWildcardImportFromLibrary = "none"
+		reportAbstractUsage = "none"
+		reportArgumentType = "none"
+		reportAssertTypeFailure = "none"
+		reportAssignmentType = "none"
+		reportAttributeAccessIssue = "none"
+		reportCallIssue = "none"
+		reportGeneralTypeIssues = "none"
+		reportInconsistentOverload = "none"
+		reportIndexIssue = "none"
+		reportInvalidTypeArguments = "none"
+		reportNoOverloadImplementation = "none"
+		reportOperatorIssue = "none"
+		reportOptionalSubscript = "none"
+		reportOptionalMemberAccess = "none"
+		reportOptionalCall = "none"
+		reportOptionalIterable = "none"
+		reportOptionalContextManager = "none"
+		reportOptionalOperand = "none"
+		reportRedeclaration = "none"
+		reportReturnType = "none"
+		reportTypedDictNotRequiredAccess = "none"
+		reportPrivateImportUsage = "none"
+		reportUnboundVariable = "none"
+		reportUnusedCoroutine = "none"
+		reportUnusedExcept = "none"
+		reportFunctionMemberAccess = "none"
+		reportIncompatibleMethodOverride = "none"
+		reportIncompatibleVariableOverride = "none"
+		reportOverlappingOverload = "none"
+		reportPossiblyUnboundVariable = "none"
+		reportConstantRedefinition = "none"
+		reportDeprecated = "none"
+		reportDuplicateImport = "none"
+		reportIncompleteStub = "none"
+		reportInconsistentConstructor = "none"
+		reportInvalidStubStatement = "none"
+		reportMatchNotExhaustive = "none"
+		reportMissingParameterType = "none"
+		reportMissingTypeArgument = "none"
+		reportPrivateUsage = "none"
+		reportTypeCommentUsage = "none"
+		reportUnknownArgumentType = "none"
+		reportUnknownLambdaType = "none"
+		reportUnknownMemberType = "none"
+		reportUnknownParameterType = "none"
+		reportUnknownVariableType = "none"
+		reportUnnecessaryCast = "none"
+		reportUnnecessaryComparison = "none"
+		reportUnnecessaryContains = "none"
+		reportUnnecessaryIsInstance = "none"
+		reportUnusedClass = "none"
+		reportUnusedImport = "none"
+		reportUnusedFunction = "none"
+		reportUnusedVariable = "none"
+		reportUntypedBaseClass = "none"
+		reportUntypedClassDecorator = "none"
+		reportUntypedFunctionDecorator = "none"
+		reportUntypedNamedTuple = "none"
+		reportCallInDefaultInitializer = "none"
+		reportImplicitOverride = "none"
+		reportImplicitStringConcatenation = "none"
+		reportImportCycles = "none"
+		reportMissingSuperCall = "none"
+		reportPropertyTypeMismatch = "none"
+		reportShadowedImports = "none"
+		reportUninitializedInstanceVariable = "none"
+		reportUnnecessaryTypeIgnoreComment = "none"
+		reportUnusedCallResult = "none"
+	EOS
+}
+
+write_vars()
+{
+    cat <<-EOS
+		#!/usr/bin/env zsh
+
+		# Set up most of our vars.
+
+		project_name=${PROJECT_NAME}
+		project_dir=$(dirname "\${scripts_dir}")
+		dist_dir=\${project_dir}/dist
+		src_dir=\${project_dir}/src/\${project_name}
+		tests_dir=\${project_dir}/tests
+		app_dest_path=\${dist_dir}/\${project_name}
+		tmp_src_dir=/tmp/\${project_name}
+
+		use_uv=\$(whence uv &> /dev/null; echo \$(( 1 - \$? )))
+
+		# We don't want to validate the virtual environment if we're in the process of
+		# setting it up.
+
+		if [[ -z "\${SKIP_VIRTUAL_ENV_VALIDATION}" ]]
+		then
+		    # Make sure there's an activated virtual environment and that it appears to
+		    # be associated with our project.
+
+		    if [[ -z "\${VIRTUAL_ENV}" ]]
+		    then
+		        echo "*** Virtual environment is not activated"
+		        exit 1
+		    fi
+
+		    if [[ ! "\${VIRTUAL_ENV}" =~ \${project_dir}.* ]]
+		    then
+		        echo "*** Wrong virtual environment is activated"
+		        exit 1
+		    fi
+
+		    if [[ ! -d "\${VIRTUAL_ENV}" ]]
+		    then
+		        echo "*** Virtual environment directory does not exist"
+		        exit 1
+		    fi
+
+		    # With that validated, establish some remaining vars.
+
+		    venv_dir=\${VIRTUAL_ENV}
+		    venv_python=\${venv_dir}/bin/python3
+
+		    # We need to find the system-installed python. With a virtual environment
+		    # activated, we can't use use a bare "python3" or it will find
+		    # venv/bin/python3, not the system python3. So deactivate, look for the
+		    # system python, then reactivate.
+		    #
+		    # Regarding that first re-assignment of path, '\${name:#pattern}' means:
+		    #
+		    #   "If the pattern matches the value of name, then substitute the empty
+		    #    string; otherwise, just substitute the value of name.  If name is an
+		    #    array, the matching array elements are removed."
+		    #
+		    # In all of the path-related assignments, we need to make sure to surround
+		    # the rhs with () in order to preserve the array's nature. Otherwise, the
+		    # rhs will be converted to a string.
+
+		    old_path=("\${path[@]}")
+		    path=("\${path[@]:#\${VIRTUAL_ENV}/bin}")
+		    system_python=\$(whence python3)
+		    path=("\${old_path[@]}")
+		    unset old_path
+		else
+		    venv_dir=/invalid
+		    venv_python=\${venv_dir}/bin/python3
+		    system_python=\$(whence python3)
+		fi
+
+		#
+	EOS
+}
+
+AUTHOR="Keith Rollin"
+YEAR=$(date +%Y)
+
+PROJECT_NAME=$1
+if [ -z "${PROJECT_NAME}" ]
+then
+    echo -n "Enter the name of the project: "
+    read PROJECT_NAME
+    [ -z $PROJECT_NAME ] && exit 0
+fi
+
+LICENSE=$2
+if [ -z "${LICENSE}" ]
+then
+    echo -n "Enter the license to use (default: MIT): "
+    read LICENSE
+    LICENSE=${LICENSE:-MIT}
+fi
+
+mkdir -p $PROJECT_NAME/docs
+mkdir -p $PROJECT_NAME/scripts
+mkdir -p $PROJECT_NAME/src/$PROJECT_NAME
+mkdir -p $PROJECT_NAME/tests
+
+write_dot_gitignore > $PROJECT_NAME/.gitignore
+write_license > $PROJECT_NAME/LICENSE
+write_pyproject_toml > $PROJECT_NAME/pyproject.toml
+write_readme > $PROJECT_NAME/README.md
+write_about > $PROJECT_NAME/src/$PROJECT_NAME/__about__.py
+write_init > $PROJECT_NAME/src/$PROJECT_NAME/__init__.py
+write_main > $PROJECT_NAME/src/$PROJECT_NAME/__main__.py
+write_cli > $PROJECT_NAME/src/$PROJECT_NAME/cli.py
+write_vars > $PROJECT_NAME/scripts/vars.sh
+
+touch $PROJECT_NAME/CHANGELOG.md
+
+uv venv $PROJECT_NAME/venv
+git -C $PROJECT_NAME init
+git -C $PROJECT_NAME commit -m "Initial commit" --allow-empty
