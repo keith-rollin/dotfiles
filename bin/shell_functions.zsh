@@ -651,7 +651,12 @@ ptop()
 
 reload()
 {
-    source ~/.zshrc
+    if [[ "$1" == "all" ]]
+    then
+        source ~/.zshrc
+    else
+        source "${DOTFILES}/bin/shell_functions.zsh"
+    fi
 }
 
 rg()
