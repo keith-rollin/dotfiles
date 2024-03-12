@@ -620,6 +620,11 @@ path()
     echo "$PATH" | tr : '\n'
 }
 
+gbip()
+{
+    "$HOME/Data/pit/venv/bin/pit" "$@"
+}
+
 preman() {
     mandoc -T pdf "$(/usr/bin/man -w $@)" | open -fa Preview
 }
