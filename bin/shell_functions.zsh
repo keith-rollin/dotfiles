@@ -813,3 +813,14 @@ xc()
         *)  echo "### Unknown command: $CMD" ;;
     esac
 }
+
+zlibd()
+{
+    # Decompress a zlib-compressed file.
+    # From: https://unix.stackexchange.com/a/49066
+
+    printf "\x1f\x8b\x08\x00\x00\x00\x00\x00" | cat - "$@" | gzip -dc | hexdump -C
+}
+
+
+#
