@@ -622,7 +622,7 @@ path()
 
 gbip()
 {
-    "$HOME/Data/pit/venv/bin/pit" "$@"
+    "$HOME/src/pit/venv/bin/pit" "$@"
 }
 
 preman() {
