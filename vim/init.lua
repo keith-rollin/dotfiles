@@ -65,7 +65,7 @@ require("user.prelazy") -- Define 'spec' function
 spec("user.plugins.comment")
 spec("user.plugins.copilot")
 spec("user.plugins.completion")
-spec("user.plugins.dap")
+-- spec("user.plugins.dap")
 spec("user.plugins.indent")
 spec("user.plugins.lsp")
 spec("user.plugins.misc")
