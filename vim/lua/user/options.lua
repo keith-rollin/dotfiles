@@ -16,7 +16,7 @@ vim.opt.listchars = {
 }
 vim.opt.mouse = "a" -- Use mouse in all (normal, visual, insert, command) modes.
 vim.opt.path:append({ "**" }) -- Recursively search subdirectories for files on tab-complete.
-vim.opt.scrolloff = 999 -- Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
+-- vim.opt.scrolloff = 999 -- Keep cursor this many lines from top or bottom for context. (Overrides vim-sensible)
 vim.opt.shiftround = true -- Round indent to multiple of 'shiftwidth'.
 vim.opt.shortmess = "atI" -- Don't show the intro message when starting Vim.
 vim.opt.smartindent = true -- Indent like C-like programs.
