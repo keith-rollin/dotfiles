@@ -54,6 +54,12 @@
 
 export DOTFILES=$(dirname -- "$(readlink -f "%R" "${(%):-%N}")")
 
+# Make sure add-zsh-hook is available. We don't seem to need this line when
+# merely launching a new session, but if I were to SSH into my own account, I
+# get a command-not-found error without this.
+
+autoload -U add-zsh-hook
+
 # The normal zsh startup sequence is as follows:
 #
 #   * /etc/zshenv   then $ZDOTDIR/.zshenv      Always
