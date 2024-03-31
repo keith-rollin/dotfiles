@@ -8,13 +8,14 @@
 #
 #   * Add the following links to my home directory, or update them if they
 #     already exist:
-#       * .zshrc
-#       * .zshenv
-#       * .gitconfig
 #       * .clang-format
-#       * .config/nvim
 #       * .config/1password/ssh/agent.toml
-#       * com.phantomprogrammer.apod.plist
+#       * .config/nvim
+#       * .config/twine/pypirc
+#       * .gitconfig
+#       * .zshenv
+#       * .zshrc
+#       * Libary/LaunchAgents/com.phantomprogrammer.apod.plist
 #       * src
 #   * Install Homebrew
 #   * Install Rust
