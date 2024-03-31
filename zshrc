@@ -106,11 +106,15 @@ prepend_path "${DOTFILES}/bin"
 export VISUAL="${EDITOR}"
 
 # Misc. vars.
+#
+# Setting SSH_AUTH_SOCK is not needed in all cases since the path is set as
+# the IdentityAgent in ~/.ssh/config, but it does make `ssh-add -l` possible.
 
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
 export OP_ACCOUNT='rollin-family.1password.com'
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
 # PROMPT/PS1
 #
