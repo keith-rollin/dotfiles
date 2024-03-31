@@ -48,3 +48,10 @@ vim.opt.tabstop = 4 -- Number of visual spaces per TAB.
 
 vim.g.netrw_banner = 0 -- Disable banner.
 vim.g.netrw_liststyle = 3 -- Tree view.
+vim.g.netrw_browse_split = 4 -- Open in previous window
+vim.g.netrw_list_hide =
+    "\\(^\\|\\s\\s\\)\\zs\\(\\(.git\\)\\|\\(.DS_Store\\)\\|\\(venv\\)\\|\\(__pycache__\\)\\|\\(.*\\.egg-info\\)\\)"
+
+--
+--
+--

@@ -79,6 +79,11 @@ return {
                 name = "LSP", -- defined in lsp.lua ("vim.lsp"},
                 l = { "<cmd>nohlsearch<CR>", "Disable highlight" },
             },
+            n = {
+                name = "netrw",
+                n = { "<cmd>20Lex<CR>", "Show current working directory" },
+                f = { "<cmd>20Lex %:p:h<CR>", "Show directory of current file" },
+            },
             -- n = { "<cmd>20Lex<CR>", "Show directory tree" },
             -- r defined in lsp.lua (rename),
             s = {
