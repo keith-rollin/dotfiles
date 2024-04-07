@@ -34,6 +34,7 @@ return {
         require("telescope").setup({
             defaults = {
                 path_display = { "tail" },
+                file_ignore_patterns = { "__pycache__/" },
             },
             pickers = {
                 live_grep = { theme = "dropdown" },
