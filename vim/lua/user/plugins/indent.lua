@@ -6,7 +6,8 @@ return {
             -- char = "▏",
             -- char = "│",
             -- char = "▕",
-            char = "╎",
+            char = "┊",
+            -- char = "╎",
             highlight = { "DiagnosticHint" },
         },
         scope = {
