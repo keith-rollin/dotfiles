@@ -57,9 +57,9 @@ kr.extend({
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
 
-require("user.abbr") -- Set our abbreviations (mostly to fix spelling errors)
-require("user.events") -- Set event handlers (e.g. respond to file loads/writes)
-require("user.misc") -- Stuuuuuffff
+require("user.abbr")    -- Set our abbreviations (mostly to fix spelling errors)
+require("user.events")  -- Set event handlers (e.g. respond to file loads/writes)
+require("user.misc")    -- Stuuuuuffff
 require("user.options") -- Set our options ("set" and "setlocal" equivalents)
 require("user.prelazy") -- Define 'spec' function
 spec("user.plugins.comment")
@@ -71,6 +71,10 @@ spec("user.plugins.lsp")
 spec("user.plugins.misc")
 spec("user.plugins.popup")
 spec("user.plugins.telescope")
+spec("user.plugins.trouble")
 spec("user.plugins.treesitter")
 spec("user.plugins.which-key")
 require("user.lazy") -- Download, install, configure, setup, etc., plugins
+
+--
+--
