@@ -96,6 +96,10 @@ grc()  { git rebase --continue ; }
 grm()  { git rebase master ; }
 gs()   { git status "$@" ; }
 
+bi() { brew info "$@" }
+bo() { brew outdated }
+bu() { brew upgrade }
+
 bak()
 {
     # Make backups of the given files (copy them to *.bak).
