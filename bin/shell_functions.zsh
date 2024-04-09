@@ -2,40 +2,40 @@
 # that various other scripts can read in just this file in order to see/use
 # these functions without having to redo all the other stuff that zshrc does.
 
-duh() { sudo du -h -d 1 ; }
-duk() { sudo du -k -d 1 ; }
-dum() { sudo du -m -d 1 ; }
-dug() { sudo du -g -d 1 ; }
-duh2() { sudo du -h -d 2 ; }
-duk2() { sudo du -k -d 2 ; }
-dum2() { sudo du -m -d 2 ; }
-dug2() { sudo du -g -d 2 ; }
+duh() { sudo du -h -d 1 }
+duk() { sudo du -k -d 1 }
+dum() { sudo du -m -d 1 }
+dug() { sudo du -g -d 1 }
+duh2() { sudo du -h -d 2 }
+duk2() { sudo du -k -d 2 }
+dum2() { sudo du -m -d 2 }
+dug2() { sudo du -g -d 2 }
 
-..() { cd .. ; }
-...() { cd ../.. ; }
-....() { cd ../../.. ; }
-.....() { cd ../../../.. ; }
-......() { cd ../../../../.. ; }
+..() { cd .. }
+...() { cd ../.. }
+....() { cd ../../.. }
+.....() { cd ../../../.. }
+......() { cd ../../../../.. }
 
-f()   { find -x .         -iname "$1" 2> /dev/null;   }     # find
-ff()  { find -x . -type f -iname "$1" 2> /dev/null;   }     # find file
-fff() { find -x . -type f -iname "*$1*" 2> /dev/null; }     # fuzzy find file
-fd()  { find -x . -type d -iname "$1" 2> /dev/null;   }     # find directory
-ffd() { find -x . -type d -iname "*$1*" 2> /dev/null; }     # fuzzy find directory
+f()   { find -x .         -iname "$1" 2> /dev/null   }     # find
+ff()  { find -x . -type f -iname "$1" 2> /dev/null   }     # find file
+fff() { find -x . -type f -iname "*$1*" 2> /dev/null }     # fuzzy find file
+fd()  { find -x . -type d -iname "$1" 2> /dev/null   }     # find directory
+ffd() { find -x . -type d -iname "*$1*" 2> /dev/null }     # fuzzy find directory
 
-grep() { grep_core "$@" ; }
-egrep() { grep_core "$@" ; }
-fgrep() { grep_core "$@" ; }
+grep() { grep_core "$@" }
+egrep() { grep_core "$@" }
+fgrep() { grep_core "$@" }
 
 v() { vim_core "$@" }
 vi() { vim_core  "$@" }
 vim() { vim_core  "$@" }
 nvim() { vim_core  "$@" }
 
-show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder ; }
-hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder ; }
-show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder ; }
-hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder ; }
+show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder }
+hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder }
+show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder }
+hide_desktop() { defaults write com.apple.finder CreateDesktop -bool false && killall Finder }
 
 set_ls_options()
 {
@@ -67,12 +67,12 @@ set_ls_options()
     fi
 }
 
-la()        { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} "$@" ; }
-lart()      { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" ; }
-lax()       { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
-ll()        { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} "$@" ; }
-llx()       { set_ls_options; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" ; }
-ls()        { set_ls_options; ls_common "$@" ; }
+la()        { set_ls_options ; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} "$@" }
+lart()      { set_ls_options ; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SORT_BY_TIME[@]} "$@" }
+lax()       { set_ls_options ; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_HIDDEN} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" }
+ll()        { set_ls_options ; ls_common -l ${LS_DATETIME_FORMAT} "$@" }
+llx()       { set_ls_options ; ls_common -l ${LS_DATETIME_FORMAT} ${LS_SHOW_EXTENDED_ATTRIBUTE_KEYS} "$@" }
+ls()        { set_ls_options ; ls_common "$@" }
 ls_common() {
     "${LS_EXECUTABLE}" \
         ${LS_SHOW_FILE_KIND_INDICATORS} \
@@ -84,17 +84,17 @@ ls_common() {
         "$@"
 }
 
-ga()   { git add "$@" ; }
-gap()  { git add -p "$@" ; }
-gc()   { git commit "$@" ; }
-gca()  { git commit -a ; }
-gcam() { git commit -am "$@" ; }
-gd()   { git diff "$@" ; }
-gl()   { git log "$@" ; }
-glp()  { git log -p "$@" ; }
-grc()  { git rebase --continue ; }
-grm()  { git rebase master ; }
-gs()   { git status "$@" ; }
+ga()   { git add "$@" }
+gap()  { git add -p "$@" }
+gc()   { git commit "$@" }
+gca()  { git commit -a }
+gcam() { git commit -am "$@" }
+gd()   { git diff "$@" }
+gl()   { git log "$@" }
+glp()  { git log -p "$@" }
+grc()  { git rebase --continue }
+grm()  { git rebase master }
+gs()   { git status "$@" }
 
 bi() { brew info "$@" }
 bo() { brew outdated }
@@ -290,7 +290,7 @@ element_in_array()
     # See if the first parameter matches any of the subsequent parameters. Used
     # to see if an item of interest is in an array, as in:
     #
-    #   if element_in_array "item-to-find" "${array-of-items[@]}"; then ...; fi
+    #   if element_in_array "item-to-find" "${array-of-items[@]}" ; then ... ; fi
     #
     # By "patrik" on https://stackoverflow.com/questions/3685970/check-if-a-bash-array-contains-a-value
 
@@ -346,9 +346,9 @@ find_python_root()
     local prev_root=
     while [ "${root}" != "${prev_root}" ]
     do
-        [ -f "${root}/pyproject.toml" ] && { echo "${root}"; return; }
-        [ -f "${root}/setup.cfg" ] && { echo "${root}"; return; }
-        [ -f "${root}/setup.py" ] && { echo "${root}"; return; }
+        [ -f "${root}/pyproject.toml" ] && { echo "${root}" ; return ; }
+        [ -f "${root}/setup.cfg" ] && { echo "${root}" ; return ; }
+        [ -f "${root}/setup.py" ] && { echo "${root}" ; return ; }
 
         prev_root=${root}
         root=$(dirname "${root}")
@@ -442,7 +442,7 @@ gtop()
 {
     # Go To Git Top.
 
-    cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.'; echo "Not within a git repository" >&2))
+    cd $(git rev-parse --show-toplevel 2>/dev/null || (echo '.' ; echo "Not within a git repository" >&2))
 }
 
 gitp()
@@ -466,7 +466,7 @@ grep_core()
 
 hide_brew()
 {
-    trap "PATH=$PATH; trap - INT EXIT" INT EXIT
+    trap "PATH=$PATH ; trap - INT EXIT" INT EXIT
     export PATH="$(echo "$PATH" | sed -E -e 's|^'$(brew_path)'/bin:||')"
     export PATH="$(echo "$PATH" | sed -E -e 's|^'$(brew_path)'/sbin:||')"
     export PATH="$(echo "$PATH" | sed -E -e 's|:'$(brew_path)'/bin||g')"
@@ -554,7 +554,7 @@ wwls () # "Words with letter sequence"
     # Break up the command line into individual letters.
 
     local all_letters=()
-    while [[ -n "$1" ]];
+    while [[ -n "$1" ]]
     do
         all_letters+=( $(echo "$1" | grep -o .) )
         shift
@@ -670,10 +670,10 @@ rg()
 
 source_rust_env()
 {
-    [[ -f "${CARGO_HOME}/env" ]] && { source "${CARGO_HOME}/env"; return; }
-    [[ -f "${HOME}/.cargo/env" ]] && { source "${HOME}/.cargo/env"; return; }
-    [[ -f "${HOME}/.local/cargo/env" ]] && { source "${HOME}/.local/cargo/env"; return; }
-    [[ -f "${HOME}/.local/state/rust/cargo/env" ]] && { source "${HOME}/.local/state/rust/cargo/env"; return; }
+    [[ -f "${CARGO_HOME}/env" ]] && { source "${CARGO_HOME}/env" ; return ; }
+    [[ -f "${HOME}/.cargo/env" ]] && { source "${HOME}/.cargo/env" ; return ; }
+    [[ -f "${HOME}/.local/cargo/env" ]] && { source "${HOME}/.local/cargo/env" ; return ; }
+    [[ -f "${HOME}/.local/state/rust/cargo/env" ]] && { source "${HOME}/.local/state/rust/cargo/env" ; return ; }
 }
 
 sudo_keep_alive()
