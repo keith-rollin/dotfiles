@@ -365,7 +365,7 @@ find_python_venv()
     # (which is not conventional, but is something I did when first learning
     # about virtual environments).
 
-    if [ -n "${VIRTUAL_ENV}" ]
+    if [ -n "${VIRTUAL_ENV}" -a -d "${VIRTUAL_ENV}" ]
     then
         local virtual_env_parent=$(dirname "${VIRTUAL_ENV}")
         if [[ "${here}" =~ "${virtual_env_parent}".* ]]
