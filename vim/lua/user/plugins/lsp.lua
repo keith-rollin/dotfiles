@@ -102,8 +102,6 @@ local ENSURE_INSTALLED = {
     -- support isort's force_single_line option)).
 
     "isort",
-
-    "stylua",
 }
 
 return {
@@ -391,12 +389,6 @@ return {
                 sources = {
                     require("none-ls.formatting.beautysh"),
                     null_ls.builtins.formatting.isort,
-                    null_ls.builtins.formatting.stylua.with({
-                        extra_args = {
-                            "--indent-type",
-                            "Spaces",
-                        },
-                    }),
                 },
             })
         end,
