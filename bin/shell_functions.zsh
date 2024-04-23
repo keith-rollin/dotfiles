@@ -747,12 +747,12 @@ update_python_packages()
 
 vap()
 {
-    vi $(command ls [a-zA-Z]*.py | sort)
+    vi $(find -s . -name '[a-zA-Z]*.py')
 }
 
 var()
 {
-    vi $(find src -name '*.rs' | sort)
+    vi $(find -s src -name '*.rs')
 }
 
 vim_core()
