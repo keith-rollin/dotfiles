@@ -86,7 +86,8 @@ local ENSURE_INSTALLED = {
     "lua-language-server",
     "pyright",  -- I keep this around only for symbol renaming.
     "rust-analyzer",
-    "ruff-lsp", -- NOTE: it's possible to install `ruff` via Mason, but I'm opting to do it via homebrew.
+    "ruff-lsp", -- Old, but more complete.
+    "ruff",     -- New, but less complete (for now).
 
     -- DAP servers, handled by nvim-dap
 
@@ -95,7 +96,13 @@ local ENSURE_INSTALLED = {
     -- Linters/formatters, handled by none-ls
 
     "beautysh",
-    "isort", -- I keep this around to re-sort on save (ruff will re-sort on demand, but doesn't seem to do that on save).
+
+    -- I keep this around to re-sort on save (ruff will re-sort on demand, but
+    -- doesn't seem to do that on save, and it doesn't do it right (it doesn't
+    -- support isort's force_single_line option)).
+
+    "isort",
+
     "stylua",
 }
 
@@ -205,6 +212,24 @@ return {
             -- invoke any of its abilities. It just creates and returns a
             -- function that will invoke it later.
 
+            -- Notes on LSP configuration:
+            -- The function vim.lsp.get_client_by_id() will return a client
+            -- object of the type described in help:vim.lsp.client. The function
+            -- vim.lsp.get_active_clients() will return a list of all active LSP
+            -- clients, with each element also being a client object as
+            -- described in help:vim.lsp.client.
+            --
+            -- Some of the interesting fields in a client object are:
+            -- * name: This allows you to identify the LSP server.
+            -- * handlers: table of handlers (how different from
+            --   config.handlers?). See help:lsp-handler (not to be confused
+            --   with help:lsp-handlers).
+            -- * config: client-provided information. Includes things like
+            --   'capabilities', 'root_dir', 'filetypes', 'settings', etc.
+            --   See help:vim.lsp.start_client() for more information.
+            -- * server_capabilities: server-provided information. I think these
+            --   are documented in the standard LSP documentation.
+
             local function create_default_handler()
                 local lspconfig = require("lspconfig")
                 local nvim_cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -214,6 +239,13 @@ return {
 
                 local function default_handler(server_name, opts)
                     local merged_opts = vim.tbl_extend(kr.keep_left, opts or {}, default_opts)
+
+                    -- 'merged_opts' get installed into the 'config' field of
+                    -- the client object described above. Hence, you would see
+                    -- the cmp_nvim_lsp capabilities that were provided above in
+                    -- client.config.capabilities.completion, and any 'settings'
+                    -- provided below in client.config.settings.
+
                     lspconfig[server_name].setup(merged_opts)
                 end
 
@@ -303,7 +335,18 @@ return {
             "williamboman/mason-lspconfig.nvim", -- Handy for translating from lspconfig names to Mason package names.
         },
 
-        -- Package downloading is actually handled on the VimEnter event.
+        -- Package downloading is actually deferred until the VimEnter event.
+        --
+        -- mason-tool-installer works by calling mason.mason-registry's
+        -- get_package function on the names we provide here. It then calls the
+        -- returned package's install function. mason-registry has information
+        -- on how to download the requested package. After the package is
+        -- installed (or it fails), the process will emit
+        -- "[package:]install:success" or "[package:]install:failed" events.
+        -- mason-tool-installer listens for these and will print a message to
+        -- the user indicating success or failure. But mason-lspconfig also
+        -- listens for these events and will respond to the "success" event by
+        -- invoking the handler we registered above for the package.
 
         opts = {
             ensure_installed = ENSURE_INSTALLED,
