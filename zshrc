@@ -110,6 +110,7 @@ export VISUAL="${EDITOR}"
 # Setting SSH_AUTH_SOCK is not needed in all cases since the path is set as
 # the IdentityAgent in ~/.ssh/config, but it does make `ssh-add -l` possible.
 
+export HOMEBREW_AUTO_UPDATE_SECS=604800
 export LANG='en_US.UTF-8';
 export LC_ALL='en_US.UTF-8';
 export LESS=-IMR
