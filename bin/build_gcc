@@ -1,5 +1,11 @@
 #!/bin/zsh
 
+# Run this script without arguments to build the latest version of GCC. It will
+# create 'gcc' and 'objdir-gcc' directories in the current directory if they
+# don't already exist. If the 'gcc' directory already exists, it will be
+# treated as a check-out directory that needs to be updated. Otherwise, a new
+# clone will be created.
+
 # Get or update GCC sources.
 
 GCC_DIR=gcc

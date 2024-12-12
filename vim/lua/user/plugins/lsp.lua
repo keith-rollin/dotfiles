@@ -84,10 +84,10 @@ local ENSURE_INSTALLED = {
     -- LSP servers, handled by mason
 
     "lua-language-server",
-    "pyright",  -- I keep this around only for symbol renaming.
+    "pyright", -- I keep this around only for symbol renaming.
     "rust-analyzer",
-    "ruff-lsp", -- Old, but more complete.
-    "ruff",     -- New, but less complete (for now).
+    "ruff",
+    "swiftlint",
 
     -- DAP servers, handled by nvim-dap
 
@@ -131,15 +131,12 @@ return {
             -- when we enter a buffer that an LSP supports.
 
             local function initialize_keymap()
-                kr.mapping.set_normal({
-                    name = "Diagnostics",
-                    d = {
-                        l = { vim.diagnostic.setloclist, "Set location list" },
-                        n = { vim.diagnostic.goto_next, "Go to next diagnostic" },
-                        o = { vim.diagnostic.open_float, "Show diagnostics" },
-                        p = { vim.diagnostic.goto_prev, "Go to previous diagnostic" },
-                    },
-                }, { prefix = "<leader>" })
+                kr.mapping.set({
+                    { "<leader>dl", vim.lsp.diagnostic.set_loclist, desc = "Set location list" },
+                    { "<leader>dn", vim.lsp.diagnostic.goto_next,   desc = "Go to next diagnostic" },
+                    { "<leader>do", vim.lsp.diagnostic.open_float,  desc = "Show diagnostics" },
+                    { "<leader>dp", vim.lsp.diagnostic.goto_prev,   desc = "Go to previous diagnostic" },
+                })
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
@@ -181,21 +178,18 @@ return {
                         -- Set up some LSP-related shortcuts (perform code
                         -- action, go to definition, show references, etc.)
 
-                        kr.mapping.set_normal({
-                            name = "LSP",
-                            l = {
-                                c = { vim.lsp.buf.code_action, "Code action" },
-                                D = { vim.lsp.buf.declaration, "Go to declaraction" },
-                                d = { vim.lsp.buf.definition, "Go to definition" },
-                                f = { vim.lsp.buf.format, "Format file" },
-                                h = { vim.lsp.buf.hover, "Display information about symbol under cursor" },
-                                i = { vim.lsp.buf.implementation, "Go to implementation" },
-                                r = { vim.lsp.buf.references, "Show references" },
-                                s = { vim.lsp.buf.signature_help, "Show signature help" },
-                                t = { vim.lsp.buf.type_definition, "Go to type definition" },
-                            },
-                            r = { vim.lsp.buf.rename, "LSP rename" },
-                        }, { prefix = "<leader>", buffer = bufnr })
+                        kr.mapping.set({
+                            { "<leader>lD", vim.lsp.buf.declaration,     desc = "Go to declaraction" },
+                            { "<leader>lc", vim.lsp.buf.code_action,     desc = "Code action" },
+                            { "<leader>ld", vim.lsp.buf.definition,      desc = "Go to definition" },
+                            { "<leader>lf", vim.lsp.buf.formatting,      desc = "Format file" },
+                            { "<leader>lh", vim.lsp.buf.hover,           desc = "Display information about symbol under cursor" },
+                            { "<leader>li", vim.lsp.buf.implementation,  desc = "Go to implementation" },
+                            { "<leader>lr", vim.lsp.buf.references,      desc = "Show references" },
+                            { "<leader>ls", vim.lsp.buf.signature_help,  desc = "Show signature help" },
+                            { "<leader>lt", vim.lsp.buf.type_definition, desc = "Go to type definition" },
+                            { "<leader>r",  vim.lsp.buf.rename,          desc = "LSP rename" },
+                        })
                     end,
                 })
             end
@@ -320,9 +314,30 @@ return {
                 })
             end
 
+            local function initialize_sourcekit()
+                -- Set up the sourcekit LSP server. This is used for Swift. Not that
+                -- we can't install this via mason-lspconfig since that plugin
+                -- doesn't know about sourcekit--it's already installed with swift.
+                -- So we need to initialize it "out of band".
+                --
+                -- See: https://www.swift.org/documentation/articles/zero-to-swift-nvim.html
+
+                local lspconfig = require("lspconfig")
+                lspconfig.sourcekit.setup {
+                    capabilities = {
+                        workspace = {
+                            didChangeWatchedFiles = {
+                                dynamicRegistration = true,
+                            },
+                        },
+                    },
+                }
+            end
+
             initialize_keymap()
             local default_handler = create_default_handler()
             initialize_mason_lspconfig(default_handler)
+            initialize_sourcekit()
         end,
     },
 

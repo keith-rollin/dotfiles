@@ -178,7 +178,7 @@ chpwd_activate()
 }
 add-zsh-hook chpwd chpwd_activate
 
-cleanupds()
+cleanup_ds_store()
 {
     local locations=(
         /Applications
@@ -197,6 +197,17 @@ cleanupds()
         find -x "${locations[@]}" -type f -name '.DS_Store' -print         2> /dev/null
     else
         find -x "${locations[@]}" -type f -name '.DS_Store' -print -delete 2> /dev/null
+    fi
+}
+
+cleanup_pycache()
+{
+    if [[ "${1}" == "-n" ]]
+    then
+        find -x . -type d -name '__pycache__' -print                        2> /dev/null
+    else
+        find -x . -type d -name '__pycache__' -print -exec rm -rf {} \;     2> /dev/null
+        # find -x . -type d \( -path '*/__pycache__/*' -o -name __pycache__ \) -delete
     fi
 }
 
@@ -395,47 +406,6 @@ find_python_venv()
     done
 
     # Could not find a virtual environment.
-}
-
-fix_nvim()
-{
-    # The following paths are causing us problems:
-    #
-    #       /opt/homebrew/Cellar/neovim/0.9.4/share/nvim/runtime/queries/*.scm
-    #       /opt/homebrew/Cellar/neovim/0.9.4/lib/nvim/parser/*.so
-    #
-    # There seems to be some conflict between them and treesitter, which tries to
-    # install its own versions. One confuses the other, leading to a long, unclear
-    # error message:
-    #
-    #       "lua/plugins.lua" <last line of file>, 18245B
-    #       Error detected while processing BufReadPost Autocommands for "*":
-    #       Error executing lua callback: ...brew/Cellar/neovim/0.9.4/share/nvim/runtime/filetype.lua:24:
-    #       Error executing lua: ...brew/Cellar/neovim/0.9.4/share/nvim/runtime/filetype.lua:25:
-    #       BufReadPost Autocommands for "*"..FileType Autocommands for "*":
-    #       Vim(append):
-    #       Error executing lua callback: ...im/0.9.4/share/nvim/runtime/lua/vim/treesitter/query.lua:259:
-    #       query: invalid structure at position 2992 for language lua
-    #       ...more...
-    #
-    # We can avoid this error by moving the built-in versions out of the way before
-    # invoking neovim and having treesitter throw its fit.
-
-    maybe_hide()
-    {
-        echo "### Attempting to move $1"
-        [[ -d "$1" ]] && mv "$1" "$1.bak"
-    }
-
-    NEOVIM_PATH="$(brew list --versions neovim | tr ' ' / | tail -1)"
-    if [[ -n "${NEOVIM_PATH}" ]]
-    then
-        NEOVIM_PATH="$(brew --cellar)/${NEOVIM_PATH}"
-        maybe_hide "${NEOVIM_PATH}/lib/nvim/parser"
-        maybe_hide "${NEOVIM_PATH}/share/nvim/queries"
-    else
-        echo "*** Unable to find neovim"
-    fi
 }
 
 gtop()

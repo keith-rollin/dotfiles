@@ -19,58 +19,16 @@ return {
         use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
     },
     config = function()
-        kr.mapping.set_normal({
-            x = {
-                name = "Trouble",
-                x = {
-                    function()
-                        require("trouble").toggle()
-                    end,
-                    "Toggle Trouble Window",
-                },
-                w = {
-                    function()
-                        require("trouble").toggle("workspace_diagnostics")
-                    end,
-                    "Toggle Workspace Diagnostics Window",
-                },
-                d = {
-                    function()
-                        require("trouble").toggle("document_diagnostics")
-                    end,
-                    "Toggle Document Diagnostics Window",
-                },
-                q = {
-                    function()
-                        require("trouble").toggle("quickfix")
-                    end,
-                    "Toggle Quickfix Window",
-                },
-                l = {
-                    function()
-                        require("trouble").toggle("loclist")
-                    end,
-                    "Toggle LocList Window",
-                },
-                f = {
-                    function()
-                        require("trouble").toggle("lsp_definitions")
-                    end,
-                    "Toggle LSP Definitions Window",
-                },
-                t = {
-                    function()
-                        require("trouble").toggle("lsp_type_definitions")
-                    end,
-                    "Toggle LSP Type Definitions Window",
-                },
-                r = {
-                    function()
-                        require("trouble").toggle("lsp_references")
-                    end,
-                    "Toggle LSP References Window",
-                },
-            },
-        }, { prefix = "<leader>" })
+        kr.mapping.set({
+            { "<leader>x",  group = "Toggle" },
+            { "<leader>xd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>",  desc = "Toggle Document Diagnostics Window" },
+            { "<leader>xf", "<cmd>TroubleToggle lsp_definitions<CR>",           desc = "Toggle LSP Definitions Window" },
+            { "<leader>xl", "<cmd>TroubleToggle loclist<CR>",                   desc = "Toggle LocList Window" },
+            { "<leader>xq", "<cmd>TroubleToggle quickfix<CR>",                  desc = "Toggle Quickfix Window" },
+            { "<leader>xr", "<cmd>TroubleToggle lsp_references<CR>",            desc = "Toggle LSP References Window" },
+            { "<leader>xt", "<cmd>TroubleToggle lsp_type_definitions<CR>",      desc = "Toggle LSP Type Definitions Window" },
+            { "<leader>xw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", desc = "Toggle Workspace Diagnostics Window" },
+            { "<leader>xx", "<cmd>TroubleToggle<CR>",                           desc = "Toggle Trouble Window" },
+        })
     end,
 }

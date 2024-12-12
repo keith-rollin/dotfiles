@@ -36,6 +36,7 @@
 
 APPS=(
     1password-cli   # Command-line interface for 1Password
+    bump-my-version # Version bump your Python project
     eza             # Modern replacement for 'ls'
     git             # Distributed revision control system
     neovim          # Ambitious Vim-fork focused on extensibility and agility
@@ -47,6 +48,13 @@ APPS=(
     uv              # An extremely fast Python package installer and resolver, written in Rust
     watch           # Executes a program periodically, showing output fullscreen
 
+    chezscheme
+    clisp
+    rlwrap
+    sbcl
+
+    font-cousine-nerd-font
+
     # Needed for building neovim.
     #
     # Note that cmake -- which is also required -- is installed below as a
@@ -54,16 +62,17 @@ APPS=(
     # a warning if installed by formula. I suppose this is so we can get the
     # macOS configuration program.
 
-    ninja libtool automake pkg-config gettext curl
+    ninja libtool automake pkg-config gettext curl # cmake is also needed, but see note above.
+
+    # Needed for building ladybird.
+
+    ninja ccache qt # cmake is also needed, but see note above.
 )
 
 # Packages to install as pre-built Mac binaries.
 
 CASKS=(
     cmake           # Needed for building neovim.
-
-    homebrew/cask-fonts/font-cousine-nerd-font
-
 
     # TODO: Test the installation of these:
     #
@@ -131,12 +140,6 @@ install_brew()
 
     local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
     (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
-
-    # Neovim and Treesitter are currently at odds with each other. Call fix_nvim to
-    # help them sort out their issues. See comments in the function for the
-    # details.
-
-    fix_nvim
 }
 
 have_brew()

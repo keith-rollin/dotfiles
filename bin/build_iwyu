@@ -1,15 +1,18 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Get or update the include-what-you-use sources.
+#
+# LLVM must already have been built and installed.
 
 REPO_URL=git@github.com:include-what-you-use/include-what-you-use.git
-DEV_DIR="${HOME}/dev/iwyu"
-REPO_DIR=include-what-you-use
-SOURCE_DIR="${REPO_DIR}"
-BUILD_DIR=build
+DEV_DIR=${HOME}/Documents/src/iwyu
+REPO_DIR=${DEV_DIR}/include-what-you-use
+SOURCE_DIR=${REPO_DIR}
+BUILD_DIR=${DEV_DIR}/build
 INSTALL_DIR=/opt/include-what-you-use/head
 LLVM_DIR=/opt/clang/head
 
+mkdir -p "${DEV_DIR}"
 cd "${DEV_DIR}"
 
 if [[ -e "${REPO_DIR}" && ! -d "${REPO_DIR}" ]]

@@ -8,20 +8,8 @@ return {
         local wk = require("which-key")
         kr.extend({
             mapping = {
-                set = function(mapping, opts)
-                    wk.register(mapping, opts)
-                end,
-                set_normal = function(mapping, opts)
-                    local n_mode = vim.tbl_extend("error", { mode = "n" }, opts or {})
-                    kr.mapping.set(mapping, n_mode)
-                end,
-                set_visual = function(mapping, opts)
-                    local v_mode = vim.tbl_extend("error", { mode = "v" }, opts or {})
-                    kr.mapping.set(mapping, v_mode)
-                end,
-                set_visual_select = function(mapping, opts)
-                    local x_mode = vim.tbl_extend("error", { mode = "x" }, opts or {})
-                    kr.mapping.set(mapping, x_mode)
+                set = function(mapping)
+                    wk.add(mapping)
                 end,
             },
         })
@@ -38,115 +26,96 @@ return {
         end
 
         wk.setup({
+            delay = function()
+                return 400
+            end,
             plugins = {
                 marks = false,
                 registers = false,
                 spelling = { enabled = false },
             },
-            key_labels = {
-                ["<space>"] = "SPC",
-                ["<cr>"] = "RET",
-                ["<tab>"] = "TAB",
-            },
-            window = {
+            win = {
                 border = "double",
             },
         })
 
-        kr.mapping.set_normal({
-            [","] = { "<cmd>FSHere<CR>", "Switch to paired file" },
-            ["."] = { "<c-^>", "Edit alternate file" },
-            [" "] = { "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space" },
-            D = {
-                name = "Debug", -- defined in dap.lua
-            },
-            d = {
-                name = "Diagnostics", -- defined in lsp.lua ("vim.diagnostics"},
-            },
-            e = {
-                name = "Edit",
-                g = { "<cmd>edit ~/.gitconfig<CR>", ".gitconfig" },
-                v = { "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua" },
-                z = { "<cmd>edit ~/.zshrc<CR>", ".zshrc" },
-            },
-            i = {
-                name = "Info",
-                l = { "<cmd>LspInfo<CR>", "LSP" },
-                m = { "<cmd>Mason<CR>", "Mason" },
-                z = { "<cmd>Lazy<CR>", "Lazy" },
-            },
-            l = {
-                name = "LSP", -- defined in lsp.lua ("vim.lsp"},
-                l = { "<cmd>nohlsearch<CR>", "Disable highlight" },
-            },
-            n = {
-                name = "netrw",
-                n = { "<cmd>20Lex<CR>", "Show current working directory" },
-                f = { "<cmd>20Lex %:p:h<CR>", "Show directory of current file" },
-            },
+        kr.mapping.set({
+            { "<leader> ",  "<cmd>lua StripWhitespace()<CR>",          desc = "Strip trailing white space" },
+            { "<leader>,",  "<cmd>FSHere<CR>",                         desc = "Switch to paired file" },
+            { "<leader>.",  "<c-^>",                                   desc = "Edit alternate file" },
+            { "<leader>D",  group = "Debug" }, -- defined in dap.lua
+            { "<leader>S",  group = "Split Management" },
+            { "<leader>Sh", "<cmd>split<CR>",                          desc = "Split horizontally" },
+            { "<leader>Sv", "<cmd>vsplit<CR>",                         desc = "Split vertically" },
+            { "<leader>Sx", "<cmd>close<CR>",                          desc = "Close split" },
+            { "<leader>d",  group = "Diagnostics" }, -- defined in lsp.lua ("vim.diagnostics"},
+            { "<leader>e",  group = "Edit" },
+            { "<leader>eg", "<cmd>edit ~/.gitconfig<CR>",              desc = ".gitconfig" },
+            { "<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", desc = "init.lua" },
+            { "<leader>ez", "<cmd>edit ~/.zshrc<CR>",                  desc = ".zshrc" },
+            { "<leader>i",  group = "Info" },
+            { "<leader>iz", "<cmd>Lazy<CR>",                           desc = "Lazy" },
+            { "<leader>l",  group = "LSP" },
+            { "<leader>ll", "<cmd>nohlsearch<CR>",                     desc = "Disable highlight" },
+            { "<leader>n",  group = "netrw" },
+            { "<leader>nf", "<cmd>20Lex %:p:h<CR>",                    desc = "Show directory of current file" },
+            { "<leader>nn", "<cmd>20Lex<CR>",                          desc = "Show current working directory" },
             -- n = { "<cmd>20Lex<CR>", "Show directory tree" },
             -- r defined in lsp.lua (rename),
-            s = {
-                name = "Toggle Settings",
-                i = { "<cmd>set cursorline!<CR>", "Toggle 'cursorline'" },
-                l = { "<cmd>set list!<CR>", "Toggle 'list'" },
-                s = { "<cmd>set spell!<CR>", "Toggle 'spell'" },
-                w = { "<cmd>set wrap!<CR>", "Toggle line wrapping" },
-            },
-            S = {
-                name = "Split Management",
-                h = { "<cmd>split<CR>", "Split horizontally" },
-                v = { "<cmd>vsplit<CR>", "Split vertically" },
-                x = { "<cmd>close<CR>", "Close split" },
-            },
-            t = {
-                name = "Telescope", -- defined in telescope.lua
-            },
-            w = { "<cmd>w<CR>", "Write current file" },
-        }, { prefix = "<leader>" })
+            { "<leader>s",  group = "Toggle Settings" },
+            { "<leader>si", "<cmd>set cursorline!<CR>",                desc = "Toggle 'cursorline'" },
+            { "<leader>sl", "<cmd>set list!<CR>",                      desc = "Toggle 'list'" },
+            { "<leader>ss", "<cmd>set spell!<CR>",                     desc = "Toggle 'spell'" },
+            { "<leader>sw", "<cmd>set wrap!<CR>",                      desc = "Toggle line wrapping" },
+            { "<leader>t",  group = "Telescope" }, -- defined in telescope.lua
+            { "<leader>w",  "<cmd>w<CR>",                              desc = "Write current file" },
+        })
 
-        local n_mappings = {
-            ["<C-J>"] = { "<C-W><C-J>" },
-            ["<C-K>"] = { "<C-W><C-K>" },
-            ["<C-L>"] = { "<C-W><C-L>" },
-            ["<C-H>"] = { "<C-W><C-H>" },
+        kr.mapping.set({
+            { "<C-H>",   desc = "<C-W><C-H>" },
+            { "<C-J>",   desc = "<C-W><C-J>" },
+            { "<C-K>",   desc = "<C-W><C-K>" },
+            { "<C-L>",   desc = "<C-W><C-L>" },
+
+            -- Tab / Shift-Tab to change buffers.
+
+            { "<M-Tab>", "<c-^>",                 desc = "Edit alternate file" },
+            { "<S-Tab>", "<cmd>bprevious<CR>",    desc = "Previous buffer" },
+            { "<Tab>",   "<cmd>bnext<CR>",        desc = "Next buffer" },
+
+            -- Change ZZ to not winge about not having visited every buffer.
+
+            { "ZZ",      "<cmd>xa<cr>",           desc = "Quit without whining" },
 
             -- Remap gf to open the file under the cursor even if it doesn't
             -- exist. This tip is from the help for 'gf'. However, that help
             -- says to just use the 'map' command. I'm not sure if that's the
             -- best way to go, so I'm using nnoremap.
 
-            ["gf"] = { "<cmd>edit <cfile><cr>", "Edit file under cursor" },
+            { "gf",      "<cmd>edit <cfile><cr>", desc = "Edit file under cursor" },
 
-            -- Change ZZ to not winge about not having visited every buffer.
+        })
 
-            ["ZZ"] = { "<cmd>xa<cr>", "Quit without whining" },
+        kr.mapping.set({
+            {
+                mode = { "v" },
 
-            -- Tab / Shift-Tab to change buffers.
+                { "<", "<gv",                 desc = "Stay in visual mode when indenting" },
+                { ">", ">gv",                 desc = "Stay in visual mode when indenting" },
 
-            ["<Tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
-            ["<S-Tab>"] = { "<cmd>bprevious<CR>", "Previous buffer" },
-            ["<M-Tab>"] = { "<c-^>", "Edit alternate file" },
-        }
-        kr.mapping.set_normal(n_mappings)
+                -- Take the selection and move it up or down, after which, reselect
+                -- the text, reformat/indent it, and select it again.
 
-        local v_mappings = {
-            -- Take the selection and move it up or down, after which, reselect
-            -- the text, reformat/indent it, and select it again.
+                { "J", "<cmd>m '>+1<CR>gv=gv" },
+                { "K", "<cmd>m '<-2<CR>gv=gv" },
+            }
+        })
 
-            J = { "<cmd>m '>+1<CR>gv=gv" },
-            K = { "<cmd>m '<-2<CR>gv=gv" },
-
-            ["<"] = { "<gv", "Stay in visual mode when indenting" },
-            [">"] = { ">gv", "Stay in visual mode when indenting" },
-        }
-        kr.mapping.set_visual(v_mappings)
-
-        local nx_mappings = {
-            H = { "^", "Alias for ^" },
-            L = { "g_", "Alias for g_" },
-        }
-        kr.mapping.set_normal(nx_mappings)
-        kr.mapping.set_visual_select(nx_mappings)
+        kr.mapping.set({
+            { "H", "^",  desc = "Alias for ^",  mode = "n" },
+            { "H", "^",  desc = "Alias for ^",  mode = "x" },
+            { "L", "g_", desc = "Alias for g_", mode = "n" },
+            { "L", "g_", desc = "Alias for g_", mode = "x" },
+        })
     end,
 }

@@ -117,6 +117,11 @@ export LESS=-IMR
 export OP_ACCOUNT='rollin-family.1password.com'
 export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
+# (From: https://www.travishinkelman.com/getting-started-with-chez-scheme-and-emacs/)
+export CHEZSCHEMELIBDIRS="${HOME}/.local/share/chezscheme/lib:"
+export CHEZSCHEMELIBEXTS=".sc::.so:"
+
+
 # PROMPT/PS1
 #
 # Show two lines. The first line show the directory in red as:

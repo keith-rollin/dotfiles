@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Get or update the LLVM/clang sources.
 
 REPO_URL=https://github.com/llvm/llvm-project.git
-DEV_DIR="${HOME}/dev/llvm"
-REPO_DIR=llvm-project
-SOURCE_DIR="${REPO_DIR}"/llvm
-BUILD_DIR=build
+DEV_DIR="${HOME}/Documents/src/llvm"
+REPO_DIR=${DEV_DIR}/llvm-project
+SOURCE_DIR=${REPO_DIR}/llvm
+BUILD_DIR=${DEV_DIR}/build
 INSTALL_DIR=/opt/clang/head
 
+
+mkdir -p "${DEV_DIR}"
 cd "${DEV_DIR}"
 
 if [[ -e "${REPO_DIR}" && ! -d "${REPO_DIR}" ]]
@@ -34,8 +36,6 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;libcxx;libcxxabi;libunwind;compiler-rt;lld;polly;debuginfo-tests' \
     #
-
-    # -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly;debuginfo-tests' \
 
 cmake --build "${BUILD_DIR}" || exit 1
 sudo chmod -R 777 /opt/

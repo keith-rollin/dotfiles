@@ -5,6 +5,7 @@ local custom_group = vim.api.nvim_create_augroup("custom_events", {})
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
 
 vim.api.nvim_create_autocmd("FileType", {
+    desc = "Restore the last cursor position",
     group = custom_group,
     pattern = "*",
     callback = function()
@@ -32,6 +33,7 @@ vim.api.nvim_create_autocmd("FileType", {
 --      https://youtu.be/m62UCkdQ8Ck?t=795
 
 vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight the yanked text",
     group = custom_group,
     pattern = "*",
     callback = function()
