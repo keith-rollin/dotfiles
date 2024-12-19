@@ -1,5 +1,5 @@
 return {
-    "hrsh7th/nvim-cmp",
+    "hrsh7th/nvim-cmp", -- Investigate blink.cmp (standalone, and part of blink.nvim). It seems like it might be too unstable at the moment.
     event = "InsertEnter",
     dependencies = {
         "folke/which-key.nvim",
