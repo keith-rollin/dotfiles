@@ -132,10 +132,10 @@ return {
 
             local function initialize_keymap()
                 kr.mapping.set({
-                    { "<leader>dl", vim.lsp.diagnostic.set_loclist, desc = "Set location list" },
-                    { "<leader>dn", vim.lsp.diagnostic.goto_next,   desc = "Go to next diagnostic" },
-                    { "<leader>do", vim.lsp.diagnostic.open_float,  desc = "Show diagnostics" },
-                    { "<leader>dp", vim.lsp.diagnostic.goto_prev,   desc = "Go to previous diagnostic" },
+                    { "<leader>dl", vim.diagnostic.setloclist,                                        desc = "Set location list" },
+                    { "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end,  desc = "Go to next diagnostic" },
+                    { "<leader>do", vim.diagnostic.open_float,                                        desc = "Show diagnostics" },
+                    { "<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, desc = "Go to previous diagnostic" },
                 })
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
@@ -182,7 +182,7 @@ return {
                             { "<leader>lD", vim.lsp.buf.declaration,     desc = "Go to declaraction" },
                             { "<leader>lc", vim.lsp.buf.code_action,     desc = "Code action" },
                             { "<leader>ld", vim.lsp.buf.definition,      desc = "Go to definition" },
-                            { "<leader>lf", vim.lsp.buf.formatting,      desc = "Format file" },
+                            { "<leader>lf", vim.lsp.buf.format,          desc = "Format file" },
                             { "<leader>lh", vim.lsp.buf.hover,           desc = "Display information about symbol under cursor" },
                             { "<leader>li", vim.lsp.buf.implementation,  desc = "Go to implementation" },
                             { "<leader>lr", vim.lsp.buf.references,      desc = "Show references" },
@@ -207,7 +207,7 @@ return {
             -- Notes on LSP configuration:
             -- The function vim.lsp.get_client_by_id() will return a client
             -- object of the type described in help:vim.lsp.client. The function
-            -- vim.lsp.get_active_clients() will return a list of all active LSP
+            -- vim.lsp.get_clients() will return a list of all active LSP
             -- clients, with each element also being a client object as
             -- described in help:vim.lsp.client.
             --
