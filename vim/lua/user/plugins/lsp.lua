@@ -124,7 +124,7 @@ return {
             "folke/which-key.nvim",    -- So we can establish associated key bindings.
             "hrsh7th/nvim-cmp",        -- So we can hook in code completion.
             "neovim/nvim-lspconfig",   -- So we can call it to configure our LSP servers.
-            "williamboman/mason.nvim", -- So mlsp can call mason-core, mason-core.functional, etc.
+            "williamboman/mason.nvim", -- So we can call mason-core, mason-core.functional, etc.
         },
         config = function()
             -- Set up an event handler to establish LSP-related key bindings
@@ -315,10 +315,10 @@ return {
             end
 
             local function initialize_sourcekit()
-                -- Set up the sourcekit LSP server. This is used for Swift. Not that
-                -- we can't install this via mason-lspconfig since that plugin
-                -- doesn't know about sourcekit--it's already installed with swift.
-                -- So we need to initialize it "out of band".
+                -- Set up the sourcekit LSP server. This is used for Swift. Note
+                -- that we can't install this via mason-lspconfig since that
+                -- plugin doesn't know about sourcekit--it's already installed
+                -- with swift. So we need to initialize it "out of band".
                 --
                 -- See: https://www.swift.org/documentation/articles/zero-to-swift-nvim.html
 
