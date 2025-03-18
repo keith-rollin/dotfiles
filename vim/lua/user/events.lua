@@ -26,6 +26,22 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+    desc = "Disable Copilot for Advent of Code Swift files",
+    group = custom_group,
+    pattern = "*",
+    callback = function()
+        local path = vim.api.nvim_buf_get_name(0)
+        if string.find(path, "/advent%-of%-code/") ~= nil then
+            vim.cmd("Copilot disable")
+        elseif string.find(path, "/aoc/") ~= nil then
+            vim.cmd("Copilot disable")
+        else
+            vim.cmd("Copilot enable")
+        end
+    end,
+})
+
 -- Briefly highlight the yanked selection.
 -- See ":help lua-highlight".
 --
