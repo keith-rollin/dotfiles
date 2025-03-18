@@ -55,6 +55,7 @@ create_link_in_home "${DOTFILES}/config/clang-format.in"    .clang-format
 create_link_in_home "${DOTFILES}/vim"                       .config/nvim
 create_link_in_home "${DOTFILES}/config/agent.toml"         .config/1password/ssh/agent.toml
 create_link_in_home "${DOTFILES}/config/pypirc"             .config/twine/pypirc
+create_link_in_home "${DOTFILES}/config/ghostty_config"     .config/ghostty/config
 create_link_in_home "$(dirname "${DOTFILES}")"
 
 # Installing a symbolic link doesn't work here -- launchd will skip over it,

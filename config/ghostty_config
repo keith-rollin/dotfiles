@@ -1,0 +1,20 @@
+font-family = Cousine Nerd Font Mono
+font-size = 18
+
+theme = catppuccin-mocha
+
+# So that we can see the cursor with our selected theme.
+cursor-opacity = 0.5
+
+window-height = 100
+window-width = 80
+
+resize-overlay = always
+
+# So that we get the block cursor.
+shell-integration-features = no-cursor
+
+# Leave the right option key for non-ASCII input.
+macos-option-as-alt = left
+
+auto-update = download
