@@ -100,6 +100,10 @@ prepend_path "${DOTFILES}/bin"
 
 # Find the best-looking vim-ish.
 
+trap "PATH=$PATH ; trap - INT EXIT" INT EXIT
+export PATH=/opt/neovim/bin:$PATH
+hash -r
+
 [[ -x $(whence -p vi) ]] && export EDITOR=$(whence -p vi)
 [[ -x $(whence -p vim) ]] && export EDITOR=$(whence -p vim)
 [[ -x $(whence -p nvim) ]] && export EDITOR=$(whence -p nvim)
