@@ -1,7 +1,12 @@
+#
+
 font-family = Cousine Nerd Font Mono
 font-size = 18
 
-theme = catppuccin-mocha
+# theme = Builtin Solarized Dark
+# theme = catppuccin-frappe
+# theme = catppuccin-mocha
+theme = Espresso
 
 # So that we can see the cursor with our selected theme.
 cursor-opacity = 0.5
