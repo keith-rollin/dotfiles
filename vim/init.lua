@@ -103,25 +103,24 @@ vim.g.rainbow_active = 1
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
 
-require("user.abbr")    -- Set our abbreviations (mostly to fix spelling errors)
-require("user.events")  -- Set event handlers (e.g. respond to file loads/writes)
-require("user.misc")    -- Stuuuuuffff
-require("user.options") -- Set our options ("set" and "setlocal" equivalents)
-require("user.prelazy") -- Define 'spec' function
+require("user.abbr")            -- Set our abbreviations (mostly to fix spelling errors)
+require("user.events")          -- Set event handlers (e.g. respond to file loads/writes)
+require("user.misc")            -- Stuuuuuffff
+require("user.options")         -- Set our options ("set" and "setlocal" equivalents)
+require("user.prelazy")         -- Define 'spec' function
 
-spec("user.plugins.copilot")
-spec("user.plugins.completion")
--- spec("user.plugins.dap")
-spec("user.plugins.indent")
-spec("user.plugins.lsp")
-spec("user.plugins.misc")
-spec("user.plugins.popup")
-spec("user.plugins.telescope")
-spec("user.plugins.trouble")
-spec("user.plugins.treesitter")
-spec("user.plugins.which-key")
+spec("user.plugins.copilot")    -- Neovim plugin for GitHub Copilot
+spec("user.plugins.completion") -- nvim-cmp, et al.
+spec("user.plugins.indent")     -- Indent guides for Neovim
+spec("user.plugins.lsp")        -- mason, mason-lspconfig, mason-tool-installer, none-ls, nvim-lspconfig, plenary
+spec("user.plugins.misc")       -- vim-fwitch, vim-sensible, paredit
+spec("user.plugins.popup")      -- An implementation of the Popup API from vim in Neovim.
+spec("user.plugins.telescope")  -- Find, Filter, Preview, Pick.
+spec("user.plugins.trouble")    -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
+spec("user.plugins.treesitter") -- Nvim Treesitter configurations and abstraction layer
+spec("user.plugins.which-key")  -- Create key bindings that stick. WhichKey helps you remember your Neovim keymaps, by showing available keybindings in a popup as you type.
 
-require("user.lazy") -- Download, install, configure, setup, etc., plugins
+require("user.lazy")            -- Download, install, configure, setup, etc., plugins
 
 --
 --
