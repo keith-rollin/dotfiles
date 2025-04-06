@@ -48,6 +48,14 @@ APPS=(
     uv              # An extremely fast Python package installer and resolver, written in Rust
     watch           # Executes a program periodically, showing output fullscreen
 
+    beautysh
+    isort
+    lua-language-server
+    pyright
+    ruff
+    swiftlint
+    # rust-analyzer # Installed with rust
+
     chezscheme
     clisp
     rlwrap
