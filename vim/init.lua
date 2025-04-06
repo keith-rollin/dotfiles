@@ -93,12 +93,6 @@ kr.extend({
 })
 
 
--- This needs to be initialized very early so that the rainbow plugin can even
--- load. Setting it in the Lazy spec's init or config functions is too late.
-
-vim.g.rainbow_active = 1
-
-
 -- It's probably a good idea to require plugins last. It's a great place for
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
