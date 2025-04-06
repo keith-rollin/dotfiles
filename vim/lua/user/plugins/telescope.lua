@@ -49,44 +49,5 @@ return {
                 lsp_implementations = { theme = "dropdown", initial_mode = "normal" },
             },
         })
-
-        kr.mapping.set({
-            { "<leader>t",   group = "Telescope" },
-
-            { "<leader>tf",  group = "Find Files" },
-            { "<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", desc = "Fuzzy search in current buffer" },
-            { "<leader>tff", "<cmd>Telescope find_files<CR>",                desc = "Search for files" },
-            { "<leader>tfg", "<cmd>Telescope grep_string<CR>",               desc = "Search directory for hot string" },
-            { "<leader>tfl", "<cmd>Telescope live_grep<CR>",                 desc = "Search open buffers" },
-            { "<leader>tft", "<cmd>Telescope treesitter<CR>",                desc = "Show Treesitter query results" },
-
-            { "<leader>tl",  group = "LSP" },
-            { "<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>",     desc = "List document symbols in workspace" },
-            { "<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>",        desc = "List incoming calls for hot string" },
-            { "<leader>tld", "<cmd>Telescope lsp_definitions<CR>",           desc = "Go to definition for hot string" },
-            { "<leader>tli", "<cmd>Telescope lsp_implementation<CR>",        desc = "Go to implementation for hot string" },
-            { "<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>",        desc = "List outgoing calls for hot string" },
-            { "<leader>tlr", "<cmd>Telescope lsp_references<CR>",            desc = "List references for hot string" },
-            { "<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>",      desc = "List document symbols in current buffer" },
-            { "<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>",      desc = "Go to type definition for hot string" },
-
-            { "<leader>tt",  group = "Tags" },
-            { "<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>",       desc = "List tags in current buffer" },
-            { "<leader>ttt", "<cmd>Telescope tags<CR>",                      desc = "List tags in current directory" },
-
-            { "<leader>tg",  group = "git" },
-            { "<leader>tgB", "<cmd>Telescope git_bcommits<CR>",              desc = "Show commits for current buffer" },
-            { "<leader>tgS", "<cmd>Telescope git_stash<CR>",                 desc = "Show stash" },
-            { "<leader>tgb", "<cmd>Telescope git_branches<CR>",              desc = "Show branches" },
-            { "<leader>tgc", "<cmd>Telescope git_commits<CR>",               desc = "Show commits" },
-            { "<leader>tgf", "<cmd>Telescope git_files<CR>",                 desc = "Show files tracked by git" },
-            { "<leader>tgs", "<cmd>Telescope git_status<CR>",                desc = "Show status" },
-
-            { "<leader>tp",  group = "Pickers" },
-            { "<leader>tpb", "<cmd>Telescope builtin<CR>",                   desc = "Show builtin pickers" },
-            { "<leader>tpr", "<cmd>Telescope resume<CR>",                    desc = "Resume the previous picker" },
-
-            { "<leader>tk",  "<cmd>Telescope keymaps<CR>",                   desc = "Show normal mode keymaps" },
-        })
     end,
 }

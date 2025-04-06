@@ -131,12 +131,7 @@ return {
             -- when we enter a buffer that an LSP supports.
 
             local function initialize_keymap()
-                kr.mapping.set({
-                    { "<leader>dl", vim.diagnostic.setloclist,                                        desc = "Set location list" },
-                    { "<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end,  desc = "Go to next diagnostic" },
-                    { "<leader>do", vim.diagnostic.open_float,                                        desc = "Show diagnostics" },
-                    { "<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, desc = "Go to previous diagnostic" },
-                })
+                kr.set_diagnostic_mapping()
 
                 local augroup = vim.api.nvim_create_augroup("formatting_group", {})
 
@@ -178,18 +173,7 @@ return {
                         -- Set up some LSP-related shortcuts (perform code
                         -- action, go to definition, show references, etc.)
 
-                        kr.mapping.set({
-                            { "<leader>lD", vim.lsp.buf.declaration,     desc = "Go to declaraction" },
-                            { "<leader>lc", vim.lsp.buf.code_action,     desc = "Code action" },
-                            { "<leader>ld", vim.lsp.buf.definition,      desc = "Go to definition" },
-                            { "<leader>lf", vim.lsp.buf.format,          desc = "Format file" },
-                            { "<leader>lh", vim.lsp.buf.hover,           desc = "Display information about symbol under cursor" },
-                            { "<leader>li", vim.lsp.buf.implementation,  desc = "Go to implementation" },
-                            { "<leader>lr", vim.lsp.buf.references,      desc = "Show references" },
-                            { "<leader>ls", vim.lsp.buf.signature_help,  desc = "Show signature help" },
-                            { "<leader>lt", vim.lsp.buf.type_definition, desc = "Go to type definition" },
-                            { "<leader>r",  vim.lsp.buf.rename,          desc = "LSP rename" },
-                        })
+                        kr.set_lsp_mapping()
                     end,
                 })
             end

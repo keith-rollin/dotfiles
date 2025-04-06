@@ -69,3 +69,16 @@ vim.diagnostic.config({
         format = fmt,
     },
 })
+
+--
+-- Originally from some old vim.org tip that I can't find any more.
+-- Modified with trim_trailing_whitespace handler in
+-- runtime/editor/lua/editorconfig.lua
+--
+StripWhitespace = function()
+    local oldquery = vim.fn.getreg("/")
+    local view = vim.fn.winsaveview()
+    vim.cmd("silent keepjumps keeppatterns %s/\\s\\+$//e")
+    vim.fn.winrestview(view)
+    vim.fn.setreg("/", oldquery)
+end

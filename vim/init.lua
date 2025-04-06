@@ -99,6 +99,7 @@ kr.extend({
 
 require("user.abbr")            -- Set our abbreviations (mostly to fix spelling errors)
 require("user.events")          -- Set event handlers (e.g. respond to file loads/writes)
+require("user.mapping")         -- Keyboard mappings
 require("user.misc")            -- Stuuuuuffff
 require("user.options")         -- Set our options ("set" and "setlocal" equivalents)
 require("user.prelazy")         -- Define 'spec' function
