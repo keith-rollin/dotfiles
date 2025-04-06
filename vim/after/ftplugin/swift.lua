@@ -3,7 +3,7 @@
 -- See `:help cterm-colors` for valid colors.
 
 local ns = vim.api.nvim_create_namespace('swift')
-vim.api.nvim_set_hl(ns, 'ColorColumn', { ctermbg = 7 })
+vim.api.nvim_set_hl(ns, 'ColorColumn', { bg = "LightGrey" })
 vim.api.nvim_win_set_hl_ns(0, ns)
 
 vim.opt_local.colorcolumn = "100"
