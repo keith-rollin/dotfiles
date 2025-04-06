@@ -18,6 +18,9 @@ local function update_highlight(hl_name, opts)
     local is_ok, hl_def = pcall(vim.api.nvim_get_hl, 0, { name = hl_name, create = true })
     if is_ok then
         for k, v in pairs(opts) do hl_def[k] = v end
+        -- Complains about not being able to assign hl_def (type
+        -- vim.api.keyset.get_hl_info) to vim.api.keyset.highlight
+        ---@diagnostic disable: param-type-mismatch
         vim.api.nvim_set_hl(0, hl_name, hl_def)
     end
 end
