@@ -6,10 +6,27 @@ font-size = 18
 # theme = Builtin Solarized Dark
 # theme = catppuccin-frappe
 # theme = catppuccin-mocha
-theme = Espresso
+# theme = Espresso
+# theme = HaX0R_BLUE
+#
+# Light themes
+# theme = Novel
+# theme = Belafonte Day
+# theme = BlueDolphin
+# theme = Builtin Solarized Light
+theme = farmhouse-light
+# theme = flexoki-light
+# theme = GitHub
+# theme = iTerm2 Solarized Light
+# theme = Material
 
 # So that we can see the cursor with our selected theme.
 cursor-opacity = 0.5
+
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = 2
+
+scrollback-limit = 10000000000
 
 window-height = 100
 window-width = 80
@@ -23,3 +40,5 @@ shell-integration-features = no-cursor
 macos-option-as-alt = left
 
 auto-update = download
+
+
