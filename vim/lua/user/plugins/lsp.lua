@@ -14,10 +14,10 @@
 -- that command will bring up the "Installing..." dialog. The API will avoid
 -- this, but it's pretty inscrutable. More on this later.
 --
--- One Mason has downloaded/installed the tools that we've specified, we need to
--- initialize/configure/setup those tools. The nvim-lspconfig provides some help
--- in this area. It contains information on how to utilize most known/major LSP
--- servers. For the most part, the configuration information it provides is
+-- Once Mason has downloaded/installed the tools that we've specified, we need
+-- to initialize/configure/setup those tools. The nvim-lspconfig provides some
+-- help in this area. It contains information on how to utilize most known/major
+-- LSP servers. For the most part, the configuration information it provides is
 -- sufficient out-of-the-box. However, the user may want to provide their own
 -- customizations to these configurations (for example, I need to tell lua_ls
 -- that "vim" is a special global variable). When using nvim-lspconfig to
@@ -149,7 +149,7 @@ return {
                         -- invoke it when the buffer is saved.
 
                         local client = vim.lsp.get_client_by_id(event.data.client_id)
-                        if client and client.supports_method("textDocument/formatting") then
+                        if client and client:supports_method("textDocument/formatting") then
                             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
                             vim.api.nvim_create_autocmd("BufWritePre", {
                                 desc = "Format on save",
