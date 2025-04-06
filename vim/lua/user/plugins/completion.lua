@@ -1,5 +1,5 @@
 return {
-    "hrsh7th/nvim-cmp", -- Investigate blink.cmp (standalone, and part of blink.nvim). It seems like it might be too unstable at the moment.
+    "hrsh7th/nvim-cmp", -- Investigate blink.cmp (standalone, and part of blink.nvim). See https://github.com/Saghen/blink.nvim and https://cmp.saghen.dev.
     event = "InsertEnter",
     dependencies = {
         "folke/which-key.nvim",
