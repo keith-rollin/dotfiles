@@ -14,7 +14,13 @@ vim.cmd.colorscheme("vim")
 -- uses the deprecated nvim_get_hl_by_name(). I've updated it to use the newer
 -- nvim_get_hl().
 
-local function update_highlight(hl_name, opts)
+local merge = true
+local replace = false
+
+local function update_highlight(hl_name, opts, merge_or_replace)
+    if not merge_or_replace then
+        vim.api.nvim_set_hl(0, hl_name, {})
+    end
     local is_ok, hl_def = pcall(vim.api.nvim_get_hl, 0, { name = hl_name, create = true })
     if is_ok then
         for k, v in pairs(opts) do hl_def[k] = v end
@@ -29,15 +35,29 @@ vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
     group = vim.api.nvim_create_augroup('Color', {}),
     pattern = "*",
     callback = function()
-        update_highlight("Comment", { italic = true })
+        update_highlight("Comment", { italic = true }, merge)
+        update_highlight("Pmenu", { fg = "Black", bg = "LightGrey" }, merge)
+        update_highlight("FloatBorder", { fg = "Black", bg = "LightGrey" }, replace)
 
-        -- Clear out the old FloatBorder first, or it seems that it will still
-        -- link to WinSeparator -> VertSplit -> Normal -> <cleared>, which seems
-        -- to give us a grey background rather than a black one.
-        vim.api.nvim_set_hl(0, "FloatBorder", {})
+        -- CursorLine is not showing up. I'm not sure why. The following is how
+        -- it's configured in my color scheme:
+        --
+        --      :highlight CursorLine
+        --      CursorLine     xxx cterm=underline guibg=Grey90
+        --
+        -- Visual highlighting does work, though, and it has an appearance that
+        -- I like, so let's just copy that.
+        --
+        --      :highlight Visual
+        --      Visual         xxx ctermfg=0 ctermbg=248 guifg=Black guibg=LightGrey
+        --
+        -- Aaaand...now that I look at it, I see that Visual isn't really the
+        -- way I'd like it. It forces the foreground to be black. Instead, I'd
+        -- like to retain the normal highlighted foreground colors. So let's set
+        -- that up while we're at it.
 
-        update_highlight("Pmenu", { fg = "Grey", bg = "Black" })
-        update_highlight("FloatBorder", { fg = "Grey", bg = "Black" })
+        update_highlight("Visual", { bg = "LightGrey" }, replace)
+        update_highlight("CursorLine", { link = "Visual" }, replace)
     end
 })
 
