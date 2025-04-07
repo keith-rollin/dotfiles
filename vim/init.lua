@@ -70,8 +70,8 @@ end
 
 local _, _ = pcall(install_venv)
 
--- Set mapleader here so that we can use it anywhere in the file. This has to
--- actually be defined before any place that uses it.
+-- Set mapleader here so that we can use it in all subsequent initialization.
+-- This has to actually be defined before any place that uses it.
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = " " -- Not really sure what this does, if anything
