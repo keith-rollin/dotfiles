@@ -38,6 +38,7 @@ APPS=(
     1password-cli   # Command-line interface for 1Password
     bump-my-version # Version bump your Python project
     eza             # Modern replacement for 'ls'
+    fzf             # Command-line fuzzy finder written in Go
     git             # Distributed revision control system
     neovim          # Ambitious Vim-fork focused on extensibility and agility
     node            # Platform built on V8 to build network applications (Needed for some LSP plugins)
@@ -45,6 +46,7 @@ APPS=(
     python-tk       # Python interface to Tcl/Tk
     ripgrep         # Search tool like grep and The Silver Searcher
     tree            # Display directories as trees (with optional color/HTML output)
+    tree-sitter     # Parser generator tool and incremental parsing library
     uv              # An extremely fast Python package installer and resolver, written in Rust
     watch           # Executes a program periodically, showing output fullscreen
 
