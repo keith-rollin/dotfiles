@@ -5,6 +5,8 @@ return {
         win = {
             border = "double",
         },
+        notify = true,
+        expand = 3,
         spec = {
             { "<leader>S",  group = "Split Management" },
             { "<leader>c",  group = "Copilot" },
