@@ -2,6 +2,7 @@ return {
     "derekwyatt/vim-fswitch",
     "tpope/vim-sensible",
     "kovisoft/paredit",
+    "tpope/vim-sleuth",
 
     -- Doesn't work along with treesitter's highlighting
     -- https://github.com/luochen1990/rainbow/issues/163
