@@ -16,7 +16,7 @@
 --
 --      * .cache/nvim           : plugin storage
 --      * .config/nvim          : init.lua and supporting scripts
---      * .local/share/nvim     : "user data directory"
+--      * .local/share/nvim     : "user data directory" (Lazy, Mason, venv, etc.)
 --      * .local/state/nvim     : drafts, swap, undo, shada, logs
 --
 -- TODO: Check out the following:
