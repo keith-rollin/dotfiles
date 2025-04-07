@@ -12,7 +12,6 @@ return {
             { "<leader>e",  group = "Edit" },
             { "<leader>i",  group = "Info" },
             { "<leader>l",  group = "LSP" },
-            { "<leader>n",  group = "netrw" },
             { "<leader>s",  group = "Toggle Settings" },
             { "<leader>t",  group = "Telescope" },
             { "<leader>x",  group = "Toggle" },
