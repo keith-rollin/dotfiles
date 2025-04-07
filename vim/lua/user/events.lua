@@ -31,6 +31,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
     group = custom_group,
     pattern = "*",
     callback = function()
+        if vim.g.loaded_copilot == nil then
+            return
+        end
         local path = vim.api.nvim_buf_get_name(0)
         if string.find(path, "/advent%-of%-code/") ~= nil then
             vim.cmd("Copilot disable")

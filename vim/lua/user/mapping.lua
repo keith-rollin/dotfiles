@@ -19,9 +19,6 @@ setn("<leader>.", "<c-^>", "Edit alternate file")
 setn("<leader>Sh", "<cmd>split<CR>", "Split horizontally")
 setn("<leader>Sv", "<cmd>vsplit<CR>", "Split vertically")
 setn("<leader>Sx", "<cmd>close<CR>", "Close split")
-setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
-setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
-setn("<leader>cs", "<cmd>Copilot status<CR>", "Status")
 setn("<leader>eg", "<cmd>edit ~/.gitconfig<CR>", ".gitconfig")
 setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
@@ -34,6 +31,18 @@ setn("<leader>sl", "<cmd>set list!<CR>", "Toggle 'list'")
 setn("<leader>ss", "<cmd>set spell!<CR>", "Toggle 'spell'")
 setn("<leader>sw", "<cmd>set wrap!<CR>", "Toggle line wrapping")
 setn("<leader>w", "<cmd>w<CR>", "Write current file")
+
+--
+-- Copilot mappings
+-- Called from Copilot setup function.
+--
+kr.extend({
+    set_copilot_mapping = function()
+        setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
+        setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
+        setn("<leader>cs", "<cmd>Copilot status<CR>", "Status")
+    end
+})
 
 --
 -- Diagnostics mappings
