@@ -49,5 +49,7 @@ return {
                 lsp_implementations = { theme = "dropdown", initial_mode = "normal" },
             },
         })
+
+        kr.set_telescope_mapping()
     end,
 }

@@ -37,7 +37,7 @@ setn("<leader>w", "<cmd>w<CR>", "Write current file")
 
 --
 -- Diagnostics mappings
--- Only used in an LSP context.
+-- Called from LSP setup function.
 --
 kr.extend({
     set_diagnostic_mapping = function()
@@ -50,7 +50,7 @@ kr.extend({
 
 --
 -- LSP mappings
--- Only used in an LSP context.
+-- Called from LSP setup function.
 --
 kr.extend({
     set_lsp_mapping = function()
@@ -69,43 +69,53 @@ kr.extend({
 
 --
 -- Trouble mappings
+-- Called from Trouble setup function.
 --
-setn("<leader>xd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", "Toggle Document Diagnostics Window")
-setn("<leader>xf", "<cmd>TroubleToggle lsp_definitions<CR>", "Toggle LSP Definitions Window")
-setn("<leader>xl", "<cmd>TroubleToggle loclist<CR>", "Toggle LocList Window")
-setn("<leader>xq", "<cmd>TroubleToggle quickfix<CR>", "Toggle Quickfix Window")
-setn("<leader>xr", "<cmd>TroubleToggle lsp_references<CR>", "Toggle LSP References Window")
-setn("<leader>xt", "<cmd>TroubleToggle lsp_type_definitions<CR>", "Toggle LSP Type Definitions Window")
-setn("<leader>xw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", "Toggle Workspace Diagnostics Window")
-setn("<leader>xx", "<cmd>TroubleToggle<CR>", "Toggle Trouble Window")
+kr.extend({
+    set_trouble_mapping = function()
+        setn("<leader>xd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", "Toggle Document Diagnostics Window")
+        setn("<leader>xf", "<cmd>TroubleToggle lsp_definitions<CR>", "Toggle LSP Definitions Window")
+        setn("<leader>xl", "<cmd>TroubleToggle loclist<CR>", "Toggle LocList Window")
+        setn("<leader>xq", "<cmd>TroubleToggle quickfix<CR>", "Toggle Quickfix Window")
+        setn("<leader>xr", "<cmd>TroubleToggle lsp_references<CR>", "Toggle LSP References Window")
+        setn("<leader>xt", "<cmd>TroubleToggle lsp_type_definitions<CR>", "Toggle LSP Type Definitions Window")
+        setn("<leader>xw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", "Toggle Workspace Diagnostics Window")
+        setn("<leader>xx", "<cmd>TroubleToggle<CR>", "Toggle Trouble Window")
+    end
+})
 
 --
 -- Telescope mappings
+-- Called from Telescope setup function.
 --
-setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
-setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
-setn("<leader>tfg", "<cmd>Telescope grep_string<CR>", "Search directory for hot string")
-setn("<leader>tfl", "<cmd>Telescope live_grep<CR>", "Search open buffers")
-setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
-setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
-setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
-setn("<leader>tld", "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string")
-setn("<leader>tli", "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string")
-setn("<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string")
-setn("<leader>tlr", "<cmd>Telescope lsp_references<CR>", "List references for hot string")
-setn("<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer")
-setn("<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string")
-setn("<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer")
-setn("<leader>ttt", "<cmd>Telescope tags<CR>", "List tags in current directory")
-setn("<leader>tgB", "<cmd>Telescope git_bcommits<CR>", "Show commits for current buffer")
-setn("<leader>tgS", "<cmd>Telescope git_stash<CR>", "Show stash")
-setn("<leader>tgb", "<cmd>Telescope git_branches<CR>", "Show branches")
-setn("<leader>tgc", "<cmd>Telescope git_commits<CR>", "Show commits")
-setn("<leader>tgf", "<cmd>Telescope git_files<CR>", "Show files tracked by git")
-setn("<leader>tgs", "<cmd>Telescope git_status<CR>", "Show status")
-setn("<leader>tpb", "<cmd>Telescope builtin<CR>", "Show builtin pickers")
-setn("<leader>tpr", "<cmd>Telescope resume<CR>", "Resume the previous picker")
-setn("<leader>tk", "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps")
+kr.extend({
+    set_telescope_mapping = function()
+        setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
+        setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
+        setn("<leader>tfg", "<cmd>Telescope grep_string<CR>", "Search directory for hot string")
+        setn("<leader>tfl", "<cmd>Telescope live_grep<CR>", "Search open buffers")
+        setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
+        setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
+        setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
+        setn("<leader>tld", "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string")
+        setn("<leader>tli", "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string")
+        setn("<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string")
+        setn("<leader>tlr", "<cmd>Telescope lsp_references<CR>", "List references for hot string")
+        setn("<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer")
+        setn("<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string")
+        setn("<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer")
+        setn("<leader>ttt", "<cmd>Telescope tags<CR>", "List tags in current directory")
+        setn("<leader>tgB", "<cmd>Telescope git_bcommits<CR>", "Show commits for current buffer")
+        setn("<leader>tgS", "<cmd>Telescope git_stash<CR>", "Show stash")
+        setn("<leader>tgb", "<cmd>Telescope git_branches<CR>", "Show branches")
+        setn("<leader>tgc", "<cmd>Telescope git_commits<CR>", "Show commits")
+        setn("<leader>tgf", "<cmd>Telescope git_files<CR>", "Show files tracked by git")
+        setn("<leader>tgs", "<cmd>Telescope git_status<CR>", "Show status")
+        setn("<leader>tpb", "<cmd>Telescope builtin<CR>", "Show builtin pickers")
+        setn("<leader>tpr", "<cmd>Telescope resume<CR>", "Resume the previous picker")
+        setn("<leader>tk", "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps")
+    end
+})
 
 --
 -- Split management mappings
