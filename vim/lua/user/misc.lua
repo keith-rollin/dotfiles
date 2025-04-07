@@ -14,13 +14,11 @@ vim.cmd.colorscheme("vim")
 -- uses the deprecated nvim_get_hl_by_name(). I've updated it to use the newer
 -- nvim_get_hl().
 
-local merge = true
-local replace = false
+local function set_highlight(hl_name, opts)
+    vim.api.nvim_set_hl(0, hl_name, opts)
+end
 
-local function update_highlight(hl_name, opts, merge_or_replace)
-    if not merge_or_replace then
-        vim.api.nvim_set_hl(0, hl_name, {})
-    end
+local function update_highlight(hl_name, opts)
     local is_ok, hl_def = pcall(vim.api.nvim_get_hl, 0, { name = hl_name, create = true })
     if is_ok then
         for k, v in pairs(opts) do hl_def[k] = v end
@@ -35,9 +33,9 @@ vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
     group = vim.api.nvim_create_augroup('Color', {}),
     pattern = "*",
     callback = function()
-        update_highlight("Comment", { italic = true }, merge)
-        update_highlight("Pmenu", { fg = "Black", bg = "LightGrey" }, merge)
-        update_highlight("FloatBorder", { fg = "Black", bg = "LightGrey" }, replace)
+        update_highlight("Comment", { italic = true })
+        update_highlight("Pmenu", { fg = "Black", bg = "LightGrey" })
+        set_highlight("FloatBorder", { fg = "Black", bg = "LightGrey" })
 
         -- CursorLine is not showing up. I'm not sure why. The following is how
         -- it's configured in my color scheme:
@@ -56,8 +54,8 @@ vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
         -- like to retain the normal highlighted foreground colors. So let's set
         -- that up while we're at it.
 
-        update_highlight("Visual", { bg = "LightGrey" }, replace)
-        update_highlight("CursorLine", { link = "Visual" }, replace)
+        set_highlight("Visual", { bg = "LightGrey" })
+        set_highlight("CursorLine", { link = "Visual" })
     end
 })
 
