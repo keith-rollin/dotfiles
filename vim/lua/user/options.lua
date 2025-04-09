@@ -26,6 +26,7 @@ vim.opt.splitbelow = true     -- New horizontal splits appear below.
 vim.opt.splitright = true     -- New vertical splits appear to the right.
 vim.opt.title = true          -- Set window title.
 vim.opt.undofile = true       -- Persistent undo
+vim.opt.updatetime = 250      -- Write to the swap file more quickly.
 vim.opt.wrap = false          -- Don't wrap text at the right side of the screen.
 
 -- Search/replace related
