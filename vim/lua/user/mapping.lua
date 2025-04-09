@@ -77,14 +77,13 @@ kr.extend({
 --
 kr.extend({
     set_trouble_mapping = function()
-        setn("<leader>xd", "<cmd>TroubleToggle lsp_document_diagnostics<CR>", "Toggle Document Diagnostics Window")
-        setn("<leader>xf", "<cmd>TroubleToggle lsp_definitions<CR>", "Toggle LSP Definitions Window")
-        setn("<leader>xl", "<cmd>TroubleToggle loclist<CR>", "Toggle LocList Window")
-        setn("<leader>xq", "<cmd>TroubleToggle quickfix<CR>", "Toggle Quickfix Window")
-        setn("<leader>xr", "<cmd>TroubleToggle lsp_references<CR>", "Toggle LSP References Window")
-        setn("<leader>xt", "<cmd>TroubleToggle lsp_type_definitions<CR>", "Toggle LSP Type Definitions Window")
-        setn("<leader>xw", "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>", "Toggle Workspace Diagnostics Window")
-        setn("<leader>xx", "<cmd>TroubleToggle<CR>", "Toggle Trouble Window")
+        setn("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Trouble: diagnostics")
+        setn("<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Trouble: buffer diagnostics")
+        setn("<leader>xs", "<cmd>Trouble diagnostics toggle focus=false<CR>", "Trouble: symbols")
+        setn("<leader>xl", "<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
+            "Trouble: LSP Definitions / references / ...")
+        setn("<leader>xL", "<cmd>Trouble loclist toggle<CR>", "Trouble: Location list")
+        setn("<leader>xQ", "<cmd>Trouble qflist toggle<CR>", "Trouble: Quickfix list")
     end
 })
 
