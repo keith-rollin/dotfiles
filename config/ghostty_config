@@ -20,6 +20,8 @@ theme = farmhouse-light
 # theme = iTerm2 Solarized Light
 # theme = Material
 
+adjust-cursor-thickness = 2
+
 # So that we can see the cursor with our selected theme.
 cursor-opacity = 0.5
 
