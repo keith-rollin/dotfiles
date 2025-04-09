@@ -2,12 +2,12 @@ local setn = function(lhs, rhs, desc)
     vim.keymap.set("n", lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
 
-local setv = function(lhs, rhs, desc)
-    vim.keymap.set("v", lhs, rhs, { noremap = true, silent = true, desc = desc })
+local setnx = function(lhs, rhs, desc)
+    vim.keymap.set({ "n", "x" }, lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
 
-local setx = function(lhs, rhs, desc)
-    vim.keymap.set("x", lhs, rhs, { noremap = true, silent = true, desc = desc })
+local setv = function(lhs, rhs, desc)
+    vim.keymap.set("v", lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
 
 --
@@ -24,7 +24,6 @@ setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
 setn("<leader>im", "<cmd>Mason<CR>", "Mason")
 setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
-setn("<leader>ll", "<cmd>nohlsearch<CR>", "Disable highlight")
 setn("<leader>si", "<cmd>set cursorline!<CR>", "Toggle 'cursorline'")
 setn("<leader>sl", "<cmd>set list!<CR>", "Toggle 'list'")
 setn("<leader>ss", "<cmd>set spell!<CR>", "Toggle 'spell'")
@@ -98,10 +97,10 @@ kr.extend({
 --
 kr.extend({
     set_telescope_mapping = function()
+        setn("<leader>tf*", "<cmd>Telescope grep_string<CR>", "Search directory for string under cursor")
         setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
         setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
-        setn("<leader>tfg", "<cmd>Telescope grep_string<CR>", "Search directory for hot string")
-        setn("<leader>tfl", "<cmd>Telescope live_grep<CR>", "Search open buffers")
+        setn("<leader>tfg", "<cmd>Telescope live_grep<CR>", "Search for string")
         setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
         setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
         setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
@@ -128,18 +127,16 @@ kr.extend({
 --
 -- Split management mappings
 --
-setn("<C-H>", "<C-W><C-H>")
-setn("<C-J>", "<C-W><C-J>")
-setn("<C-K>", "<C-W><C-K>")
-setn("<C-L>", "<C-W><C-L>")
+setn("<C-h>", "<C-w><C-h>") -- Move to the window to the left
+setn("<C-j>", "<C-w><C-j>") -- Move to the window below
+setn("<C-k>", "<C-w><C-k>") -- Move to the window above
+setn("<C-l>", "<C-w><C-l>") -- Move to the window to the right
 
 --
 -- Line navigation mappings
 --
-setn("H", "^", "Alias for ^")
-setx("H", "^", "Alias for ^")
-setn("L", "g_", "Alias for g_")
-setx("L", "g_", "Alias for g_")
+setnx("H", "^", "Alias for ^")
+setnx("L", "g_", "Alias for g_")
 
 --
 -- Tab / Shift-Tab to change buffers.
@@ -147,6 +144,11 @@ setx("L", "g_", "Alias for g_")
 setn("<M-Tab>", "<c-^>", "Edit alternate file")
 setn("<S-Tab>", "<cmd>bprevious<CR>", "Previous buffer")
 setn("<Tab>", "<cmd>bnext<CR>", "Next buffer")
+
+--
+-- Remove search highlight.
+--
+setn("<ESC>", "<cmd>nohlsearch<CR>", "Disable highlight")
 
 --
 -- Change ZZ to not winge about not having visited every buffer.
