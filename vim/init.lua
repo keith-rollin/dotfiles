@@ -76,21 +76,23 @@ local _, _ = pcall(install_venv)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " " -- Not really sure what this does, if anything
 
--- Function to self-add things to my global utility table.
+-- A little global utility table.
 
-_G.kr = {
-    extend = function(tbl)
-        _G.kr = vim.tbl_extend("error", tbl, _G.kr)
-    end,
-}
+_G.kr = {}
 
+-- `vim.tbl_extend` takes a behavior for the first parameter. This behavior
+-- determines what happens when there's a conflict merging two tables, and is
+-- defined as:
+--
+-- • "error": raise an error
+-- • "keep": use value from the leftmost map
+-- • "force": use value from the rightmost map
+--
 -- I can never remember which means left and which means right, so define some
 -- aliases.
 
-kr.extend({
-    keep_left = "keep",
-    keep_right = "force",
-})
+kr.keep_left = "keep"
+kr.keep_right = "force"
 
 
 -- It's probably a good idea to require plugins last. It's a great place for

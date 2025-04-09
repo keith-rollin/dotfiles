@@ -34,26 +34,22 @@ setn("<leader>w", "<cmd>w<CR>", "Write current file")
 -- Copilot mappings
 -- Called from Copilot setup function.
 --
-kr.extend({
-    set_copilot_mapping = function()
-        setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
-        setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
-        setn("<leader>cs", "<cmd>Copilot status<CR>", "Status")
-    end
-})
+kr.set_copilot_mapping = function()
+    setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
+    setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
+    setn("<leader>cs", "<cmd>Copilot status<CR>", "Status")
+end
 
 --
 -- Diagnostics mappings
 -- Called from LSP setup function.
 --
-kr.extend({
-    set_diagnostic_mapping = function()
-        setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
-        setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d
-        setn("<leader>do", vim.diagnostic.open_float, "Show diagnostics")
-        setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d
-    end
-})
+kr.set_diagnostic_mapping = function()
+    setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
+    setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d
+    setn("<leader>do", vim.diagnostic.open_float, "Show diagnostics")
+    setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d
+end
 
 --
 -- LSP mappings
@@ -62,63 +58,57 @@ kr.extend({
 -- These are named to be consistent with the new gra, gri, grn, and grr
 -- keybindings in Neovim 0.11.
 --
-kr.extend({
-    set_lsp_mapping = function()
-        setn("ff", vim.lsp.buf.format, "Format file")
-        setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
-        setn("grs", vim.lsp.buf.signature_help, "Show signature help")
-        setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
-    end
-})
+kr.set_lsp_mapping = function()
+    setn("ff", vim.lsp.buf.format, "Format file")
+    setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
+    setn("grs", vim.lsp.buf.signature_help, "Show signature help")
+    setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
+end
 
 --
 -- Trouble mappings
 -- Called from Trouble setup function.
 --
-kr.extend({
-    set_trouble_mapping = function()
-        setn("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Trouble: diagnostics")
-        setn("<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Trouble: buffer diagnostics")
-        setn("<leader>xs", "<cmd>Trouble diagnostics toggle focus=false<CR>", "Trouble: symbols")
-        setn("<leader>xl", "<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
-            "Trouble: LSP Definitions / references / ...")
-        setn("<leader>xL", "<cmd>Trouble loclist toggle<CR>", "Trouble: Location list")
-        setn("<leader>xQ", "<cmd>Trouble qflist toggle<CR>", "Trouble: Quickfix list")
-    end
-})
+kr.set_trouble_mapping = function()
+    setn("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Trouble: diagnostics")
+    setn("<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Trouble: buffer diagnostics")
+    setn("<leader>xs", "<cmd>Trouble diagnostics toggle focus=false<CR>", "Trouble: symbols")
+    setn("<leader>xl", "<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
+        "Trouble: LSP Definitions / references / ...")
+    setn("<leader>xL", "<cmd>Trouble loclist toggle<CR>", "Trouble: Location list")
+    setn("<leader>xQ", "<cmd>Trouble qflist toggle<CR>", "Trouble: Quickfix list")
+end
 
 --
 -- Telescope mappings
 -- Called from Telescope setup function.
 --
-kr.extend({
-    set_telescope_mapping = function()
-        setn("<leader>tf*", "<cmd>Telescope grep_string<CR>", "Search directory for string under cursor")
-        setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
-        setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
-        setn("<leader>tfg", "<cmd>Telescope live_grep<CR>", "Search for string")
-        setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
-        setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
-        setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
-        setn("<leader>tld", "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string")
-        setn("<leader>tli", "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string")
-        setn("<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string")
-        setn("<leader>tlr", "<cmd>Telescope lsp_references<CR>", "List references for hot string")
-        setn("<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer")
-        setn("<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string")
-        setn("<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer")
-        setn("<leader>ttt", "<cmd>Telescope tags<CR>", "List tags in current directory")
-        setn("<leader>tgB", "<cmd>Telescope git_bcommits<CR>", "Show commits for current buffer")
-        setn("<leader>tgS", "<cmd>Telescope git_stash<CR>", "Show stash")
-        setn("<leader>tgb", "<cmd>Telescope git_branches<CR>", "Show branches")
-        setn("<leader>tgc", "<cmd>Telescope git_commits<CR>", "Show commits")
-        setn("<leader>tgf", "<cmd>Telescope git_files<CR>", "Show files tracked by git")
-        setn("<leader>tgs", "<cmd>Telescope git_status<CR>", "Show status")
-        setn("<leader>tpb", "<cmd>Telescope builtin<CR>", "Show builtin pickers")
-        setn("<leader>tpr", "<cmd>Telescope resume<CR>", "Resume the previous picker")
-        setn("<leader>tk", "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps")
-    end
-})
+kr.set_telescope_mapping = function()
+    setn("<leader>tf*", "<cmd>Telescope grep_string<CR>", "Search directory for string under cursor")
+    setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
+    setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
+    setn("<leader>tfg", "<cmd>Telescope live_grep<CR>", "Search for string")
+    setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
+    setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
+    setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
+    setn("<leader>tld", "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string")
+    setn("<leader>tli", "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string")
+    setn("<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string")
+    setn("<leader>tlr", "<cmd>Telescope lsp_references<CR>", "List references for hot string")
+    setn("<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer")
+    setn("<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string")
+    setn("<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer")
+    setn("<leader>ttt", "<cmd>Telescope tags<CR>", "List tags in current directory")
+    setn("<leader>tgB", "<cmd>Telescope git_bcommits<CR>", "Show commits for current buffer")
+    setn("<leader>tgS", "<cmd>Telescope git_stash<CR>", "Show stash")
+    setn("<leader>tgb", "<cmd>Telescope git_branches<CR>", "Show branches")
+    setn("<leader>tgc", "<cmd>Telescope git_commits<CR>", "Show commits")
+    setn("<leader>tgf", "<cmd>Telescope git_files<CR>", "Show files tracked by git")
+    setn("<leader>tgs", "<cmd>Telescope git_status<CR>", "Show status")
+    setn("<leader>tpb", "<cmd>Telescope builtin<CR>", "Show builtin pickers")
+    setn("<leader>tpr", "<cmd>Telescope resume<CR>", "Resume the previous picker")
+    setn("<leader>tk", "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps")
+end
 
 --
 -- Split management mappings
