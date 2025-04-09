@@ -49,9 +49,9 @@ kr.extend({
 kr.extend({
     set_diagnostic_mapping = function()
         setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
-        setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")
+        setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d
         setn("<leader>do", vim.diagnostic.open_float, "Show diagnostics")
-        setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic")
+        setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d
     end
 })
 
@@ -59,18 +59,15 @@ kr.extend({
 -- LSP mappings
 -- Called from LSP setup function.
 --
+-- These are named to be consistent with the new gra, gri, grn, and grr
+-- keybindings in Neovim 0.11.
+--
 kr.extend({
     set_lsp_mapping = function()
-        setn("<leader>lD", vim.lsp.buf.declaration, "Go to declaraction")
-        setn("<leader>lc", vim.lsp.buf.code_action, "Code action")
-        setn("<leader>ld", vim.lsp.buf.definition, "Go to definition")
-        setn("<leader>lf", vim.lsp.buf.format, "Format file")
-        setn("<leader>lh", vim.lsp.buf.hover, "Display information about symbol under cursor")
-        setn("<leader>li", vim.lsp.buf.implementation, "Go to implementation")
-        setn("<leader>lr", vim.lsp.buf.references, "Show references")
-        setn("<leader>ls", vim.lsp.buf.signature_help, "Show signature help")
-        setn("<leader>lt", vim.lsp.buf.type_definition, "Go to type definition")
-        setn("<leader>r", vim.lsp.buf.rename, "LSP rename")
+        setn("ff", vim.lsp.buf.format, "Format file")
+        setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
+        setn("grs", vim.lsp.buf.signature_help, "Show signature help")
+        setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
     end
 })
 
