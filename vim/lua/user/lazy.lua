@@ -14,7 +14,7 @@
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 -- Complains about fs_stat
----@diagnostic disable: undefined-field
+---@diagnostic disable-next-line: undefined-field
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local out = vim.fn.system({
         "git",
