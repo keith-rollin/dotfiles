@@ -22,6 +22,7 @@ setn("<leader>Sx", "<cmd>close<CR>", "Close split")
 setn("<leader>eg", "<cmd>edit ~/.gitconfig<CR>", ".gitconfig")
 setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
+setn("<leader>ff", function() require("conform").format() end, "Format file")
 setn("<leader>im", "<cmd>Mason<CR>", "Mason")
 setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
 setn("<leader>si", "<cmd>set cursorline!<CR>", "Toggle 'cursorline'")
@@ -34,6 +35,8 @@ setn("<leader>w", "<cmd>w<CR>", "Write current file")
 -- Copilot mappings
 -- Called from Copilot setup function.
 --
+-- I have no idea why I need to squelch this warning for this next line and the
+-- other places in which I assign to `kr`, but I do.
 ---@diagnostic disable-next-line: duplicate-set-field
 kr.set_copilot_mapping = function()
     setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
@@ -62,7 +65,6 @@ end
 --
 ---@diagnostic disable-next-line: duplicate-set-field
 kr.set_lsp_mapping = function()
-    setn("ff", vim.lsp.buf.format, "Format file")
     setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
     setn("grs", vim.lsp.buf.signature_help, "Show signature help")
     setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
