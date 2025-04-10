@@ -1,0 +1,108 @@
+-- Mason allows you to install and manage external editor tooling, such as LSP
+-- servers, linters, and formatters. The installation and management is
+-- performed through a popup UI in nvim as well as a set of nvim commands. It
+-- works with the Mason registry, a collection of packages that can be installed
+-- via Mason.
+--
+-- Note that Mason does not automatically install any packages. For that, we use
+-- mason-tool-installer, which uses the Mason API to install the packages.
+
+return {
+    "williamboman/mason.nvim",
+    opts = {
+        ui = {
+            border = "double",
+        },
+    },
+}
+
+-- -----------------------------------------------------------------------------
+--
+-- Here are some old notes that give a detailed description of how
+-- nvim-lspconfig, mason, mason-lspconfig, mason-tool-installer, and conform all
+-- fit together:
+--
+-- Managing plugins for LSP, formatting, and linting is kind of a pain.
+--
+-- Managing a plugin involves two steps:
+--
+--  * Downloading/installing the plugin so that it's available somewhere in your
+--    environment.
+--  * Initializing/configuring/setting up the plugin by invoking its setup()
+--    function or equivalent.
+--
+-- Mason is a pretty good tool for downloading/installing, but it only gets you
+-- part of the way there. Mason knows about tons of plugins and how to load
+-- them, but it will only load them via its API or its MasonInstall command. The
+-- command is not very friendly to run when executing startup Lua scripts since
+-- that command will bring up the "Installing..." dialog. The API will avoid
+-- this, but it's pretty inscrutable. More on this later.
+--
+-- Once Mason has downloaded/installed the tools that we've specified, we need
+-- to initialize/configure/setup those tools. The nvim-lspconfig provides some
+-- help in this area. It contains information on how to utilize most known/major
+-- LSP servers. For the most part, the configuration information it provides is
+-- sufficient out-of-the-box. However, the user may want to provide their own
+-- customizations to these configurations (for example, I need to tell lua_ls
+-- that "vim" is a special global variable). When using nvim-lspconfig to
+-- configure our tools, it provides a mechanism for doing this.
+--
+-- However, we can't just naively invoke nvim-lspconfig to configure our tools.
+-- Since Mason downloads the tools asynchronously, it's possible that the tools
+-- have not yet downloaded when we try to configure them. Therefore, we need to
+-- make use of mason-lspconfig, which provides support for this issue.
+-- mason-lspconfig will make sure that any downloads have completed, and will
+-- then arrange for the tools to finally be configured. This configuration is
+-- achieved by setting mason-lspconfig up with configuration 'handlers'. These
+-- handlers -- one per tool that we've installed -- are invoked by
+-- mason-lspconfig when the tools can safely be configured.
+--
+-- mason-lspconfig also arranges to kick off the downloading of the tools via
+-- Mason. This is done by listing the tools you want installed in a
+-- mason-lspconfig configuration setting called 'ensure_installed'.
+-- Unfortunately, only actual LSP servers can be specified in
+-- 'ensure_installed'. Attempting to include any of the other non-LSP servers
+-- that Mason knows about in this list will result in an error at startup saying
+-- "Server Foo is not a valid entry in ensure_installed. Make sure to only
+-- provide lspconfig server names." This leaves us with our not being able to
+-- automatically download non-LSP servers when using mason-lspconfig.
+--
+-- To make up for this lack, we use mason-tool-installer. This plugin can be
+-- configured with any list of tools to install -- both LSP and non-LSP.
+-- mason-tool-installer is basically a simple loop that schedules the required
+-- set of tools to be installed via Mason's API.
+--
+-- Once the tools are installed, as mentioned, mason-lspconfig will arrange for
+-- the LSP servers to be configured via the 'handlers' we've registered with it.
+-- But it doesn't have support for configuring the non-LSP servers. Therefore,
+-- we use a tool called conform to take care of that. (NOTE: we used to use a
+-- tool called null-ls to handle the loading and configuring of non-LSP plugins
+-- that are nonetheless known to mason and mason-registry. However, that project
+-- got abandoned and is no longer being maintained. It was taken over by someone
+-- else and renamed to none-ls. However, the maintainer of that project decided
+-- to prune a lot of plugins from the main none-ls repository, moving them to
+-- none-ls-extras. This bi-location of plugins was awkward and made the
+-- initialization of the plugins in `extras` a bit more difficult. Further,
+-- there is now a mason-null-ls project that aims to bridge between none-ls and
+-- mason. All of this sounds very onerous to configured and deal with, so I
+-- replaced it all with `conform`.)
+--
+-- For reference, the list of everything that Mason can install through its UI
+-- and that mason-tool-installer can install via Mason's API is here:
+--
+--      https://github.com/mason-org/mason-registry/tree/main/packages
+--
+-- The list of everything that mason-lspconfig can install through its
+-- ensure_installed facility is here (the string to specify is the left-hand
+-- one):
+--
+--      https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/mappings/server.lua
+--
+-- The list of things that null-ls can initialize is here:
+--
+--      https://github.com/nvimtools/none-ls.nvim/blob/main/doc/BUILTINS.md
+--
+-- The list of things that conform can initialize is here:
+--
+--      https://github.com/stevearc/conform.nvim/tree/master/lua/conform/formatters
+--      :help conform-formatters
