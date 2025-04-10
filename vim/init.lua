@@ -114,6 +114,7 @@ spec("user.plugins.mason")                -- mason
 spec("user.plugins.mason-lspconfig")      -- mason-lspconfig
 spec("user.plugins.mason-tool-installer") -- Downloading LSP servers, linters, formatters, etc.
 spec("user.plugins.misc")                 -- vim-fwitch, vim-sensible, paredit
+spec("user.plugins.nvim-treesitter-textobjects")
 spec("user.plugins.telescope")            -- Find, Filter, Preview, Pick.
 spec("user.plugins.trouble")              -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
 spec("user.plugins.treesitter")           -- Nvim Treesitter configurations and abstraction layer
