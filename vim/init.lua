@@ -109,7 +109,7 @@ require("user.prelazy")                   -- Define 'spec' function
 spec("user.plugins.blink-cmp")            -- Completion
 spec("user.plugins.copilot")              -- Neovim plugin for GitHub Copilot
 spec("user.plugins.conform")              -- Formatting
-spec("user.plugins.indent")               -- Indent guides for Neovim
+spec("user.plugins.indent-blankline")     -- Indent guides for Neovim
 spec("user.plugins.mason")                -- mason
 spec("user.plugins.mason-lspconfig")      -- mason-lspconfig
 spec("user.plugins.mason-tool-installer") -- Downloading LSP servers, linters, formatters, etc.
