@@ -113,7 +113,6 @@ spec("user.plugins.indent-blankline")     -- Indent guides for Neovim
 spec("user.plugins.mason")                -- mason
 spec("user.plugins.mason-lspconfig")      -- mason-lspconfig
 spec("user.plugins.mason-tool-installer") -- Downloading LSP servers, linters, formatters, etc.
-spec("user.plugins.misc")                 -- vim-fwitch, vim-sensible, paredit
 spec("user.plugins.nvim-treesitter")      -- Nvim Treesitter configurations and abstraction layer
 spec("user.plugins.nvim-treesitter-textobjects")
 spec("user.plugins.telescope")            -- Find, Filter, Preview, Pick.

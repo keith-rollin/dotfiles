@@ -3,31 +3,23 @@
 vim.opt.autoindent = true         -- Normally 'autoindent' should also be on when using 'smartindent'.
 vim.opt.autowriteall = true       -- Write the file when we switch buffers.
 vim.opt.clipboard = "unnamedplus" -- Interoperate with the system clipboard.
-vim.opt.completeopt = {           -- Mostly for "cmp"
-    "menu",
-    "menuone",
-    "noselect" }
-vim.opt.cursorline = true        -- Highlight the current line.
-vim.opt.grepprg = "rg --vimgrep" -- Use ripgrep for grepping.
-vim.opt.list = true              -- Show invisible characters.
-
-vim.opt.listchars = {
-    tab = "▸ ", -- Show TABs as RIGHT-ARROW + SPACEs. (Overrides vim-sensible)
-    trail = "•", -- Show trailing spaces as bullets. (Overrides vim-sensible)
-    nbsp = "∆", -- Show non-breaking spaces as deltas. (Overrides vim-sensible)
-}
-
-vim.opt.mouse = "a"           -- Use mouse in all (normal, visual, insert, command) modes.
-vim.opt.path:append({ "**" }) -- Recursively search subdirectories for files on tab-complete.
-vim.opt.shiftround = true     -- Round indent to multiple of 'shiftwidth'.
-vim.opt.shortmess = "atI"     -- Don't show the intro message when starting Vim.
-vim.opt.smartindent = true    -- Indent like C-like programs.
-vim.opt.splitbelow = true     -- New horizontal splits appear below.
-vim.opt.splitright = true     -- New vertical splits appear to the right.
-vim.opt.title = true          -- Set window title.
-vim.opt.undofile = true       -- Persistent undo
-vim.opt.updatetime = 250      -- Write to the swap file more quickly.
-vim.opt.wrap = false          -- Don't wrap text at the right side of the screen.
+-- vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.cursorline = true         -- Highlight the current line.
+vim.opt.grepprg = "rg --vimgrep"  -- Use ripgrep for grepping.
+vim.opt.list = true               -- Show invisible characters.
+vim.opt.listchars = { tab = "▸ ", trail = "•", nbsp = "∆", }
+vim.opt.mouse = "a"               -- Use mouse in all (normal, visual, insert, command) modes.
+vim.opt.path:append({ "**" })     -- Recursively search subdirectories for files on tab-complete.
+vim.opt.scrolloff = 1             -- Keep at least 1 line above and below the cursor.
+vim.opt.shiftround = true         -- Round indent to multiple of 'shiftwidth'.
+vim.opt.shortmess = "atI"         -- Don't show the intro message when starting Vim.
+vim.opt.smartindent = true        -- Indent like C-like programs.
+vim.opt.splitbelow = true         -- New horizontal splits appear below.
+vim.opt.splitright = true         -- New vertical splits appear to the right.
+vim.opt.title = true              -- Set window title.
+vim.opt.undofile = true           -- Persistent undo
+vim.opt.updatetime = 250          -- Write to the swap file more quickly.
+vim.opt.wrap = false              -- Don't wrap text at the right side of the screen.
 
 -- Search/replace related
 
