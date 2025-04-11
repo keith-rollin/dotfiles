@@ -19,6 +19,7 @@ vim.opt.splitright = true         -- New vertical splits appear to the right.
 vim.opt.title = true              -- Set window title.
 vim.opt.undofile = true           -- Persistent undo
 vim.opt.updatetime = 250          -- Write to the swap file more quickly.
+vim.opt.winborder = "single"      -- Default window border style.
 vim.opt.wrap = false              -- Don't wrap text at the right side of the screen.
 
 -- Search/replace related
@@ -46,11 +47,6 @@ vim.g.netrw_liststyle = 3    -- Tree view.
 vim.g.netrw_browse_split = 4 -- Open in previous window
 vim.g.netrw_list_hide =
 "\\(^\\|\\s\\s\\)\\zs\\(\\(.git\\)\\|\\(.DS_Store\\)\\|\\(venv\\)\\|\\(__pycache__\\)\\|\\(.*\\.egg-info\\)\\)"
-
--- New option as of: Mar 18, 2025
--- https://github.com/neovim/neovim/commit/62d9fab9af21323e42828748e6761c02020a7aa5
--- To appear in Neovim 0.11.0
-vim.o.winborder = "single"
 
 --
 --
