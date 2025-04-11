@@ -120,10 +120,15 @@ end
 --
 -- Split management mappings
 --
-setn("<C-h>", "<C-w><C-h>") -- Move to the window to the left
-setn("<C-j>", "<C-w><C-j>") -- Move to the window below
-setn("<C-k>", "<C-w><C-k>") -- Move to the window above
-setn("<C-l>", "<C-w><C-l>") -- Move to the window to the right
+setn("<C-h>", "<C-w><C-h>", "Move to the window to the left")
+setn("<C-j>", "<C-w><C-j>", "Move to the window below")
+setn("<C-k>", "<C-w><C-k>", "Move to the window above")
+setn("<C-l>", "<C-w><C-l>", "Move to the window to the right")
+
+setn("<S-Up>", ":resize -2<CR>", "Decrease window height")
+setn("<S-Down>", ":resize +2<CR>", "Increase window height")
+setn("<S-Left>", ":vertical resize -2<CR>", "Decrease window width")
+setn("<S-Right>", ":vertical resize +2<CR>", "Increase window width")
 
 --
 -- Line navigation mappings
@@ -161,3 +166,7 @@ setn("gf", "<cmd>edit <cfile><cr>", "Edit file under cursor")
 --
 setv("<", "<gv", "Stay in visual mode when indenting")
 setv(">", ">gv", "Stay in visual mode when indenting")
+
+--
+--
+--
