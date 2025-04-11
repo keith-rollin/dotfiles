@@ -18,18 +18,6 @@
 --      * .config/nvim          : init.lua and supporting scripts
 --      * .local/share/nvim     : "user data directory" (Lazy, Mason, venv, etc.)
 --      * .local/state/nvim     : drafts, swap, undo, shada, logs
---
--- TODO: Check out the following:
---      * Neovide: https://neovide.dev/
---      * LazyVim: https://lazyvim.org https://github.com/LazyVim/LazyVim
---      * LunarVim: https://github.com/LunarVim/LunarVim
---      * AstroNvim: https://github.com/AstroNvim/AstroNvim
---      * NvChad: https://github.com/NvChad/NvChad
---      * Kickstart: https://github.com/nvim-lua/kickstart.nvim
---      * SpaceVim: https://spacevim.org/
---      * CosmicNvim: https://github.com/CosmicNvim/CosmicNvim
---      * lsp-zero: https://github.com/VonHeikemen/lsp-zero.nvim
---      * Awesome Neovim: https://github.com/rockerBOO/awesome-neovim
 
 -- Create a python virtual environment and use that for the python3 host
 -- program used in nvim operations.
