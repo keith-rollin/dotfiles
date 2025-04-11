@@ -50,7 +50,7 @@ vim.g.netrw_list_hide =
 -- New option as of: Mar 18, 2025
 -- https://github.com/neovim/neovim/commit/62d9fab9af21323e42828748e6761c02020a7aa5
 -- To appear in Neovim 0.11.0
-vim.o.winborder = 'single'
+vim.o.winborder = "single"
 
 --
 --

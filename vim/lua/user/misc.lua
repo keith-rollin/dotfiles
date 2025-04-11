@@ -30,7 +30,7 @@ local function update_highlight(hl_name, opts)
 end
 
 vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
-    group = vim.api.nvim_create_augroup('Color', {}),
+    group = vim.api.nvim_create_augroup("Color", {}),
     pattern = "*",
     callback = function()
         update_highlight("Comment", { italic = true })
