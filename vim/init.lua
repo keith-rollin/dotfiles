@@ -95,6 +95,7 @@ require("user.options")                   -- Set our options ("set" and "setloca
 require("user.prelazy")                   -- Define 'spec' function
 
 spec("user.plugins.blink-cmp")            -- Completion
+spec("user.plugins.colorscheme")          -- colorscheme
 spec("user.plugins.copilot")              -- Neovim plugin for GitHub Copilot
 spec("user.plugins.conform")              -- Formatting
 spec("user.plugins.indent-blankline")     -- Indent guides for Neovim

@@ -14,11 +14,13 @@ font-size = 18
 # theme = Belafonte Day
 # theme = BlueDolphin
 # theme = Builtin Solarized Light
-theme = farmhouse-light
+# theme = farmhouse-light
 # theme = flexoki-light
 # theme = GitHub
 # theme = iTerm2 Solarized Light
 # theme = Material
+
+theme = catppuccin-mocha
 
 adjust-cursor-thickness = 2
 
