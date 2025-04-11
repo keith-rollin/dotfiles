@@ -28,21 +28,11 @@ return {
         local function initialize_mason_lspconfig()
             -- Establish some custom settings for our LSPs.
 
+            local blink = require("blink.cmp")
             local function create_default_handler()
-                local nvim_cmp_capabilities = {} -- require("cmp_nvim_lsp").default_capabilities()
-                local default_opts = {
-                    capabilities = nvim_cmp_capabilities,
-                }
-
                 local function default_handler(server_name, opts)
-                    local merged_opts = vim.tbl_extend(kr.keep_left, opts or {}, default_opts)
-
-                    -- 'merged_opts' get installed into the 'config' field of
-                    -- the client object described above. Hence, you would see
-                    -- the cmp_nvim_lsp capabilities that were provided above in
-                    -- client.config.capabilities.completion, and any 'settings'
-                    -- provided below in client.config.settings.
-
+                    local merged_opts = opts or {}
+                    merged_opts.capabilities = blink.get_lsp_capabilities()
                     lspconfig[server_name].setup(merged_opts)
                 end
 
