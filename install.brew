@@ -36,26 +36,31 @@
 
 APPS=(
     1password-cli   # Command-line interface for 1Password
-    bump-my-version # Version bump your Python project
+    curl            # Get a file from an HTTP, HTTPS or FTP server
     eza             # Modern replacement for 'ls'
     fzf             # Command-line fuzzy finder written in Go
     git             # Distributed revision control system
     neovim          # Ambitious Vim-fork focused on extensibility and agility
-    node            # Platform built on V8 to build network applications (Needed for some LSP plugins)
+    node            # Platform built on V8 to build network applications (Needed for some LSP plugins (which?))
     python          # Interpreted, interactive, object-oriented programming language
-    python-tk       # Python interface to Tcl/Tk
     ripgrep         # Search tool like grep and The Silver Searcher
     tree            # Display directories as trees (with optional color/HTML output)
-    tree-sitter     # Parser generator tool and incremental parsing library
     uv              # An extremely fast Python package installer and resolver, written in Rust
     watch           # Executes a program periodically, showing output fullscreen
-
-    chezscheme
-    clisp
-    rlwrap
-    sbcl
+    zoxide          # Shell extension to navigate your filesystem faster
 
     font-cousine-nerd-font
+
+    # I don't really use these. Leave them out for now, but leave them here in
+    # case I change my mind.
+    #
+    # bump-my-version # Version bump your Python project
+    # python-tk       # Python interface to Tcl/Tk
+    # tree-sitter     # Parser generator tool and incremental parsing library
+    # chezscheme
+    # clisp
+    # rlwrap
+    # sbcl
 
     # Needed for building neovim.
     #
@@ -64,17 +69,17 @@ APPS=(
     # a warning if installed by formula. I suppose this is so we can get the
     # macOS configuration program.
 
-    ninja libtool automake pkg-config gettext curl # cmake is also needed, but see note above.
+    # ninja libtool automake pkg-config gettext curl # cmake is also needed, but see note above.
 
     # Needed for building ladybird.
 
-    ninja ccache qt # cmake is also needed, but see note above.
+    # ninja ccache qt # cmake is also needed, but see note above.
 )
 
 # Packages to install as pre-built Mac binaries.
 
 CASKS=(
-    cmake           # Needed for building neovim.
+    # cmake           # Needed for building neovim.
 
     # TODO: Test the installation of these:
     #
@@ -101,7 +106,11 @@ remove_brew()
     echo "### Uninstalling Homebrew"
     echo
 
-    brew rm --zap "${CASKS[@]}"
+    if [[ -n "${CASKS}" ]]
+    then
+        brew rm --zap "${CASKS[@]}"
+    fi
+
     sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
     sudo rm -rf $(brew_path)
 }
@@ -140,8 +149,11 @@ install_brew()
     local TO_INSTALL=( $(filter APPS $(brew list --formula)) )
     (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q "${TO_INSTALL[@]}"
 
-    local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
-    (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
+    if [[ -n "${CASKS}" ]]
+    then
+        local TO_INSTALL=( $(filter CASKS $(brew list --cask)) )
+        (( $#TO_INSTALL > 0 )) && dont_sleep brew install -q --cask "${TO_INSTALL[@]}"
+    fi
 }
 
 have_brew()

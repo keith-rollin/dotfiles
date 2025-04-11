@@ -222,6 +222,13 @@ then
     fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
 fi
 
+# Hook in zoxide.
+
+if is_executable zoxide
+then
+    eval "$(zoxide init zsh)"
+fi
+
 # Define a `help` function that (mostly) works like bash's.
 # Note that it won't directly bring you to documentation for low-level
 # built-ins like "if" or "while". Nor will it show help for commands in
