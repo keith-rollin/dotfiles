@@ -13,6 +13,7 @@ vim.opt.path:append({ "**" })     -- Recursively search subdirectories for files
 vim.opt.scrolloff = 1             -- Keep at least 1 line above and below the cursor.
 vim.opt.shiftround = true         -- Round indent to multiple of 'shiftwidth'.
 vim.opt.shortmess = "atI"         -- Don't show the intro message when starting Vim.
+vim.opt.showmode = false          -- Don't show mode (insert, replace, etc.) in the command line.
 vim.opt.smartindent = true        -- Indent like C-like programs.
 vim.opt.splitbelow = true         -- New horizontal splits appear below.
 vim.opt.splitright = true         -- New vertical splits appear to the right.
