@@ -65,6 +65,7 @@ end
 --
 ---@diagnostic disable-next-line: duplicate-set-field
 kr.set_lsp_mapping = function()
+    setn("grd", vim.lsp.buf.definition, "Go to definition")
     setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
     setn("grs", vim.lsp.buf.signature_help, "Show signature help")
     setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
