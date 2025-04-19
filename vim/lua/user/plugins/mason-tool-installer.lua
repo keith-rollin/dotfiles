@@ -26,7 +26,6 @@ return {
             "pyright", -- I keep this around only for symbol renaming.
             "ruff",
             "rust-analyzer",
-            "swiftlint",
 
             -- Linters/formatters
             --
