@@ -87,29 +87,12 @@ kr.keep_right = "force"
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
 
-require("user.abbr")                      -- Set our abbreviations (mostly to fix spelling errors)
-require("user.events")                    -- Set event handlers (e.g. respond to file loads/writes)
-require("user.mapping")                   -- Keyboard mappings
-require("user.misc")                      -- Stuuuuuffff
-require("user.options")                   -- Set our options ("set" and "setlocal" equivalents)
-require("user.prelazy")                   -- Define 'spec' function
-
-spec("user.plugins.blink-cmp")            -- Completion
-spec("user.plugins.colorscheme")          -- colorscheme
-spec("user.plugins.copilot")              -- Neovim plugin for GitHub Copilot
-spec("user.plugins.conform")              -- Formatting
-spec("user.plugins.indent-blankline")     -- Indent guides for Neovim
-spec("user.plugins.lualine")              -- A blazing fast and easy to configure neovim statusline written in pure lua
-spec("user.plugins.mason")                -- mason
-spec("user.plugins.mason-lspconfig")      -- mason-lspconfig
-spec("user.plugins.mason-tool-installer") -- Downloading LSP servers, linters, formatters, etc.
-spec("user.plugins.nvim-treesitter")      -- Nvim Treesitter configurations and abstraction layer
-spec("user.plugins.nvim-treesitter-textobjects")
-spec("user.plugins.telescope")            -- Find, Filter, Preview, Pick.
-spec("user.plugins.trouble")              -- A pretty diagnostics, references, telescope results, quickfix and location list to help you solve all the trouble your code is causing.
-spec("user.plugins.which-key")            -- Create key bindings that stick. WhichKey helps you remember your Neovim keymaps, by showing available keybindings in a popup as you type.
-
-require("user.lazy")                      -- Download, install, configure, setup, etc., plugins
+require("user.abbr")    -- Set our abbreviations (mostly to fix spelling errors)
+require("user.events")  -- Set event handlers (e.g. respond to file loads/writes)
+require("user.mapping") -- Keyboard mappings
+require("user.misc")    -- Stuuuuuffff
+require("user.options") -- Set our options ("set" and "setlocal" equivalents)
+require("user.lazy")    -- Download, install, configure, setup, etc., plugins
 
 --
 --
