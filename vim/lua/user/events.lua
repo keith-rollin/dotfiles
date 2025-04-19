@@ -4,6 +4,23 @@ local custom_group = vim.api.nvim_create_augroup("custom_events", {})
 -- Based on idea from: 'help last-position-jump'.
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
 
+-- I sometimes get this when Blink shows the completion menu. Line 24 is/was the
+-- one calling vim.api.nvim_win_set_cursor:
+--
+-- Error detected while processing FileType Autocommands for "*":
+-- Error executing lua callback: /Users/keith/.config/nvim/lua/user/events.lua:24: Cursor position outside buffer
+-- stack traceback:
+--         [C]: in function 'nvim_win_set_cursor'
+--         /Users/keith/.config/nvim/lua/user/events.lua:24: in function </Users/keith/.config/nvim/lua/user/events.lua:11>
+--         [C]: in function 'nvim_set_option_value'
+--         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/lib/window/init.lua:132: in function 'open'
+--         ...lazy/blink.cmp/lua/blink/cmp/completion/windows/menu.lua:95: in function 'open'
+--         ...lazy/blink.cmp/lua/blink/cmp/completion/windows/menu.lua:61: in function 'open_with_items'
+--         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:70: in function 'callback'
+--         .../nvim/lazy/blink.cmp/lua/blink/cmp/lib/event_emitter.lua:28: in function 'emit'
+--         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/list.lua:96: in function 'show'
+--         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:53: in function <...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:29>
+
 vim.api.nvim_create_autocmd("FileType", {
     desc = "Restore the last cursor position",
     group = custom_group,
@@ -17,6 +34,7 @@ vim.api.nvim_create_autocmd("FileType", {
             if position == { 0, 0 } then
                 return
             end
+            position[2] = 0 -- Wild attempt to fix the above noted error.
             local max_line = vim.fn.line("$")
             if position[1] > max_line then
                 position[1] = max_line
