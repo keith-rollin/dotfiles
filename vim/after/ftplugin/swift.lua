@@ -1,13 +1,12 @@
--- Set the ColorColumn color.
--- Help from: https://www.reddit.com/r/neovim/comments/x3zp6t/comment/imsi3xt/
--- See `:help cterm-colors` for valid colors.
-
-local ns = vim.api.nvim_create_namespace('swift')
-vim.api.nvim_set_hl(ns, 'ColorColumn', { bg = "LightGrey" })
-vim.api.nvim_win_set_hl_ns(0, ns)
-
+--
+-- Warn me about long lines in Swift files.
+--
 vim.opt_local.colorcolumn = "100"
 
--- Adjust the formatting for bulleted lists starting with "*".
-
-vim.bo.comments = vim.bo.comments .. ",fb:*"
+-- Actually word wrap comments in Swift files. But don't do it for
+-- other long lines containing actual code. I'll let the Swift formatter
+-- handle that.
+--
+vim.opt_local.formatoptions:append("c") -- Auto wrap comments using textwidth
+vim.opt_local.formatoptions:remove("t") -- Don't auto wrap other long lines
+vim.opt_local.textwidth = 80
