@@ -26,23 +26,13 @@ require("lazy").setup({
 
     spec = "user.plugins",
 
-    -- Move the lazy-lock file from my vim directory to the share directory
-    -- so that I don't have to deal with version controlling it in git.
-    -- Some people may want to do that, but I don't think it's for me.
+    -- Move the lazy-lock file from my vim directory to the share directory so
+    -- that I don't have to deal with version controlling it in git. Some people
+    -- may want to do that, but I don't think it's for me.
 
     lockfile = vim.fn.stdpath("data") .. "/lazy/lazy-lock.json",
 
     ui = {
         border = "double",
-        change_detection = {
-            enabled = true,
-            notify = false,
-        },
-        icons = {
-            loaded = "•",
-            not_loaded = "o",
-            task = "√ ",
-            list = { "•", ">", "*", "-" },
-        },
     },
 })
