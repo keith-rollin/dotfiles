@@ -1,50 +1,73 @@
 #
-
+# Setting these affect only new windows/tabs/panes.
+#
 font-family = Cousine Nerd Font Mono
 font-size = 18
 
-# theme = Builtin Solarized Dark
-# theme = catppuccin-frappe
-# theme = catppuccin-mocha
-# theme = Espresso
-# theme = HaX0R_BLUE
 #
-# Light themes
-# theme = Novel
-# theme = Belafonte Day
-# theme = BlueDolphin
-# theme = Builtin Solarized Light
-# theme = farmhouse-light
-# theme = flexoki-light
-# theme = GitHub
-# theme = iTerm2 Solarized Light
-# theme = Material
-
+# I'm not picky about themes. I just want one that works. There are so many out
+# there where actual usage is poor. For instance, you can't see text that's
+# highlighted or under the cursor or part of the current line in vim where
+# cursorline is enabled. I also want a theme that is available in vim so that I
+# don't have a jarring switch when I go between vim and the shell. So
+# cattpuccin seems popular, possibly for these reasons, so I'm using this one.
+# I'm sure there are others that are also just fine.
+#
 theme = catppuccin-mocha
 
+#
+# The default cursor thickness is too thin for me to see.
+#
 adjust-cursor-thickness = 2
 
-# So that we can see the cursor with our selected theme.
+#
+# So that we can see the cursor with our selected theme. Without it, the
+# character under the cursor is not visible.
+#
 cursor-opacity = 0.5
 
+#
+# This only makes sense. I don't know why it isn't the default.
+#
 mouse-hide-while-typing = true
+
+#
+# This was suggested on Discord. I'm not sure I've tried it out to see if it
+# matters.
+#
 mouse-scroll-multiplier = 2
 
-background-opacity = 0.8
+#
+# Seeing just a bit of the background is nice. But, for me, seeing too much is
+# distracting.
+#
+background-opacity = 0.95
 
+#
+# I want all the history! Too back "unlimited" isn't supported.
+#
 scrollback-limit = 10000000000
 
-window-height = 1000
-window-width = 1000
+#
+# This gives me a fake fullscreen mode. I used this because I wanted
+# fullscreen, but actual fullscreen didn't allow the desktop image to bleed
+# through when `background-opacity` was < 1.0. However, somehow, that now seems
+# to be working, so I don't need fake-fullscreen any more.
+#
+# window-height = 1000
+# window-width = 1000
 
-resize-overlay = always
-
+#
 # So that we get the block cursor.
+#
 shell-integration-features = no-cursor
 
+#
 # Leave the right option key for non-ASCII input.
+#
 macos-option-as-alt = left
 
+#
+# Check for updates and download them, but let me control when to install them.
+#
 auto-update = download
-
-
