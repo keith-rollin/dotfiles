@@ -4,7 +4,7 @@ return {
     opts = {
         keymap = {
             preset = "default",
-            ["<C-c"] = { "cancel", "fallback" }, -- alias for <C-e>
+            ["<CR>"] = { "accept", "fallback" }, -- alias for <C-y>
         }
     },
 }
