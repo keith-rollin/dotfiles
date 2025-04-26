@@ -25,6 +25,9 @@ setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
 setn("<leader>ff", function() require("conform").format() end, "Format file")
 setn("<leader>im", "<cmd>Mason<CR>", "Mason")
 setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
+-- Defined in treesitter-textobjects.lua
+-- ["<leader>sa"] = { query = "@parameter.inner", desc = "Swap with next parameter" },
+-- ["<leader>sA"] = { query = "@parameter.inner", desc = "Swap with previous parameter" },
 setn("<leader>si", "<cmd>set cursorline!<CR>", "Toggle 'cursorline'")
 setn("<leader>sl", "<cmd>set list!<CR>", "Toggle 'list'")
 setn("<leader>ss", "<cmd>set spell!<CR>", "Toggle 'spell'")
