@@ -49,18 +49,18 @@ APPS=(
     watch           # Executes a program periodically, showing output fullscreen
     zoxide          # Shell extension to navigate your filesystem faster
 
-    font-cousine-nerd-font
-
     # I don't really use these. Leave them out for now, but leave them here in
     # case I change my mind.
     #
-    # bump-my-version # Version bump your Python project
+    # bump-my-version # Version bump your Python project (NOTE: `uv` can do this now)
     # python-tk       # Python interface to Tcl/Tk
     # tree-sitter     # Parser generator tool and incremental parsing library
     # chezscheme
     # clisp
     # rlwrap
     # sbcl
+    #
+    # font-cousine-nerd-font
 
     # Needed for building neovim.
     #
@@ -83,12 +83,17 @@ CASKS=(
 
     # TODO: Test the installation of these:
     #
+    # 1password
     # arc
     # backblaze
-    # dash
+    # dash (from cask--formula installs the shell)
+    # docker
     # electrum
+    # ghostty
+    # gitbutler
     # google-earth-pro
     # hazeover
+    # marked
     # moom
     # warp
 )

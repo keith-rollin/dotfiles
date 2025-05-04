@@ -1,7 +1,6 @@
 #
-# Setting these affect only new windows/tabs/panes.
+# Setting this affects only new windows/tabs/panes.
 #
-font-family = Cousine Nerd Font Mono
 font-size = 18
 
 #
@@ -9,9 +8,9 @@ font-size = 18
 # there where actual usage is poor. For instance, you can't see text that's
 # highlighted or under the cursor or part of the current line in vim where
 # cursorline is enabled. I also want a theme that is available in vim so that I
-# don't have a jarring switch when I go between vim and the shell. So
-# cattpuccin seems popular, possibly for these reasons, so I'm using this one.
-# I'm sure there are others that are also just fine.
+# don't have a jarring switch when I go between vim and the shell. Cattpuccin
+# seems popular, possibly for these reasons, so I'm using this one. I'm sure
+# there are others that are also just fine.
 #
 theme = catppuccin-mocha
 
@@ -47,15 +46,6 @@ background-opacity = 0.95
 # I want all the history! Too back "unlimited" isn't supported.
 #
 scrollback-limit = 10000000000
-
-#
-# This gives me a fake fullscreen mode. I used this because I wanted
-# fullscreen, but actual fullscreen didn't allow the desktop image to bleed
-# through when `background-opacity` was < 1.0. However, somehow, that now seems
-# to be working, so I don't need fake-fullscreen any more.
-#
-# window-height = 1000
-# window-width = 1000
 
 #
 # So that we get the block cursor.
