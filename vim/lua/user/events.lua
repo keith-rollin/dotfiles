@@ -77,3 +77,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank({ higroup = "Visual" })
     end, -- Why can't I just set the callback to vim.highlight.on_yank?
 })
+
+-- Set up an event handler to establish LSP-related key bindings when we
+-- enter a buffer that an LSP supports.
+
+vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "LSP actions",
+    callback = function()
+        kr.set_diagnostic_mapping()
+        kr.set_lsp_mapping()
+    end,
+})
