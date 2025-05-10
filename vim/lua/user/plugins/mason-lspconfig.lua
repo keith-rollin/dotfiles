@@ -1,48 +1,26 @@
--- Mason-lspconfig arranges for the configuration of the LSP servers that Mason
--- manages. It does this by noting what LSP servers are installed and listening
--- for the installation of new servers. When a new server is installed, it will
--- be configured with the information here.
-
-vim.lsp.config('lua_ls', {
-    settings = {
-        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
-        -- https://luals.github.io/wiki/settings/
-        Lua = {
-            diagnostics = { enable = true, globals = { "vim", "kr" }, },
-            format = { enable = true, },
-            hint = { enable = true, },
-            runtime = { special = { spec = "require", }, version = "LuaJIT", },
-            workspace = {
-                library = {
-                    [vim.env.VIMRUNTIME] = true,
-                    [vim.fn.stdpath("config")] = true,
-                },
-            },
-        },
-    },
-})
-
-vim.lsp.config('pyright', {
-    settings = {
-        -- From https://github.com/astral-sh/ruff/blob/main/crates/ruff_server/docs/setup/NEOVIM.md
-        pyright = {
-            -- Using Ruff's import organizer
-            disableOrganizeImports = true,
-        },
-        python = {
-            analysis = {
-                -- Ignore all files for analysis to exclusively use Ruff for linting
-                -- ignore = { "*" },
-            },
-        },
-    },
-})
+-- It used to do a lot more, but since nvim v0.11, mason-lspconfig has been
+-- reduced to merely arranging for installed LSP servers to be enabled on
+-- startup. It also helps translate between the Mason and nvim-lspconfig names
+-- for said servers.
+--
+-- From its README:
+--
+--      Since the introduction of :h vim.lsp.config in Neovim 0.11, this
+--      plugin's feature set has been reduced. Use this plugin if you want to
+--      automatically enable installed servers (:h vim.lsp.enable()) or have
+--      access to the :LspInstall command.
 
 return {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     dependencies = {
+        -- These dependencies are based on the following snippet from the
+        -- mason-lspconfig 2.0 CHANGELOG:
+        --
+        --      require("mason").setup()
+        --      require("mason-lspconfig").setup() -- Note: `nvim-lspconfig` needs to be in 'runtimepath' by the time you setup
+
         "neovim/nvim-lspconfig",
-        "williamboman/mason.nvim"
+        "mason-org/mason.nvim"
     },
     opts = {},
 }

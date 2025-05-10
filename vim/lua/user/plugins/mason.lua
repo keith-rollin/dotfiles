@@ -4,11 +4,12 @@
 -- works with the Mason registry, a collection of packages that can be installed
 -- via Mason.
 --
--- Note that Mason does not automatically install any packages. For that, we use
+-- Note that Mason does not programatically install any packages. That is, we
+-- can't just give it a list of packages to install. Instead, we use
 -- mason-tool-installer, which uses the Mason API to install the packages.
 
 return {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
         ui = {
             border = "double",

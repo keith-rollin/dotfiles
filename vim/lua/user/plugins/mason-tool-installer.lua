@@ -15,8 +15,8 @@
 return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     dependencies = {
-        "williamboman/mason.nvim",           -- Required for base package downloading functionality.
-        "williamboman/mason-lspconfig.nvim", -- Handy for translating from lspconfig names to Mason package names.
+        "mason-org/mason.nvim",           -- Required for base package downloading functionality.
+        "mason-org/mason-lspconfig.nvim", -- Handy for translating from lspconfig names to Mason package names.
     },
     opts = {
         ensure_installed = {
