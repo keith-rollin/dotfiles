@@ -4,7 +4,10 @@
 [init]
 	defaultBranch = main
 [push]
-	default = simple
+	autoSetupRemote = true
+	followTags = true
+[pull]
+	rebase = true
 [alias]
 	br = branch
 	ci = commit
@@ -31,6 +34,7 @@
 	conflictstyle = zdiff3
 [rerere]
 	enabled = true
+	autoupdate = true
 [sendemail]
 	transferEncoding = base64
 [log]
@@ -38,6 +42,27 @@
 [fetch]
 	showForcedUpdates = true
 	prune = true
+	pruneTags = true
+	all = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
