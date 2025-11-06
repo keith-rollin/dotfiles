@@ -1,26 +1,24 @@
--- It used to do a lot more, but since nvim v0.11, mason-lspconfig has been
--- reduced to merely arranging for installed LSP servers to be enabled on
--- startup. It also helps translate between the Mason and nvim-lspconfig names
--- for said servers.
+-- From the README:
 --
--- From its README:
+--      [mason-lspconfig]'s main responsibilities are to:
 --
---      Since the introduction of :h vim.lsp.config in Neovim 0.11, this
---      plugin's feature set has been reduced. Use this plugin if you want to
---      automatically enable installed servers (:h vim.lsp.enable()) or have
---      access to the :LspInstall command.
+--      * allow you to (i) automatically install, and (ii) automatically enable
+--        (vim.lsp.enable()) installed servers
+--      * provide extra convenience APIs such as the :LspInstall command
+--      * provide additional LSP configurations for a few servers
+--      * translate between nvim-lspconfig server names and mason.nvim package names
+--        (e.g. lua_ls <-> lua-language-server)
+--
+-- It's not apparent to me what "installed servers" means, but I think it's the
+-- items in ~/.local/share/nvim/mason/packages/. Note that we don't use
+-- mason-lspconfig to install our LSP servers; we use mason-tool-installer for
+-- that.
 
 return {
     "mason-org/mason-lspconfig.nvim",
     dependencies = {
-        -- These dependencies are based on the following snippet from the
-        -- mason-lspconfig 2.0 CHANGELOG:
-        --
-        --      require("mason").setup()
-        --      require("mason-lspconfig").setup() -- Note: `nvim-lspconfig` needs to be in 'runtimepath' by the time you setup
-
+        { "mason-org/mason.nvim", opts = {} },
         "neovim/nvim-lspconfig",
-        "mason-org/mason.nvim"
     },
     opts = {},
 }

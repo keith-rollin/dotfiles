@@ -1,7 +1,15 @@
--- Mason Tool Installer arranges for the automatic installation of the external
--- tooling that Mason manages. Here, we simply specify the packages that we
--- want to install. The installation is performed automatically when the
--- `VimEnter` event is triggered.
+-- From the README:
+--
+--      Install or upgrade all of your third-party tools.
+--
+--      Can run at startup or may be run manually via a command.
+--
+--      Uses Mason to do nearly all the work. This is a simple plugin that helps
+--      users keep up-to-date with their tools and to make certain they have a
+--      consistent environment.
+--
+-- As such, we merely list the tools we want installed at 'VimEnter' time.
+-- mason-tool-installer takes care of the rest.
 --
 -- The names used here are the canonical Mason names, as shown on the right hand
 -- side of:
