@@ -4,6 +4,11 @@
 font-size = 18
 
 #
+# Turn off ligatures. I like ASCII, the way god intended.
+#
+font-feature = -calt
+
+#
 # I'm not picky about themes. I just want one that works. There are so many out
 # there where actual usage is poor. For instance, you can't see text that's
 # highlighted or under the cursor or part of the current line in vim where
