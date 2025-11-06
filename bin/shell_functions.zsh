@@ -32,6 +32,17 @@ vi() { vim_core  "$@" }
 vim() { vim_core  "$@" }
 nvim() { vim_core  "$@" }
 
+s() { swift "$@" }
+sr() { swift run "$@" }
+srd() { swift run --debug "$@" }
+srr() { swift run --release "$@" }
+sb() { swift build "$@" }
+sbd() { swift build --debug "$@" }
+sbr() { swift build --release "$@" }
+st() { swift test "$@" }
+std() { swift test --debug "$@" }
+str() { swift test --release "$@" }
+
 show_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder }
 hide_hidden() { defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder }
 show_desktop() { defaults write com.apple.finder CreateDesktop -bool true && killall Finder }
