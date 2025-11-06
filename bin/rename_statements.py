@@ -131,8 +131,7 @@ def rename_chase(root) -> list[RenamePair]:
         RenameData(
             root / "Chase",
             std_renamer,
-            # 2024'03'16-statements-5033-.pdf
-            rf"{YEAR}{MONTH}{DAY}-(?P<PREFIX>.*)-5033.*\.pdf",
+            rf"{YEAR}{MONTH}{DAY}-(?P<PREFIX>.*)-\d\d\d\d-.*\.pdf",
             rf".*-{YEAR}-{MONTH}-{DAY}.pdf",
             r"\g<PREFIX>-\g<YEAR>-\g<MONTH>-\g<DAY>.pdf",
         )
