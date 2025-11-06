@@ -17,7 +17,7 @@ font-feature = -calt
 # seems popular, possibly for these reasons, so I'm using this one. I'm sure
 # there are others that are also just fine.
 #
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
 
 #
 # The default cursor thickness is too thin for me to see.
