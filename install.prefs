@@ -96,10 +96,11 @@ defaults write NSGlobalDomain               NSToolbarTitleViewRolloverDelay -flo
 defaults write NSGlobalDomain               NSAlertMetricsGatheringEnabled  -bool false
 
 
-# Use the system print dialog instead of Chrome's/Arc's custom dialog.
+# Use the system print dialog instead of Chrome's/Arc's/Dia's custom dialog.
 
 defaults write com.google.Chrome            DisablePrintPreview             -bool true
 defaults write company.thebrowser.Browser   DisablePrintPreview             -bool true
+defaults write company.thebrowser.dia       DisablePrintPreview             -bool true
 
 chflags nohidden ~/Library
 
