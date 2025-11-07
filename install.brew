@@ -49,6 +49,11 @@ APPS=(
     watch           # Executes a program periodically, showing output fullscreen
     zoxide          # Shell extension to navigate your filesystem faster
 
+    lua-language-server # Language Server for the Lua language
+    pyright             # Static type checker for Python
+    ruff                # Extremely fast Python linter, written in Rust
+    isort               # Sort Python imports automatically
+
     # I don't really use these. Leave them out for now, but leave them here in
     # case I change my mind.
     #

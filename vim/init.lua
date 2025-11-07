@@ -92,8 +92,9 @@ require("user.events")  -- Set event handlers (e.g. respond to file loads/writes
 require("user.mapping") -- Keyboard mappings
 require("user.misc")    -- Stuuuuuffff
 require("user.options") -- Set our options ("set" and "setlocal" equivalents)
-require("user.sourcekit")
+
 require("user.lazy")    -- Download, install, configure, setup, etc., plugins
+require("user.lsp")     -- Enable LSP servers. Do this after 'user.lazy' so that nvim-lspconfig is available.
 
 --
 --

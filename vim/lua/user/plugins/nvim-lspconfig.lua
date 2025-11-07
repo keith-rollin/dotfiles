@@ -1,3 +1,48 @@
+-- From the README:
+--
+--      nvim-lspconfig is a collection of LSP server configurations for the Nvim
+--      LSP client.
+--
+--      The configs live in the lsp/ directory. vim.lsp.config automatically
+--      finds them and merges them with any local lsp/*.lua configs defined by
+--      you or a plugin.
+--
+-- Further notes on the merging of multiple configs (from :help lsp.txt):
+--
+--      When an LSP client starts, it resolves its configuration by merging from
+--      the following (in increasing priority):
+--
+--      1. Configuration defined for the `'*'` name.
+--      2. Configuration from the result of merging all tables returned by
+--         `lsp/<config>.lua` files in 'runtimepath' for the config named
+--         `<config>`.
+--      3. Configurations defined anywhere else.
+--
+--      Note: The merge semantics of configurations follow the behaviour of
+--      vim.tbl_deep_extend().
+--
+-- Still kind of vague. But let's assume that any and all "lsp" directories are
+-- searched for in the RTP in the order they are specified, and that
+-- tbl_deep_extends behavior is "force" (keep the new value, overwriting any
+-- previous value). For example, I currently have the following:
+--
+--      runtimepath=
+--          ~/.config/nvim
+--          ...
+--          ~/.local/share/nvim/lazy/nvim-lspconfig
+--          ...
+--          /opt/homebrew/Cellar/neovim/0.11.5/share/nvim/runtime
+--          ...
+--          /opt/homebrew/Cellar/neovim/0.11.5/lib/nvim
+--          ...
+--          ~/.config/nvim/after
+--          ...
+--
+-- Therefore, if I want to make sure that none of my custom settings are
+-- overridden by nvim-lspconfig, I should place my custom <config>.lua files
+-- not in ~/.config/nvim/lsp, but in ~/.config/nvim/after/lsp. TBD. So far, it
+-- doesn't seem to be an issue.
+
 return {
     "neovim/nvim-lspconfig",
 }
