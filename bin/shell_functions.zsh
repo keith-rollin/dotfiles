@@ -2,6 +2,12 @@
 # that various other scripts can read in just this file in order to see/use
 # these functions without having to redo all the other stuff that zshrc does.
 
+..() { cd .. }
+...() { cd ../.. }
+....() { cd ../../.. }
+.....() { cd ../../../.. }
+......() { cd ../../../../.. }
+
 duh() { sudo du -h -d 1 }
 duk() { sudo du -k -d 1 }
 dum() { sudo du -m -d 1 }
@@ -10,12 +16,6 @@ duh2() { sudo du -h -d 2 }
 duk2() { sudo du -k -d 2 }
 dum2() { sudo du -m -d 2 }
 dug2() { sudo du -g -d 2 }
-
-..() { cd .. }
-...() { cd ../.. }
-....() { cd ../../.. }
-.....() { cd ../../../.. }
-......() { cd ../../../../.. }
 
 f()   { find -x .         -iname "$1" 2> /dev/null   }     # find
 ff()  { find -x . -type f -iname "$1" 2> /dev/null   }     # find file
@@ -323,6 +323,11 @@ element_in_array()
         [ "$element_to_find" = "$element_in_array" ] && return 0
     done
     return 1
+}
+
+env()
+{
+    command env | sort
 }
 
 filter()
