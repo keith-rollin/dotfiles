@@ -96,11 +96,15 @@ defaults write NSGlobalDomain               NSToolbarTitleViewRolloverDelay -flo
 defaults write NSGlobalDomain               NSAlertMetricsGatheringEnabled  -bool false
 
 
-# Use the system print dialog instead of Chrome's/Arc's/Dia's custom dialog.
 
-defaults write com.google.Chrome            DisablePrintPreview             -bool true
-defaults write company.thebrowser.Browser   DisablePrintPreview             -bool true
-defaults write company.thebrowser.dia       DisablePrintPreview             -bool true
+# Use the system print dialog instead of Chrome's/Arc's/Dia's custom dialog.
+# (Disabling because enabling these makes the browser be considered as a
+# "managed" instance, and a manage instance can't change the Secure DNS
+# setting.)
+
+# defaults write com.google.Chrome            DisablePrintPreview             -bool true
+# defaults write company.thebrowser.Browser   DisablePrintPreview             -bool true
+# defaults write company.thebrowser.dia       DisablePrintPreview             -bool true
 
 chflags nohidden ~/Library
 
