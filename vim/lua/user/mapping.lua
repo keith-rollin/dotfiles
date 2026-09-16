@@ -39,9 +39,6 @@ setn("<leader>w", "<cmd>w<CR>", "Write current file")
 -- Copilot mappings
 -- Called from Copilot setup function.
 --
--- I have no idea why I need to squelch this warning for this next line and the
--- other places in which I assign to `kr`, but I do.
----@diagnostic disable-next-line: duplicate-set-field
 kr.set_copilot_mapping = function()
     setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
     setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
@@ -52,7 +49,6 @@ end
 -- Diagnostics mappings
 -- Called from LSP setup function.
 --
----@diagnostic disable-next-line: duplicate-set-field
 kr.set_diagnostic_mapping = function()
     setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
     setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d
@@ -67,7 +63,6 @@ end
 -- These are named to be consistent with the new gra, gri, grn, and grr
 -- keybindings in Neovim 0.11.
 --
----@diagnostic disable-next-line: duplicate-set-field
 kr.set_lsp_mapping = function()
     setn("grd", vim.lsp.buf.definition, "Go to definition")
     setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
@@ -79,7 +74,6 @@ end
 -- Trouble mappings
 -- Called from Trouble setup function.
 --
----@diagnostic disable-next-line: duplicate-set-field
 kr.set_trouble_mapping = function()
     setn("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Trouble: diagnostics")
     setn("<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Trouble: buffer diagnostics")
@@ -94,7 +88,6 @@ end
 -- Telescope mappings
 -- Called from Telescope setup function.
 --
----@diagnostic disable-next-line: duplicate-set-field
 kr.set_telescope_mapping = function()
     setn("<leader>tf*", "<cmd>Telescope grep_string<CR>", "Search directory for string under cursor")
     setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
