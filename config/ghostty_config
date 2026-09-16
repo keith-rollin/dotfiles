@@ -66,3 +66,15 @@ macos-option-as-alt = left
 # Check for updates and download them, but let me control when to install them.
 #
 auto-update = download
+
+#
+# Repurposes "cmd+`" to toggle a quick terminal. This key binding normally
+# cycles between application windows.
+#
+keybind = global:cmd+backquote=toggle_quick_terminal
+
+#
+# Aliases for cmd-d and cmd-shift-d to create new splits.
+#
+keybind = cmd+alt+backslash=new_split:right
+keybind = cmd+alt+minus=new_split:down
