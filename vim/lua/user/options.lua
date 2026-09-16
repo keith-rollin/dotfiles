@@ -10,6 +10,7 @@ vim.opt.list = true               -- Show invisible characters.
 vim.opt.listchars = { tab = "▸ ", trail = "•", nbsp = "∆", }
 vim.opt.mouse = "a"               -- Use mouse in all (normal, visual, insert, command) modes.
 vim.opt.path:append({ "**" })     -- Recursively search subdirectories for files on tab-complete.
+vim.opt.pumborder = "single"      -- Default popup window border style.
 vim.opt.scrolloff = 1             -- Keep at least 1 line above and below the cursor.
 vim.opt.shiftround = true         -- Round indent to multiple of 'shiftwidth'.
 vim.opt.shortmess = "atI"         -- Don't show the intro message when starting Vim.
@@ -22,6 +23,12 @@ vim.opt.undofile = true           -- Persistent undo
 vim.opt.updatetime = 250          -- Write to the swap file more quickly.
 vim.opt.winborder = "single"      -- Default window border style.
 vim.opt.wrap = false              -- Don't wrap text at the right side of the screen.
+
+-- Installation instructions for fzf say:
+--
+--      "To use fzf in Vim, add the following line to your .vimrc:"
+
+vim.opt.rtp:prepend("/opt/homebrew/opt/fzf")
 
 -- Search/replace related
 
@@ -41,14 +48,26 @@ vim.opt.shiftwidth = 4   -- Number of spaces to use for each step of (auto)inden
 vim.opt.softtabstop = 4  -- Number of spaces in tab when editing.
 vim.opt.tabstop = 4      -- Number of visual spaces per TAB.
 
+-- autocomplete related
+
+-- vim.opt.autocomplete = false
+-- vim.opt.pumheight = 10
+
 -- netrw: Configuration
 
 vim.g.netrw_banner = 0       -- Disable banner.
 vim.g.netrw_liststyle = 3    -- Tree view.
 vim.g.netrw_browse_split = 4 -- Open in previous window
-vim.g.netrw_list_hide =
-"\\(^\\|\\s\\s\\)\\zs\\(\\(.git\\)\\|\\(.DS_Store\\)\\|\\(venv\\)\\|\\(__pycache__\\)\\|\\(.*\\.egg-info\\)\\)"
+vim.g.netrw_list_hide = "\z
+    \\(^\\|\\s\\s\\)\z
+    \\zs\z
+    \\(\z
+        \\(.git\\)\\|\z
+        \\(.DS_Store\\)\\|\z
+        \\(venv\\)\\|\z
+        \\(__pycache__\\)\\|\z
+        \\(.*\\.egg-info\\)\z
+    \\)"
 
---
 --
 --

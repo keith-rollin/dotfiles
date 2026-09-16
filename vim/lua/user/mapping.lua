@@ -1,3 +1,38 @@
+-- Notes on recent additions to built-in mappings:
+--
+-- nvim 0.10:
+--   * "]d" and "[d" in Normal mode map to vim.diagnostic.goto_next() and
+--     vim.diagnostic.goto_prev(), respectively. ]d-default [d-default
+--   * <C-W>d (and <C-W><C-D>) map to vim.diagnostic.open_float()
+--     CTRL-W_d-default
+--   * vim.lsp.start() sets the following default keymaps (assuming server
+--     support):
+--     * K in Normal mode maps to vim.lsp.buf.hover(), unless 'keywordprg' was
+--       customized before calling vim.lsp.start().
+--
+-- nvim 0.11:
+--   * grn in Normal mode maps to vim.lsp.buf.rename()
+--   * grr in Normal mode maps to vim.lsp.buf.references()
+--   * gri in Normal mode maps to vim.lsp.buf.implementation()
+--   * gO in Normal mode maps to vim.lsp.buf.document_symbol()
+--   * gra in Normal and Visual mode maps to vim.lsp.buf.code_action()
+--   * CTRL-S in Insert and Select mode maps to vim.lsp.buf.signature_help()
+--   * [D-default and ]D-default jump to the first and last diagnostic in the
+--     current buffer, respectively.
+--   * Mappings inspired by Tim Pope's vim-unimpaired:
+--     * [q, ]q, [Q, ]Q, [_CTRL-Q, ]_CTRL-Q navigate through the quickfix list
+--     * [l, ]l, [L, ]L, [_CTRL-L, ]_CTRL-L navigate through the location-list
+--     * [t, ]t, [T, ]T, [_CTRL-T, ]_CTRL-T navigate through the tag-matchlist
+--     * [a, ]a, [A, ]A navigate through the argument-list
+--     * [b, ]b, [B, ]B navigate through the buffer-list
+--     * [<Space>, ]<Space> add an empty line above and below the cursor
+--     * [[ and ]] in Normal mode jump between shell prompts for shells which
+--       emit OSC 133 sequences ("shell integration" or "semantic prompts").
+--
+-- nvim 0.12:
+--   * grt in Normal mode maps to vim.lsp.buf.type_definition()
+--   * grx in Normal mode maps to vim.lsp.codelens.run()
+--
 local setn = function(lhs, rhs, desc)
     vim.keymap.set("n", lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
@@ -22,11 +57,13 @@ setn("<leader>Sx", "<cmd>close<CR>", "Close split")
 setn("<leader>ee", "<cmd>edit ~/.config/ghostty/config<CR>", "Ghostty config")
 setn("<leader>eg", "<cmd>edit ~/.gitconfig<CR>", ".gitconfig")
 setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
+setn("<leader>ex", "<cmd>Lex 15<CR>", "Open netrw")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
 setn("<leader>ff", function() require("conform").format() end, "Format file")
 setn("<leader>im", "<cmd>Mason<CR>", "Mason")
 setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
--- Defined in treesitter-textobjects.lua
+setn("<leader>ru", "<cmd>:.lua<CR>", "Run current line")
+-- Defined in packages.lua for treesitter-textobjects.
 -- ["<leader>sa"] = { query = "@parameter.inner", desc = "Swap with next parameter" },
 -- ["<leader>sA"] = { query = "@parameter.inner", desc = "Swap with previous parameter" },
 setn("<leader>si", "<cmd>set cursorline!<CR>", "Toggle 'cursorline'")
@@ -51,9 +88,8 @@ end
 --
 kr.set_diagnostic_mapping = function()
     setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
-    setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d
-    setn("<leader>do", vim.diagnostic.open_float, "Show diagnostics")
-    setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d
+    setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d, but opens diagnostic window
+    setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d, but opens diagnostic window
 end
 
 --
@@ -64,10 +100,9 @@ end
 -- keybindings in Neovim 0.11.
 --
 kr.set_lsp_mapping = function()
-    setn("grd", vim.lsp.buf.definition, "Go to definition")
-    setn("grD", vim.lsp.buf.declaration, "Go to declaraction")
-    setn("grs", vim.lsp.buf.signature_help, "Show signature help")
-    setn("grt", vim.lsp.buf.type_definition, "Go to type definition")
+    setn("grd", vim.lsp.buf.definition, "Go to definition")        -- Aliases gD
+    setn("grD", vim.lsp.buf.declaration, "Go to declaraction")     -- Aliases gd
+    setn("grs", vim.lsp.buf.signature_help, "Show signature help") -- Aliases i_Ctrl-S
 end
 
 --
@@ -152,10 +187,9 @@ setn("<ESC>", "<cmd>nohlsearch<CR>", "Disable highlight")
 setn("ZZ", "<cmd>xa<cr>", "Quit without whining")
 
 --
--- Remap gf to open the file under the cursor even if it doesn't
--- exist. This tip is from the help for 'gf'. However, that help
--- says to just use the 'map' command. I'm not sure if that's the
--- best way to go, so I'm using nnoremap.
+-- Remap gf to open the file under the cursor even if it doesn't exist. This tip
+-- is from the help for 'gf'. However, that help says to just use the 'map'
+-- command. I'm not sure if that's the best way to go, so I'm using nnoremap.
 --
 setn("gf", "<cmd>edit <cfile><cr>", "Edit file under cursor")
 
@@ -165,6 +199,13 @@ setn("gf", "<cmd>edit <cfile><cr>", "Edit file under cursor")
 setv("<", "<gv", "Stay in visual mode when indenting")
 setv(">", ">gv", "Stay in visual mode when indenting")
 
+setv("J", ":m '>+1<CR>gv=gv", "Move selected lines down")
+setv("K", ":m '<-2<CR>gv=gv", "Move selected lines up")
+
 --
+-- Retain cursor position when joining lines.
+--
+setn("J", "mzJ`z", "Join lines without moving cursor")
+
 --
 --
