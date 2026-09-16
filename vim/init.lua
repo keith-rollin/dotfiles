@@ -83,18 +83,18 @@ kr.keep_left = "keep"
 kr.keep_right = "force"
 
 
+require("user.abbr")     -- Set our abbreviations (mostly to fix spelling errors)
+require("user.events")   -- Set event handlers (e.g. respond to file loads/writes)
+require("user.mapping")  -- Keyboard mappings
+require("user.misc")     -- Stuuuuuffff
+require("user.options")  -- Set our options ("set" and "setlocal" equivalents)
 -- It's probably a good idea to require plugins last. It's a great place for
 -- things to fail, and we would like that to happen after everything else is
 -- set up and vim is feeling comfy.
 
-require("user.abbr")    -- Set our abbreviations (mostly to fix spelling errors)
-require("user.events")  -- Set event handlers (e.g. respond to file loads/writes)
-require("user.mapping") -- Keyboard mappings
-require("user.misc")    -- Stuuuuuffff
-require("user.options") -- Set our options ("set" and "setlocal" equivalents)
+require("user.packages") -- Download, install, configure, setup, etc., plugins
+require("user.lsp")      -- Enable LSP servers. Do this after 'user.packages' so that nvim-lspconfig is available.
 
-require("user.lazy")    -- Download, install, configure, setup, etc., plugins
-require("user.lsp")     -- Enable LSP servers. Do this after 'user.lazy' so that nvim-lspconfig is available.
 
 --
 --
