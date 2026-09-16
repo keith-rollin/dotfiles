@@ -96,6 +96,15 @@ defaults write NSGlobalDomain               NSToolbarTitleViewRolloverDelay -flo
 defaults write NSGlobalDomain               NSAlertMetricsGatheringEnabled  -bool false
 
 
+# Try to hide the annoying menu item icons that Tahoe and later versions of
+# macOS litter the menus with. I'm told that this setting is kind of hit or
+# miss, so the resulting mess might be more annoying than the current mess. See
+# Gruber's article.
+#
+#   https://daringfireball.net/2026/03/what_to_do_about_those_menu_item_icons_in_macos_26_tahoe
+
+defaults write -g NSMenuEnableActionImages -bool NO
+
 
 # Use the system print dialog instead of Chrome's/Arc's/Dia's custom dialog.
 # (Disabling because enabling these makes the browser be considered as a
