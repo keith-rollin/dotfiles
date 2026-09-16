@@ -282,4 +282,21 @@ unalias run-help 2> /dev/null # Something aliases run-help to man, so remove tha
 autoload -Uz run-help
 alias help=run-help
 
+#
+# Tips from: https://www.youtube.com/watch?v=3fVAtaGhUyU
+#
+
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line
+
+bindkey " " magic-space
+
+alias -g ODN='>/dev/null'
+alias -g EDN='2>/dev/null'
+alias -g BDN='>/dev/null 2>&1'
+
+alias -g PC=' | pbcopy'
+alias -g PL=' | less'
+
 true # Exit with no error.
