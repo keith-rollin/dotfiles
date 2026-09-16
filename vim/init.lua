@@ -61,6 +61,7 @@ require("user.options")  -- Set our options ("set" and "setlocal" equivalents)
 require("user.packages") -- Download, install, configure, setup, etc., plugins
 require("user.lsp")      -- Enable LSP servers. Do this after 'user.packages' so that nvim-lspconfig is available.
 
+require("vim._core.ui2").enable()
 
 --
 --
