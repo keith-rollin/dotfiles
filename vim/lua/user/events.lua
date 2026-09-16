@@ -44,6 +44,59 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- TODO: I somehow came up with the +"ro" for Python. Do I want this for other
+-- languages?
+--
+-- 'formatoptions' 'fo'	string	(default "tcqj")
+--
+-- t    Auto-wrap text using 'textwidth'
+-- c    Auto-wrap comments using 'textwidth', inserting the current comment
+--      leader automatically.
+-- q    Allow formatting of comments with "gq". Note that formatting will not
+--      change blank lines or lines containing only the comment leader.  A new
+--      paragraph starts after such a line, or when the comment leader changes.
+-- j    Where it makes sense, remove a comment leader when joining lines.
+-- r    Automatically insert the current comment leader after hitting <Enter> in
+--      Insert mode.
+-- o    Automatically insert the current comment leader after hitting 'o' or 'O'
+--      in Normal mode.  In case comment is unwanted in a specific place use
+--      CTRL-U to quickly delete it. |i_CTRL-U|
+
+local set_filetype_configuration = function(pattern, callback)
+    vim.api.nvim_create_autocmd("FileType", {
+        group = custom_group,
+        pattern = pattern,
+        callback = callback,
+    })
+end
+set_filetype_configuration({ "gitconfig", "lua", "markdown", "python", "swift", "text" },
+    function()
+        -- Extend the pattern that recognizes numbered lists to include bulleted
+        -- lists. Also, extend 'formatoptions' to format numbered lists which,
+        -- thanks to the change to 'formatlistpat', now includes bulleted lists.
+        vim.opt_local.formatlistpat = [[^\s*\(\d\+[\]:.)}\t ]\s+\|[-*+]\)\s*]]
+        vim.opt_local.formatoptions:append("n")
+        vim.opt_local.colorcolumn = "+1"
+    end)
+set_filetype_configuration({ "lua", "markdown", "text" },
+    function()
+        vim.opt_local.textwidth = 80
+    end)
+set_filetype_configuration("gitconfig",
+    function()
+        vim.opt_local.expandtab = false
+    end)
+set_filetype_configuration("python",
+    function()
+        vim.opt_local.formatoptions:append("ro")
+        vim.opt_local.textwidth = 88
+    end)
+set_filetype_configuration("swift",
+    function()
+        -- As established by swift-format.
+        vim.opt_local.textwidth = "100"
+    end)
+
 vim.api.nvim_create_autocmd("BufEnter", {
     desc = "Disable Copilot for Advent of Code Swift files",
     group = custom_group,
@@ -99,3 +152,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- end
     end,
 })
+
+--
+--
