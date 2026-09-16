@@ -11,7 +11,7 @@
 #   mypath=${0:A}
 #   mydir=${0:A:h}
 #
-# But that requires a $0, which is not set to what we want of we're being
+# But that requires a $0, which is not set to what we want if we're being
 # invoked at shell startup ($0 is set to -zsh, and $0:A is set to $HOME/-zsh).
 # So we need another approach. What we'll be doing is evaluating/expanding
 # "${(%):-%N}".
