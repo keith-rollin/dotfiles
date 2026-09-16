@@ -293,6 +293,11 @@ dont_sleep()
     caffeinate -dim "$@"
 }
 
+edit_changed()
+{
+    vim $(gs -s | awk '{print $2}')
+}
+
 element_in_array()
 {
     # See if the first parameter matches any of the subsequent parameters. Used
