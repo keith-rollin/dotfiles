@@ -249,6 +249,27 @@ then
     eval "$(zoxide init zsh --cmd cd)"
 fi
 
+# Hook in Racket.
+
+racket_path=/Applications/Racket\ v9.0/bin
+if [ -e "${racket_path}/racket" ]
+then
+    prepend_path "${racket_path}"
+    # source <("${racket_path}/racket" --lib "pkg/plt-scheme-completions/completions.zsh")
+fi
+unset racket_path
+
+# Hook in any additional brew-provided zsh extensions.
+
+for ext_path in \
+    "${HOMEBREW_PREFIX}/opt/curl/share/zsh/site-functions"
+do
+    if [ -d "${ext_path}" ]
+    then
+        fpath=("${ext_path}" "${fpath[@]}")
+    fi
+done
+
 # Define a `help` function that (mostly) works like bash's.
 # Note that it won't directly bring you to documentation for low-level
 # built-ins like "if" or "while". Nor will it show help for commands in
