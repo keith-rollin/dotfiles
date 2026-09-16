@@ -82,17 +82,20 @@ source "${DOTFILES}"/bin/shell_functions.zsh
 # Set up $PATH before setting $EDITOR so that we can find any brew-based
 # solutions if we have them installed.
 
-BREW_PATH="$(brew_path)"
-if [ -e "${BREW_PATH}/bin/brew" ]
+if [ -z "${HOMEBREW_PREFIX}" ]
 then
-    # Suggested from the brew installation instructions printed after it's
-    # installed. This sets up variables like PATH, MANPATH, and INFOPATH, as
-    # well as defines HOMEBREW_PREFIX, HOMEBREW_CELLAR, and
-    # HOMEBREW_REPOSITORY.
+    BREW_PATH="$(brew_path)"
+    if [ -e "${BREW_PATH}/bin/brew" ]
+    then
+        # Suggested from the brew installation instructions printed after it's
+        # installed. This sets up variables like PATH, MANPATH, and INFOPATH, as
+        # well as defines HOMEBREW_PREFIX, HOMEBREW_CELLAR, and
+        # HOMEBREW_REPOSITORY.
 
-    eval "$(${BREW_PATH}/bin/brew shellenv)"
+        eval "$(${BREW_PATH}/bin/brew shellenv)"
+    fi
+    unset BREW_PATH
 fi
-unset BREW_PATH
 
 source_rust_env
 
