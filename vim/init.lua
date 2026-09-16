@@ -25,6 +25,11 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " " -- Not really sure what this does, if anything
 
+-- Set up the colorscheme. This is done before loading plugins so that they can
+-- use the colorscheme if they want to.
+
+vim.cmd.colorscheme("catppuccin")
+
 -- A little global utility table.
 
 _G.kr = {}
