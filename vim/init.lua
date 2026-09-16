@@ -38,9 +38,9 @@ _G.kr = {}
 -- determines what happens when there's a conflict merging two tables, and is
 -- defined as:
 --
--- • "error": raise an error
--- • "keep": use value from the leftmost map
--- • "force": use value from the rightmost map
+-- * "error": raise an error
+-- * "keep": use value from the leftmost map
+-- * "force": use value from the rightmost map
 --
 -- I can never remember which means left and which means right, so define some
 -- aliases.
@@ -48,15 +48,32 @@ _G.kr = {}
 kr.keep_left = "keep"
 kr.keep_right = "force"
 
+-- Here's the directory structure of my Neovim configuration (`:r !tree vim`):
+--
+--     vim
+--     ├── init.lua
+--     ├── lua
+--     │   └── user
+--     │       ├── abbr.lua
+--     │       ├── events.lua
+--     │       ├── lsp.lua
+--     │       ├── mapping.lua
+--     │       ├── misc.lua
+--     │       ├── options.lua
+--     │       └── packages.lua
+--     └── nvim-pack-lock.json
+--
+--     3 directories, 9 files
+--
+-- It's probably a good idea to require packages and servers last. It's a great
+-- place for things to fail, and we would like that to happen after everything
+-- else is set up and vim is feeling comfy.
 
 require("user.abbr")     -- Set our abbreviations (mostly to fix spelling errors)
 require("user.events")   -- Set event handlers (e.g. respond to file loads/writes)
 require("user.mapping")  -- Keyboard mappings
 require("user.misc")     -- Stuuuuuffff
 require("user.options")  -- Set our options ("set" and "setlocal" equivalents)
--- It's probably a good idea to require plugins last. It's a great place for
--- things to fail, and we would like that to happen after everything else is
--- set up and vim is feeling comfy.
 
 require("user.packages") -- Download, install, configure, setup, etc., plugins
 require("user.lsp")      -- Enable LSP servers. Do this after 'user.packages' so that nvim-lspconfig is available.
