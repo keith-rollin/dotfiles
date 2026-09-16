@@ -3,7 +3,8 @@ local custom_group = vim.api.nvim_create_augroup("custom_events", {})
 -- Restore the last cursor position.
 -- Based on idea from: 'help last-position-jump'.
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
-
+-- Additional tweaks from:  https://www.youtube.com/watch?v=v36vLiFVOXY
+--
 -- I sometimes get this when Blink shows the completion menu. Line 24 is/was the
 -- one calling vim.api.nvim_win_set_cursor:
 --
@@ -25,21 +26,19 @@ vim.api.nvim_create_autocmd("FileType", {
     desc = "Restore the last cursor position",
     group = custom_group,
     pattern = "*",
-    callback = function()
+    callback = function(ev)
         local hands_off_these_files = { "gitcommit", "gitrebase", "netrw" }
         if not vim.tbl_contains(hands_off_these_files, vim.o.filetype) then
             -- Get the last position as {row, col}, where row is 1-based. Get
             -- {0,0} if there is no mark.
-            local position = vim.api.nvim_buf_get_mark(0, '"')
-            if position == { 0, 0 } then
-                return
+            local position = vim.api.nvim_buf_get_mark(ev.buf, '"')
+            local line_count = vim.api.nvim_buf_line_count(ev.buf)
+            if position[1] >= 1 and position[1] <= line_count then
+                vim.api.nvim_win_set_cursor(0, position)
+                vim.schedule(function()
+                    vim.cmd("normal! zz")
+                end)
             end
-            position[2] = 0 -- Wild attempt to fix the above noted error.
-            local max_line = vim.fn.line("$")
-            if position[1] > max_line then
-                position[1] = max_line
-            end
-            vim.api.nvim_win_set_cursor(0, position)
         end
     end,
 })
