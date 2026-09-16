@@ -270,15 +270,6 @@ create_link_in_home()
     create_link "$real_file" "$sym_file"
 }
 
-delete_lazy()
-{
-    rm -rf ~/.local/{share,state}/nvim/lazy
-}
-
-delete_mason() {
-    rm -rf ~/.local/share/nvim/mason
-}
-
 delete_python_packages()
 {
     local all_packages=( \
@@ -295,11 +286,6 @@ delete_python_packages()
     then
         python3 -m pip uninstall --yes "${all_packages[@]}"
     fi
-}
-
-delete_treesitter() {
-    rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser/*.so
-    rm -rf ~/.local/share/nvim/lazy/nvim-treesitter/parser-info/*.revision
 }
 
 dont_sleep()
