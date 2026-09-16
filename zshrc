@@ -300,3 +300,8 @@ alias -g PC=' | pbcopy'
 alias -g PL=' | less'
 
 true # Exit with no error.
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/keith/.lmstudio/bin"
+# End of LM Studio CLI section
+
