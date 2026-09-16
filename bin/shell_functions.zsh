@@ -109,7 +109,7 @@ gs()   { git status "$@" }
 
 bi() { brew info "$@" }
 bo() { brew outdated }
-bu() { brew upgrade }
+bu() { brew upgrade -y }
 
 bak()
 {
