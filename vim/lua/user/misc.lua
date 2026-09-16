@@ -32,7 +32,7 @@ vim.diagnostic.config({
 -- Modified with trim_trailing_whitespace handler in
 -- runtime/editor/lua/editorconfig.lua
 --
-StripWhitespace = function()
+kr.StripWhitespace = function()
     local oldquery = vim.fn.getreg("/")
     local view = vim.fn.winsaveview()
     vim.cmd("silent keepjumps keeppatterns %s/\\s\\+$//e")

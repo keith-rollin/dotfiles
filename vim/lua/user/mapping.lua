@@ -13,7 +13,7 @@ end
 --
 -- Miscellaneous custom mappings
 --
-setn("<leader> ", "<cmd>lua StripWhitespace()<CR>", "Strip trailing white space")
+setn("<leader> ", "<cmd>lua kr.StripWhitespace()<CR>", "Strip trailing white space")
 setn("<leader>,", "<cmd>FSHere<CR>", "Switch to paired file")
 setn("<leader>.", "<c-^>", "Edit alternate file")
 setn("<leader>Sh", "<cmd>split<CR>", "Split horizontally")
