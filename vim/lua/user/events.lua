@@ -127,28 +127,54 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
     callback = function()
         vim.highlight.on_yank({ higroup = "Visual" })
-    end, -- Why can't I just set the callback to vim.highlight.on_yank?
+    end,
 })
 
 -- Set up an event handler to establish LSP-related key bindings when we
 -- enter a buffer that an LSP supports.
+-- From ':help lsp-lint'
 
 vim.api.nvim_create_autocmd("LspAttach", {
     desc = "LSP actions",
-    callback = function() -- (ev)
-        kr.set_diagnostic_mapping()
-        kr.set_lsp_mapping()
+    group = custom_group,
+    callback = function(ev)
+        local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+        if client:supports_method('textDocument/implementation') then
+            kr.set_diagnostic_mapping()
+            kr.set_lsp_mapping()
+        end
 
-        -- Should I use this or do I use blink?
+        -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+        if client:supports_method('textDocument/completion') then
+            -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+            -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+            -- client.server_capabilities.completionProvider.triggerCharacters = chars
+            --
+            -- vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect', 'fuzzy', 'popup' }
+            vim.opt.completeopt = { 'fuzzy', 'menu', 'noselect', 'popup' } -- Default = menu, popup
+            vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+            -- vim.keymap.set('i', '<C-Space>', function()
+            --     vim.lsp.completion.get()
+            -- end)
+            vim.opt.complete:append('o') -- Add LSP-style completions to autocomplete/complete options.
+        end
+
+        -- Auto-format ("lint") on save.
+        -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
         --
-        -- local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        -- if client and client:supports_method('textDocument/completion') then
-        --     vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect', 'fuzzy', 'popup' }
-        --     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-        --     vim.keymap.set('i', '<C-Space', function()
-        --         vim.lsp.completion.get()
-        --     end)
-        -- end
+        -- TODO: Handle the case where the LSP has detached from this buffer. In
+        -- that case, the client (used to fetch the client.id) will be invalid.
+        -- See help for example in LspDetach.
+        if not client:supports_method('textDocument/willSaveWaitUntil')
+            and client:supports_method('textDocument/formatting') then
+            vim.api.nvim_create_autocmd('BufWritePre', {
+                group = custom_group,
+                buffer = ev.buf,
+                callback = function()
+                    vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
+                end,
+            })
+        end
     end,
 })
 
