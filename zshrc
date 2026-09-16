@@ -225,11 +225,28 @@ then
     fpath=("$(brew --prefix)/share/zsh/site-functions" "${fpath[@]}")
 fi
 
+# Hook in fzf.
+#
+# I'm not sure what this enables. fzf seems to work pretty well without it. But
+# we're told to do this. The output of `fzf --zsh` is pretty extensive, and I
+# haven't read through it all yet.
+#
+# (LATER: Ohai! https://junegunn.github.io/fzf/shell-integration/. It
+# configures Ctrl-T, to enter text into the command line, Ctrl-R for history
+# search, and Alt-C to "change directory".)
+
+if is_executable fzf
+then
+    source <(fzf --zsh)
+fi
+
 # Hook in zoxide.
+#
+# Configure `cd` and `cdi` to be redirected to `z` and `zi`.
 
 if is_executable zoxide
 then
-    eval "$(zoxide init zsh)"
+    eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # Define a `help` function that (mostly) works like bash's.
