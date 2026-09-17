@@ -28,7 +28,6 @@ APPS=(
     fzf             # Command-line fuzzy finder written in Go
     git             # Distributed revision control system
     neovim          # Ambitious Vim-fork focused on extensibility and agility
-    node            # Platform built on V8 to build network applications (Needed for some LSP plugins (which?))
     python          # Interpreted, interactive, object-oriented programming language
     ripgrep         # Search tool like grep and The Silver Searcher
     tree            # Display directories as trees (with optional color/HTML output)
@@ -48,7 +47,11 @@ APPS=(
 
     isort               # Sort Python imports automatically
 
+    # More Neovim support.
 
+    node                # Platform built on V8 to build network applications (Needed for some LSP plugins (which?))
+    tree-sitter         # Parser generator tool and incremental parsing library
+    tree-sitter-cli     # Parser generator tool
 )
 
 # Packages to install as pre-built Mac binaries.
