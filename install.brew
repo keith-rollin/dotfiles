@@ -17,19 +17,6 @@
 # To remove homebrew and then re-install it:
 #
 #       CLEAN_INSTALL=1 source ./install.brew
-#
-# TERMINOLOGY CHEAT SHEET:
-#
-# (See: https://docs.brew.sh/Formula-Cookbook)
-#
-# * Tap: A Git repository of Formulae. E.g., homebrew-core.
-# * Formula: The Ruby file describing the package.
-# * Cellar: Build/intallation location. Prefixed by project/version.
-# * Keg: The versioned installation path in the Cellar.
-# * Keg-only: Not made visible to $HOMEBREW_PREFIX/{bin,lib,etc}
-# * Bottle: Prebuilt Keg.
-# * Cask: Facility for installing macOS native applications.
-# * Bundle: Something about homebrew dependencies.
 
 
 # Packages to install as source (formulae) or pre-built (bottles).
@@ -49,36 +36,19 @@ APPS=(
     watch           # Executes a program periodically, showing output fullscreen
     zoxide          # Shell extension to navigate your filesystem faster
 
+    # Language servers for LSP plugins in neovim.
+    # (Note that we also use rust_analyzer and sourcekit, but those are
+    # installed separately, not via brew.)
+
     lua-language-server # Language Server for the Lua language
     pyright             # Static type checker for Python
     ruff                # Extremely fast Python linter, written in Rust
+
+    # Formatters for neovim.
+
     isort               # Sort Python imports automatically
 
-    # I don't really use these. Leave them out for now, but leave them here in
-    # case I change my mind.
-    #
-    # bump-my-version # Version bump your Python project (NOTE: `uv` can do this now)
-    # python-tk       # Python interface to Tcl/Tk
-    # tree-sitter     # Parser generator tool and incremental parsing library
-    # chezscheme
-    # clisp
-    # rlwrap
-    # sbcl
-    #
-    # font-cousine-nerd-font
 
-    # Needed for building neovim.
-    #
-    # Note that cmake -- which is also required -- is installed below as a
-    # cask. This seems to be the approach recommended by homebrew, which prints
-    # a warning if installed by formula. I suppose this is so we can get the
-    # macOS configuration program.
-
-    # ninja libtool automake pkg-config gettext curl # cmake is also needed, but see note above.
-
-    # Needed for building ladybird.
-
-    # ninja ccache qt # cmake is also needed, but see note above.
 )
 
 # Packages to install as pre-built Mac binaries.
