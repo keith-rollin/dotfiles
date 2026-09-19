@@ -70,6 +70,10 @@ local packs = vim.iter({
         -- ---------------------------------------------------------------------
         -- conform.nvim
         -- Lightweight yet powerful formatter plugin for Neovim
+        --
+        -- We could also "simply" try:
+        --
+        --    https://github.com/smnatale/nvim_native/blob/main/lua/formatting.lua
         {
             src = gh("stevearc/conform.nvim"),
             opts = {
@@ -78,8 +82,7 @@ local packs = vim.iter({
                     lsp_format = "fallback",
                 },
                 formatters_by_ft = {
-                    -- For Python, use ruff, and then isort.
-                    python = { "ruff", "isort" },
+                    python = { "ruff_organize_imports", lsp_format = "first" },
                 },
                 format_on_save = {},
             },

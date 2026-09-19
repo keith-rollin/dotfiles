@@ -45,7 +45,7 @@ APPS=(
 
     # Formatters for neovim.
 
-    isort               # Sort Python imports automatically
+    # (None at the moment, but we may add some in the future.)
 
     # More Neovim support.
 
