@@ -59,7 +59,9 @@ setn("<leader>eg", "<cmd>edit ~/.gitconfig<CR>", ".gitconfig")
 setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
 setn("<leader>ex", "<cmd>Lex 15<CR>", "Open netrw")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
-setn("<leader>ff", function() require("conform").format() end, "Format file")
+-- This conficts with fzf's find-files. Also, I never really used this, opting
+-- to just save the file instead.
+-- setn("<leader>ff", function() require("conform").format() end, "Format file")
 setn("<leader>im", "<cmd>Mason<CR>", "Mason")
 setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
 setn("<leader>ru", "<cmd>:.lua<CR>", "Run current line")

@@ -124,6 +124,52 @@ local packs = vim.iter({
             end,
         },
         -- ---------------------------------------------------------------------
+        -- Three packages for supporting fzf. I'll play with these until I
+        -- determine which one I like best (if any).
+        -- ---------------------------------------------------------------------
+        -- fzf.vim
+        -- fzf ❤️ vim
+        --
+        -- NB: Make sure it can access the fzf binary that I installed with
+        -- homebrew.
+        {
+            disabled = true,
+            src = gh("junegunn/fzf.vim"),
+            config = function()
+                vim.keymap.set("n", "<leader>ff", ":Files<CR>")
+                vim.keymap.set("n", "<leader>fg", ":Rg<CR>")
+                vim.keymap.set("n", "<leader>fb", ":Buffers<CR>")
+                -- Lots of other commands. See:
+                --
+                --      https://github.com/junegunn/fzf.vim
+            end,
+        },
+        -- fzf.lua
+        -- Improved fzf.vim written in lua
+        --
+        -- Needs nvim-web-devicons, installed later.
+        -- Can also make use of fd, rg, etc. See:
+        --
+        --      https://github.com/ibhagwan/fzf-lua
+        --
+        -- This package has TONs of commands. See above web page.
+        {
+            src = gh("ibhagwan/fzf-lua"),
+            config = function()
+                local fzf_lua = require("fzf-lua")
+                fzf_lua.setup({ "default" })
+                vim.keymap.set("n", "<leader>ff", fzf_lua.files)
+                vim.keymap.set("n", "<leader>fg", fzf_lua.live_grep)
+                vim.keymap.set("n", "<leader>fb", fzf_lua.buffers)
+            end,
+        },
+        -- telescope-fzf-native.nvim
+        {
+            disabled = true, -- Need mechanism for making binary component
+            src = gh("nvim-telescope/telescope-fzf-native.nvim"),
+            build = "make",
+        },
+        -- ---------------------------------------------------------------------
         -- indent-blankline.nvim
         -- Indent guides for Neovim
         --
