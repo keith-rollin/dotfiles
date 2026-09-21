@@ -132,7 +132,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- Set up an event handler to establish LSP-related key bindings when we
 -- enter a buffer that an LSP supports.
+--
 -- From ':help lsp-lint'
+--
+-- NB: See `help gra` as the start of documentation on what nvim enables by
+-- default when an LSP attaches to a buffer. That information can guide what
+-- else we want to enable here.
 
 vim.api.nvim_create_autocmd("LspAttach", {
     desc = "LSP actions",
@@ -155,8 +160,27 @@ vim.api.nvim_create_autocmd("LspAttach", {
             vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
             -- vim.keymap.set('i', '<C-Space>', function()
             --     vim.lsp.completion.get()
-            -- end)
+            -- end,
+            -- desc = "Trigger LSP completion")
             vim.opt.complete:append('o') -- Add LSP-style completions to autocomplete/complete options.
+        end
+
+        -- Enable inline-completion.
+        if client:supports_method('textDocument/inlineCompletion') then
+            vim.opt.completeopt = { 'fuzzy', 'menu', 'noselect', 'popup' }
+            vim.lsp.inline_completion.enable(true)
+            vim.keymap.set('i', '<Tab>', function()
+                    if not vim.lsp.inline_completion.get() then
+                        return "<Tab>"
+                    end
+                end,
+                {
+                    expr = true,
+                    replace_keycodes = true,
+                    noremap = true,
+                    silent = true,
+                    desc = "Trigger LSP inline completion"
+                })
         end
 
         -- Auto-format ("lint") on save.

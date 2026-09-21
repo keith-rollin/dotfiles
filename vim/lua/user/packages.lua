@@ -95,6 +95,7 @@ local packs = vim.iter({
         -- We could also "simply" try:
         --
         --    https://github.com/smnatale/nvim_native/blob/main/lua/formatting.lua
+        --    https://github.com/mplusp/nvim-0.12-built-in-inline-completion/blob/main/lua/core/lsp.lua
         {
             src = gh("stevearc/conform.nvim"),
             opts = {
@@ -114,7 +115,6 @@ local packs = vim.iter({
         --
         -- Do I need this? Can I use the steps in *lsp-copilot*?
         {
-            disabled = false, -- Disabled because it conflicts with autocomplete
             src = gh("github/copilot.vim"),
             config = function()
                 kr.set_copilot_mapping()
