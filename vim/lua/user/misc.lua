@@ -27,6 +27,15 @@ vim.diagnostic.config({
     },
 })
 
+-- Make the split dividers more prominent by changing the color and making them
+-- bold.
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ff8800", bold = true })
+-- vim.opt.fillchars:append({
+--     vert = "┃", -- heavier vertical bar
+--     -- vert = "█", -- solid block, very prominent
+--     horiz = "━", -- horizontal split divider
+-- })
+
 --
 -- Originally from some old vim.org tip that I can't find any more.
 -- Modified with trim_trailing_whitespace handler in
