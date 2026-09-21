@@ -1,3 +1,24 @@
+-- Some additional packages that I want to install.
+--
+-- A minimalist Lua buffer evaluator that executes the current editor buffer
+-- https://github.com/FractalCodeRicardo/lua-inspector
+--
+-- A handy scratch pad / REPL / debug console for Lua development and Neovim
+-- exploration
+-- https://github.com/YaroSpace/lua-console.nvim
+--
+-- Library of 45+ independent Lua modules improving Neovim experience with
+-- minimal effort
+-- https://github.com/nvim-mini/mini.nvim
+--
+-- Neovim file explorer: edit your filesystem like a buffer
+-- https://github.com/stevearc/oil.nvim
+--
+-- Notes on configuring mini.files:
+-- https://www.reddit.com/r/neovim/comments/1bceiw2/oilnvim_vs_minifiles
+--
+--
+--
 -- Prefix the given partial path with "https://github.com/" so that we don't
 -- need to always spell out the whole thing in our pack specs.
 local gh = function(x) return 'https://github.com/' .. x end
