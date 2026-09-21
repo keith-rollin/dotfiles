@@ -1,5 +1,7 @@
 -- Notes on recent additions to built-in mappings:
 --
+-- (See also `:help default-mappings`)
+--
 -- nvim 0.10:
 --   * "]d" and "[d" in Normal mode map to vim.diagnostic.goto_next() and
 --     vim.diagnostic.goto_prev(), respectively. ]d-default [d-default

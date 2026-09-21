@@ -147,29 +147,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
         if client:supports_method('textDocument/completion') then
-            -- Optional: trigger autocompletion on EVERY keypress. May be slow!
-            -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-            -- client.server_capabilities.completionProvider.triggerCharacters = chars
-            --
-            -- vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'noselect', 'fuzzy', 'popup' }
             vim.opt.completeopt = { 'fuzzy', 'menu', 'noselect', 'popup' } -- Default = menu, popup
             vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-            -- vim.keymap.set('i', '<C-Space>', function()
-            --     vim.lsp.completion.get()
-            -- end,
-            -- desc = "Trigger LSP completion")
-            vim.opt.complete:append('o') -- Add LSP-style completions to autocomplete/complete options.
+            vim.opt.complete:append('o')                                   -- Add LSP-style completions to autocomplete/complete options.
         end
 
         -- Enable inline-completion.
         if client:supports_method('textDocument/inlineCompletion') then
             vim.lsp.inline_completion.enable(true, { bufnr = ev.buf, client_id = client.id })
             vim.keymap.set('i', '<Tab>', function()
+                    -- Try to accesspt the currently displayed completion candidate
+                    -- into the buffer. If there is no candidate, then insert a tab
+                    -- character.
                     if not vim.lsp.inline_completion.get({ bufnr = ev.buf }) then
                         return "<Tab>"
                     end
                 end,
-                { expr = true, desc = "Trigger LSP inline completion" })
+                { expr = true, desc = "Accept the current inline completion" })
         end
 
         -- Auto-format ("lint") on save.
