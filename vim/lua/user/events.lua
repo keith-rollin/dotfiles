@@ -163,20 +163,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- Enable inline-completion.
         if client:supports_method('textDocument/inlineCompletion') then
-            vim.opt.completeopt = { 'fuzzy', 'menu', 'noselect', 'popup' }
-            vim.lsp.inline_completion.enable(true)
+            vim.lsp.inline_completion.enable(true, { bufnr = ev.buf, client_id = client.id })
             vim.keymap.set('i', '<Tab>', function()
-                    if not vim.lsp.inline_completion.get() then
+                    if not vim.lsp.inline_completion.get({ bufnr = ev.buf }) then
                         return "<Tab>"
                     end
                 end,
-                {
-                    expr = true,
-                    replace_keycodes = true,
-                    noremap = true,
-                    silent = true,
-                    desc = "Trigger LSP inline completion"
-                })
+                { expr = true, desc = "Trigger LSP inline completion" })
         end
 
         -- Auto-format ("lint") on save.
