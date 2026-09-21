@@ -144,10 +144,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     group = custom_group,
     callback = function(ev)
         local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-        if client:supports_method('textDocument/implementation') then
-            kr.set_diagnostic_mapping()
-            kr.set_lsp_mapping()
-        end
 
         -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
         if client:supports_method('textDocument/completion') then

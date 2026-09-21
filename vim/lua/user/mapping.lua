@@ -85,29 +85,6 @@ kr.set_copilot_mapping = function()
 end
 
 --
--- Diagnostics mappings
--- Called from LSP setup function.
---
-kr.set_diagnostic_mapping = function()
-    setn("<leader>dl", vim.diagnostic.setloclist, "Set location list")
-    setn("<leader>dn", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Go to next diagnostic")      -- Similar to ]d, but opens diagnostic window
-    setn("<leader>dp", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Go to previous diagnostic") -- Similar to [d, but opens diagnostic window
-end
-
---
--- LSP mappings
--- Called from LSP setup function.
---
--- These are named to be consistent with the new gra, gri, grn, and grr
--- keybindings in Neovim 0.11.
---
-kr.set_lsp_mapping = function()
-    setn("grd", vim.lsp.buf.definition, "Go to definition")        -- Aliases gD
-    setn("grD", vim.lsp.buf.declaration, "Go to declaraction")     -- Aliases gd
-    setn("grs", vim.lsp.buf.signature_help, "Show signature help") -- Aliases i_Ctrl-S
-end
-
---
 -- Trouble mappings
 -- Called from Trouble setup function.
 --
