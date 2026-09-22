@@ -1,40 +1,8 @@
--- Notes on recent additions to built-in mappings:
+-- Some locations listing some mappings nvim sets up:
 --
--- (See also `:help default-mappings`)
---
--- nvim 0.10:
---   * "]d" and "[d" in Normal mode map to vim.diagnostic.goto_next() and
---     vim.diagnostic.goto_prev(), respectively. ]d-default [d-default
---   * <C-W>d (and <C-W><C-D>) map to vim.diagnostic.open_float()
---     CTRL-W_d-default
---   * vim.lsp.start() sets the following default keymaps (assuming server
---     support):
---     * K in Normal mode maps to vim.lsp.buf.hover(), unless 'keywordprg' was
---       customized before calling vim.lsp.start().
---
--- nvim 0.11:
---   * grn in Normal mode maps to vim.lsp.buf.rename()
---   * grr in Normal mode maps to vim.lsp.buf.references()
---   * gri in Normal mode maps to vim.lsp.buf.implementation()
---   * gO in Normal mode maps to vim.lsp.buf.document_symbol()
---   * gra in Normal and Visual mode maps to vim.lsp.buf.code_action()
---   * CTRL-S in Insert and Select mode maps to vim.lsp.buf.signature_help()
---   * [D-default and ]D-default jump to the first and last diagnostic in the
---     current buffer, respectively.
---   * Mappings inspired by Tim Pope's vim-unimpaired:
---     * [q, ]q, [Q, ]Q, [_CTRL-Q, ]_CTRL-Q navigate through the quickfix list
---     * [l, ]l, [L, ]L, [_CTRL-L, ]_CTRL-L navigate through the location-list
---     * [t, ]t, [T, ]T, [_CTRL-T, ]_CTRL-T navigate through the tag-matchlist
---     * [a, ]a, [A, ]A navigate through the argument-list
---     * [b, ]b, [B, ]B navigate through the buffer-list
---     * [<Space>, ]<Space> add an empty line above and below the cursor
---     * [[ and ]] in Normal mode jump between shell prompts for shells which
---       emit OSC 133 sequences ("shell integration" or "semantic prompts").
---
--- nvim 0.12:
---   * grt in Normal mode maps to vim.lsp.buf.type_definition()
---   * grx in Normal mode maps to vim.lsp.codelens.run()
---
+--  `:help default-mappings`
+--  `:help grx`
+
 local setn = function(lhs, rhs, desc)
     vim.keymap.set("n", lhs, rhs, { noremap = true, silent = true, desc = desc })
 end
@@ -53,25 +21,11 @@ end
 setn("<leader> ", "<cmd>lua kr.StripWhitespace()<CR>", "Strip trailing white space")
 setn("<leader>,", "<cmd>FSHere<CR>", "Switch to paired file")
 setn("<leader>.", "<c-^>", "Edit alternate file")
-setn("<leader>Sh", "<cmd>split<CR>", "Split horizontally")
-setn("<leader>Sv", "<cmd>vsplit<CR>", "Split vertically")
-setn("<leader>Sx", "<cmd>close<CR>", "Close split")
 setn("<leader>ee", "<cmd>edit ~/.config/ghostty/config<CR>", "Ghostty config")
 setn("<leader>eg", "<cmd>edit ~/.gitconfig<CR>", ".gitconfig")
 setn("<leader>ev", "<cmd>edit " .. vim.env.MYVIMRC .. "<CR>", "init.lua")
-setn("<leader>ex", "<cmd>Lex 15<CR>", "Open netrw")
 setn("<leader>ez", "<cmd>edit ~/.zshrc<CR>", ".zshrc")
--- This conficts with fzf's find-files. Also, I never really used this, opting
--- to just save the file instead.
--- setn("<leader>ff", function() require("conform").format() end, "Format file")
-setn("<leader>im", "<cmd>Mason<CR>", "Mason")
-setn("<leader>iz", "<cmd>Lazy<CR>", "Lazy")
 setn("<leader>ru", "<cmd>:.lua<CR>", "Run current line")
--- Defined in packages.lua for treesitter-textobjects.
--- ["<leader>sa"] = { query = "@parameter.inner", desc = "Swap with next parameter" },
--- ["<leader>sA"] = { query = "@parameter.inner", desc = "Swap with previous parameter" },
-setn("<leader>si", "<cmd>set cursorline!<CR>", "Toggle 'cursorline'")
-setn("<leader>sl", "<cmd>set list!<CR>", "Toggle 'list'")
 setn("<leader>ss", "<cmd>set spell!<CR>", "Toggle 'spell'")
 setn("<leader>sw", "<cmd>set wrap!<CR>", "Toggle line wrapping")
 setn("<leader>w", "<cmd>w<CR>", "Write current file")
@@ -84,51 +38,6 @@ kr.set_copilot_mapping = function()
     setn("<leader>cd", "<cmd>Copilot disable<CR><cmd>Copilot status<CR>", "Disable")
     setn("<leader>ce", "<cmd>Copilot enable<CR><cmd>Copilot status<CR>", "Enable")
     setn("<leader>cs", "<cmd>Copilot status<CR>", "Status")
-end
-
---
--- Trouble mappings
--- Called from Trouble setup function.
---
-kr.set_trouble_mapping = function()
-    setn("<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", "Trouble: diagnostics")
-    setn("<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Trouble: buffer diagnostics")
-    setn("<leader>xs", "<cmd>Trouble diagnostics toggle focus=false<CR>", "Trouble: symbols")
-    setn("<leader>xl", "<cmd>Trouble lsp toggle focus=false win.position=right<CR>",
-        "Trouble: LSP Definitions / references / ...")
-    setn("<leader>xL", "<cmd>Trouble loclist toggle<CR>", "Trouble: Location list")
-    setn("<leader>xQ", "<cmd>Trouble qflist toggle<CR>", "Trouble: Quickfix list")
-end
-
---
--- Telescope mappings
--- Called from Telescope setup function.
---
-kr.set_telescope_mapping = function()
-    setn("<leader>tf*", "<cmd>Telescope grep_string<CR>", "Search directory for string under cursor")
-    setn("<leader>tfc", "<cmd>Telescope current_buffer_fuzzy_find<CR>", "Fuzzy search in current buffer")
-    setn("<leader>tff", "<cmd>Telescope find_files<CR>", "Search for files")
-    setn("<leader>tfg", "<cmd>Telescope live_grep<CR>", "Search for string")
-    setn("<leader>tft", "<cmd>Telescope treesitter<CR>", "Show Treesitter query results")
-    setn("<leader>tLS", "<cmd>Telescope lsp_workspace_symbols<CR>", "List document symbols in workspace")
-    setn("<leader>tlI", "<cmd>Telescope lsp_incoming_calls<CR>", "List incoming calls for hot string")
-    setn("<leader>tld", "<cmd>Telescope lsp_definitions<CR>", "Go to definition for hot string")
-    setn("<leader>tli", "<cmd>Telescope lsp_implementation<CR>", "Go to implementation for hot string")
-    setn("<leader>tlo", "<cmd>Telescope lsp_outgoing_calls<CR>", "List outgoing calls for hot string")
-    setn("<leader>tlr", "<cmd>Telescope lsp_references<CR>", "List references for hot string")
-    setn("<leader>tls", "<cmd>Telescope lsp_document_symbols<CR>", "List document symbols in current buffer")
-    setn("<leader>tlt", "<cmd>Telescope lsp_type_definitions<CR>", "Go to type definition for hot string")
-    setn("<leader>ttc", "<cmd>Telescope current_buffer_tags<CR>", "List tags in current buffer")
-    setn("<leader>ttt", "<cmd>Telescope tags<CR>", "List tags in current directory")
-    setn("<leader>tgB", "<cmd>Telescope git_bcommits<CR>", "Show commits for current buffer")
-    setn("<leader>tgS", "<cmd>Telescope git_stash<CR>", "Show stash")
-    setn("<leader>tgb", "<cmd>Telescope git_branches<CR>", "Show branches")
-    setn("<leader>tgc", "<cmd>Telescope git_commits<CR>", "Show commits")
-    setn("<leader>tgf", "<cmd>Telescope git_files<CR>", "Show files tracked by git")
-    setn("<leader>tgs", "<cmd>Telescope git_status<CR>", "Show status")
-    setn("<leader>tpb", "<cmd>Telescope builtin<CR>", "Show builtin pickers")
-    setn("<leader>tpr", "<cmd>Telescope resume<CR>", "Resume the previous picker")
-    setn("<leader>tk", "<cmd>Telescope keymaps<CR>", "Show normal mode keymaps")
 end
 
 --

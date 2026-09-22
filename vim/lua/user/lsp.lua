@@ -1,16 +1,15 @@
--- This is the result of reducing from mason and related tools down to the
--- built-in LSP management facilities. Inspired by:
+-- Inspired by:
 --
 --      "How To Set Up LSP Natively in Neovim 0.11+"
 --      https://www.youtube.com/watch?v=tdhxpn1XdjQ
 --
--- All of the servers and other tools are installed outside of Neovim using
--- Homebrew.
-
--- UPDATE: see also:
+-- See also:
 --
 --     "I Migrated to Neovim 0.12 VimPack So You Don't Have To"
 --     https://youtu.be/h1sCwi0pNyM?si=4z4vtsOFkpybjZKn&t=647
+--
+-- All of the servers and other tools are installed outside of Neovim using
+-- Homebrew.
 
 vim.lsp.config("lua_ls", {
     settings = {
@@ -25,8 +24,15 @@ vim.lsp.config("lua_ls", {
             },
             workspace = {
                 library = {
+                    -- Tell lua_ls where to find all the Lua files that you have
+                    -- loaded for your Neovim configuration.
+                    --
                     -- From "The Only Video You Need to Get Started with Neovim"
-                    --      https://www.youtube.com/watch?v=m8C0Cq9Uv9o&t=1275s
+                    --      https://youtu.be/m8C0Cq9Uv9o?t=1416
+                    --
+                    -- This seems to also take care of the problem where the
+                    -- symbol "vim" is not recognized in Lua files and flagged
+                    -- with underlined squiggles.
                     "${3rd}/luv/library",
                     unpack(vim.api.nvim_get_runtime_file("", true)),
                 },
@@ -41,12 +47,6 @@ vim.lsp.config("pyright", {
         pyright = {
             -- Using Ruff's import organizer
             disableOrganizeImports = true,
-        },
-        python = {
-            analysis = {
-                -- Ignore all files for analysis to exclusively use Ruff for linting
-                -- ignore = { "*" },
-            },
         },
     },
 })

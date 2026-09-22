@@ -27,14 +27,11 @@ vim.diagnostic.config({
     },
 })
 
+--
 -- Make the split dividers more prominent by changing the color and making them
 -- bold.
+--
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ff8800", bold = true })
--- vim.opt.fillchars:append({
---     vert = "┃", -- heavier vertical bar
---     -- vert = "█", -- solid block, very prominent
---     horiz = "━", -- horizontal split divider
--- })
 
 --
 -- Originally from some old vim.org tip that I can't find any more.
@@ -49,9 +46,10 @@ kr.StripWhitespace = function()
     vim.fn.setreg("/", oldquery)
 end
 
+--
 -- Create a python virtual environment and use that for the python3 host
 -- program used in nvim operations.
-
+--
 local function install_venv()
     local function check(system_obj, msg)
         local system_completed = system_obj:wait()

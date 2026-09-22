@@ -48,23 +48,6 @@ _G.kr = {}
 kr.keep_left = "keep"
 kr.keep_right = "force"
 
--- Here's the directory structure of my Neovim configuration (`:r !tree vim`):
---
---     vim
---     ├── init.lua
---     ├── lua
---     │   └── user
---     │       ├── abbr.lua
---     │       ├── events.lua
---     │       ├── lsp.lua
---     │       ├── mapping.lua
---     │       ├── misc.lua
---     │       ├── options.lua
---     │       └── packages.lua
---     └── nvim-pack-lock.json
---
---     3 directories, 9 files
---
 -- It's probably a good idea to require packages and servers last. It's a great
 -- place for things to fail, and we would like that to happen after everything
 -- else is set up and vim is feeling comfy.

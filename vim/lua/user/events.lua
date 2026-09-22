@@ -43,24 +43,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- TODO: I somehow came up with the +"ro" for Python. Do I want this for other
--- languages?
---
--- 'formatoptions' 'fo'	string	(default "tcqj")
---
--- t    Auto-wrap text using 'textwidth'
--- c    Auto-wrap comments using 'textwidth', inserting the current comment
---      leader automatically.
--- q    Allow formatting of comments with "gq". Note that formatting will not
---      change blank lines or lines containing only the comment leader.  A new
---      paragraph starts after such a line, or when the comment leader changes.
--- j    Where it makes sense, remove a comment leader when joining lines.
--- r    Automatically insert the current comment leader after hitting <Enter> in
---      Insert mode.
--- o    Automatically insert the current comment leader after hitting 'o' or 'O'
---      in Normal mode.  In case comment is unwanted in a specific place use
---      CTRL-U to quickly delete it. |i_CTRL-U|
-
 local set_filetype_configuration = function(pattern, callback)
     vim.api.nvim_create_autocmd("FileType", {
         group = custom_group,
@@ -149,16 +131,18 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if client:supports_method('textDocument/completion') then
             vim.opt.completeopt = { 'fuzzy', 'menu', 'noselect', 'popup' } -- Default = menu, popup
             vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-            vim.opt.complete:append('o')                                   -- Add LSP-style completions to autocomplete/complete options.
+
+            -- Add LSP-style completions to autocomplete/complete options.
+            vim.opt.complete:append('o')
         end
 
         -- Enable inline-completion.
         if client:supports_method('textDocument/inlineCompletion') then
             vim.lsp.inline_completion.enable(true, { bufnr = ev.buf, client_id = client.id })
             vim.keymap.set('i', '<Tab>', function()
-                    -- Try to accesspt the currently displayed completion candidate
-                    -- into the buffer. If there is no candidate, then insert a tab
-                    -- character.
+                    -- Try to insert the currently displayed completion
+                    -- candidate into the buffer. If there is no candidate, then
+                    -- pass along our trigger character.
                     if not vim.lsp.inline_completion.get({ bufnr = ev.buf }) then
                         return "<Tab>"
                     end
@@ -167,7 +151,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         -- Auto-format ("lint") on save.
-        -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+        -- From example in `:help lsp-lint`.
         --
         -- TODO: Handle the case where the LSP has detached from this buffer. In
         -- that case, the client (used to fetch the client.id) will be invalid.
