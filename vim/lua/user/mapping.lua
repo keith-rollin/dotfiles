@@ -41,6 +41,16 @@ kr.set_copilot_mapping = function()
 end
 
 --
+-- FZF mappings
+-- Called from FZF setup function.
+--
+kr.set_fzf_mapping = function(fzf_lua)
+    -- See `:help fzf-lua` for more commands to map.
+    setn("<leader>fb", fzf_lua.buffers, "Find buffers")
+    setn("<leader>ff", fzf_lua.files, "Find files")
+    setn("<leader>fg", fzf_lua.live_grep, "Grep current project")
+end
+--
 -- Split management mappings
 --
 setn("<C-h>", "<C-w><C-h>", "Move to the window to the left")
