@@ -287,6 +287,25 @@ vim.pack.add(packs)
 vim.iter(packs):each(configure_pack)
 
 
+vim.api.nvim_create_user_command("PackUpdate", function()
+    -- vim.pack.update prints a lot of status information to a new buffer. There
+    -- are lots of things that can be done in this buffer. See:
+    --
+    --      https://youtu.be/J1r0vrqOMJo?si=u2VZ9hJlZzFmTOGS&t=419
+    --
+    -- For example, to accept the updates, execute `:write`. To discard them,
+    -- execute `:quit`.
+    vim.pack.update()
+end, {})
+
+vim.api.nvim_create_user_command("PackClean", function()
+    -- From `:help vim.pack.examples`
+    vim.pack.del(
+        vim.iter(vim.pack.get())
+        :filter(function(x) return not x.active end)
+        :map(function(x) return x.spec.name end)
+        :totable())
+end, {})
 
 --
 --
