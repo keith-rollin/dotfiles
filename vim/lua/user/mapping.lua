@@ -108,4 +108,32 @@ setv("K", ":m '<-2<CR>gv=gv", "Move selected lines up")
 setn("J", "mzJ`z", "Join lines without moving cursor")
 
 --
+-- Map gK to show help for the word under the cursor or for the current
+-- selection (if any).
+--
+setn("gK", function()
+    local text = vim.fn.expand("<cword>")
+    vim.cmd("help " .. text)
+end, "Help for word under cursor")
+
+setv("gK", function()
+    -- Get the current selection. This is a bit tricky, because the selection
+    -- can be in any of the three Visual modes (character, line, or block). We
+    -- can use `getpos` to get the start and end positions of the selection, and
+    -- then use `getregion` to get the text in that region.
+    local pos1 = vim.fn.getpos("v")
+    local pos2 = vim.fn.getpos(".")
+    local mode = vim.fn.mode()
+    local region = vim.fn.getregion(pos1, pos2, { type = mode })
+    local text = table.concat(region, "")
+
+    -- Exit Visual mode before calling :help. Otherwise, the help window will
+    -- open in Visual mode, which is not what we want.
+    local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+    vim.api.nvim_feedkeys(esc, "nx", false)
+
+    vim.cmd("help " .. text)
+end, "Help for visual selection")
+
+--
 --
