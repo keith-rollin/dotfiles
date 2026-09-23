@@ -5,41 +5,46 @@ local custom_group = vim.api.nvim_create_augroup("custom_events", {})
 -- Lua version based on: https://www.reddit.com/r/neovim/comments/tqeh9m/help_allow_lastpositionjump_or_opening_to_a
 -- Additional tweaks from:  https://www.youtube.com/watch?v=v36vLiFVOXY
 --
--- I sometimes get this when Blink shows the completion menu. Line 24 is/was the
--- one calling vim.api.nvim_win_set_cursor:
---
--- Error detected while processing FileType Autocommands for "*":
--- Error executing lua callback: /Users/keith/.config/nvim/lua/user/events.lua:24: Cursor position outside buffer
--- stack traceback:
---         [C]: in function 'nvim_win_set_cursor'
---         /Users/keith/.config/nvim/lua/user/events.lua:24: in function </Users/keith/.config/nvim/lua/user/events.lua:11>
---         [C]: in function 'nvim_set_option_value'
---         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/lib/window/init.lua:132: in function 'open'
---         ...lazy/blink.cmp/lua/blink/cmp/completion/windows/menu.lua:95: in function 'open'
---         ...lazy/blink.cmp/lua/blink/cmp/completion/windows/menu.lua:61: in function 'open_with_items'
---         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:70: in function 'callback'
---         .../nvim/lazy/blink.cmp/lua/blink/cmp/lib/event_emitter.lua:28: in function 'emit'
---         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/list.lua:96: in function 'show'
---         ...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:53: in function <...re/nvim/lazy/blink.cmp/lua/blink/cmp/completion/init.lua:29>
+-- I added the call to win_findbuf() to help fix a problem with Blink. I would
+-- sometimes get an error calling nvim_win_set_cursor(0, position) because the
+-- buffer associated with the event was not in the current window. To address
+-- this, just get all of the actual windows associated with the buffer and set
+-- the cursor in each of them. We'll see if this works. Just in case, I wrapped
+-- the call to nvim_win_set_cursor() in a pcall() so that if it fails, we don't
+-- get an error message.
 
 vim.api.nvim_create_autocmd("FileType", {
     desc = "Restore the last cursor position",
     group = custom_group,
     pattern = "*",
     callback = function(ev)
-        local hands_off_these_files = { "gitcommit", "gitrebase", "netrw" }
-        if not vim.tbl_contains(hands_off_these_files, vim.o.filetype) then
-            -- Get the last position as {row, col}, where row is 1-based. Get
-            -- {0,0} if there is no mark.
-            local position = vim.api.nvim_buf_get_mark(ev.buf, '"')
-            local line_count = vim.api.nvim_buf_line_count(ev.buf)
-            if position[1] >= 1 and position[1] <= line_count then
-                vim.api.nvim_win_set_cursor(0, position)
-                vim.schedule(function()
-                    vim.cmd("normal! zz")
-                end)
-            end
+        -- Don't restore the cursor position if we're in diff mode.
+        -- (It's not apparent to me if this is safe. I've seen indications that
+        -- the current window may not be one showing the buffer issuing the
+        -- FileType event.)
+        if vim.wo.diff then
+            return
         end
+
+        -- Don't restore the cursor position for certain file types.
+        local hands_off_these_files = { "gitcommit", "gitrebase", "netrw" }
+        local filetype = vim.api.nvim_get_option_value("filetype", { buf = ev.buf })
+        if vim.tbl_contains(hands_off_these_files, filetype) then
+            return
+        end
+
+        -- Don't restore the cursor position if the mark is out of range.
+        local position = vim.api.nvim_buf_get_mark(ev.buf, '"')
+        local mark_line = position[1]
+        local line_count = vim.api.nvim_buf_line_count(ev.buf)
+        if mark_line < 1 or mark_line > line_count then
+            return
+        end
+
+        local windows = vim.fn.win_findbuf(ev.buf)
+        vim.iter(windows):each(function(win)
+            pcall(vim.api.nvim_win_set_cursor, win, position)
+        end)
     end,
 })
 
