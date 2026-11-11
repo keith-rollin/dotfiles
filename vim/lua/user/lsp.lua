@@ -16,7 +16,12 @@ vim.lsp.config("lua_ls", {
         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#lua_ls
         -- https://luals.github.io/wiki/settings/
         Lua = {
-            format = { enable = true, },
+            format = {
+                enable = true,
+                defaultConfig = {
+                    quote_style = "double",
+                },
+            },
             hint = { enable = true, },
             runtime = { special = { spec = "require", }, version = "LuaJIT", },
             diagnostics = {
