@@ -321,13 +321,13 @@ env()
     # If no parameters are given, show the current environment sorted by name.
     # Otherwise, invoke `env` with the given parameters.
 
-    if $# -eq 0
+    if [[ $# -eq 0 ]]
     then
         command env | sort
         return
     fi
 
-    env "$@"
+    command env "$@"
 }
 
 filter()
