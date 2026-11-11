@@ -47,6 +47,13 @@ kr.StripWhitespace = function()
 end
 
 --
+-- `cd` to the directory of the current file.
+--
+vim.api.nvim_create_user_command("Cdb", function()
+    vim.cmd.cd("%:p:h")
+end, { nargs = "?" })
+
+--
 -- Create a python virtual environment and use that for the python3 host
 -- program used in nvim operations.
 --
