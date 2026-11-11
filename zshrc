@@ -103,10 +103,6 @@ prepend_path "${DOTFILES}/bin"
 
 # Find the best-looking vim-ish.
 
-trap "PATH=$PATH ; trap - INT EXIT" INT EXIT
-export PATH=/opt/neovim/bin:$PATH
-hash -r
-
 [[ -x $(whence -p vi) ]] && export EDITOR=$(whence -p vi)
 [[ -x $(whence -p vim) ]] && export EDITOR=$(whence -p vim)
 [[ -x $(whence -p nvim) ]] && export EDITOR=$(whence -p nvim)
@@ -300,8 +296,4 @@ alias -g PC=' | pbcopy'
 alias -g PL=' | less'
 
 true # Exit with no error.
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/keith/.lmstudio/bin"
-# End of LM Studio CLI section
 
