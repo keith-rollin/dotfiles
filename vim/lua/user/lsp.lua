@@ -56,11 +56,11 @@ vim.lsp.config("pyright", {
     },
 })
 
-vim.lsp.enable('lua_ls')        -- Downloaded via install.brew
-vim.lsp.enable('pyright')       -- Downloaded via install.brew
-vim.lsp.enable('ruff')          -- Downloaded via install.brew
-vim.lsp.enable('rust_analyzer') -- Downloaded via `rustup`
-vim.lsp.enable('sourcekit')     -- Downloaded via CommandLineTools
+vim.lsp.enable("lua_ls")        -- Downloaded via install.brew
+vim.lsp.enable("pyright")       -- Downloaded via install.brew
+vim.lsp.enable("ruff")          -- Downloaded via install.brew
+vim.lsp.enable("rust_analyzer") -- Downloaded via `rustup`
+vim.lsp.enable("sourcekit")     -- Downloaded via CommandLineTools
 
 --
 --
